@@ -4,88 +4,97 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Eunhee Builds</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap">
 <style>
-/* Layout: one dark immersive canvas, full-bleed sections stacked like slides; a thin fixed menu rail on the left (top on phone). */
+/* Layout: one deep-space canvas (immersive), a single chrome orb + wireframe horizon (Y2K), sparse full-height sections stacked like screens (minimal); fixed pill menu. Single dark theme by design. */
 :root{
-  --bg:#0b0c0f; --bg-2:#111318; --fg:#ecebe6; --fg-2:#9a9b9a; --line:rgba(236,235,230,.12);
-  --accent:#c9b37e; --accent-soft:rgba(201,179,126,.14);
-  --display:"Gowun Batang","Nanum Myeongjo",Georgia,serif;
+  --bg:#05060b; --bg-2:#0c0e17; --fg:#eef0f7; --fg-2:#8e93a8; --line:rgba(238,240,247,.12);
+  --chrome:linear-gradient(135deg,#f7f8fc 0%,#a9afc4 22%,#f1f3fa 40%,#6d7390 58%,#e6e9f4 78%,#9ea4bc 100%);
+  --iris:linear-gradient(90deg,#8fd6ff,#c9b6ff 40%,#ffb3e6 70%,#9ef2e2);
+  --glow:#8fd6ff;
+  --display:"Syne","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --pixel:"Silkscreen",ui-monospace,monospace;
   --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
   color-scheme:dark;
 }
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
-  --bg:#f5f3ee; --bg-2:#ebe8e0; --fg:#15161a; --fg-2:#66676a; --line:rgba(21,22,26,.12);
-  --accent:#8a6f2f; --accent-soft:rgba(138,111,47,.12); color-scheme:light}}
-:root[data-theme="light"]{
-  --bg:#f5f3ee; --bg-2:#ebe8e0; --fg:#15161a; --fg-2:#66676a; --line:rgba(21,22,26,.12);
-  --accent:#8a6f2f; --accent-soft:rgba(138,111,47,.12); color-scheme:light}
-
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--fg);font:300 16px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 
-#ambient{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.9}
+#ambient{position:fixed;inset:0;z-index:0;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='.6'/></svg>")}
 
-/* Menu rail */
-.rail{position:fixed;z-index:10;left:0;top:env(safe-area-inset-top,0px);height:100%;width:200px;padding:40px 28px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line);backdrop-filter:blur(6px)}
-.brand{font-family:var(--display);font-size:20px;letter-spacing:.02em;text-decoration:none;color:var(--fg)}
-.brand small{display:block;font:400 11px/1.4 var(--mono);color:var(--fg-2);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
-.menu{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
-.menu a{color:var(--fg-2);text-decoration:none;font-size:14px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;transition:color .3s}
-.menu a::before{content:"";width:0;height:1px;background:var(--accent);transition:width .3s}
-.menu a:hover,.menu a.active{color:var(--fg)}
-.menu a.active::before{width:18px}
-.menu a:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
-.rail-foot{font:400 11px/1.6 var(--mono);color:var(--fg-2);letter-spacing:.06em}
+/* Pill menu */
+.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 18px);display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;background:rgba(12,14,23,.6);border:1px solid var(--line);backdrop-filter:blur(14px);max-width:calc(100% - 32px)}
+.nav .brand{font:800 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;background:var(--chrome);color:#0a0b12;text-decoration:none;white-space:nowrap}
+.menu{list-style:none;margin:0;padding:0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.menu::-webkit-scrollbar{display:none}
+.menu a{display:block;padding:10px 14px;border-radius:999px;color:var(--fg-2);text-decoration:none;font-size:13px;white-space:nowrap;transition:color .3s,background .3s}
+.menu a:hover{color:var(--fg)}
+.menu a.active{color:var(--fg);background:rgba(238,240,247,.08)}
+.menu a:focus-visible{outline:1px solid var(--glow);outline-offset:2px}
 
-main{position:relative;z-index:1;margin-left:200px}
-.wrap{padding-inline:clamp(20px,6vw,96px);padding-block:0}
+main{position:relative;z-index:1}
+.wrap{padding-inline:clamp(20px,7vw,120px);padding-block:0;max-width:1400px;margin:0 auto}
 
-/* Sections */
-section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:96px;border-bottom:1px solid var(--line)}
-section:last-of-type{border-bottom:0}
-.eyebrow{font:400 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 22px}
-h1,h2{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
-h1{font-size:clamp(40px,7vw,96px);line-height:1.05;letter-spacing:-.01em}
-h2{font-size:clamp(30px,4vw,54px);line-height:1.15;margin-bottom:18px}
-.lead{max-width:34em;color:var(--fg-2);font-size:clamp(16px,1.4vw,19px);margin:28px 0 0}
-.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:56px;font:400 12px/1.6 var(--mono);color:var(--fg-2);letter-spacing:.06em}
-.hero-meta b{display:block;color:var(--fg);font-weight:400;font-size:14px}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:120px}
+.eyebrow{font:400 11px/1 var(--pixel);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);margin:0 0 26px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--chrome);box-shadow:0 0 14px var(--glow)}
+h1,h2{font-family:var(--display);font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(44px,8vw,120px);line-height:.98}
+h2{font-size:clamp(32px,5vw,68px);line-height:1.04;margin-bottom:20px}
+.iris{background:var(--iris);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chrome-text{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{max-width:32em;color:var(--fg-2);font-size:clamp(16px,1.4vw,19px);margin:28px 0 0}
 
-/* Project grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
-.card{background:var(--bg);padding:28px 26px 26px;display:flex;flex-direction:column;gap:14px;min-width:0;text-decoration:none;color:inherit;position:relative;transition:background .4s}
-.card:hover{background:var(--bg-2)}
-.card:focus-visible{outline:1px solid var(--accent);outline-offset:-1px}
-.card-top{display:flex;justify-content:space-between;align-items:baseline;font:400 11px/1 var(--mono);color:var(--fg-2);letter-spacing:.1em}
-.card h3{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.25;margin:0}
+/* Hero */
+.hero{position:relative}
+.orb{position:absolute;right:clamp(-40px,2vw,40px);top:50%;transform:translateY(-50%);width:clamp(220px,34vw,460px);aspect-ratio:1;max-width:100%;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#ffffff 0%,#d9dcea 12%,#7d839e 38%,#2a2e40 62%,#0b0d16 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px rgba(143,214,255,.18),inset -30px -40px 80px rgba(0,0,0,.55);pointer-events:none}
+.orb::after{content:"";position:absolute;inset:-14%;border-radius:50%;border:1px solid rgba(238,240,247,.18);transform:rotateX(72deg);animation:spin 26s linear infinite}
+.orb::before{content:"";position:absolute;left:18%;top:14%;width:30%;height:16%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));filter:blur(2px)}
+@keyframes spin{to{transform:rotateX(72deg) rotate(360deg)}}
+.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:56px}
+.chip{font:400 11px/1 var(--pixel);letter-spacing:.04em;color:var(--fg);padding:12px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(12,14,23,.5)}
+.chip b{font-weight:400;color:var(--fg-2);margin-left:10px}
+
+/* Grid of programs */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-top:48px}
+.card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:22px;padding:26px 24px 24px;display:flex;flex-direction:column;gap:14px;min-width:0;text-decoration:none;color:inherit;transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:var(--iris);opacity:.45}
+.card:hover{transform:translateY(-4px);border-color:rgba(238,240,247,.28);box-shadow:0 30px 80px rgba(143,214,255,.10)}
+.card:focus-visible{outline:1px solid var(--glow);outline-offset:2px}
+.card-top{display:flex;justify-content:space-between;align-items:center;font:400 10px/1 var(--pixel);color:var(--fg-2);letter-spacing:.06em}
+.card-top .id{width:34px;height:34px;border-radius:50%;background:var(--chrome);color:#0a0b12;display:grid;place-items:center;font:700 11px var(--display)}
+.card h3{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .card p{margin:0;color:var(--fg-2);font-size:14.5px;line-height:1.65}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
-.tag{font:400 11px/1 var(--mono);letter-spacing:.06em;color:var(--fg-2);border:1px solid var(--line);padding:6px 9px;border-radius:2px}
-.tag.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
-.card .go{position:absolute;right:26px;bottom:24px;font:400 12px/1 var(--mono);color:var(--accent);opacity:0;transform:translateX(-6px);transition:all .3s}
+.tag{font:400 10px/1 var(--pixel);letter-spacing:.04em;color:var(--fg-2);border:1px solid var(--line);padding:7px 10px;border-radius:999px}
+.tag.on{color:#0a0b12;background:var(--iris);border-color:transparent}
+.card .go{position:absolute;right:22px;bottom:22px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font:400 14px var(--display);color:var(--fg);opacity:0;transform:translate(-6px,6px);transition:all .4s}
 .card:hover .go{opacity:1;transform:none}
 
 /* About */
 .about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:64px;align-items:start;margin-top:40px}
 .about p{margin:0 0 18px;max-width:36em;color:var(--fg-2)}
 .about p:first-child{color:var(--fg)}
-.facts{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.facts li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
-.facts li span:first-child{color:var(--fg-2);font:400 11px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.facts{list-style:none;margin:0;padding:6px 0;border:1px solid var(--line);border-radius:22px;background:rgba(12,14,23,.5)}
+.facts li{display:flex;justify-content:space-between;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line);font-size:14px}
+.facts li:last-child{border-bottom:0}
+.facts li span:first-child{color:var(--fg-2);font:400 10px/1.8 var(--pixel);letter-spacing:.06em;text-transform:uppercase}
 .facts li span:last-child{text-align:right;min-width:0}
 
 /* Contact */
-.contact-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
-.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);padding:12px 18px;color:var(--fg);text-decoration:none;font-size:14px;transition:border-color .3s}
-.pill:hover{border-color:var(--accent)}
-.pill code{font:400 13px var(--mono);color:var(--fg-2)}
-.pill button{all:unset;cursor:pointer;color:var(--accent);font:400 11px var(--mono);letter-spacing:.08em}
-.pill button:focus-visible{outline:1px solid var(--accent);outline-offset:3px}
-footer{padding:36px 0 40px;font:400 11px/1.7 var(--mono);color:var(--fg-2);letter-spacing:.06em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.contact-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);padding:13px 20px;border-radius:999px;color:var(--fg);text-decoration:none;font-size:14px;background:rgba(12,14,23,.5);transition:border-color .3s,background .3s}
+.pill:hover{border-color:rgba(238,240,247,.35);background:rgba(238,240,247,.06)}
+.pill.primary{background:var(--chrome);color:#0a0b12;border-color:transparent;font-weight:500}
+.pill code{font:400 12px var(--pixel);color:inherit;opacity:.85}
+.pill button{all:unset;cursor:pointer;font:400 10px var(--pixel);letter-spacing:.06em;opacity:.7}
+.pill button:focus-visible{outline:1px solid var(--glow);outline-offset:3px}
+footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);letter-spacing:.06em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 /* reveal */
 .rv{opacity:1;transform:none}
@@ -93,156 +102,152 @@ footer{padding:36px 0 40px;font:400 11px/1.7 var(--mono);color:var(--fg-2);lette
 .js .rv.in{opacity:1;transform:none}
 
 @media (max-width:900px){
-  .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;width:100%;flex-direction:row;align-items:center;padding:14px 20px;border-right:0;border-bottom:1px solid var(--line);background:var(--bg);gap:16px}
-  .rail-foot{display:none}
-  .brand small{display:none}
-  .menu{flex-direction:row;gap:14px;overflow-x:auto;scrollbar-width:none;min-width:0}
-  .menu::-webkit-scrollbar{display:none}
-  .menu a{font-size:13px;white-space:nowrap}
-  .menu a::before{display:none}
-  .menu a.active{color:var(--accent)}
-  main{margin-left:0}
-  section{min-height:auto;padding-block:72px}
+  section{min-height:auto;padding-block:96px}
+  .hero{padding-top:140px}
+  .orb{position:relative;transform:none;right:auto;top:auto;margin:48px 0 0;width:min(70vw,320px)}
   .about{grid-template-columns:1fr;gap:36px}
+  .nav .brand{padding:9px 12px;font-size:11px}
+  .menu a{padding:9px 11px;font-size:12px}
 }
 </style>
 </head>
 <body>
 
 <canvas id="ambient" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
-<nav class="rail" aria-label="메뉴">
-  <a class="brand" href="#top">Eunhee Builds<small>side projects</small></a>
+<nav class="nav" aria-label="메뉴">
+  <a class="brand" href="#top">EB</a>
   <ul class="menu">
-    <li><a href="#finance" data-sec="finance">재무·회계 도구</a></li>
+    <li><a href="#finance" data-sec="finance">재무·회계</a></li>
     <li><a href="#invest" data-sec="invest">투자 시그널</a></li>
     <li><a href="#automation" data-sec="automation">자동화</a></li>
-    <li><a href="#content" data-sec="content">콘텐츠 도구</a></li>
+    <li><a href="#content" data-sec="content">콘텐츠</a></li>
     <li><a href="#about" data-sec="about">소개</a></li>
     <li><a href="#contact" data-sec="contact">연락</a></li>
   </ul>
-  <div class="rail-foot">© 2026<br>Seoul, KR</div>
 </nav>
 
 <main id="top">
 <div class="wrap">
 
-<section id="hero" style="min-height:calc(100vh - 0px)">
-  <p class="eyebrow rv">회계사가 취미로 만든 것들</p>
-  <h1 class="rv">숫자를 다루다가,<br>도구를 만들게 됐습니다.</h1>
+<section id="hero" class="hero">
+  <p class="eyebrow rv">EUNHEE BUILDS · SIDE PROJECTS · EST. 2024</p>
+  <h1 class="rv">숫자를 다루다가,<br><span class="iris">도구를 만들게</span> 됐습니다.</h1>
   <p class="lead rv">펀드 감사와 재무보고 실무에서 반복되던 일을 코드로 옮긴 기록입니다. 세금 계산기부터 매일 아침 돌아가는 스크립트까지, 메뉴별로 정리했습니다.</p>
   <div class="hero-meta rv">
-    <div><b>10+</b>공개 프로젝트</div>
-    <div><b>Python · JS · Excel</b>주로 쓰는 도구</div>
-    <div><b>2024 —</b>만들기 시작한 해</div>
+    <span class="chip">10+<b>PROGRAMS</b></span>
+    <span class="chip">PY · JS · XLS<b>STACK</b></span>
+    <span class="chip">SEOUL<b>KR</b></span>
   </div>
+  <div class="orb" aria-hidden="true"></div>
 </section>
 
 <section id="finance">
-  <p class="eyebrow rv">01 — 재무·회계 도구</p>
-  <h2 class="rv">계산은 기계가, 판단은 사람이.</h2>
+  <p class="eyebrow rv">MENU 01 · FINANCE &amp; ACCOUNTING</p>
+  <h2 class="rv">계산은 기계가,<br><span class="chrome-text">판단은 사람이.</span></h2>
   <p class="lead rv">실무에서 손으로 반복하던 계산과 서식 변환을 자동화한 도구들입니다.</p>
   <div class="grid rv">
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>WEB</span></div>
+      <div class="card-top"><span class="id">01</span><span>2026 · WEB</span></div>
       <h3>보유세 간편추정기</h3>
       <p>상업용 부동산의 재산세·종부세를 공시가격과 세율 구간으로 추정하고, 연도별 현금흐름표로 펼쳐 보여줍니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">Streamlit</span><span class="tag">지방세법</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2025</span><span>SCRIPT</span></div>
+      <div class="card-top"><span class="id">02</span><span>2025 · SCRIPT</span></div>
       <h3>펀드 재무제표 K-GAAP 변환기</h3>
       <p>영문 펀드 재무제표(PDF/Excel)를 읽어 국내 감독 서식으로 계정을 매핑하고, 검증 합계까지 자동으로 맞춥니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">openpyxl</span><span class="tag">IFRS</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2025</span><span>EXCEL</span></div>
+      <div class="card-top"><span class="id">03</span><span>2025 · EXCEL</span></div>
       <h3>해외현지법인 재무상황표 빌더</h3>
       <p>현지법인 시산표를 붙여 넣으면 세무 신고용 재무상황표 서식이 채워지고, 환율 적용 근거가 시트에 남습니다.</p>
       <div class="tags"><span class="tag on">VBA</span><span class="tag">Excel</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
   </div>
 </section>
 
 <section id="invest">
-  <p class="eyebrow rv">02 — 투자 시그널</p>
-  <h2 class="rv">장 열리기 전, 한 줄의 신호.</h2>
+  <p class="eyebrow rv">MENU 02 · MARKET SIGNALS</p>
+  <h2 class="rv">장 열리기 전,<br><span class="chrome-text">한 줄의 신호.</span></h2>
   <p class="lead rv">매일 아침 자동으로 계산해 메신저로 보내주는 규칙 기반 시그널입니다. 예측이 아니라, 정해둔 규칙을 지키기 위한 장치입니다.</p>
   <div class="grid rv">
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>DAILY</span></div>
+      <div class="card-top"><span class="id">04</span><span>2026 · DAILY</span></div>
       <h3>KOSPI 반도체 레버리지 시그널</h3>
       <p>레버리지 ETF 자금 유출입과 지수 위치를 보고 WAIT / BUY / REDUCE 세 상태 중 하나를 개장 전에 알려줍니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">스케줄러</span><span class="tag">카카오톡</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>REPORT</span></div>
+      <div class="card-top"><span class="id">05</span><span>2026 · REPORT</span></div>
       <h3>글로벌 증시 일일 리포트</h3>
       <p>한·미 증시 뉴스와 시황 페이지를 모아 시나리오 세 갈래로 정리한 Word 보고서를 만들고, 아침에 자동 전송합니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">docx</span><span class="tag">크롤링</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2025</span><span>SCREENER</span></div>
+      <div class="card-top"><span class="id">06</span><span>2025 · SCREENER</span></div>
       <h3>국장·미장 종목 스크리너</h3>
       <p>정해둔 재무·차트 기준으로 후보를 걸러 TOP5를 뽑고, 각 종목의 근거를 표로 남깁니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">pandas</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
   </div>
 </section>
 
 <section id="automation">
-  <p class="eyebrow rv">03 — 자동화</p>
-  <h2 class="rv">내가 자는 동안 돌아가는 것들.</h2>
+  <p class="eyebrow rv">MENU 03 · AUTOMATION</p>
+  <h2 class="rv">내가 자는 동안<br><span class="chrome-text">돌아가는 것들.</span></h2>
   <p class="lead rv">하루에 한 번 확인하면 되는 일들을 스크립트에 맡겼습니다.</p>
   <div class="grid rv">
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>BOT</span></div>
+      <div class="card-top"><span class="id">07</span><span>2026 · BOT</span></div>
       <h3>채용공고 모니터</h3>
       <p>자산운용사·회계법인 공고를 조건에 맞게 걸러 새 공고만 메신저로 보내고, 이미 보낸 공고는 기록해 중복을 막습니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">API</span><span class="tag">카카오톡</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2025</span><span>CLI</span></div>
+      <div class="card-top"><span class="id">08</span><span>2025 · CLI</span></div>
       <h3>은행 명세서 → Excel 변환기</h3>
       <p>PDF 명세서 여러 달을 한 번에 읽어 거래 내역을 표로 만들고, 기초·기말 잔액이 맞는지 스스로 검증합니다.</p>
       <div class="tags"><span class="tag on">Python</span><span class="tag">pdfplumber</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
   </div>
 </section>
 
 <section id="content">
-  <p class="eyebrow rv">04 — 콘텐츠 도구</p>
-  <h2 class="rv">글쓰기도 반은 데이터.</h2>
+  <p class="eyebrow rv">MENU 04 · CONTENT TOOLS</p>
+  <h2 class="rv">글쓰기도<br><span class="chrome-text">반은 데이터.</span></h2>
   <p class="lead rv">SNS 운영을 실험처럼 하기 위해 만든 기록·분석 도구입니다.</p>
   <div class="grid rv">
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>SHEET</span></div>
+      <div class="card-top"><span class="id">09</span><span>2026 · SHEET</span></div>
       <h3>Threads 90일 실험 대시보드</h3>
       <p>매일의 조회수·클릭·판매를 기록하고 글 구조별(A/B/C) 성과와 퍼널 병목을 주 단위로 비교합니다.</p>
       <div class="tags"><span class="tag on">Excel</span><span class="tag">Python</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
     <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span>2026</span><span>WEB</span></div>
+      <div class="card-top"><span class="id">10</span><span>2026 · WEB</span></div>
       <h3>바이럴 글 구조 분석기</h3>
       <p>터진 게시물을 붙여 넣으면 훅·전개·CTA 구조를 분해하고, 내 계정 톤에 맞춘 변형안을 제안합니다.</p>
       <div class="tags"><span class="tag on">JS</span><span class="tag">LLM API</span></div>
-      <span class="go">열기 →</span>
+      <span class="go">↗</span>
     </a>
   </div>
 </section>
 
 <section id="about">
-  <p class="eyebrow rv">소개</p>
-  <h2 class="rv">고은희 <span style="color:var(--fg-2);font-size:.6em">Eunhee Ko</span></h2>
+  <p class="eyebrow rv">ABOUT</p>
+  <h2 class="rv">고은희 <span class="chrome-text" style="font-size:.55em;font-weight:700">Eunhee Ko</span></h2>
   <div class="about rv">
     <div>
       <p>회계법인에서 펀드 감사와 해외 펀드 재무보고를 담당하고 있습니다. 영문 재무제표를 한국 서식으로 옮기는 일을 오래 하다 보니, 같은 일을 두 번 하지 않으려고 코드를 배우게 됐습니다.</p>
@@ -260,16 +265,16 @@ footer{padding:36px 0 40px;font:400 11px/1.7 var(--mono);color:var(--fg-2);lette
 </section>
 
 <section id="contact" style="min-height:60vh">
-  <p class="eyebrow rv">연락</p>
-  <h2 class="rv">같이 만들어 볼 것이 있다면.</h2>
+  <p class="eyebrow rv">CONTACT</p>
+  <h2 class="rv">같이 만들어 볼 것이<br><span class="iris">있다면.</span></h2>
   <div class="contact-row rv">
-    <span class="pill"><code id="mail">hello@example.com</code><button type="button" id="copyMail">COPY</button></span>
-    <a class="pill" href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+    <span class="pill primary"><code id="mail">hello@example.com</code><button type="button" id="copyMail">COPY</button></span>
+    <a class="pill" href="https://github.com/Ella1-crypto" target="_blank" rel="noopener">GitHub ↗</a>
     <a class="pill" href="https://www.threads.com/" target="_blank" rel="noopener">Threads ↗</a>
     <a class="pill" href="https://blog.naver.com/goghibli" target="_blank" rel="noopener">Blog ↗</a>
   </div>
   <footer>
-    <span>EUNHEE BUILDS — SIDE PROJECTS ARCHIVE</span>
+    <span>EUNHEE BUILDS · SIDE PROJECTS ARCHIVE</span>
     <span>LAST UPDATED 2026.09</span>
   </footer>
 </section>
@@ -300,21 +305,36 @@ document.getElementById('copyMail').addEventListener('click',async e=>{
   setTimeout(()=>b.textContent='COPY',1600);
 });
 
-// ambient canvas: slow drifting soft light, very low contrast
-const c=document.getElementById('ambient'),x=c.getContext('2d');let W,H,t=0;
-const dark=()=>getComputedStyle(document.documentElement).colorScheme.includes('dark');
-function size(){W=c.width=innerWidth*devicePixelRatio;H=c.height=innerHeight*devicePixelRatio}
+// ambient: Y2K wireframe horizon + slow drifting light
+const c=document.getElementById('ambient'),x=c.getContext('2d');let W,H,t=0,dpr=Math.min(devicePixelRatio||1,2);
+function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr}
 size();addEventListener('resize',size);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function draw(){
   x.clearRect(0,0,W,H);
-  const d=dark();
-  const blobs=[[.75,.3,.55,d?'rgba(201,179,126,.10)':'rgba(138,111,47,.10)'],[.2,.8,.5,d?'rgba(120,140,170,.08)':'rgba(120,140,170,.10)'],[.6,.9,.4,d?'rgba(201,179,126,.05)':'rgba(201,179,126,.08)']];
+  // soft light blobs
+  const blobs=[[.78,.35,.5,'rgba(143,214,255,.10)'],[.15,.85,.5,'rgba(201,182,255,.08)'],[.55,.95,.45,'rgba(255,179,230,.06)']];
   blobs.forEach(([bx,by,r,col],i)=>{
-    const px=(bx+Math.sin(t*.0004+i)*.06)*W, py=(by+Math.cos(t*.0003+i*2)*.06)*H, rad=r*Math.max(W,H);
+    const px=(bx+Math.sin(t*.0004+i)*.05)*W, py=(by+Math.cos(t*.0003+i*2)*.05)*H, rad=r*Math.max(W,H);
     const g=x.createRadialGradient(px,py,0,px,py,rad);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=g;x.fillRect(0,0,W,H);
   });
+  // perspective grid at the bottom (fades upward)
+  const horizon=H*.62, rows=14, cols=18, off=(t*.00004)%1;
+  x.lineWidth=1*dpr;
+  for(let i=0;i<=rows;i++){
+    const p=Math.pow((i+off)/rows,2.2); const y=horizon+(H-horizon)*p;
+    x.strokeStyle='rgba(238,240,247,'+(0.02+p*0.09)+')';
+    x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke();
+  }
+  for(let j=0;j<=cols;j++){
+    const u=j/cols; const xb=(u-.5)*W*3+W/2;
+    x.strokeStyle='rgba(238,240,247,.05)';
+    x.beginPath();x.moveTo(W/2+(u-.5)*W*.35,horizon);x.lineTo(xb,H);x.stroke();
+  }
+  // fade grid into the sky
+  const fade=x.createLinearGradient(0,horizon-10,0,horizon+H*.18);fade.addColorStop(0,'rgba(5,6,11,1)');fade.addColorStop(1,'rgba(5,6,11,0)');
+  x.fillStyle=fade;x.fillRect(0,horizon-10,W,H*.18);
   if(!reduce){t+=16;requestAnimationFrame(draw)}
 }
 draw();
