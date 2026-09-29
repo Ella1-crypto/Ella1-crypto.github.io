@@ -6,7 +6,7 @@
 <title>Ella's Side Ledger</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap">
 <style>
-/* Layout: one deep-space canvas (immersive), a single chrome orb + wireframe horizon (Y2K), sparse full-height sections stacked like screens (minimal); fixed pill menu. Single dark theme by design. */
+/* Layout: one deep-space canvas (immersive), chrome sparkle stars + wireframe horizon (Y2K), sparse full-height sections stacked like screens (minimal); fixed pill menu. Single dark theme by design. */
 :root{
   --bg:#05060b; --bg-2:#0c0e17; --fg:#eef0f7; --fg-2:#8e93a8; --line:rgba(238,240,247,.12);
   --chrome:linear-gradient(135deg,#f7f8fc 0%,#a9afc4 22%,#f1f3fa 40%,#6d7390 58%,#e6e9f4 78%,#9ea4bc 100%);
@@ -55,14 +55,14 @@ h2{font-size:clamp(32px,5vw,68px);line-height:1.04;margin-bottom:20px}
 
 /* Hero */
 .hero{position:relative}
-.hero>*:not(.orb){position:relative;z-index:1}
-.hero .orb{z-index:0;opacity:.55}
-.orb{position:absolute;right:clamp(-40px,2vw,40px);top:50%;transform:translateY(-50%);width:clamp(220px,34vw,460px);aspect-ratio:1;max-width:100%;border-radius:50%;
-  background:radial-gradient(circle at 32% 28%,#ffffff 0%,#d9dcea 12%,#7d839e 38%,#2a2e40 62%,#0b0d16 100%);
-  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px rgba(143,214,255,.18),inset -30px -40px 80px rgba(0,0,0,.55);pointer-events:none}
-.orb::after{content:"";position:absolute;inset:-14%;border-radius:50%;border:1px solid rgba(238,240,247,.18);transform:rotateX(72deg);animation:spin 26s linear infinite}
-.orb::before{content:"";position:absolute;left:18%;top:14%;width:30%;height:16%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));filter:blur(2px)}
-@keyframes spin{to{transform:rotateX(72deg) rotate(360deg)}}
+.hero>*:not(.stars){position:relative;z-index:1}
+/* 크롬 반짝이 별 3개 (큰 별 + 작은 별 둘) — 글자 뒤에서 천천히 반짝인다 */
+.stars{position:absolute;z-index:0;right:clamp(0px,4vw,60px);top:50%;transform:translateY(-50%);width:clamp(200px,30vw,420px);aspect-ratio:1;max-width:100%;pointer-events:none;opacity:.8;filter:drop-shadow(0 0 28px rgba(143,214,255,.35))}
+.stars i{position:absolute;display:block;aspect-ratio:1;background:var(--chrome);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);animation:twinkle 5s ease-in-out infinite}
+.stars .s1{left:14%;top:14%;width:72%}
+.stars .s2{left:0;top:2%;width:22%;animation-delay:1.3s}
+.stars .s3{right:4%;bottom:6%;width:13%;animation-delay:2.6s}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.84) rotate(14deg)}}
 .hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:56px}
 .chip{font:400 11px/1 var(--pixel);letter-spacing:.04em;color:var(--fg);padding:12px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(12,14,23,.5)}
 .chip b{font-weight:400;color:var(--fg-2);margin-left:10px}
@@ -111,7 +111,7 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
 @media (max-width:900px){
   section{min-height:auto;padding-block:96px}
   .hero{padding-top:140px}
-  .orb{position:relative;transform:none;right:auto;top:auto;margin:48px 0 0;width:min(70vw,320px)}
+  .stars{position:relative;transform:none;right:auto;top:auto;margin:48px 0 0;width:min(60vw,280px)}
   .about{grid-template-columns:1fr;gap:36px}
   main{padding-left:0}
   .nav{top:calc(env(safe-area-inset-top,0px) + 12px);bottom:auto;left:50%;transform:translateX(-50%);width:auto;max-width:calc(100% - 24px);flex-direction:row;align-items:center;gap:6px;padding:6px;border-radius:999px}
@@ -153,7 +153,7 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
     <span class="chip">PY · JS · XLS<b>STACK</b></span>
     <span class="chip">SEOUL<b>KR</b></span>
   </div>
-  <div class="orb" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
 </section>
 
 <section id="finance" data-menu="재무·회계">
