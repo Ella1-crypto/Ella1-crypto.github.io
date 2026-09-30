@@ -6,39 +6,48 @@
 <title>Ella's Side Ledger</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap">
 <style>
-/* Layout: 밝은 펄 캔버스(미니멀) + 옅은 와이어프레임 지평선(Y2K) + 진주 목걸이 검은 고양이(귀여움). 왼쪽 메뉴는 section[data-menu]로 자동 생성. */
+/* 설정 화면(my infinite buying setup)과 같은 룩: 어두운 캔버스, 유리 카드 + 크롬 그라데이션 테두리, 라임·라일락·핑크 포인트, Syne 디스플레이. 메뉴는 section[data-menu]로 자동 생성. */
 :root{
-  --bg:#f3f1ed; --bg-2:#ebe8e3; --fg:#17171b; --fg-2:#6d6c75; --line:rgba(23,23,27,.1);
-  --chrome:linear-gradient(135deg,#22222a 0%,#7c7e8c 30%,#c9cad3 46%,#6c6e7b 64%,#22222a 100%);
-  --pearl:radial-gradient(circle at 32% 30%,#ffffff 0%,#f4f1f5 40%,#e2dee6 75%,#cfcad4 100%);
-  --iris:linear-gradient(90deg,#e0739b,#a88cf0 48%,#56b9a8);
-  --blush:#f6c3cf; --blush-ink:#8a2447; --mint:#bfe6dd; --glow:#e0739b;
+  --bg:#05060b; --bg-2:#0b0d18; --fg:#eef0f7; --fg-2:#9aa0b8; --line:rgba(238,240,247,.1);
+  --card:rgba(18,20,34,.72);
+  --lime:#d4ff5c; --lime-ink:#1e2a02; --lilac:#b9a8ff; --pink:#ff9fd4; --pink-ink:#4a0f30; --ice:#9fe2ff;
+  --chrome:linear-gradient(115deg,#5d6378 0%,#f4f5fb 22%,#9aa3bb 40%,#d9ccff 55%,#a8e6ff 70%,#f4f5fb 85%,#5d6378 100%);
+  --chrome-text:linear-gradient(110deg,#8b92a8 0%,#ffffff 22%,#b9a8ff 42%,#9fe2ff 62%,#ffffff 80%,#ff9fd4 100%);
+  --iris:linear-gradient(90deg,#9fe2ff,#b9a8ff 45%,#ff9fd4 80%,#d4ff5c);
+  --glow:#b9a8ff;
   --display:"Syne","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --pixel:"Silkscreen",ui-monospace,monospace;
   --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
-  --soft-shadow:0 18px 44px -26px rgba(60,40,80,.28);
-  color-scheme:light;
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--fg);font:300 16px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:radial-gradient(70% 50% at 80% 10%,rgba(185,168,255,.12),transparent 60%),linear-gradient(var(--bg),var(--bg-2)) fixed;color:var(--fg);font:300 16px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 
 #ambient{position:fixed;inset:0;z-index:0;pointer-events:none}
-.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='.6'/></svg>")}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='.6'/></svg>")}
+.sparkles span{position:fixed;z-index:0;color:var(--lilac);pointer-events:none;animation:twinkle 3s ease-in-out infinite}
+.sparkles span:nth-child(1){top:9%;left:4%;font-size:1.3rem}
+.sparkles span:nth-child(2){top:24%;right:6%;font-size:1rem;animation-delay:.6s}
+.sparkles span:nth-child(3){bottom:16%;left:3%;font-size:1.1rem;animation-delay:1.2s}
+.sparkles span:nth-child(4){bottom:8%;right:4%;font-size:1.5rem;animation-delay:1.8s}
+@keyframes twinkle{50%{transform:scale(.5) rotate(45deg);opacity:.35}}
 
-/* Side menu — section[data-menu]마다 자동으로 한 줄씩 생긴다 (새 메뉴 = 새 section 추가) */
-.nav{position:fixed;z-index:20;left:20px;top:20px;bottom:20px;width:224px;display:flex;flex-direction:column;gap:14px;padding:18px 12px;border-radius:30px;background:rgba(255,255,255,.62);border:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:var(--soft-shadow)}
-.nav .brand{align-self:flex-start;margin-left:6px;font:800 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;background:var(--fg);color:#fff;text-decoration:none;white-space:nowrap}
+/* Side menu — 유리 캡슐 + 크롬 테두리 */
+.nav{position:fixed;z-index:20;left:20px;top:20px;bottom:20px;width:224px;display:flex;flex-direction:column;gap:14px;padding:18px 12px;border-radius:30px;backdrop-filter:blur(14px);
+  background:linear-gradient(var(--card),var(--card)) padding-box,var(--chrome) border-box;border:2px solid transparent}
+.nav .brand{align-self:flex-start;margin-left:6px;font:800 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;background:var(--chrome);color:#0a0b12;text-decoration:none;white-space:nowrap}
 .nav-label{margin:10px 0 0 14px;font:400 10px/1 var(--pixel);letter-spacing:.08em;color:var(--fg-2)}
 .menu{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;overflow-y:auto;scrollbar-width:none;min-height:0}
 .menu::-webkit-scrollbar{display:none}
-.menu a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;color:var(--fg-2);text-decoration:none;font-size:14px;white-space:nowrap;transition:color .3s,background .3s,box-shadow .3s}
+.menu a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;color:var(--fg-2);text-decoration:none;font-size:14px;white-space:nowrap;transition:color .3s,background .3s}
 .menu a em{font:400 10px/1 var(--pixel);font-style:normal;margin-right:8px;opacity:.7}
-.menu a .n{font:400 10px/1 var(--pixel);min-width:22px;height:22px;display:grid;place-items:center;border-radius:999px;border:1px solid var(--line);background:#fff}
-.menu a:hover{color:var(--fg);background:rgba(23,23,27,.04)}
-.menu a.active{color:var(--fg);background:#fff;box-shadow:0 6px 16px -10px rgba(60,40,80,.35)}
-.menu a.active .n{background:var(--blush);color:var(--blush-ink);border-color:transparent}
+.menu a .n{font:400 10px/1 var(--pixel);min-width:22px;height:22px;display:grid;place-items:center;border-radius:999px;border:1px solid var(--line)}
+.menu a:hover{color:var(--fg);background:rgba(238,240,247,.05)}
+.menu a.active{color:var(--fg);background:rgba(238,240,247,.08)}
+.menu a.active .n{background:var(--lime);color:var(--lime-ink);border-color:transparent}
 .menu a:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 .nav-foot{margin:auto 0 0 14px;font:400 9px/1.7 var(--pixel);letter-spacing:.06em;color:var(--fg-2);opacity:.7}
 
@@ -47,45 +56,49 @@ main{position:relative;z-index:1;padding-left:244px}
 
 section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:120px}
 .eyebrow{font:400 11px/1 var(--pixel);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);margin:0 0 26px;display:flex;align-items:center;gap:12px}
-.eyebrow::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--pearl);box-shadow:0 0 0 1px var(--line),0 2px 6px rgba(60,40,80,.18)}
-h1,h2{font-family:var(--display);font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.02em}
+.eyebrow::before{content:"✦";color:var(--lilac);animation:twinkle 2.4s ease-in-out infinite}
+h1,h2{font-family:var(--display);font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.03em}
 h1{font-size:clamp(40px,4.8vw,80px);line-height:1.04}
-h2{font-size:clamp(32px,5vw,68px);line-height:1.04;margin-bottom:20px}
-.iris{background:var(--iris);-webkit-background-clip:text;background-clip:text;color:transparent}
-.chrome-text{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:clamp(32px,5vw,64px);line-height:1.04;margin-bottom:20px;font-weight:500}
+.iris,.chrome-text{background:var(--chrome-text);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s var(--ease) infinite alternate}
+.iris{background-image:var(--iris);background-size:200% 100%}
+@keyframes sheen{to{background-position:100% 0}}
 .lead{max-width:32em;color:var(--fg-2);font-size:clamp(16px,1.4vw,19px);margin:28px 0 0}
 
-/* Hero — 진주 목걸이 검은 고양이가 둥실둥실 */
+/* Hero */
 .hero{position:relative;padding-right:clamp(250px,30vw,440px)}
 .hero>*:not(.mascot){position:relative;z-index:1}
 .mascot{position:absolute;z-index:0;right:clamp(-20px,1vw,40px);top:50%;width:clamp(230px,27vw,400px);height:auto;transform:translateY(-50%);pointer-events:none;user-select:none;
-  filter:drop-shadow(0 34px 34px rgba(60,40,80,.14));animation:float 6s ease-in-out infinite}
+  filter:drop-shadow(0 0 40px rgba(185,168,255,.25));animation:float 6s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(-50%)}50%{transform:translateY(calc(-50% - 12px))}}
 .hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:56px}
-.chip{font:400 11px/1 var(--pixel);letter-spacing:.04em;color:var(--fg);padding:12px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.7)}
+.chip{font:400 11px/1 var(--pixel);letter-spacing:.04em;color:var(--fg);padding:12px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
 .chip b{font-weight:400;color:var(--fg-2);margin-left:10px}
 
-/* Grid of programs */
+/* Grid of programs — 설정 화면 카드 */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-top:48px}
-.card{position:relative;background:rgba(255,255,255,.66);border:1px solid var(--line);border-radius:26px;padding:26px 24px 24px;display:flex;flex-direction:column;gap:14px;min-width:0;text-decoration:none;color:inherit;transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s;overflow:hidden}
-.card::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--iris);opacity:.55}
-.card:hover{transform:translateY(-4px);border-color:rgba(23,23,27,.18);box-shadow:var(--soft-shadow)}
+.card{position:relative;padding:26px 24px 24px;display:flex;flex-direction:column;gap:14px;min-width:0;text-decoration:none;color:inherit;border-radius:26px;backdrop-filter:blur(10px);
+  background:linear-gradient(var(--card),var(--card)) padding-box,var(--chrome) border-box;border:2px solid transparent;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);transform:translateX(-120%);transition:transform .9s var(--ease)}
+.card:hover{transform:translateY(-4px) rotate(-.3deg);box-shadow:0 30px 70px -40px rgba(185,168,255,.5)}
+.card:hover::after{transform:translateX(120%)}
 .card:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 .card-top{display:flex;justify-content:space-between;align-items:center;font:400 10px/1 var(--pixel);color:var(--fg-2);letter-spacing:.06em}
-.card-top .id{width:34px;height:34px;border-radius:50%;background:var(--pearl);box-shadow:0 0 0 1px var(--line),0 3px 8px rgba(60,40,80,.15);color:var(--fg);display:grid;place-items:center;font:700 11px var(--display)}
+.card-top .id{width:34px;height:34px;border-radius:50%;background:var(--chrome);color:#0a0b12;display:grid;place-items:center;font:700 11px var(--display)}
 .card h3{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .card p{margin:0;color:var(--fg-2);font-size:14.5px;line-height:1.65}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
-.tag{font:400 10px/1 var(--pixel);letter-spacing:.04em;color:var(--fg-2);border:1px solid var(--line);padding:7px 10px;border-radius:999px;background:#fff}
-.tag.on{color:var(--blush-ink);background:var(--blush);border-color:transparent}
-.card .go{position:absolute;right:22px;bottom:22px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font:400 14px var(--display);color:var(--fg);opacity:0;transform:translate(-6px,6px);transition:all .4s}
+.tag{font:400 10px/1 var(--pixel);letter-spacing:.04em;color:var(--fg-2);border:1px solid var(--line);padding:7px 10px;border-radius:999px}
+.tag.on{color:var(--lime-ink);background:var(--lime);border-color:transparent}
+.card .go{position:absolute;right:22px;bottom:22px;width:34px;height:34px;border-radius:50%;background:var(--pink);color:var(--pink-ink);display:grid;place-items:center;font:600 14px var(--display);opacity:0;transform:translate(-6px,6px);transition:all .4s}
 .card:hover .go{opacity:1;transform:none}
 
 /* About */
 .about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:64px;align-items:start;margin-top:40px}
 .about p{margin:0 0 18px;max-width:36em;color:var(--fg-2)}
 .about p:first-child{color:var(--fg)}
-.facts{list-style:none;margin:0;padding:6px 0;border:1px solid var(--line);border-radius:26px;background:rgba(255,255,255,.66)}
+.facts{list-style:none;margin:0;padding:6px 0;border-radius:26px;background:linear-gradient(var(--card),var(--card)) padding-box,var(--chrome) border-box;border:2px solid transparent}
 .facts li{display:flex;justify-content:space-between;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line);font-size:14px}
 .facts li:last-child{border-bottom:0}
 .facts li span:first-child{color:var(--fg-2);font:400 10px/1.8 var(--pixel);letter-spacing:.06em;text-transform:uppercase}
@@ -93,9 +106,9 @@ h2{font-size:clamp(32px,5vw,68px);line-height:1.04;margin-bottom:20px}
 
 /* Contact */
 .contact-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
-.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);padding:13px 20px;border-radius:999px;color:var(--fg);text-decoration:none;font-size:14px;background:rgba(255,255,255,.7);transition:border-color .3s,background .3s,transform .3s}
-.pill:hover{border-color:rgba(23,23,27,.25);background:#fff;transform:translateY(-2px)}
-.pill.primary{background:var(--fg);color:#fff;border-color:transparent;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--line);padding:13px 20px;border-radius:999px;color:var(--fg);text-decoration:none;font-size:14px;font-weight:600;background:var(--card);transition:transform .2s var(--ease),box-shadow .2s}
+.pill:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 22px -14px rgba(185,168,255,.7)}
+.pill.primary{background:var(--lime);color:var(--lime-ink);border-color:transparent}
 .pill code{font:400 12px var(--pixel);color:inherit;opacity:.85}
 .pill button{all:unset;cursor:pointer;font:400 10px var(--pixel);letter-spacing:.06em;opacity:.7}
 .pill button:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
@@ -125,6 +138,7 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
 
 <canvas id="ambient" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
+<div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
 
 <!-- 메뉴는 아래 section[data-menu] 순서대로 자동 생성된다. 메뉴 추가 = section 하나 추가, 순서 변경 = section 위치 이동 -->
 <nav class="nav" aria-label="메뉴">
@@ -358,7 +372,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function draw(){
   x.clearRect(0,0,W,H);
   // soft light blobs
-  const blobs=[[.78,.35,.5,'rgba(246,195,207,.35)'],[.15,.85,.5,'rgba(191,230,221,.32)'],[.55,.95,.45,'rgba(200,184,245,.22)']];
+  const blobs=[[.78,.35,.5,'rgba(185,168,255,.12)'],[.15,.85,.5,'rgba(159,226,255,.09)'],[.55,.95,.45,'rgba(255,159,212,.07)']];
   blobs.forEach(([bx,by,r,col],i)=>{
     const px=(bx+Math.sin(t*.0004+i)*.05)*W, py=(by+Math.cos(t*.0003+i*2)*.05)*H, rad=r*Math.max(W,H);
     const g=x.createRadialGradient(px,py,0,px,py,rad);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');
