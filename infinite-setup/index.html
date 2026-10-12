@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>무한매수 설정 · 체험판</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"><div class="grid-floor"></div><div class="star-big"><i></i></div></div>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span></div>
+
+  <div class="demo-banner" role="note">
+    <b>✦ 체험판</b> 실제 봇에 연결되지 않은 보여 주기용 화면이에요. 종목·원금·분할·주기·익절을 자유롭게 바꿔 볼 수 있고,
+    백테스트 결과는 미리 계산해 둔 예시(TQQQ · DFEN · HIBL · UDOW · MIDU · TNA · $10,000 · 40회 · 매일 · +10% 기준, 시세 2026-10-12)예요. 저장과 봇 켜기·끄기는 동작하지 않아요.
+    <a href="../">← Ella's Side Ledger</a>
+  </div>
+  <header class="top">
+    <p class="eyebrow"><span class="spark">✦</span> 라오어 무한매수법</p>
+    <h1 class="chrome">my infinite<br>buying ✦ setup</h1>
+    <div class="chips" id="chips"></div>
+  </header>
+
+  <section class="card guide" aria-labelledby="h-guide">
+    <h2 id="h-guide">✧ 설정 바꾸는 순서</h2>
+    <ol class="steps">
+      <li><b>종목마다</b> 원금·분할 수·매수 주기·익절률을 따로 정해요. 종목 하나가 사이클 하나예요. (전략 V2.2)</li>
+      <li><b>백테스트로 검사</b>를 눌러요. 종목마다 과거 결과와 최악 손실, 주기별·익절률별 비교표가 나와요.</li>
+      <li>검사를 통과하면 <b>저장하기</b>가 켜져요. 저장하면 파일에 기록돼요.</li>
+      <li><b>봇을 껐다 켜야 적용돼요.</b> 저장 버튼 옆의 <b>봇 끄기 → 봇 켜기</b>를 차례로 누르면 돼요.</li>
+    </ol>
+    <p class="muted">실제 화면은 내 기기에서만 열리고, 주문을 내는 기능은 없어요. (이 페이지는 체험판이라 저장되지 않아요.) <b>보유 중인 종목</b>은 뺄 수 없고 원금·분할 수·매수 주기를 바꿀 수 없어요(익절률만 가능). 사이클이 끝나 보유가 없을 때 바꾸면 다음 첫 매수부터 적용돼요. 다른 종목은 언제든 새로 담을 수 있어요.</p>
+  </section>
+
+  <main class="grid">
+    <section class="card bubble" aria-labelledby="h-budget">
+      <p class="step">01</p>
+      <h2 id="h-budget">종목 설정</h2>
+      <div class="tabs" id="tabs" role="tablist" aria-label="설정할 종목"></div>
+      <p class="msg warn" id="lock-note" hidden></p>
+      <label class="field">
+        <span>원금 (USD) <b class="pill lime" id="unit-out"></b></span>
+        <input id="principal" class="big-input" type="text" inputmode="decimal" autocomplete="off">
+      </label>
+      <div class="field">
+        <span>분할 수 <b class="pill lime" id="splits-out"></b></span>
+        <div class="seg" id="splits" role="radiogroup" aria-label="분할 수"></div>
+        <small>원금을 몇 번에 나눠 살지예요. 적을수록 하루에 많이 사서 빨리 채우고, 많을수록 조금씩 오래 사요.</small>
+      </div>
+      <div class="field">
+        <span>매수 주기 <b class="pill lime" id="interval-out"></b></span>
+        <div class="seg" id="interval" role="radiogroup" aria-label="매수 주기"></div>
+        <small><b>거래일</b> 기준이에요(주말·휴장일은 세지 않아요). 주기마다 한 번만 마감 직전에 매수를 판단하고, 익절 주문은 매일 걸어 둬요.</small>
+      </div>
+      <div class="field">
+        <span>익절 목표 <b class="pill lime" id="target-out"></b></span>
+        <div class="target-row">
+          <input id="target" type="range" min="10" max="15" step="0.5" aria-label="익절 목표 슬라이더">
+          <span class="pct-box"><input id="target-num" type="text" inputmode="decimal" autocomplete="off" aria-label="익절 목표 %"><i>%</i></span>
+        </div>
+        <small>평단 +10% ~ +15% (0.5% 단위). 보유 중에도 바꿀 수 있어요. 저장하고 봇을 다시 켜야 적용돼요.</small>
+      </div>
+      <figure class="chart">
+        <button type="button" id="chart-open" class="chart-btn" aria-label="그래프 크게 보기">
+          <svg id="chart" viewBox="0 0 360 250" role="img" aria-label="회차 T에 따른 ★% 와 익절선 그래프"></svg>
+          <span class="chart-hint">🔍 누르면 크게 보여요</span>
+        </button>
+        <figcaption class="muted">가로 = 회차 T, 세로 = 평단 대비 %. <b>보라선</b>은 매수·매도 기준이 되는 ★%로, 회차가 쌓일수록 내려와 절반부터는 평단 아래에서만 사요. <b>라임 점선</b>은 익절 목표예요. 분홍 점은 지금 실전 위치예요.</figcaption>
+      </figure>
+      <p class="rule" id="rule-line"></p>
+      <div class="reco">
+        <div class="row">
+          <b>익절 목표 추천</b>
+          <button id="btn-reco" class="btn small">과거 데이터로 계산</button>
+        </div>
+        <p class="muted">종목마다 10~15%를 0.5% 단위로 돌려, 앞 70%(학습)에서 가장 좋았던 값을 고르고 뒤 30%(검증)로 확인해요. 과거 결과 요약이지 미래 수익을 보장하는 투자 조언은 아니에요.</p>
+        <div id="reco-out"></div>
+      </div>
+    </section>
+
+    <section class="card wide" aria-labelledby="h-picks">
+      <p class="step">02</p>
+      <h2 id="h-picks">내 종목 (종목 하나 = 사이클 하나)</h2>
+      <div id="picks" class="pick-list"></div>
+      <p class="sum" id="sum"></p>
+      <div class="new-cycle-row">
+        <button type="button" id="btn-new-cycle" class="btn primary" aria-controls="new-cycle" aria-expanded="false">＋ 새 사이클 만들기</button>
+        <span class="muted">새 원금을 넣고 종목을 1~3개 골라 비율로 나눠요. 지금 돌고 있는 사이클은 그대로예요.</span>
+      </div>
+    </section>
+
+    <section class="card wide fill" id="new-cycle" aria-labelledby="h-cands" hidden>
+      <p class="step">03</p>
+      <div class="row head-row"><h2 id="h-cands">새 사이클 만들기 <span class="muted" id="cand-note"></span></h2><button type="button" id="new-cycle-close" class="btn small">닫기 ✕</button></div>
+      <p class="muted"><b>① 새로 넣을 원금</b>을 적고 → <b>② 종목을 고르고</b>(여러 개 가능) → <b>③ 비율</b>을 정한 뒤 만들기를 눌러요. 후보는 미국 상장 3배 데일리 ETF/ETN(운용사 자료로 확인)이고, 추천이 아니라 규칙(1회분으로 2주 이상, 오일·VIX·인버스·이머징 제외) 통과 여부예요.</p>
+      <div class="cand-head">
+        <label class="field inline"><span>① 새로 넣을 원금 $</span>
+          <span class="pct-box"><input id="new-principal" class="wide-num" type="text" inputmode="decimal" autocomplete="off"></span>
+        </label>
+        <label class="check"><input id="show-all" type="checkbox"> 못 담는 종목도 보기</label>
+      </div>
+      <div class="tray" id="tray" hidden>
+        <div class="row"><b>③ 고른 종목과 비율</b><span class="tray-btns"><button type="button" id="tray-even" class="btn small">똑같이 나누기</button><button type="button" id="tray-clear" class="btn small">비우기</button></span></div>
+        <div id="tray-list" class="tray-list"></div>
+        <p class="sum" id="tray-sum"></p>
+        <button type="button" id="tray-commit" class="btn primary">새 사이클 만들기</button>
+      </div>
+      <p class="muted" id="tray-hint"><b>② 종목 고르기</b> — 고른 종목끼리 "새로 넣을 원금"을 비율대로 나눠 각자의 원금이 돼요(종목 하나 = 사이클 하나). 만든 뒤 01번에서 종목마다 원금·분할·주기·익절을 고칠 수 있고, 04번에서 검사·저장해야 실제로 반영돼요.</p>
+      <div id="cands" class="cand-grid"></div>
+    </section>
+
+    <section class="card full" aria-labelledby="h-check">
+      <p class="step">04</p>
+      <h2 id="h-check">검사 · 저장 · 봇 켜기/끄기 <span id="bot-state" class="tag warn">봇 확인 중…</span></h2>
+      <div class="actions">
+        <button id="btn-check" class="btn">✧ 백테스트로 검사</button>
+        <button id="btn-save" class="btn primary" disabled>저장하기</button>
+        <span class="sep" aria-hidden="true"></span>
+        <button id="btn-stop" class="btn" disabled>■ 봇 끄기</button>
+        <button id="btn-start" class="btn danger" disabled>▶ 봇 켜기 (실전)</button>
+      </div>
+      <p class="muted" id="bot-note">켜면 실제 주문이 나가요. 미국장 열리기 전(한국 시간 22:30 전)에 켜 두면 그날 밤부터 돌아요.</p>
+      <div id="bot-msgs" role="status" aria-live="polite"></div>
+      <pre id="bot-log" class="log" hidden></pre>
+      <div id="msgs" role="status" aria-live="polite"></div>
+      <div id="results" class="results"></div>
+      <div id="after-save" class="after-save" hidden>
+        <h3>✦ 저장했어요 — 아직 봇에는 적용 전이에요</h3>
+        <ol class="steps">
+          <li>위의 <b>■ 봇 끄기</b>를 눌러요. (꺼져 있으면 건너뛰어요)</li>
+          <li>이어서 <b>▶ 봇 켜기 (실전)</b>를 눌러요.</li>
+          <li>카카오톡에 "봇 시작" 메시지가 오면 새 설정으로 돌아가는 거예요.</li>
+        </ol>
+        <p class="muted">미국장 열리기 전(한국 시간 22:30 전)에 하면 그날 밤부터 새 설정이 쓰여요.</p>
+      </div>
+      <p class="muted">저장한 뒤 <b>봇 끄기 → 봇 켜기</b>를 눌러야 적용돼요. 봇은 서버에서 돌고, 켜 두면 서버가 재부팅돼도 저절로 다시 켜져요.</p>
+    </section>
+  </main>
+  <div id="chart-modal" class="modal" hidden role="dialog" aria-modal="true" aria-label="그래프 크게 보기">
+    <div class="modal-box">
+      <div class="modal-head"><b>회차(T)별 ★% 기준선</b><button type="button" id="chart-close" class="btn small">닫기 ✕</button></div>
+      <svg id="chart-big" viewBox="0 0 360 250" role="img" aria-label="회차 T에 따른 ★% 와 익절선 그래프 (확대)"></svg>
+      <p class="muted">바깥을 누르거나 Esc 키로 닫아요.</p>
+    </div>
+  </div>
+  <script src="demo-data.js"></script>
+  <script src="demo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
