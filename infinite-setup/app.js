@@ -378,7 +378,7 @@
 
   async function post(path) {
     $("btn-check").disabled = true; $("btn-save").disabled = true;
-    $("msgs").replaceChildren(el("div", "msg warn", path.endsWith("save") ? "저장하는 중…" : "백테스트 중… 종목당 10~30초 걸려요 (새 종목은 과거 데이터를 받느라 더 걸려요) ✧"));
+    $("msgs").replaceChildren(el("div", "msg warn", path.endsWith("save") ? "저장하는 중…" : "백테스트 중… 종목당 10~30초 걸려요 (처음 한 번은 계산 엔진을 받느라 더 걸려요) ✧"));
     try {
       const r = await fetch(path, { method: "POST", headers: HDR, body: JSON.stringify(form()) });
       const data = await r.json();
