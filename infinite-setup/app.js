@@ -365,7 +365,7 @@
     for (const [sym, r] of Object.entries(data.results || {})) {
       const c = el("div", "result");
       const h = el("h3", null, `${sym} · ${usd0(r.principal)} · ${r.splits}회 · ${ivLong(r.interval || 1)} · +${(r.target * 100).toFixed(1).replace(/\.0$/, "")}%`);
-      h.append(tag(r.live_ok ? "ok" : "bad", r.live_ok ? "실전 가능" : "위험선 초과"));
+      h.append(tag(r.live_ok ? "ok" : "bad", r.live_ok ? "검증 기준 충족" : "검증 기준 미달"));
       const dl = el("dl");
       for (const [k, v] of [["기간", (r.period || []).join(" ~ ")], ["완료 사이클", r.cycles + "회"], ["누적 손익", usd(r.total_profit)],
         ["최악 평가손실", pct(r.worst_open_loss)], ["최장 물림", r.max_days_in_cycle + "거래일"], ["검증구간 평균", pct(r.oos_mean) + ` (${r.n_oos}건)`]]) dl.append(el("dt", null, k), el("dd", null, v));
@@ -480,7 +480,7 @@
         if (x.error) { c.append(el("b", null, x.symbol), el("span", "muted", " " + x.error)); out.append(c); continue; }
         const bestPct = (x.best * 100).toFixed(1).replace(/\.0$/, ""), curPct = (x.current * 100).toFixed(1).replace(/\.0$/, "");
         const same = Math.abs(x.best - x.current) < 1e-9;
-        const head = el("div", "row"); head.append(el("b", null, `${x.symbol} · 추천 +${bestPct}%`), tag(same ? "ok" : "warn", same ? "지금 설정과 같음" : `지금 +${curPct}%`));
+        const head = el("div", "row"); head.append(el("b", null, `${x.symbol} · 과거 기준 최선 +${bestPct}%`), tag(same ? "ok" : "warn", same ? "지금 설정과 같음" : `지금 +${curPct}%`));
         const dl = el("dl", "reco-dl");
         for (const [k, v] of [
           ["학습 구간 연평균", `${usd(x.is_best_yearly)} (지금 설정 ${usd(x.is_cur_yearly)})`],
