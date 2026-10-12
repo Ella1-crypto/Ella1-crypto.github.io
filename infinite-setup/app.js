@@ -63,7 +63,7 @@
       b.addEventListener("click", () => { sel = i; refresh(); });
       box.append(b);
     });
-    if (!picks.length) box.append(el("span", "muted", "아래 03번에서 종목을 담아 주세요 ✧"));
+    if (!picks.length) box.append(el("span", "muted", "02번의 ＋ 새 사이클 만들기를 눌러 종목을 담아 주세요 ✧"));
   }
 
   function seg(id, choices, value, label, locked, onPick) {
@@ -356,7 +356,7 @@
     if (data.saved) box.append(el("div", "msg ok", "✦ 저장했어요! 아래 순서대로 봇을 다시 켜야 적용돼요."));
     else if (!(data.errors || []).length && data.results) box.append(el("div", "msg ok", "✓ 검사 통과 — 아래 '저장하기'를 누르면 파일에 기록돼요."));
     const res = $("results"); res.replaceChildren();
-    if (Object.keys(data.results || {}).length) {
+    if (window.DEMO && Object.keys(data.results || {}).length) {          // 엑셀 저장은 체험판에만 (실제 화면에는 넣지 않기로 함)
       const save = el("button", "btn small", "⬇ 엑셀로 저장 (CSV)"); save.type = "button";
       save.addEventListener("click", () => downloadCsv(data.results));
       const bar = el("div", "export-row"); bar.append(save, el("span", "muted", "설정과 백테스트 표를 엑셀에서 열리는 파일로 내려받아요."));
