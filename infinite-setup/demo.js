@@ -22,10 +22,14 @@
       if (D.state.excluded[sym]) errors.push(`${sym}: ${D.state.excluded[sym]} 종목 (규칙 2-3)`);
       else if (price && unit < 2 * price) errors.push(`${sym}: 1회분 ${usd(unit)}로 2주(${usd(2 * price)}) 못 삼 (규칙 1-2) — 원금을 올리거나 분할 수를 줄이세요`);
       else if (!D.check[sym]) errors.push(`${sym}: 체험판에는 이 종목의 백테스트 결과가 들어 있지 않아요 (들어 있는 종목: ${have.join(" · ")})`);
-      else results[sym] = D.check[sym].results;
+      else {
+        const r = v.splits === D.state.default.splits ? D.check[sym].results : ((D.splits || {})[sym] || {})[v.splits];
+        if (r) results[sym] = r;
+        else errors.push(`${sym}: 체험판에는 ${v.splits}회 분할 결과가 들어 있지 않아요`);
+      }
     }
     if (!Object.keys(body.symbols || {}).length) errors.push("종목을 하나 이상 담아 주세요");
-    const warnings = errors.length ? [] : ["체험판: 아래 결과는 $10,000 · 40회 · 매일 · +10% 기준으로 미리 계산해 둔 예시예요. 지금 고른 값으로 다시 계산한 것이 아니에요."];
+    const warnings = errors.length ? [] : ["체험판: 미리 계산해 둔 결과예요. 고른 분할 수는 반영되지만, 원금 $10,000 · 매일 · +10% 는 고정이에요 (주기·익절은 아래 비교표에서 볼 수 있어요)."];
     return reply({ errors, warnings, results: errors.length ? {} : results, saved: false, settings: body }, errors.length ? 422 : 200, 700);
   }
 
