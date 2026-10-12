@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>무한매수 설정 · 체험판</title>
+  <title>라오어 무한매수법 설정 화면 (비공식 구현) · 체험판</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=1791775953">
+  <link rel="stylesheet" href="style.css?v=1791780397">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><div class="grid-floor"></div><div class="star-big"><i></i></div></div>
@@ -15,9 +15,11 @@
     <b>✦ 체험판</b> 실제 봇에 연결되지 않은 보여 주기용 화면이에요. 종목·원금·분할·주기·익절을 자유롭게 바꿔 보고 <b>백테스트로 검사</b>를 누르면
     고른 값 그대로 이 브라우저에서 실제로 계산해요 (DFEN · HIBL · MIDU · TNA · TQQQ · UDOW · 일봉 2026-10-12 까지 · 첫 검사는 계산 엔진을 받느라 조금 더 걸려요). 저장과 봇 켜기·끄기는 동작하지 않아요.
     <a href="../">← Ella's Side Ledger</a>
+    <span class="demo-note">책으로 공개된 '라오어 무한매수법'을 개인이 구현한 <b>비공식</b> 화면이며 저자·출판사와 무관해요.
+    모든 숫자는 <b>과거 데이터로 계산한 결과</b>일 뿐 투자 권유가 아니고, 미래 수익을 보장하지 않아요. 3배 레버리지 상품은 원금 대부분을 잃을 수 있어요.</span>
   </div>
   <header class="top">
-    <p class="eyebrow"><span class="spark">✦</span> 라오어 무한매수법</p>
+    <p class="eyebrow"><span class="spark">✦</span> 라오어 무한매수법 · 비공식 구현 (저자·출판사와 무관)</p>
     <h1 class="chrome">my infinite<br>buying ✦ setup</h1>
     <div class="chips" id="chips"></div>
   </header>
@@ -71,7 +73,7 @@
       <p class="rule" id="rule-line"></p>
       <div class="reco">
         <div class="row">
-          <b>익절 목표 추천</b>
+          <b>과거 기준 최선 익절률</b>
           <button id="btn-reco" class="btn small">과거 데이터로 계산</button>
         </div>
         <p class="muted">종목마다 10~15%를 0.5% 단위로 돌려, 앞 70%(학습)에서 가장 좋았던 값을 고르고 뒤 30%(검증)로 확인해요. 과거 결과 요약이지 미래 수익을 보장하는 투자 조언은 아니에요.</p>
@@ -144,8 +146,8 @@
       <p class="muted">바깥을 누르거나 Esc 키로 닫아요.</p>
     </div>
   </div>
-  <script src="demo-data.js?v=1791775953"></script>
-  <script src="demo.js?v=1791775953"></script>
-  <script src="app.js?v=1791775953"></script>
+  <script src="demo-data.js?v=1791780397"></script>
+  <script src="demo.js?v=1791780397"></script>
+  <script src="app.js?v=1791780397"></script>
 </body>
 </html>
