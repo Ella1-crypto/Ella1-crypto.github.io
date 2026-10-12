@@ -146,8 +146,6 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
   <p class="nav-label">MENU</p>
   <ul class="menu" id="menu">
     <li><a href="#finance" data-sec="finance">재무·회계</a></li>
-    <li><a href="#invest" data-sec="invest">투자 시그널</a></li>
-    <li><a href="#automation" data-sec="automation">자동화</a></li>
     <li><a href="#content" data-sec="content">콘텐츠</a></li>
   </ul>
   <p class="nav-foot">SIDE PROJECTS<br>ARCHIVE</p>
@@ -161,7 +159,7 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
   <h1 class="rv">숫자를 다루다가,<br><span class="iris">도구를 만들게</span> <span style="white-space:nowrap">됐습니다.</span></h1>
 
   <div class="hero-meta rv">
-    <span class="chip"><span id="count">10</span><b>PROGRAMS</b></span>
+    <span class="chip"><span id="count">7</span><b>PROGRAMS</b></span>
     <span class="chip">PY · JS · XLS<b>STACK</b></span>
     <span class="chip">SEOUL<b>KR</b></span>
   </div>
@@ -197,35 +195,6 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
   </div>
 </section>
 
-<section id="invest" data-menu="투자 시그널">
-  <p class="eyebrow rv" data-en="MARKET SIGNALS">MENU 02 · MARKET SIGNALS</p>
-  <h2 class="rv">장 열리기 전,<br><span class="chrome-text">한 줄의 신호.</span></h2>
-  <p class="lead rv">매일 아침 자동으로 계산해 메신저로 보내주는 규칙 기반 시그널입니다. 예측이 아니라, 정해둔 규칙을 지키기 위한 장치입니다.</p>
-  <div class="grid rv">
-    <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span class="id">04</span><span>2026 · DAILY</span></div>
-      <h3>KOSPI 반도체 레버리지 시그널</h3>
-      <p>레버리지 ETF 자금 유출입과 지수 위치를 보고 WAIT / BUY / REDUCE 세 상태 중 하나를 개장 전에 알려줍니다.</p>
-      <div class="tags"><span class="tag on">Python</span><span class="tag">스케줄러</span><span class="tag">카카오톡</span></div>
-      <span class="go">↗</span>
-    </a>
-    <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span class="id">05</span><span>2026 · REPORT</span></div>
-      <h3>글로벌 증시 일일 리포트</h3>
-      <p>한·미 증시 뉴스와 시황 페이지를 모아 시나리오 세 갈래로 정리한 Word 보고서를 만들고, 아침에 자동 전송합니다.</p>
-      <div class="tags"><span class="tag on">Python</span><span class="tag">docx</span><span class="tag">크롤링</span></div>
-      <span class="go">↗</span>
-    </a>
-    <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span class="id">06</span><span>2025 · SCREENER</span></div>
-      <h3>국장·미장 종목 스크리너</h3>
-      <p>정해둔 재무·차트 기준으로 후보를 걸러 TOP5를 뽑고, 각 종목의 근거를 표로 남깁니다.</p>
-      <div class="tags"><span class="tag on">Python</span><span class="tag">pandas</span></div>
-      <span class="go">↗</span>
-    </a>
-  </div>
-</section>
-
 <section id="infinite" data-menu="무한매수법">
   <p class="eyebrow rv" data-en="INFINITE BUYING">MENU · INFINITE BUYING</p>
   <h2 class="rv">나눠 사고,<br><span class="chrome-text">정해진 곳에서 판다.</span></h2>
@@ -243,28 +212,6 @@ footer{padding:48px 0 40px;font:400 10px/1.8 var(--pixel);color:var(--fg-2);lett
       <h3>운용 설정 화면</h3>
       <p>원금과 종목 비율을 입력하면 1회분으로 2주 이상 살 수 있는 3배 ETF 후보만 자동으로 걸러 주고, 바꾼 설정을 16년 백테스트로 검사한 뒤 저장합니다.</p>
       <div class="tags"><span class="tag on">JS</span><span class="tag">Python</span><span class="tag">백테스트</span></div>
-      <span class="go">↗</span>
-    </a>
-  </div>
-</section>
-
-<section id="automation" data-menu="자동화">
-  <p class="eyebrow rv" data-en="AUTOMATION">MENU 03 · AUTOMATION</p>
-  <h2 class="rv">내가 자는 동안<br><span class="chrome-text">돌아가는 것들.</span></h2>
-  <p class="lead rv">하루에 한 번 확인하면 되는 일들을 스크립트에 맡겼습니다.</p>
-  <div class="grid rv">
-    <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span class="id">07</span><span>2026 · BOT</span></div>
-      <h3>채용공고 모니터</h3>
-      <p>자산운용사·회계법인 공고를 조건에 맞게 걸러 새 공고만 메신저로 보내고, 이미 보낸 공고는 기록해 중복을 막습니다.</p>
-      <div class="tags"><span class="tag on">Python</span><span class="tag">API</span><span class="tag">카카오톡</span></div>
-      <span class="go">↗</span>
-    </a>
-    <a class="card" href="#" target="_blank" rel="noopener">
-      <div class="card-top"><span class="id">08</span><span>2025 · CLI</span></div>
-      <h3>은행 명세서 → Excel 변환기</h3>
-      <p>PDF 명세서 여러 달을 한 번에 읽어 거래 내역을 표로 만들고, 기초·기말 잔액이 맞는지 스스로 검증합니다.</p>
-      <div class="tags"><span class="tag on">Python</span><span class="tag">pdfplumber</span></div>
       <span class="go">↗</span>
     </a>
   </div>
