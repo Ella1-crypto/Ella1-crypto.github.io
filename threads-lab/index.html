@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Threads Lab 데일리 배치</title>
+  <meta name="description" content="스레드 실험 계정의 하루치 글 5개를 매일 아침 준비하는 자동화 루틴과, 그 규칙으로 글을 검수하는 도구">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261012">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+
+  <header class="top">
+    <a class="back" href="../#content">← Ella's Side Ledger</a>
+    <p class="eyebrow">THREADS LAB · DAILY BATCH · 07:00 KST</p>
+    <div class="top-grid">
+      <div>
+        <h1>매일 아침 일곱 시,<br><span class="iris">글 다섯 개가</span> 준비된다.</h1>
+        <p class="lead">스레드 실험 계정의 하루치 콘텐츠를 만드는 자동화 루틴입니다. 해외에서 반응이 온 생활용품 소재를 찾고, 글과 쇼츠 대본을 쓰고, 다른 에이전트에게 반박을 시킨 뒤, 시간표에 맞춰 예약까지 합니다.</p>
+        <p class="note" role="note">이 페이지는 루틴의 <b>규칙을 보여 주고 직접 돌려 보는 공개용 화면</b>입니다. 계정 이름과 실제 배치 내용은 싣지 않았고, 아래에 붙여 넣는 글은 이 브라우저 안에서만 처리되며 저장·전송되지 않습니다.</p>
+      </div>
+
+      <section class="today glass" aria-labelledby="today-heading">
+        <h2 class="pixel" id="today-heading">TODAY</h2>
+        <p class="dday" aria-live="polite"><span id="dday-value">D—</span></p>
+        <p class="phase"><span class="badge" id="phase-label"></span></p>
+        <p class="phase-detail" id="phase-detail"></p>
+        <ol class="track" id="track" aria-label="30일 일정">
+          <li data-phase="nolink"><b>D1–10</b><span>링크 없는 버전</span></li>
+          <li data-phase="link"><b>D11–20</b><span>링크 + 고지문 · CPC 1개</span></li>
+          <li data-phase="expand"><b>D21–</b><span>확장</span></li>
+        </ol>
+        <label class="field" for="date-input"><span>기준일 (D1 = 2026-09-17)</span>
+          <input type="date" id="date-input">
+        </label>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <section class="block" aria-labelledby="flow-heading">
+      <p class="pixel">01 · PIPELINE</p>
+      <h2 id="flow-heading">한 번 실행에 <span class="chrome-text">여섯 단계.</span></h2>
+      <ol class="flow">
+        <li class="glass wide"><span class="step">1</span><h3>소재 수집 <em>10 → 5</em></h3>
+          <p>해외 스레드에서 반응이 온 생활용품 글을 후보 10개까지만 모으고, 국내에서 같은 상품을 살 수 있는 것만 5개로 추립니다. 조회수를 읽지 못하면 <b>[확인 불가]</b>로 적고 지어내지 않습니다.</p></li>
+        <li class="glass"><span class="step">2</span><h3>본문 5개</h3>
+          <p>소재마다 훅 포인트 3개 → 첫 줄 후보 3개 → 5줄 이내 글 → 무음 15초 3컷 쇼츠 대본.</p></li>
+        <li class="glass"><span class="step">3</span><h3>반론 검증</h3>
+          <p>별도 에이전트가 3초 안에 넘길 이유 3개, 광고 티, 경험 날조를 지적하고 수정본을 냅니다. 더 나을 때만 채택합니다.</p></li>
+        <li class="glass"><span class="step">4</span><h3>시간표</h3>
+          <p>글 5개를 하루에 나눠 배정하고, 소재가 가장 강한 1개만 저녁 쇼츠로 돌립니다.</p></li>
+        <li class="glass"><span class="step">5</span><h3>게시·예약</h3>
+          <p>로그인된 계정이 실험 계정인지 먼저 확인합니다. 다른 계정이면 게시하지 않습니다. 오류나 제한 문구가 한 번이라도 뜨면 멈춥니다.</p></li>
+        <li class="glass wide"><span class="step">6</span><h3>마무리</h3>
+          <p>엑셀 1개(소재 · 본문 · 쇼츠 대본 · 검증 · 실험일지 5개 시트)와 요약을 남깁니다. 게시하지 못한 글은 붙여 넣을 수 있게 그대로 전달하고, 조회·클릭·전환 칸은 사람이 채웁니다.</p></li>
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="slots-heading">
+      <p class="pixel">02 · TIMETABLE</p>
+      <h2 id="slots-heading">메인 계정과는 <span class="chrome-text">30분 이상 어긋나게.</span></h2>
+      <div class="split">
+        <ul class="slots" id="slots"></ul>
+        <div class="glass panel">
+          <label class="field" for="main-times"><span>메인 계정 게시 시각 (쉼표로 구분, 24시간제)</span>
+            <input type="text" id="main-times" inputmode="numeric" autocomplete="off" placeholder="예: 07:30, 12:10, 21:00">
+          </label>
+          <p class="hint" id="slots-result" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="check-heading">
+      <p class="pixel">03 · CHECKER</p>
+      <h2 id="check-heading">올리기 전에 <span class="chrome-text">규칙으로 한 번 더.</span></h2>
+      <p class="lead">글을 붙여 넣으면 루틴이 지키는 규칙으로 확인합니다. 여러 개는 <code>---</code> 한 줄로 나눕니다.</p>
+      <div class="split checker">
+        <div class="glass panel">
+          <label class="field" for="draft"><span>글</span>
+            <textarea id="draft" rows="14" spellcheck="false" placeholder="첫 줄은 상황만&#10;둘째 줄부터 발견·비교·전언&#10;마지막 줄은 CTA&#10;---&#10;다음 글"></textarea>
+          </label>
+          <label class="field" for="names"><span>상품명 (쉼표로 구분 · 넣으면 첫 줄을 확인)</span>
+            <input type="text" id="names" autocomplete="off" placeholder="예: 건조대, 선 정리함">
+          </label>
+          <fieldset class="modes">
+            <legend>기간</legend>
+            <label><input type="radio" name="mode" value="auto" checked> <span id="mode-auto">기준일 따라</span></label>
+            <label><input type="radio" name="mode" value="nolink"> <span>링크 없는 버전</span></label>
+            <label><input type="radio" name="mode" value="link"> <span>링크 버전</span></label>
+          </fieldset>
+          <div class="actions">
+            <button type="button" class="btn primary" id="run">검수하기</button>
+            <button type="button" class="btn" id="sample">예시 넣기</button>
+            <button type="button" class="btn ghost" id="clear">지우기</button>
+          </div>
+        </div>
+        <div class="results" id="results" role="status">
+          <p class="empty">아직 검수한 글이 없습니다. 왼쪽에 글을 붙여 넣거나 <b>예시 넣기</b>를 눌러 보세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="rules-heading">
+      <p class="pixel">04 · HARD RULES</p>
+      <h2 id="rules-heading">자동화가 <span class="chrome-text">하지 않는 일.</span></h2>
+      <ul class="rules">
+        <li class="glass"><b>지어내지 않는다</b><span>읽지 못한 조회수·좋아요는 [확인 불가]. 확인 못 한 가격·효과·배송은 글에 넣지 않는다.</span></li>
+        <li class="glass"><b>써 본 척하지 않는다</b><span>"써봤어", "샀어" 같은 경험 표현 대신 발견·비교·전언만 쓴다.</span></li>
+        <li class="glass"><b>계정 행동은 하지 않는다</b><span>팔로우·좋아요·댓글·리포스트·프로필 수정은 사람이 한다. 자동화는 글 게시만.</span></li>
+        <li class="glass"><b>링크는 만들지 않는다</b><span>제휴 링크 생성과 링크 댓글은 계정 주인이 직접. 고지문은 빠뜨리지 않는다.</span></li>
+        <li class="glass"><b>원본을 다시 올리지 않는다</b><span>쇼츠는 자막과 컷을 새로 얹은 2차 창작으로만 지시하고 원본 계정을 적는다.</span></li>
+        <li class="glass"><b>의심스러우면 뺀다</b><span>정품 여부가 의심되는 상품, 타깃과 맞지 않는 상품은 후보에서 빼고 사유를 남긴다.</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>THREADS LAB · DAILY BATCH</span>
+    <a href="../#content">← ELLA'S SIDE LEDGER</a>
+  </footer>
+
+  <script type="module" src="app.js?v=20261012"></script>
+</body>
+</html>
