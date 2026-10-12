@@ -46,7 +46,8 @@
     if (errors.length) return later({ errors, warnings: [], results: {}, saved: false, settings: body }, 422, 300);
     try {
       const out = await engine("check", body);
-      if (!out.data.errors.length) out.data.warnings.push(`체험판: 지금 고른 값으로 이 브라우저에서 방금 계산한 결과예요 (일봉 ${D.day} 까지). 저장은 되지 않아요.`);
+      if (!out.data.errors.length) out.data.warnings.push(`체험판: 지금 고른 값으로 이 브라우저에서 방금 계산한 결과예요 (일봉 ${D.day} 까지). 저장은 되지 않아요.`,
+        "과거 데이터로 계산한 결과이며 투자 권유가 아닙니다. 미래 수익을 보장하지 않아요.");
       return respond(out.data, out.status);
     } catch (e) {
       return respond({ errors: ["계산 엔진을 불러오지 못했어요 — 인터넷 연결을 확인하고 새로고침해 주세요 (" + e.message.slice(0, 120) + ")"], warnings: [], results: {} }, 422);
