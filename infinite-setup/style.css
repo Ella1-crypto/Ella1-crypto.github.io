@@ -238,3 +238,4 @@ input[type=text]:disabled { opacity: .55; cursor: not-allowed; }
 .demo-banner b { color: var(--lime); }
 .demo-banner > b:first-child { margin-right: .5rem; }
 .demo-banner a { color: var(--lilac); margin-left: .5rem; white-space: nowrap; }
+.demo-note { display: block; margin-top: .5rem; padding-top: .5rem; border-top: 1px solid var(--line); color: var(--muted, #9aa0b8); font-size: .86rem; }
