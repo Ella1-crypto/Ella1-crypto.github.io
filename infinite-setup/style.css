@@ -231,9 +231,10 @@ input[type=text]:disabled { opacity: .55; cursor: not-allowed; }
 /* 검사 결과 내려받기 */
 .export-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: .6rem; }
 
-/* 체험판 안내 띠 */
+/* 체험판 안내 띠 — 아래 카드들과 좌우 끝을 맞춘다 */
 .demo-banner { position: relative; z-index: 2; box-sizing: border-box; max-width: calc(1120px - 2 * clamp(1rem, 4vw, 2.5rem));
   width: calc(100% - 2 * clamp(1rem, 4vw, 2.5rem)); margin: 1rem auto 0; padding: .8rem 1.1rem; border-radius: 18px;
   border: 1px solid var(--lime); background: rgba(212, 255, 92, .08); color: var(--fg); font-size: .92rem; line-height: 1.6; }
-.demo-banner b { color: var(--lime); margin-right: .5rem; }
+.demo-banner b { color: var(--lime); }
+.demo-banner > b:first-child { margin-right: .5rem; }
 .demo-banner a { color: var(--lilac); margin-left: .5rem; white-space: nowrap; }
