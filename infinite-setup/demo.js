@@ -23,7 +23,7 @@
   }
 
   function state() {
-    return { ...D.state, settings: { symbols: { TQQQ: { ...D.state.default } }, max_open_loss: 0.8 },
+    return { ...D.state, settings: { symbols: {}, max_open_loss: 0.8 },      // 체험판은 빈 상태에서 시작 — 방문자가 직접 종목을 담는다
       usd: null, positions: {}, held: {}, validation: {}, toss: true, bot: bot() };
   }
 
