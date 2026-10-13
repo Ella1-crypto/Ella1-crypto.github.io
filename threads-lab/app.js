@@ -1,8 +1,9 @@
 // lab-core.js 의 규칙을 화면에 연결한다. 모든 텍스트는 textContent 로만 넣는다(innerHTML 미사용).
 import {
-  DISCLOSURE, SHORTS_SLOT, SLOTS, checkBatch, checkPost, dayNumber, findConflicts, kstDateString,
-  parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261012';
+  DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
+  kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
+} from './lab-core.js?v=20261013';
+import { requestAnalysis } from './llm.js?v=20261013';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -90,19 +91,24 @@ function resultCard(title, findings, preview) {
   return card;
 }
 
-function disclosureCard() {
-  const card = h('article', 'glass result');
-  const button = h('button', 'btn', '고지문 복사');
-  button.type = 'button';
+function wireCopy(button, getText) {
+  const label = button.textContent;
   button.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(DISCLOSURE);
+      await navigator.clipboard.writeText(getText());
       button.textContent = '복사됨';
     } catch (error) {
       button.textContent = '복사 실패 — 직접 선택해 복사';
     }
-    setTimeout(() => { button.textContent = '고지문 복사'; }, 1800);
+    setTimeout(() => { button.textContent = label; }, 1800);
   });
+}
+
+function disclosureCard() {
+  const card = h('article', 'glass result');
+  const button = h('button', 'btn', '고지문 복사');
+  button.type = 'button';
+  wireCopy(button, () => DISCLOSURE);
   card.append(h('h3', '', '댓글 고지문'), h('p', 'preview', DISCLOSURE), button);
   return card;
 }
@@ -134,6 +140,30 @@ function fillSample() {
   runCheck();
 }
 
+async function generateDrafts() {
+  const status = $('generate-status');
+  const button = $('generate');
+  const apiKey = $('api-key').value.trim();
+  const { items, dropped } = parseItems($('items').value);
+  if (items.length === 0) { status.textContent = '소재를 한 줄 이상 적어 주세요.'; return; }
+  if (!apiKey) { status.textContent = 'API 키를 입력해 주세요.'; return; }
+
+  button.disabled = true;
+  status.textContent = `글 ${items.length}개를 쓰는 중입니다…`;
+  const result = await requestAnalysis(apiKey, buildDraftPrompt(items, { linkAllowed: isLinkAllowed() }));
+  button.disabled = false;
+  if (!result.ok) { status.textContent = result.error; return; }
+
+  const posts = parseDrafts(result.text);
+  if (posts.length === 0) { status.textContent = '응답에서 글을 찾지 못했습니다. 다시 눌러 주세요.'; return; }
+  $('draft').value = posts.join('\n---\n');
+  $('names').value = items.map((item) => item.name).join(', ');
+  runCheck();
+  const extra = dropped ? ` 소재는 5개까지만 써서 ${dropped}개는 뺐습니다.` : '';
+  status.textContent = `초안 ${posts.length}개를 아래 검수기에 넣었습니다. 수정 표시가 있으면 고친 뒤 다시 검수하세요.${extra}`;
+  $('check-heading').scrollIntoView({ block: 'start' });
+}
+
 function clearAll() {
   $('draft').value = '';
   $('names').value = '';
@@ -146,5 +176,7 @@ $('main-times').addEventListener('input', renderSlots);
 $('run').addEventListener('click', runCheck);
 $('sample').addEventListener('click', fillSample);
 $('clear').addEventListener('click', clearAll);
+$('generate').addEventListener('click', generateDrafts);
+wireCopy($('copy-draft'), () => $('draft').value);
 renderToday();
 renderSlots();
