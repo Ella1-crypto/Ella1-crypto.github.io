@@ -3,7 +3,7 @@ import {
   BATCH_SIZE as MAX_ITEMS, DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
 } from './lab-core.js?v=20261013';
-import { requestAnalysis } from './llm.js?v=20261013c';
+import { requestAnalysis } from './llm.js?v=20261013f';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
