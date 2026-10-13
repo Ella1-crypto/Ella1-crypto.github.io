@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>소재·키워드 찾기</title>
+  <meta name="description" content="네이버 검색광고 월간 검색수로 그날 쓸 소재를 거르는 기준과, 가장 최근 조사 결과">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261013c">
+  <link rel="stylesheet" href="sojae.css?v=20261013c">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+
+  <header class="top">
+    <a class="back" href="../#content">← Ella's Side Ledger</a>
+    <p class="eyebrow">MATERIAL FINDER · NAVER SEARCH AD</p>
+    <div class="top-grid">
+      <div>
+        <h1>오늘 쓸 소재는<br><span class="iris">숫자로 고른다.</span></h1>
+        <p class="lead">쇼핑글 소재를 감으로 고르지 않기 위해, 네이버 검색광고의 월간 검색수로 후보를 거릅니다.
+          검색량이 받쳐 주고, 물건이고, 효능을 주장하지 않아도 되는 것만 남깁니다.</p>
+        <p class="note" role="note">이 페이지는 <b>PC 앱에서 조사한 결과를 올려 둔 화면</b>입니다. 네이버 검색광고 API는
+          비밀키 서명이 필요하고 브라우저 호출을 막아 두어, 공개 페이지에서 직접 조회할 수 없습니다. 그래서 키는 이 사이트에
+          올라가지 않습니다.</p>
+      </div>
+      <section class="today glass" aria-labelledby="meta-heading">
+        <h2 class="pixel" id="meta-heading">LATEST</h2>
+        <p class="dday" id="count">–</p>
+        <p class="phase"><span class="badge" id="checked">확인일 –</span></p>
+        <p class="phase-detail" id="seeds">기초 낱말 –</p>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <section class="block" aria-labelledby="rule-heading">
+      <p class="pixel">01 · RULES</p>
+      <h2 id="rule-heading">감이 아니라 <span class="chrome-text">기준으로 거른다.</span></h2>
+      <p class="lead">엑셀로 손으로 하던 TOP20 스크리닝을 그대로 코드로 옮긴 기준입니다.</p>
+      <ol class="howto">
+        <li><b>월간 검색량 300 이상</b>네이버 검색광고 키워드도구의 PC+모바일 월간검색수. 숫자가 확인되지 않으면 후보에서 뺍니다.</li>
+        <li><b>물건만 남긴다</b>"OO 추천·방법·가격" 같은 검색 의도, 시공·서비스·대형가구는 링크 보고 바로 사는 물건이 아니라 뺍니다.</li>
+        <li><b>효능 주장은 뺀다</b>탈모·미백·주름·다이어트처럼 사실 확인이 어려운 말은 소재로 쓰지 않습니다.</li>
+        <li><b>경쟁 과열은 미룬다</b>광고 경쟁이 '높음'인 낱말은 검색량이 커도 후순위로 둡니다.</li>
+        <li><b>계정 주제 먼저</b>출근 패션 · 현실 뷰티 · 생활정보를 앞에 두고, 같은 주제 안에서 검색량 순으로 줄 세웁니다.</li>
+        <li><b>모르는 건 모른다고 쓴다</b>리뷰 수·별점·반짝 유행 여부는 무료 API로 받을 수 없어 <code>[확인 불가]</code>로 두고 사람이 확인합니다.</li>
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="list-heading">
+      <p class="pixel">02 · CANDIDATES</p>
+      <h2 id="list-heading">기준을 통과한 <span class="chrome-text">소재 후보.</span></h2>
+      <p class="lead" id="notes">불러오는 중…</p>
+      <div class="filters" id="filters" role="group" aria-label="카테고리 고르기"></div>
+      <ul class="cards" id="list"></ul>
+      <p class="hint" id="source"></p>
+    </section>
+
+    <section class="block" aria-labelledby="next-heading">
+      <p class="pixel">03 · NEXT</p>
+      <h2 id="next-heading">고른 소재는 <span class="chrome-text">글로 넘어간다.</span></h2>
+      <p class="lead">여기서 고른 소재는 <code>상품명 | 확인한 사실</code> 한 줄로 정리해
+        <a href="../threads-lab/">Threads Lab 데일리 배치</a>의 소재 칸에 넣으면 그대로 초안 5개가 됩니다.
+        쿠팡 링크를 붙이는 글은 본문 첫 줄에 고지문을 넣습니다 —
+        <code>[광고] 이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</code></p>
+    </section>
+  </main>
+
+  <footer>
+    <span>ELLA'S SIDE LEDGER</span>
+    <span><a href="../#content">← 목록으로</a></span>
+  </footer>
+
+  <script type="module" src="sojae.js?v=20261013c"></script>
+</body>
+</html>
