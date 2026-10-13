@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>쇼츠 대본</title>
+  <meta name="description" content="스레드 초안을 7~15초 쇼츠 장면으로 나누고 자막과 읽을 말을 정리합니다">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261013k">
+  <link rel="stylesheet" href="shorts.css?v=20261013k">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+
+  <nav class="menubar" aria-label="메뉴">
+    <a class="menu-item" href="../sojae/">🔎 1. 소재 찾기</a>
+    <a class="menu-item" href="../threads-lab/#draft-heading">📨 2. 스레드 초안</a>
+    <a class="menu-item" href="../threads-lab/#blog-heading">✍️ 3. 블로그 초안</a>
+    <a class="menu-item" href="../threads-lab/#check-heading">🧾 4. 검수</a>
+    <a class="menu-item on" href="./">🎬 5. 쇼츠 대본</a>
+    <a class="menu-item" href="../analyzer/">🔍 6. 글 구조 분석</a>
+  </nav>
+
+  <header class="top">
+    <a class="back" href="../#content">← Ella's Side Ledger</a>
+    <p class="eyebrow">SHORTS SCRIPT · 7~15초</p>
+    <h1>스레드 글을<br><span class="iris">컷으로 나눈다.</span></h1>
+    <p class="lead">2번 메뉴에서 만든 스레드 초안을 그대로 가져와, 훅·전개·마무리를 컷으로 나누고 자막과 읽을 말을 정리합니다.
+      규칙은 PC 앱과 같습니다 — 컷 4개 이내, 첫 컷 3초 이하, 전체 7~15초.</p>
+    <p class="note" role="note">영상 파일(MP4)은 음성 합성과 자막 입히기가 필요해 <b>PC 앱에서 만듭니다.</b>
+      여기서는 촬영·편집에 쓸 대본까지 준비합니다.</p>
+  </header>
+
+  <main>
+    <section class="block" aria-labelledby="script-heading">
+      <p class="pixel">01 · SCRIPT</p>
+      <h2 id="script-heading">컷마다 <span class="chrome-text">자막과 읽을 말.</span></h2>
+      <div class="glass panel">
+        <label class="field" for="source"><span>스레드 초안 (2번 메뉴에서 자동으로 넘어옵니다 · 고쳐도 됩니다)</span>
+          <textarea id="source" rows="8" spellcheck="false" placeholder="글과 글 사이는 --- 한 줄로 나눕니다."></textarea>
+        </label>
+        <div class="actions">
+          <button type="button" class="btn primary" id="redraw">컷 다시 나누기</button>
+        </div>
+      </div>
+      <div id="shorts-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>ELLA'S SIDE LEDGER</span>
+    <span><a href="../#content">← 목록으로</a></span>
+  </footer>
+
+  <script type="module" src="shorts.js?v=20261013k"></script>
+</body>
+</html>

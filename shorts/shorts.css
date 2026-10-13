@@ -1,0 +1,15 @@
+/* 쇼츠 대본 페이지 조각. 색·폰트는 style.css 토큰을 따른다. */
+#shorts-list{display:grid;gap:18px;margin-top:28px}
+.post-card{display:grid;gap:12px}
+.post-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.post-head h3{margin:0;font:700 19px/1.3 var(--display);letter-spacing:-.02em}
+.scenes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.scene{padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px}
+.scene h3{margin:0;font:700 16px/1.3 var(--display);letter-spacing:-.01em}
+.scene-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.scene .rank{font:400 10px/1 var(--pixel);color:var(--lilac);letter-spacing:.05em}
+.scene .volume{font:400 10px/1 var(--pixel);color:var(--lime);letter-spacing:.04em}
+.scene .why{margin:0;font-size:12.5px;line-height:1.6;color:var(--fg-2)}
+.empty{padding:22px;border:1px dashed var(--line);border-radius:var(--r-sm);color:var(--fg-2);font-size:13.5px}
+@media (max-width:980px){.scenes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.scenes{grid-template-columns:1fr}}
