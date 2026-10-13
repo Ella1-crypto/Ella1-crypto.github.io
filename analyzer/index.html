@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.anthropic.com https://generativelanguage.googleapis.com; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>바이럴 글 구조 분석기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="styles.css?v=20261013k">
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">90</span><span>바이럴 글 구조 분석기</span></div>
+      <nav class="nav" aria-label="메뉴">
+        <a href="../sojae/">소재 찾기</a>
+        <a href="../threads-lab/#draft-heading">스레드 초안</a>
+        <a href="../threads-lab/#blog-heading">블로그 초안</a>
+        <a href="../shorts/">쇼츠 대본</a>
+        <a href="../#content">목록</a>
+      </nav>
+    </header>
+
+    <main class="bento">
+      <section class="card hero span-5" aria-labelledby="input-heading">
+        <h1 class="big" id="input-heading">터진 글을 붙여 넣으면<br>구조만 뽑아냅니다</h1>
+        <div class="stack-lg">
+          <p class="dim small">붙여 넣은 글은 이 브라우저 안에서만 처리되고 저장되지 않습니다. 문장을 가져오는 도구가 아니라 훅·전개·댓글 유도의 뼈대를 보는 도구입니다.</p>
+          <div>
+            <label class="small" for="source">분석할 글</label>
+            <textarea class="field" id="source" placeholder="스레드 글 본문을 붙여 넣으세요" spellcheck="false"></textarea>
+          </div>
+          <div class="chips">
+            <button class="btn primary" type="button" id="run">구조 분석</button>
+            <button class="btn" type="button" id="clear">지우기</button>
+          </div>
+          <p class="notice" id="input-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <section class="card span-7" aria-labelledby="result-heading" id="result">
+        <h2 id="result-heading">분석 결과 (규칙 기반 추정)</h2>
+        <p class="dim">왼쪽에 글을 붙여 넣고 구조 분석을 누르세요.</p>
+      </section>
+
+      <section class="card span-6" aria-labelledby="variation-heading" id="variation" hidden></section>
+      <section class="card span-6" aria-labelledby="record-heading" id="record" hidden></section>
+      <section class="card span-12" aria-labelledby="llm-heading" id="llm" hidden></section>
+    </main>
+
+    <footer class="footer">
+      <p>다른 계정의 문장·사진·영상은 복제하지 않습니다. 구조와 아이디어만 분석합니다.</p>
+      <p>변형안의 [ ] 자리는 직접 겪은 일과 직접 확인한 사실로만 채웁니다.</p>
+    </footer>
+  </div>
+  <script type="module" src="analyzer.js?v=20261013k"></script>
+</body>
+</html>
