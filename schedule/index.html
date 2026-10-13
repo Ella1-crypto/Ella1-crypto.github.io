@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>예약 발행</title>
+  <meta name="description" content="올릴 글과 시각을 모아 둔 목록. 자동 발행은 켜져 있지 않습니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261013n">
+  <link rel="stylesheet" href="schedule.css?v=20261013n">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+
+  <nav class="menubar" aria-label="메뉴">
+    <a class="menu-item" href="../sojae/">🔎 1. 소재 찾기</a>
+    <a class="menu-item" href="../threads-lab/#draft-heading">📨 2. 스레드 초안</a>
+    <a class="menu-item" href="../threads-lab/#blog-heading">✍️ 3. 블로그 초안</a>
+    <a class="menu-item" href="../threads-lab/#check-heading">🧾 4. 검수</a>
+    <a class="menu-item" href="../shorts/">🎬 5. 쇼츠 대본</a>
+    <a class="menu-item" href="../analyzer/">🔍 6. 글 구조 분석</a>
+    <a class="menu-item on" href="./">⏰ 7. 예약 발행</a>
+  </nav>
+
+  <header class="top">
+    <a class="back" href="../#content">← Ella's Side Ledger</a>
+    <p class="eyebrow">SCHEDULE · 아직 수동 발행</p>
+    <div class="top-grid">
+      <div>
+        <h1>올릴 글과<br><span class="iris">올릴 시각.</span></h1>
+        <p class="lead">PC 앱에서 예약 목록에 넣은 글을 여기서 확인합니다. 어느 날 몇 건이 잡혀 있는지,
+          링크가 붙는 글은 무엇인지 한눈에 봅니다.</p>
+        <p class="note" role="note"><b>자동 발행은 켜져 있지 않습니다.</b> 이 목록은 "언제 무엇을 올릴지" 정리한 것이고,
+          실제 게시는 사람이 직접 합니다. 자동화를 켜면 하루 건수·고지문·계정 위험을 먼저 정한 뒤에 켭니다.</p>
+      </div>
+      <section class="today glass" aria-labelledby="meta-heading">
+        <h2 class="pixel" id="meta-heading">QUEUE</h2>
+        <p class="dday" id="count">–</p>
+        <p class="phase"><span class="badge" id="updated">갱신 –</span></p>
+        <p class="phase-detail" id="days">날짜별 –</p>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <section class="block" aria-labelledby="list-heading">
+      <p class="pixel">01 · QUEUE</p>
+      <h2 id="list-heading">언제 <span class="chrome-text">무엇을 올리나.</span></h2>
+      <p class="lead" id="notes">불러오는 중…</p>
+      <ul class="queue" id="queue"></ul>
+    </section>
+
+    <section class="block" aria-labelledby="rule-heading">
+      <p class="pixel">02 · RULES</p>
+      <h2 id="rule-heading">켜기 전에 <span class="chrome-text">정할 것.</span></h2>
+      <ol class="howto">
+        <li><b>하루 몇 건</b>운영지침은 하루 5개입니다. 8건을 넘으면 스팸으로 판정될 위험이 커집니다. 적게 시작해 반응을 보고 올립니다.</li>
+        <li><b>고지문</b>제휴 링크가 있는 글은 본문 첫 줄에 고지문을 넣고, 링크는 첫 댓글에 답니다. 앱이 자동으로 붙여 줍니다.</li>
+        <li><b>토큰 수명</b>스레드 토큰은 60일이면 만료됩니다. 자동 발행을 켜면 만료 전에 갱신하는 일이 함께 돌아야 합니다.</li>
+        <li><b>사실 확인</b>가격·효과·배송은 확인한 것만 씁니다. 예약해 두고 잊으면 틀린 정보가 그대로 올라갑니다.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <span>ELLA'S SIDE LEDGER</span>
+    <span><a href="../#content">← 목록으로</a></span>
+  </footer>
+
+  <script type="module" src="schedule.js?v=20261013n"></script>
+</body>
+</html>

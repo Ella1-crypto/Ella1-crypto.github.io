@@ -1,0 +1,8 @@
+/* 예약 목록 조각. 색·폰트는 style.css 토큰을 따른다. */
+.queue{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:8px}
+.queue-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px}
+.queue-row .when{font:400 11px/1 var(--pixel);color:var(--lime);letter-spacing:.04em;flex:none}
+.queue-row .mark{font-size:14px;flex:none}
+.queue-row .title{font-size:14px;color:var(--fg);flex:1 1 200px}
+.queue-row .tag{font:400 9px/1 var(--pixel);letter-spacing:.04em;padding:7px 9px;border-radius:999px;border:1px solid var(--line);color:var(--fg-2)}
+.empty{padding:22px;border:1px dashed var(--line);border-radius:var(--r-sm);color:var(--fg-2);font-size:13.5px}
