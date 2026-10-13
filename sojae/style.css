@@ -155,6 +155,14 @@ input:focus-visible,textarea:focus-visible,.btn:focus-visible,.back:focus-visibl
 .save-key{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:12.5px;line-height:1.6;color:var(--fg-2);cursor:pointer}
 .save-key input{margin:2px 0 0;accent-color:var(--lime);width:15px;height:15px;flex:none}
 
+.menubar{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.menu-item{font:400 11px/1 var(--pixel);letter-spacing:.04em;padding:11px 13px;border-radius:999px;border:1px solid var(--line);
+  background:var(--card);color:var(--fg-2);text-decoration:none;transition:color .3s,border-color .3s,background .3s}
+.menu-item:hover{color:var(--fg);border-color:var(--lilac)}
+.menu-item.on{background:var(--lime);color:var(--lime-ink);border-color:transparent}
+.menu-item.off{opacity:.45;cursor:not-allowed}
+@media (max-width:560px){.menu-item{font-size:10px;padding:10px 11px}}
+
 footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-block:40px;border-top:1px solid var(--line);font:400 10px/1.8 var(--pixel);letter-spacing:.06em;color:var(--fg-2)}
 footer a{color:inherit;text-decoration:none}
 footer a:hover{color:var(--fg)}
