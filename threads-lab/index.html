@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://api.anthropic.com; base-uri 'self'; form-action 'none'; object-src 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Threads Lab 데일리 배치</title>
   <meta name="description" content="스레드 실험 계정의 하루치 글 5개를 매일 아침 준비하는 자동화 루틴과, 그 규칙으로 글을 검수하는 도구">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261012">
+  <link rel="stylesheet" href="style.css?v=20261013">
 </head>
 <body>
   <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
@@ -22,7 +22,7 @@
       <div>
         <h1>매일 아침 일곱 시,<br><span class="iris">글 다섯 개가</span> 준비된다.</h1>
         <p class="lead">스레드 실험 계정의 하루치 콘텐츠를 만드는 자동화 루틴입니다. 해외에서 반응이 온 생활용품 소재를 찾고, 글과 쇼츠 대본을 쓰고, 다른 에이전트에게 반박을 시킨 뒤, 시간표에 맞춰 예약까지 합니다.</p>
-        <p class="note" role="note">이 페이지는 루틴의 <b>규칙을 보여 주고 직접 돌려 보는 공개용 화면</b>입니다. 계정 이름과 실제 배치 내용은 싣지 않았고, 아래에 붙여 넣는 글은 이 브라우저 안에서만 처리되며 저장·전송되지 않습니다.</p>
+        <p class="note" role="note">이 페이지는 루틴의 <b>규칙을 보여 주고 직접 돌려 보는 공개용 화면</b>입니다. 계정 이름과 실제 배치 내용은 싣지 않았고, 아래 검수기에 붙여 넣는 글은 이 브라우저 안에서만 처리되며 저장되지 않습니다. 초안 만들기를 쓸 때만 입력한 소재가 Anthropic API 로 전송됩니다.</p>
       </div>
 
       <section class="today glass" aria-labelledby="today-heading">
@@ -76,8 +76,34 @@
       </div>
     </section>
 
+    <section class="block" aria-labelledby="draft-heading">
+      <p class="pixel">03 · DRAFT</p>
+      <h2 id="draft-heading">소재를 적으면 <span class="chrome-text">초안 다섯 개.</span></h2>
+      <p class="lead">소재를 한 줄에 하나씩 적고 누르면 루틴의 규칙대로 글 초안을 쓰고, 바로 아래 검수기로 넘깁니다. <b>소재 찾기와 스레드 게시는 여기서 하지 않습니다.</b></p>
+      <div class="split">
+        <div class="glass panel">
+          <label class="field" for="items"><span>소재 (한 줄에 하나 · 최대 5개 · <code>상품명 | 확인한 사실</code>)</span>
+            <textarea id="items" class="short" rows="6" spellcheck="false" placeholder="접이식 실리콘 건조대 | 말아서 서랍에 보관, 싱크대 위에 걸침&#10;멀티탭 선 정리함 | 멀티탭째 넣고 뚜껑을 덮는 구조"></textarea>
+          </label>
+          <label class="field" for="api-key"><span>Anthropic API 키</span>
+            <input type="password" id="api-key" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+          </label>
+          <div class="actions">
+            <button type="button" class="btn primary" id="generate">초안 만들기</button>
+          </div>
+          <p class="hint" id="generate-status" role="status"></p>
+        </div>
+        <ul class="facts">
+          <li><b>키는 저장하지 않습니다</b><span>이 탭의 메모리에만 있고, 새로 고치면 사라집니다. Anthropic API 로만 전송됩니다.</span></li>
+          <li><b>요금은 내 키로 나갑니다</b><span>한 번 누를 때마다 내 API 계정에 사용량이 잡힙니다. 응답까지 수십 초가 걸릴 수 있습니다.</span></li>
+          <li><b>적은 사실만 씁니다</b><span>가격·효과·배송은 소재 옆에 적어 준 것만 글에 들어갑니다. 그래도 올리기 전에 직접 확인하세요.</span></li>
+          <li><b>공용 PC 에서는 쓰지 마세요</b><span>키를 입력한 탭은 쓰고 나서 닫습니다.</span></li>
+        </ul>
+      </div>
+    </section>
+
     <section class="block" aria-labelledby="check-heading">
-      <p class="pixel">03 · CHECKER</p>
+      <p class="pixel">04 · CHECKER</p>
       <h2 id="check-heading">올리기 전에 <span class="chrome-text">규칙으로 한 번 더.</span></h2>
       <p class="lead">글을 붙여 넣으면 루틴이 지키는 규칙으로 확인합니다. 여러 개는 <code>---</code> 한 줄로 나눕니다.</p>
       <div class="split checker">
@@ -97,6 +123,7 @@
           <div class="actions">
             <button type="button" class="btn primary" id="run">검수하기</button>
             <button type="button" class="btn" id="sample">예시 넣기</button>
+            <button type="button" class="btn" id="copy-draft">글 복사</button>
             <button type="button" class="btn ghost" id="clear">지우기</button>
           </div>
         </div>
@@ -107,7 +134,7 @@
     </section>
 
     <section class="block" aria-labelledby="rules-heading">
-      <p class="pixel">04 · HARD RULES</p>
+      <p class="pixel">05 · HARD RULES</p>
       <h2 id="rules-heading">자동화가 <span class="chrome-text">하지 않는 일.</span></h2>
       <ul class="rules">
         <li class="glass"><b>지어내지 않는다</b><span>읽지 못한 조회수·좋아요는 [확인 불가]. 확인 못 한 가격·효과·배송은 글에 넣지 않는다.</span></li>
@@ -125,6 +152,6 @@
     <a href="../#content">← ELLA'S SIDE LEDGER</a>
   </footer>
 
-  <script type="module" src="app.js?v=20261012"></script>
+  <script type="module" src="app.js?v=20261013"></script>
 </body>
 </html>
