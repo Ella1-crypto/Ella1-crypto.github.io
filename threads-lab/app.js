@@ -1,9 +1,9 @@
 // lab-core.js 의 규칙을 화면에 연결한다. 모든 텍스트는 textContent 로만 넣는다(innerHTML 미사용).
 import {
-  BATCH_SIZE as MAX_ITEMS, DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
+  BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
 } from './lab-core.js?v=20261013';
-import { requestAnalysis } from './llm.js?v=20261013f';
+import { requestAnalysis } from './llm.js?v=20261013g';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -207,8 +207,19 @@ async function generateDrafts() {
   $('names').value = items.map((item) => item.name).join(', ');
   runCheck();
   const extra = dropped ? ` 소재는 5개까지만 써서 ${dropped}개는 뺐습니다.` : '';
-  status.textContent = `초안 ${posts.length}개를 아래 검수기에 넣었습니다. 수정 표시가 있으면 고친 뒤 다시 검수하세요.${extra}`;
+  status.textContent = `스레드 글 ${posts.length}개를 검수기에 넣었습니다. 이어서 블로그 초안을 쓰는 중입니다…${extra}`;
   $('check-heading').scrollIntoView({ block: 'start' });
+
+  // 블로그는 글이 길어 한 번 더 부른다. 스레드 글은 이미 나왔으므로 여기서 실패해도 그대로 쓸 수 있다.
+  button.disabled = true;
+  const blog = await requestAnalysis(apiKey, buildBlogPrompt(items));
+  button.disabled = false;
+  if (!blog.ok) {
+    status.textContent = `스레드 글 ${posts.length}개는 나왔습니다. 블로그 초안은 실패했습니다 — ${blog.error}`;
+    return;
+  }
+  $('blog-draft').value = blog.text.trim();
+  status.textContent = `스레드 글 ${posts.length}개와 블로그 초안 한 편을 만들었습니다.${extra}`;
 }
 
 function clearAll() {
@@ -231,5 +242,6 @@ loadSavedItems();
 loadPickedMaterials();
 $('items').addEventListener('input', rememberItems);
 wireCopy($('copy-draft'), () => $('draft').value);
+wireCopy($('copy-blog'), () => $('blog-draft').value);
 renderToday();
 renderSlots();

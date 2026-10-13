@@ -217,3 +217,35 @@ export function parseDrafts(reply) {
   return splitBatch(splitLines(reply).filter((line) => !isNoise(line)).join('\n'))
     .map((post) => splitLines(post).map(stripLabel).join('\n'));
 }
+
+/**
+ * 같은 소재로 네이버 블로그 초안 한 편을 받아 오는 요청문.
+ * 스레드 글과 규칙이 다르다: 길이가 길고 소제목을 쓰지만, 사실성 규칙(적힌 것만)은 똑같이 지킨다.
+ * @param {{name: string, facts: string}[]} items @returns {string}
+ */
+export function buildBlogPrompt(items) {
+  const list = items.map((item, index) =>
+    `${index + 1}. ${item.name} — ${item.facts || '확인된 사실 없음(상품 종류에서 당연한 것만 쓴다)'}`);
+  return [
+    '너는 한국어 네이버 블로그 초안을 쓰는 보조다. 독자는 30~40대 바쁜 직장인 여성이고, 말투는 존댓말이다.',
+    `아래 소재 ${items.length}개를 묶어 글 한 편을 쓴다.`,
+    '',
+    '구성:',
+    '- 첫 줄: 제목 한 줄 (낚시 제목 금지)',
+    '- 도입 3~4줄: 바쁜 직장인의 실제 불편에서 시작한다',
+    '- 소재마다: "## 소제목" 한 줄 + 설명 3~5줄',
+    '- 마무리 3줄: 고를 때 볼 기준만 정리한다',
+    '- 마지막 줄: 해시태그 5개 이내',
+    '',
+    '규칙:',
+    '- 소재에 적힌 사실만 쓴다. 가격·할인·효과·배송·순위는 적혀 있지 않으면 절대 넣지 않는다.',
+    '- 직접 써 본 것처럼 쓰지 않는다. 발견·비교·전언으로만 쓴다.',
+    '- 확인하지 못한 것은 [확인 필요]라고 그대로 적는다. 지어내지 않는다.',
+    '- 효능·치료를 단정하지 않는다.',
+    '',
+    '출력: 글만 쓴다. 설명이나 머리말을 붙이지 않는다.',
+    '',
+    '소재:',
+    ...list,
+  ].join('\n');
+}
