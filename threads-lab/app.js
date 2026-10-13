@@ -2,8 +2,8 @@
 import {
   BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261013k';
-import { requestAnalysis } from './llm.js?v=20261013k';
+} from './lab-core.js?v=20261013m';
+import { requestAnalysis } from './llm.js?v=20261013m';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -136,11 +136,17 @@ function fillSample() {
   const cta = isLinkAllowed() ? '링크 댓글에' : '써본 사람 있으면 알려줘';
   const posts = [...SAMPLE_BODIES.map((lines) => [...lines, cta]), SAMPLE_BAD];
   $('draft').value = posts.map((lines) => lines.join('\n')).join('\n---\n');
+  rememberDrafts();
   $('names').value = SAMPLE_NAMES;
   runCheck();
 }
 
 const KEY_STORE = 'threads-lab-api-key';
+const DRAFTS_STORE = 'threads-lab-drafts';   // 쇼츠 대본 페이지가 읽어 가는 자리
+
+function rememberDrafts() {
+  try { localStorage.setItem(DRAFTS_STORE, $('draft').value); } catch (error) { /* 저장을 막아 둔 브라우저 */ }
+}
 const PICK_STORE = 'threads-lab-items';   // 소재 찾기 페이지가 넣어 둔 소재 (같은 사이트라 그대로 읽는다)
 
 const ITEMS_STORE = 'threads-lab-draft-items';   // 소재 찾기 페이지에 다녀와도 적어 둔 소재가 남도록
@@ -204,6 +210,7 @@ async function generateDrafts() {
   const posts = parseDrafts(result.text);
   if (posts.length === 0) { status.textContent = '응답에서 글을 찾지 못했습니다. 다시 눌러 주세요.'; return; }
   $('draft').value = posts.join('\n---\n');
+  rememberDrafts();
   $('names').value = items.map((item) => item.name).join(', ');
   runCheck();
   const extra = dropped ? ` 소재는 5개까지만 써서 ${dropped}개는 뺐습니다.` : '';
@@ -269,6 +276,10 @@ loadSavedKey();
 loadSavedItems();
 loadPickedMaterials();
 $('items').addEventListener('input', rememberItems);
+
+
+$('draft').addEventListener('input', rememberDrafts);
+try { const kept = localStorage.getItem(DRAFTS_STORE); if (kept && !$('draft').value.trim()) $('draft').value = kept; } catch (error) { /* 저장 불가 */ }
 wireCopy($('copy-draft'), () => $('draft').value);
 wireCopy($('copy-blog'), () => $('blog-draft').value);
 $('clear-blog').addEventListener('click', () => {
