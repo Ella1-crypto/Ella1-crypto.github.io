@@ -1,6 +1,6 @@
 // lab-core.js 의 규칙을 화면에 연결한다. 모든 텍스트는 textContent 로만 넣는다(innerHTML 미사용).
 import {
-  DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
+  BATCH_SIZE as MAX_ITEMS, DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
 } from './lab-core.js?v=20261013';
 import { requestAnalysis } from './llm.js?v=20261013c';
@@ -141,6 +141,35 @@ function fillSample() {
 }
 
 const KEY_STORE = 'threads-lab-api-key';
+const PICK_STORE = 'threads-lab-items';   // 소재 찾기 페이지가 넣어 둔 소재 (같은 사이트라 그대로 읽는다)
+
+const ITEMS_STORE = 'threads-lab-draft-items';   // 소재 찾기 페이지에 다녀와도 적어 둔 소재가 남도록
+
+function rememberItems() {
+  try { localStorage.setItem(ITEMS_STORE, $('items').value); } catch (error) { /* 저장을 막아 둔 브라우저 */ }
+}
+
+function loadSavedItems() {
+  try {
+    const saved = localStorage.getItem(ITEMS_STORE) || '';
+    if (saved && !$('items').value.trim()) $('items').value = saved;
+  } catch (error) { /* 저장을 막아 둔 브라우저 */ }
+}
+
+/** 소재 찾기에서 고른 소재를 소재 칸에 넣는다. 직접 적어 둔 줄은 지우지 않고 뒤에 붙인다. */
+function loadPickedMaterials() {
+  let raw = '';
+  try { raw = localStorage.getItem(PICK_STORE) || ''; localStorage.removeItem(PICK_STORE); } catch (error) { return; }
+  if (!raw) return;
+  let lines = [];
+  try { lines = JSON.parse(raw); } catch (error) { return; }
+  const sent = (Array.isArray(lines) ? lines : []).filter((line) => typeof line === 'string' && line.trim());
+  if (sent.length === 0) return;
+  const merged = [...new Set([...splitLines($('items').value), ...sent])].slice(0, MAX_ITEMS);
+  $('items').value = merged.join('\n');
+  $('generate-status').textContent = `소재 찾기에서 ${sent.length}개를 받았습니다. 고치거나 더 적은 뒤 초안을 만드세요.`;
+}
+
 
 /** 켜 두면 이 기기 브라우저에만 키를 남긴다(폰에서 매번 입력하지 않으려고). 끄면 바로 지운다. */
 function rememberKey() {
@@ -198,6 +227,9 @@ $('generate').addEventListener('click', generateDrafts);
 $('save-key').addEventListener('change', rememberKey);
 $('api-key').addEventListener('input', rememberKey);
 loadSavedKey();
+loadSavedItems();
+loadPickedMaterials();
+$('items').addEventListener('input', rememberItems);
 wireCopy($('copy-draft'), () => $('draft').value);
 renderToday();
 renderSlots();
