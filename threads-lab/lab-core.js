@@ -152,13 +152,68 @@ export function checkPost(text, { linkAllowed, productNames = [] }) {
  * @returns {{id: string, level: 'pass'|'warn'|'fail', message: string, evidence: string}[]}
  */
 export function checkBatch(posts) {
+  // 5개가 안 되는 배치는 절반만 달라도 된다.
+  const needed = Math.min(MIN_VARIED_ENTRIES, Math.ceil(posts.length / 2));
   const varied = posts.filter((post) => !/^해외/.test(splitLines(post)[1] || '')).length;
   return [
     posts.length === BATCH_SIZE
       ? finding('count', 'pass', `글 ${BATCH_SIZE}개가 모두 있습니다.`)
       : finding('count', 'warn', `글이 ${posts.length}개입니다. 하루 배치는 ${BATCH_SIZE}개입니다.`),
-    varied >= MIN_VARIED_ENTRIES
+    varied >= needed
       ? finding('entry', 'pass', `둘째 줄을 "해외 …"로 시작하지 않는 글이 ${varied}개입니다.`)
-      : finding('entry', 'fail', `둘째 줄이 거의 다 "해외 …"로 시작합니다. 최소 ${MIN_VARIED_ENTRIES}개는 진입 방식을 바꿉니다.`, `다른 진입 ${varied}개`),
+      : finding('entry', 'fail', `둘째 줄이 거의 다 "해외 …"로 시작합니다. 최소 ${needed}개는 진입 방식을 바꿉니다.`, `다른 진입 ${varied}개`),
   ];
+}
+
+/**
+ * 소재 입력을 읽는다. 한 줄에 하나, `상품명 | 확인한 사실`.
+ * @param {string} text
+ * @returns {{items: {name: string, facts: string}[], dropped: number}}
+ */
+export function parseItems(text) {
+  const all = splitLines(text).map((line) => {
+    const [name, ...rest] = line.split('|');
+    return { name: name.trim(), facts: rest.join('|').trim() };
+  }).filter((item) => item.name);
+  return { items: all.slice(0, BATCH_SIZE), dropped: Math.max(0, all.length - BATCH_SIZE) };
+}
+
+/**
+ * 글 초안을 요청하는 프롬프트. 규칙은 checkPost 가 확인하는 것과 같다.
+ * @param {{name: string, facts: string}[]} items
+ * @param {{linkAllowed: boolean}} options
+ * @returns {string}
+ */
+export function buildDraftPrompt(items, { linkAllowed }) {
+  const cta = linkAllowed
+    ? '마지막 줄은 정확히 "링크 댓글에" 로 끝낸다. 본문에 주소는 쓰지 않는다.'
+    : '마지막 줄은 "써본 사람 있으면 알려줘" 같은 질문형으로 끝낸다. 링크라는 말은 쓰지 않는다.';
+  const list = items.map((item, index) => `${index + 1}. ${item.name} — ${item.facts || '확인된 사실 없음(상품 종류에서 당연한 것만 쓴다)'}`);
+  return [
+    '너는 한국어 스레드(Threads) 글을 쓰는 보조다. 독자는 30~40대 바쁜 직장인 여성이고, 말투는 친한 언니가 카톡 하듯 반말이다.',
+    `아래 소재 ${items.length}개마다 글을 하나씩, 같은 순서로 쓴다.`,
+    '',
+    '규칙:',
+    `- 글 하나는 ${MAX_LINES}줄 이내. 한 줄은 짧게.`,
+    '- 첫 줄은 상품명 없이 공감되는 상황만 쓴다.',
+    '- 직접 써 본 것처럼 쓰지 않는다("써봤어", "샀어", "쓰고 있어" 금지). 발견·비교·전언("~한다길래", "~더라")만 쓴다.',
+    '- 소재에 적힌 사실만 쓴다. 가격·할인·효과·배송·순위는 적혀 있지 않으면 절대 넣지 않는다.',
+    `- 둘째 줄을 "해외 …"로 시작하는 글은 전체의 절반 이하로 하고, 최소 ${MIN_VARIED_ENTRIES}개는 다른 방식으로 들어간다.`,
+    `- ${cta}`,
+    '- 해시태그, 이모지, 번호, 제목, 설명을 붙이지 않는다.',
+    '',
+    '출력 형식: 글만 쓴다. 글과 글 사이에는 --- 한 줄만 둔다.',
+    '',
+    '소재:',
+    ...list,
+  ].join('\n');
+}
+
+const stripLabel = (line) => line.replace(/^\s*(?:\d+[.)]\s+|[-*]\s+)/, '');
+const isNoise = (line) => /^```/.test(line) || /^\*\*.*\*\*$/.test(line) || /^#+\s/.test(line) || /^글\s?\d+\s*[:.]?$/.test(line);
+
+/** @param {string} reply 모델 응답 @returns {string[]} 글 목록(번호·코드 울타리·소제목 제거) */
+export function parseDrafts(reply) {
+  return splitBatch(splitLines(reply).filter((line) => !isNoise(line)).join('\n'))
+    .map((post) => splitLines(post).map(stripLabel).join('\n'));
 }
