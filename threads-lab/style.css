@@ -144,6 +144,17 @@ input:focus-visible,textarea:focus-visible,.btn:focus-visible,.back:focus-visibl
 .rules li:nth-child(3n+2) b{color:var(--ice)}
 .rules li:nth-child(3n) b{color:var(--pink)}
 
+.howto{list-style:none;counter-reset:howto;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.howto li{counter-increment:howto;padding:18px 18px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:13.5px;line-height:1.65;color:var(--fg-2);transition:border-color .4s}
+.howto li:hover{border-color:var(--lilac)}
+.howto li::before{content:"STEP " counter(howto);display:block;font:400 10px/1 var(--pixel);letter-spacing:.06em;color:var(--lime);margin-bottom:10px}
+.howto b{display:block;margin-bottom:5px;font:700 15px/1.35 var(--display);letter-spacing:-.01em;color:var(--fg)}
+.howto li b~b{display:inline;margin:0;font:inherit;color:var(--lime);font-weight:500}
+.howto a{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+
+.save-key{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:12.5px;line-height:1.6;color:var(--fg-2);cursor:pointer}
+.save-key input{margin:2px 0 0;accent-color:var(--lime);width:15px;height:15px;flex:none}
+
 footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-block:40px;border-top:1px solid var(--line);font:400 10px/1.8 var(--pixel);letter-spacing:.06em;color:var(--fg-2)}
 footer a{color:inherit;text-decoration:none}
 footer a:hover{color:var(--fg)}
@@ -152,10 +163,11 @@ footer a:hover{color:var(--fg)}
   .top-grid,.split{grid-template-columns:1fr}
   .today{transform:none}
   .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .howto{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rules{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:560px){
-  .flow,.rules{grid-template-columns:1fr}
+  .flow,.rules,.howto{grid-template-columns:1fr}
   .flow li.wide{grid-column:auto}
   .slot{grid-template-columns:74px 1fr;row-gap:4px}
   .slot-state{grid-column:1/-1;text-align:left}

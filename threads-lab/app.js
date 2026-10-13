@@ -3,7 +3,7 @@ import {
   DISCLOSURE, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
 } from './lab-core.js?v=20261013';
-import { requestAnalysis } from './llm.js?v=20261013';
+import { requestAnalysis } from './llm.js?v=20261013c';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -140,6 +140,24 @@ function fillSample() {
   runCheck();
 }
 
+const KEY_STORE = 'threads-lab-api-key';
+
+/** 켜 두면 이 기기 브라우저에만 키를 남긴다(폰에서 매번 입력하지 않으려고). 끄면 바로 지운다. */
+function rememberKey() {
+  try {
+    if ($('save-key').checked) localStorage.setItem(KEY_STORE, $('api-key').value.trim());
+    else localStorage.removeItem(KEY_STORE);
+  } catch (error) { /* 저장소를 막아 둔 브라우저에서는 그냥 저장하지 않는다 */ }
+}
+
+function loadSavedKey() {
+  let saved = '';
+  try { saved = localStorage.getItem(KEY_STORE) || ''; } catch (error) { saved = ''; }
+  if (!saved) return;
+  $('api-key').value = saved;
+  $('save-key').checked = true;
+}
+
 async function generateDrafts() {
   const status = $('generate-status');
   const button = $('generate');
@@ -177,6 +195,9 @@ $('run').addEventListener('click', runCheck);
 $('sample').addEventListener('click', fillSample);
 $('clear').addEventListener('click', clearAll);
 $('generate').addEventListener('click', generateDrafts);
+$('save-key').addEventListener('change', rememberKey);
+$('api-key').addEventListener('input', rememberKey);
+loadSavedKey();
 wireCopy($('copy-draft'), () => $('draft').value);
 renderToday();
 renderSlots();
