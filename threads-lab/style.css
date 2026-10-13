@@ -163,6 +163,8 @@ input:focus-visible,textarea:focus-visible,.btn:focus-visible,.back:focus-visibl
 .menu-item.off{opacity:.45;cursor:not-allowed}
 @media (max-width:560px){.menu-item{font-size:10px;padding:10px 11px}}
 
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
 footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-block:40px;border-top:1px solid var(--line);font:400 10px/1.8 var(--pixel);letter-spacing:.06em;color:var(--fg-2)}
 footer a{color:inherit;text-decoration:none}
 footer a:hover{color:var(--fg)}

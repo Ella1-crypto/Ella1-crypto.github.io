@@ -2,8 +2,8 @@
 import {
   BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261013i';
-import { requestAnalysis } from './llm.js?v=20261013i';
+} from './lab-core.js?v=20261013j';
+import { requestAnalysis } from './llm.js?v=20261013j';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -235,8 +235,9 @@ function undoText(slot) {
 }
 
 function showUndo(slot) {
+  // 버튼은 늘 보이고, 되살릴 게 없으면 회색으로 둔다(숨기면 기능이 있는지 모른다).
   const button = $(`undo-${slot}`);
-  if (button) button.hidden = !undoText(slot);
+  if (button) button.disabled = !undoText(slot);
 }
 
 function restore(slot, area) {
