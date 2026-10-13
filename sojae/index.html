@@ -57,6 +57,7 @@
       <h2 id="list-heading">기준을 통과한 <span class="chrome-text">소재 후보.</span></h2>
       <p class="lead" id="notes">불러오는 중…</p>
       <div class="filters" id="filters" role="group" aria-label="카테고리 고르기"></div>
+      <p class="hint">카드를 눌러 고릅니다. 최대 5개까지 고를 수 있고, 아래 막대의 버튼을 누르면 Threads Lab 소재 칸으로 들어갑니다.</p>
       <ul class="cards" id="list"></ul>
       <p class="hint" id="source"></p>
     </section>
@@ -70,6 +71,18 @@
         <code>[광고] 이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</code></p>
     </section>
   </main>
+
+  <div class="picked" id="picked" role="status" aria-live="polite">
+    <div class="picked-main">
+      <span class="picked-count" id="picked-count">0 / 5</span>
+      <span class="picked-list" id="picked-list"></span>
+    </div>
+    <p class="picked-note" id="picked-note"></p>
+    <div class="picked-buttons">
+      <button type="button" class="btn ghost" id="picked-clear">비우기</button>
+      <button type="button" class="btn primary" id="picked-send" disabled>Threads Lab 소재 칸으로</button>
+    </div>
+  </div>
 
   <footer>
     <span>ELLA'S SIDE LEDGER</span>
