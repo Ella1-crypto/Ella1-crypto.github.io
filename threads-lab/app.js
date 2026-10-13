@@ -2,8 +2,8 @@
 import {
   BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261013h';
-import { requestAnalysis } from './llm.js?v=20261013h';
+} from './lab-core.js?v=20261013i';
+import { requestAnalysis } from './llm.js?v=20261013i';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -222,7 +222,34 @@ async function generateDrafts() {
   status.textContent = `스레드 글 ${posts.length}개와 블로그 초안 한 편을 만들었습니다.${extra}`;
 }
 
+const UNDO_PREFIX = 'threads-lab-undo-';   // 실수로 지웠을 때 한 벌만 되살린다(이 기기에만 남는다)
+
+function keepForUndo(slot, text) {
+  if (!text.trim()) return;
+  try { localStorage.setItem(UNDO_PREFIX + slot, text); } catch (error) { /* 저장을 막아 둔 브라우저 */ }
+  showUndo(slot);
+}
+
+function undoText(slot) {
+  try { return localStorage.getItem(UNDO_PREFIX + slot) || ''; } catch (error) { return ''; }
+}
+
+function showUndo(slot) {
+  const button = $(`undo-${slot}`);
+  if (button) button.hidden = !undoText(slot);
+}
+
+function restore(slot, area) {
+  const text = undoText(slot);
+  if (!text) return;
+  area.value = area.value.trim() ? `${text}
+---
+${area.value}` : text;   // 새로 쓴 글이 있으면 위에 붙인다
+  area.focus();
+}
+
 function clearAll() {
+  keepForUndo('draft', $('draft').value);
   $('draft').value = '';
   $('names').value = '';
   $('results').replaceChildren(h('p', 'empty', '아직 검수한 글이 없습니다.'));
@@ -243,6 +270,14 @@ loadPickedMaterials();
 $('items').addEventListener('input', rememberItems);
 wireCopy($('copy-draft'), () => $('draft').value);
 wireCopy($('copy-blog'), () => $('blog-draft').value);
-$('clear-blog').addEventListener('click', () => { $('blog-draft').value = ''; $('blog-draft').focus(); });
+$('clear-blog').addEventListener('click', () => {
+  keepForUndo('blog', $('blog-draft').value);
+  $('blog-draft').value = '';
+  $('blog-draft').focus();
+});
+$('undo-draft').addEventListener('click', () => restore('draft', $('draft')));
+$('undo-blog').addEventListener('click', () => restore('blog', $('blog-draft')));
+showUndo('draft');
+showUndo('blog');
 renderToday();
 renderSlots();
