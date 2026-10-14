@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob: https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src blob:; connect-src 'self' https://api.anthropic.com https://generativelanguage.googleapis.com; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>릴스 분석</title>
+  <meta name="description" content="릴스·쇼츠 영상 파일을 올리면 브라우저 안에서 받아쓰기와 장면 추출을 하고, 터진 이유를 분석합니다">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261014a">
+  <link rel="stylesheet" href="reels.css?v=20261014a">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+
+  <header class="top">
+    <a class="back" href="../#content">← Ella's Side Ledger</a>
+    <p class="eyebrow">REELS BREAKDOWN · 영상 → 글자 + 장면</p>
+    <h1>터진 릴스를<br><span class="iris">뜯어서 본다.</span></h1>
+    <p class="lead">영상 파일을 올리면 <b>말은 받아쓰고, 장면이 바뀔 때마다 한 장씩</b> 뽑습니다.
+      음악만 나오는 릴스도 화면 자막까지 읽을 수 있게 됩니다. 모든 처리는 이 브라우저 안에서 하고, 영상은 어디에도 올라가지 않습니다.</p>
+    <p class="note" role="note">웹사이트는 인스타 링크에서 영상을 직접 받을 수 없어서 <b>영상 파일(MP4)을 먼저 저장</b>해 올립니다.
+      링크만 붙여 쓰려면 PC 의 Claude 에서 "이 릴스 분석해줘: 링크" 로 요청하세요.</p>
+  </header>
+
+  <main>
+    <section class="block" aria-labelledby="upload-heading">
+      <p class="pixel">01 · VIDEO</p>
+      <h2 id="upload-heading">영상 파일을 <span class="chrome-text">끌어다 놓기.</span></h2>
+      <div class="split">
+        <div class="glass panel">
+          <label class="drop" id="drop" for="file">
+            <input type="file" id="file" accept="video/*">
+            <b>여기에 영상 놓기</b>
+            <span id="file-name">또는 눌러서 파일 고르기 · MP4 권장 · 3분 이하</span>
+          </label>
+          <fieldset class="modes" aria-label="받아쓰기 모델">
+            <legend>받아쓰기 정확도 (처음 한 번만 모델을 내려받습니다)</legend>
+            <label><input type="radio" name="model" value="onnx-community/whisper-base"><span>빠르게 · 약 75MB</span></label>
+            <label><input type="radio" name="model" value="onnx-community/whisper-small" checked><span>정확하게 · 약 240MB</span></label>
+            <label><input type="radio" name="model" value="none"><span>받아쓰기 안 함</span></label>
+          </fieldset>
+          <label class="field range" for="scene"><span>장면 민감도 — 낮출수록 장면을 더 많이 뽑습니다 (<output id="scene-out">보통</output>)</span>
+            <input type="range" id="scene" min="1" max="5" step="1" value="3">
+          </label>
+          <div class="actions">
+            <button type="button" class="btn primary" id="run" disabled>분석 준비 시작</button>
+          </div>
+          <ol class="progress" id="progress" aria-live="polite"></ol>
+        </div>
+        <div class="glass panel preview-box">
+          <video id="video" playsinline muted controls hidden></video>
+          <p class="empty" id="video-empty">아직 올린 영상이 없습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="result-heading" id="result" hidden>
+      <p class="pixel">02 · BREAKDOWN</p>
+      <h2 id="result-heading">글자와 장면으로 <span class="chrome-text">펼친 결과.</span></h2>
+      <div class="frames" id="frames"></div>
+      <div class="split">
+        <div class="glass panel">
+          <h3>받아쓰기</h3>
+          <pre class="transcript" id="transcript"></pre>
+        </div>
+        <div class="glass panel">
+          <h3>Claude 에 가져가기</h3>
+          <p class="hint">텍스트를 복사하고, 장면 모음 이미지를 함께 붙여 넣으면 됩니다. 분석 질문까지 들어 있습니다.</p>
+          <div class="actions">
+            <button type="button" class="btn primary" id="copy-text">분석 요청 텍스트 복사</button>
+            <button type="button" class="btn" id="copy-sheet">장면 모음 이미지 복사</button>
+            <button type="button" class="btn ghost" id="save-sheet">이미지 저장</button>
+          </div>
+          <p class="hint" id="copy-status" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="llm-heading" id="llm" hidden>
+      <p class="pixel">03 · WHY IT WORKED</p>
+      <h2 id="llm-heading">여기서 바로 <span class="chrome-text">분석까지.</span> <small class="opt">선택</small></h2>
+      <div class="split">
+        <div class="glass panel">
+          <label class="field" for="api-key"><span>API 키 — Google AI Studio 무료 키(<code>AIza…</code>) 또는 Anthropic 키(<code>sk-ant-…</code>)</span>
+            <input type="password" id="api-key" autocomplete="off" spellcheck="false" placeholder="AIza…">
+          </label>
+          <label class="save-key" for="save-key">
+            <input type="checkbox" id="save-key">
+            <span>이 기기에 키 저장 — 스레드 초안 메뉴와 같은 키를 씁니다. 공용 PC 에서는 끄세요.</span>
+          </label>
+          <div class="actions">
+            <button type="button" class="btn primary" id="analyze">터진 이유 분석</button>
+          </div>
+          <p class="hint" id="analyze-status" role="status"></p>
+        </div>
+        <div class="glass panel">
+          <pre class="answer" id="answer">분석 결과가 여기에 나옵니다.</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>다른 계정의 영상·문장은 복제하지 않습니다. 구조와 아이디어만 봅니다.</span>
+    <span><a href="../#content">← 목록으로</a></span>
+  </footer>
+
+  <script type="module" src="reels.js?v=20261014a"></script>
+</body>
+</html>
