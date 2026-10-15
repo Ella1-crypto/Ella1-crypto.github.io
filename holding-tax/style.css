@@ -325,3 +325,6 @@ tr:last-child > * { border-bottom: 0; }
 .cmp-card { margin-top: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 18px; }
 .cmp-card table { margin-top: 8px; }
 .cmp-card .win { color: var(--land); font-weight: 700; }
+
+.limits { max-width: 54em; padding-left: 1.2em; display: grid; gap: 10px; color: var(--ink-2); }
+.limits b { color: var(--ink); }
