@@ -33,7 +33,7 @@ async function load() {
     $('queue').replaceChildren(...(data.items || []).map(row));
     if ((data.items || []).length === 0) $('queue').replaceChildren(h('li', 'empty', '예약된 글이 없습니다.'));
   } catch (error) {
-    $('notes').textContent = `예약 목록을 불러오지 못했습니다 (${error.message}). PC 앱 7번 탭에서 "사이트용 파일 만들기"를 눌러 주세요.`;
+    $('notes').textContent = `예약 목록을 불러오지 못했습니다 (${error.message}). PC 앱 7번 탭에서 "사이트에 반영하기"를 눌러 주세요.`;
   }
 }
 
