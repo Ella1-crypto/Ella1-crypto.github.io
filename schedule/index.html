@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <meta name="referrer" content="no-referrer">
   <title>예약 발행</title>
-  <meta name="description" content="올릴 글과 시각을 모아 둔 목록. 자동 발행은 켜져 있지 않습니다.">
+  <meta name="description" content="PC 앱의 예약 목록. 자동 발행을 켜 두면 예약 시각에 스레드에 올라갑니다.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261013n">
-  <link rel="stylesheet" href="schedule.css?v=20261013n">
+  <link rel="stylesheet" href="style.css?v=20261015b">
+  <link rel="stylesheet" href="schedule.css?v=20261015b">
 </head>
 <body>
   <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
@@ -28,14 +28,14 @@
 
   <header class="top">
     <a class="back" href="../#content">← Ella's Side Ledger</a>
-    <p class="eyebrow">SCHEDULE · 아직 수동 발행</p>
+    <p class="eyebrow">SCHEDULE · PC 자동 발행</p>
     <div class="top-grid">
       <div>
         <h1>올릴 글과<br><span class="iris">올릴 시각.</span></h1>
         <p class="lead">PC 앱에서 예약 목록에 넣은 글을 여기서 확인합니다. 어느 날 몇 건이 잡혀 있는지,
           링크가 붙는 글은 무엇인지 한눈에 봅니다.</p>
-        <p class="note" role="note"><b>자동 발행은 켜져 있지 않습니다.</b> 이 목록은 "언제 무엇을 올릴지" 정리한 것이고,
-          실제 게시는 사람이 직접 합니다. 자동화를 켜면 하루 건수·고지문·계정 위험을 먼저 정한 뒤에 켭니다.</p>
+        <p class="note" role="note"><b>여기서는 올리지 않습니다.</b> 실제 게시는 PC 앱의 자동 발행이 예약 시각에 합니다(PC가 켜져 있어야 함).
+          이 목록은 PC 앱이 내보낸 사본이라, 마지막 갱신 이후의 변경은 보이지 않습니다.</p>
       </div>
       <section class="today glass" aria-labelledby="meta-heading">
         <h2 class="pixel" id="meta-heading">QUEUE</h2>
@@ -54,14 +54,26 @@
       <ul class="queue" id="queue"></ul>
     </section>
 
-    <section class="block" aria-labelledby="rule-heading">
-      <p class="pixel">02 · RULES</p>
-      <h2 id="rule-heading">켜기 전에 <span class="chrome-text">정할 것.</span></h2>
+    <section class="block" aria-labelledby="howto-heading">
+      <p class="pixel">02 · HOW TO</p>
+      <h2 id="howto-heading">사이트에서 만들고 <span class="chrome-text">PC가 올린다.</span></h2>
       <ol class="howto">
-        <li><b>하루 몇 건</b>운영지침은 하루 5개입니다. 8건을 넘으면 스팸으로 판정될 위험이 커집니다. 적게 시작해 반응을 보고 올립니다.</li>
-        <li><b>고지문</b>제휴 링크가 있는 글은 본문 첫 줄에 고지문을 넣고, 링크는 첫 댓글에 답니다. 앱이 자동으로 붙여 줍니다.</li>
-        <li><b>토큰 수명</b>스레드 토큰은 60일이면 만료됩니다. 자동 발행을 켜면 만료 전에 갱신하는 일이 함께 돌아야 합니다.</li>
-        <li><b>사실 확인</b>가격·효과·배송은 확인한 것만 씁니다. 예약해 두고 잊으면 틀린 정보가 그대로 올라갑니다.</li>
+        <li><b>글 만들기·검수</b><a href="../threads-lab/#check-heading">4. 검수</a>에서 <b>검수하기</b>를 누르면 아래에 <b>예약 파일로 내보내기</b>가 나타납니다. 시각과 첫 댓글 링크를 정하고 파일을 내려받습니다.</li>
+        <li><b>PC 앱에서 가져오기</b>content-automation 앱 <b>⏰ 7. 예약 발행</b> 탭 → <b>📥 threads-lab 예약 파일 가져오기</b>에 파일을 올리고 넣습니다.</li>
+        <li><b>자동 발행 켜기</b>처음 한 번 <code>자동발행_켜기.bat</code>을 실행합니다. 5분마다 확인해 시각이 된 글을 한 개씩 올립니다. 끌 때는 <code>자동발행_끄기.bat</code>.</li>
+        <li><b>이 페이지 갱신</b>앱 7번 탭의 <b>🌐 사이트용 파일 만들기</b>로 내보낸 목록이 여기 보입니다.</li>
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="rule-heading">
+      <p class="pixel">03 · RULES</p>
+      <h2 id="rule-heading">자동 발행이 <span class="chrome-text">지키는 것.</span></h2>
+      <ol class="howto">
+        <li><b>하루 몇 건</b>운영지침은 하루 5개입니다. 하루 8건이 차면 남은 글은 보류합니다. 한 번에 한 글씩만 올립니다.</li>
+        <li><b>늦으면 안 올린다</b>PC가 꺼져 있어 예약 시각을 60분 넘기면 올리지 않고 실패로 남깁니다. 다시 예약하면 됩니다.</li>
+        <li><b>미완성은 안 올린다</b>[확인 필요]·빈칸·예시 주소가 남은 글, 본문에 주소가 있는 글은 올리지 않습니다. 링크는 고지문과 함께 첫 댓글로만 답니다.</li>
+        <li><b>두 번 올리지 않는다</b>같은 글이 이미 예약·발행돼 있으면 다시 넣지 않고, 실패한 글도 자동으로 다시 시도하지 않습니다.</li>
+        <li><b>토큰 수명</b>스레드 토큰은 60일이면 만료됩니다. 만료되면 글이 실패로 남으니 그 전에 갱신합니다.</li>
       </ol>
     </section>
   </main>
@@ -71,6 +83,6 @@
     <span><a href="../#content">← 목록으로</a></span>
   </footer>
 
-  <script type="module" src="schedule.js?v=20261013n"></script>
+  <script type="module" src="schedule.js?v=20261015b"></script>
 </body>
 </html>

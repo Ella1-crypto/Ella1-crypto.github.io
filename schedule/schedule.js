@@ -1,6 +1,6 @@
-// PC 앱에서 내보낸 schedule.json 을 읽어 예약 목록을 보여 준다. 여기서는 아무것도 올리지 않는다.
+// PC 앱에서 내보낸 schedule.json 을 읽어 예약 목록을 보여 준다. 여기서는 아무것도 올리지 않는다(게시는 PC 앱의 자동 발행).
 const $ = (id) => document.getElementById(id);
-const STATUS_MARK = { '예약': '⏳', '올림': '✅', '실패': '❌', '취소': '⛔' };
+const STATUS_MARK = { '예약': '⏳', '올리는 중': '📤', '올림': '✅' };
 
 function h(tag, cls, text) {
   const node = document.createElement(tag);
@@ -28,7 +28,8 @@ async function load() {
     $('updated').textContent = `갱신 ${(data.updated_at || '').replace('T', ' ').slice(0, 16)}`;
     const days = Object.entries(data.by_day || {}).map(([day, count]) => `${day.slice(5)} ${count}건`).join(' · ');
     $('days').textContent = days ? `날짜별 ${days}` : '예약된 글이 없습니다';
-    $('notes').textContent = '⏳ 예약 · ✅ 올림 · ❌ 실패 · ⛔ 취소. 글 내용은 첫 줄만 싣습니다.';
+    const failed = data.failed ? ` 실패 ${data.failed}건은 PC 앱 7번 탭에서 확인하세요.` : '';
+    $('notes').textContent = `⏳ 예약 · 📤 올리는 중 · ✅ 올림. 글 내용은 첫 줄만 싣고, 취소한 글은 싣지 않습니다.${failed}`;
     $('queue').replaceChildren(...(data.items || []).map(row));
     if ((data.items || []).length === 0) $('queue').replaceChildren(h('li', 'empty', '예약된 글이 없습니다.'));
   } catch (error) {
