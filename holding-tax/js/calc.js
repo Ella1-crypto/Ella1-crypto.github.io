@@ -59,12 +59,14 @@
     const rate = parcel.bld.rate || 'general';
     const k = shareOf(parcel) / 100;
     const prevMain = Number(parcel.bld.prevMain) || 0; // 내 몫 기준 작년 본세 → 건물 전체로 환산해 상한 비교
+    const prevFire = Number(parcel.bld.prevFire) || 0;
     // 용도 구분은 가액 산정용일 뿐 한 동이므로, 소방분 누진·재산세 끝수는 동 전체 가액에 한 번 적용한다
     const tax = BT.calc({
       units: [{ name: '건물', use: '', amount: sum(rows.map(r => r.value)), rate, fire: fire.fire }],
       bldInput: 'value',
       bldUrban: parcel.urban === false ? 'off' : 'on',
       bldPrevMain: prevMain > 0 ? prevMain / k : null,
+      bldPrevFire: prevFire > 0 ? prevFire / k : null,
     });
     const own = tax.error ? null : BT.forOwners(tax, [{ tp: 'me', share: shareOf(parcel) }])[0];
     return { parcelId: parcel.id, rows, fire, rate, tax, own, share: shareOf(parcel), value: sum(rows.map(r => r.value)), error: tax.error || null };
@@ -135,9 +137,9 @@
   /**
    * @param {{ownerType:'개인'|'법인', growth:number, mode?:string, prev?:object, parcels:Array}} state
    */
-  function compute(state) {
+  function compute(state, opts = {}) {
     const parcels = state.parcels || [];
-    const year = modeOf(state.mode).year;
+    const year = opts.year || modeOf(state.mode).year; // CF 다년 계산은 연도를 바꿔 부른다(건물 잔가율 기준연도)
     const buildings = parcels.map(p => buildingFor(p, year)).filter(Boolean);
     const split = landSplit(parcels, buildings, state.mode);
     const land = split.rows.length ? HT.calcTaxpayer(split.rows, prevFor(state)) : null;
@@ -152,7 +154,7 @@
     ].filter(s => s.amount > 0);
     const housing = parcels.filter(isHouse).length;
     const missing = parcels.filter(p => !isHouse(p) && !isLandReady(p)).length;
-    return { mode: state.mode || '2026', year, land, buildings, totals, schedule, warnings: split.warnings, projection: projection(state, split.rows), missing, housing, parcelCount: parcels.length };
+    return { mode: state.mode || '2026', year, land, buildings, totals, schedule, warnings: split.warnings, projection: opts.skipProjection ? [] : projection(state, split.rows), missing, housing, parcelCount: parcels.length };
   }
 
   return Object.freeze({ MODES, compute, buildingFor, landSplit, landTotals, PROJECTION_YEARS });

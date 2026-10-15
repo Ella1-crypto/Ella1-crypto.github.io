@@ -55,6 +55,7 @@
       direct: num(b.direct),
       footprint: num(b.footprint, 1e7),
       prevMain: num(b.prevMain),
+      prevFire: num(b.prevFire),
       rows: rows.length ? rows : newBuilding().rows,
     };
   }
@@ -91,6 +92,8 @@
       ownerType: s.ownerType === '개인' ? '개인' : '법인',
       growth: Math.min(30, num(s.growth, 30)),
       mode: s.mode === '2027reform' ? '2027reform' : '2026',
+      cfYears: [1, 3, 5, 10].includes(Number(s.cfYears)) ? Number(s.cfYears) : 5,
+      cfInstall: s.cfInstall === true,
       prev: { propSep: num(s.prev && s.prev.propSep), propJong: num(s.prev && s.prev.propJong), cmtSep: num(s.prev && s.prev.cmtSep), cmtJong: num(s.prev && s.prev.cmtJong) },
       parcels: (Array.isArray(s.parcels) ? s.parcels : []).slice(0, MAX_PARCELS).map(cleanParcel),
     };

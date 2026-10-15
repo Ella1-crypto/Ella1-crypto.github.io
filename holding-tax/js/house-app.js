@@ -25,7 +25,7 @@
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
   /* ---------- 상태 ---------- */
-  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0 });
+  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0, bldValue: 0, prevFire: 0 });
   function clean(raw) {
     const s = raw && typeof raw === 'object' ? raw : {};
     const houses = (Array.isArray(s.houses) ? s.houses : []).filter(h => h && typeof h === 'object').slice(0, MAX_HOUSES).map(h => ({
@@ -35,6 +35,8 @@
       share: Math.max(0.01, Math.min(100, num(h.share, 100) || 100)),
       urban: h.urban !== false,
       prevPrice: num(h.prevPrice, 1e12),
+      bldValue: num(h.bldValue, 1e12),
+      prevFire: num(h.prevFire, 1e10),
     }));
     return {
       mode: own(H.MODES, s.mode) ? s.mode : '2026',
@@ -45,6 +47,9 @@
       holdYears: Math.round(num(s.holdYears, 100)),
       houseCount: Math.round(num(s.houseCount, 100)),
       prevTotal: num(s.prevTotal, 1e12),
+      cfYears: [1, 3, 5, 10].includes(Number(s.cfYears)) ? Number(s.cfYears) : 5,
+      cfInstall: s.cfInstall === true,
+      cfGrowth: Math.min(30, num(s.cfGrowth, 30)),
       houses: houses.length ? houses : [newHouse()],
     };
   }
@@ -62,7 +67,7 @@
   const unb64 = t => new TextDecoder().decode(Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
 
   function input() {
-    return { ...state, houses: state.houses.map(h => ({ price: h.price, share: h.share, urban: h.urban, prevPrice: h.prevPrice })) };
+    return { ...state, houses: state.houses.map(h => ({ price: h.price, share: h.share, urban: h.urban, prevPrice: h.prevPrice, bldValue: h.bldValue, prevFire: h.prevFire })) };
   }
 
   /* ---------- 렌더 ---------- */
@@ -83,8 +88,14 @@
           <label class="fld"><span class="fld-l">주택 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="price" value="${esc(fmt(h.price))}"><em>원</em></span><span class="fld-h">${h.price > 0 ? eok(h.price) : '<a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>'}</span></label>
           <label class="fld"><span class="fld-l">내 지분</span><span class="num"><input type="text" inputmode="decimal" data-hid="${esc(h.id)}" data-f="share" value="${esc(h.share)}"><em>%</em></span><span class="fld-h">공동명의면 내 지분</span></label>
           <label class="fld"><span class="fld-l">작년 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="prevPrice" value="${esc(fmt(h.prevPrice))}"><em>원</em></span><span class="fld-h">선택 — 과세표준상한(5%) 계산</span></label>
-          <label class="fld"><span class="fld-l">재산세</span><span class="fld-h house-tax">${row ? `<b>${won(row.ownTotal)}원</b> (본세 ${won(row.ownMain)} · 도시 ${won(row.ownUrban)} · 교육 ${won(row.ownEdu)})` : '—'}</span></label>
+          <label class="fld"><span class="fld-l">재산세</span><span class="fld-h house-tax">${row ? `<b>${won(row.ownTotal)}원</b> (본세 ${won(row.ownMain)} · 도시 ${won(row.ownUrban)} · 교육 ${won(row.ownEdu)}${row.ownFire ? ` · 소방 ${won(row.ownFire)}` : ''})` : '—'}</span></label>
         </div>
+        <details class="more"><summary>소방분(지역자원시설세) 넣기 — 건물분 시가표준액</summary>
+          <div class="grid4">
+            <label class="fld"><span class="fld-l">건물 시가표준액</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="bldValue" value="${esc(fmt(h.bldValue))}"><em>원</em></span><span class="fld-h">재산세 고지서·위택스의 건축물 시가표준액(토지 제외)</span></label>
+            <label class="fld"><span class="fld-l">작년 소방분</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="prevFire" value="${esc(fmt(h.prevFire))}"><em>원</em></span><span class="fld-h">선택 — 150% 상한</span></label>
+          </div>
+        </details>
         <label class="chk"><input type="checkbox" data-hid="${esc(h.id)}" data-f="urban"${h.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 — 대부분의 시 지역 주택은 해당</label>
       </article>`;
     }).join('');
@@ -162,6 +173,10 @@
     $('#schedule').innerHTML = schedule(r);
     $('#compare').innerHTML = compare();
     $('#mbar-total').textContent = `${won(r.total)}원`;
+    $('#cf-table').innerHTML = window.HTMCFView.render(currentCF());
+    $('#cf-years').value = String(state.cfYears);
+    $('#cf-install').checked = state.cfInstall;
+    if (document.activeElement !== $('#cf-growth')) $('#cf-growth').value = state.cfGrowth;
     document.querySelectorAll('[data-owner]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.owner === state.ownerType)));
     $('#mode').value = state.mode;
     const single = state.houses.length === 1 && state.ownerType === '개인' && !(state.houseCount > 1);
@@ -175,6 +190,35 @@
     if (focus && focus.f) {
       const el = document.querySelector(`[data-hid="${CSS.escape(focus.hid || '')}"][data-f="${CSS.escape(focus.f)}"]`);
       if (el) el.focus({ preventScroll: true });
+    }
+  }
+
+  const currentCF = () => window.HTMCF.house(input(), { years: state.cfYears, installments: state.cfInstall, growth: state.cfGrowth });
+
+  async function downloadXlsx() {
+    const r = H.calc(input());
+    const cf = currentCF();
+    const c = r.cmt || { decided: 0, nong: 0 };
+    const summary = [
+      ['연간 예상 보유세 합계', r.total, H.MODES[state.mode].label],
+      ['주택 재산세 본세', r.prop.main], ['도시지역분', r.prop.urban], ['지방교육세', r.prop.edu], ['소방분 지역자원시설세', r.prop.fire, r.prop.fire ? '' : '건물 시가표준액 미입력'],
+      ['종합부동산세 결정세액', c.decided], ['농어촌특별세', c.nong],
+      [`${cf.years}년 CF 합계${cf.installments ? ' (분할납부 반영)' : ''}`, cf.total],
+    ];
+    const inputs = [['소유자', state.ownerType], ['1세대1주택', state.oneHouse ? '예' : '아니오'], ['나이·보유기간', `${state.age || '-'}세 · ${state.holdYears || '-'}년`], ['공시가격 연 상승률', `${state.cfGrowth}%`]]
+      .concat(state.houses.map((h, i) => [`주택 ${i + 1} ${h.name || ''}`.trim(), `공시가격 ${h.price.toLocaleString('ko-KR')}원 · 지분 ${h.share}%`]));
+    if (!cf.entries.length) { toast('계산된 세금이 없어 엑셀로 낼 내용이 없습니다.'); return; }
+    const btn = document.querySelector('[data-act="xlsx"]');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    toast('엑셀 파일을 만드는 중…');
+    try {
+      await window.HTMXlsx.download({ fileName: `보유세맵_주택_${r.year}.xlsx`, title: '보유세맵 — 주택 보유세 계산', modeLabel: H.MODES[state.mode].label, summary, inputs, cf, basis: H.BASIS });
+      toast('엑셀 파일을 내려받았습니다.');
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      btn.disabled = false;
     }
   }
 
@@ -213,6 +257,7 @@
       try { await navigator.clipboard.writeText(url); toast('계산 결과 링크를 복사했습니다.'); } catch (_) { history.replaceState(null, '', url); toast('주소창의 링크를 복사해 공유하세요.'); }
     },
     print: () => window.print(),
+    xlsx: () => downloadXlsx(),
     save: () => {
       const r = H.calc(input());
       const name = state.houses.map(h => h.name).filter(Boolean).join(', ') || `주택 ${state.houses.length}채`;
@@ -264,6 +309,9 @@
     document.addEventListener('pointercancel', release, true);
     document.querySelectorAll('[data-owner]').forEach(b => b.addEventListener('click', () => setState({ ...state, ownerType: b.dataset.owner })));
     $('#mode').addEventListener('change', e => setState({ ...state, mode: e.target.value }));
+    $('#cf-years').addEventListener('change', e => setState({ ...state, cfYears: Number(e.target.value) }));
+    $('#cf-install').addEventListener('change', e => setState({ ...state, cfInstall: e.target.checked }));
+    $('#cf-growth').addEventListener('change', e => setState({ ...state, cfGrowth: num(e.target.value, 30) }));
     $('#oneHouse').addEventListener('change', e => setState({ ...state, oneHouse: e.target.checked }));
     $('#resident').addEventListener('change', e => setState({ ...state, resident: e.target.checked }));
     ['age', 'holdYears', 'houseCount', 'prevTotal'].forEach(k => $(`#${k}`).addEventListener('change', e => setState({ ...state, [k]: num(e.target.value, 1e12) })));

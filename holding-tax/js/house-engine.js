@@ -14,6 +14,8 @@
  *  · 1세대1주택 세액공제: 고령자 20·30·40% + 장기보유 20·40·50%, 합계 80% 한도(§9⑤~⑧)
  *  · 세부담상한: 개인은 (재산세+종부세) 직전 연도 상당액의 150%(§10), 법인 중과세율 적용분은 없음
  *  · 농어촌특별세 = 종부세 × 20%
+ *  · 소방분 지역자원시설세: 주택 건축물 부분 시가표준액 × 주택 공정시장가액비율에 0.04~0.12% 누진(§146③④),
+ *      재산세 납기(7·9월 1/2)·분할납부·150% 상한 준용(§147②)
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -53,6 +55,7 @@
   });
 
   const sfloor = n => Math.floor(n + 1e-6);
+  const FIRE_BRACKETS = Object.freeze([[6e6, 4e-4], [13e6, 5e-4], [26e6, 6e-4], [39e6, 8e-4], [64e6, 1e-3], [Infinity, 1.2e-3]]);
   function progressive(base, brackets) {
     let tax = 0, lower = 0;
     for (const [upper, rate] of brackets) {
@@ -91,14 +94,20 @@
     const stdMain = progressive(base, PROP_STD);
     const urban = h.urban === false ? 0 : sfloor(base * P.urbanRate);
     const edu = sfloor(main * P.eduRate);
-    return { price, fmv, rawBase, base, capped: base < rawBase, special, main, stdMain, urban, edu, total: main + urban + edu };
+    const bldValue = Number(h.bldValue) || 0;
+    const fireBase = sfloor(bldValue * fmv);
+    const fireRaw = sfloor(progressive(fireBase, FIRE_BRACKETS));
+    const prevFire = Number(h.prevFire) || 0; // 내 몫 기준 → 100%로 환산은 ownerShare에서
+    return { price, fmv, rawBase, base, capped: base < rawBase, special, main, stdMain, urban, edu, bldValue, fireBase, fireRaw, prevFire, total: main + urban + edu };
   }
 
   /** 지분만큼 귀속 — 재산세는 주택 전체에 세율을 적용한 뒤 지분으로 나눈다 */
   function ownerShare(t, share) {
     const k = (Number(share) > 0 ? Math.min(100, Number(share)) : 100) / 100;
     const main = sfloor(t.main * k), urban = sfloor(t.urban * k), edu = sfloor(t.edu * k);
-    return { ...t, share: k * 100, ownMain: main, ownUrban: urban, ownEdu: edu, ownTotal: main + urban + edu, ownValue: t.price * k, ownBase: t.base * k };
+    const fireOwn = sfloor(t.fireRaw * k);
+    const fire = t.prevFire > 0 ? Math.min(fireOwn, sfloor(t.prevFire * P.cmtCap)) : fireOwn; // 소방분 150% 상한(§147②)
+    return { ...t, share: k * 100, ownMain: main, ownUrban: urban, ownEdu: edu, ownFire: fire, ownTotal: main + urban + edu + fire, ownValue: t.price * k, ownBase: t.base * k };
   }
 
   function deductionFor(opt) {
@@ -170,14 +179,14 @@
     if ((Number(opt.houseCount) || 0) > 1) opt.oneHouse = false; // 목록 밖 주택이 있으면 1세대1주택이 아니다
     const rows = (opt.houses || []).filter(h => Number(h.price) > 0).map(h => ownerShare(propertyTax(h, opt), h.share));
     const prop = rows.reduce((a, r) => ({
-      main: a.main + r.ownMain, urban: a.urban + r.ownUrban, edu: a.edu + r.ownEdu, total: a.total + r.ownTotal,
-    }), { main: 0, urban: 0, edu: 0, total: 0 });
+      main: a.main + r.ownMain, urban: a.urban + r.ownUrban, edu: a.edu + r.ownEdu, fire: a.fire + r.ownFire, total: a.total + r.ownTotal,
+    }), { main: 0, urban: 0, edu: 0, fire: 0, total: 0 });
     const cmt = rows.length ? cmtTax(rows, opt) : null;
-    const julyOnly = prop.main <= P.julyOnlyMax;
+    const julyOnly = prop.main + prop.urban <= P.julyOnlyMax;
     const half = julyOnly ? prop.total : Math.ceil(prop.total / 2);
     const year = (MODES[opt.mode] || MODES['2026']).year;
     const schedule = [
-      { month: 7, due: '7.16 ~ 7.31', item: julyOnly ? '주택 재산세 전액(20만원 이하)·도시지역분·교육세' : '주택 재산세 1/2·도시지역분·교육세', amount: half },
+      { month: 7, due: '7.16 ~ 7.31', item: julyOnly ? '주택 재산세 전액(20만원 이하)·도시지역분·교육세·소방분' : '주택 재산세 1/2·도시지역분·교육세·소방분', amount: half },
       { month: 9, due: '9.16 ~ 9.30', item: '주택 재산세 나머지 1/2', amount: prop.total - half },
       { month: 12, due: '12.1 ~ 12.15', item: '종합부동산세·농어촌특별세', amount: cmt ? cmt.total : 0 },
     ].filter(s => s.amount > 0);
@@ -195,6 +204,8 @@
     { item: '세부담상한', rule: '개인: (재산세+종부세) 직전 연도 상당액 × 150% 초과분 제외 / 법인 중과세율분 미적용', law: '종부세법 제10조' },
     { item: '농어촌특별세', rule: '종부세 결정세액 × 20%', law: '농어촌특별세법 제5조' },
     { item: '납기', rule: '재산세 7.16~7.31·9.16~9.30 각 1/2(20만원 이하는 7월 한 번에) · 종부세 12.1~12.15', law: '지방세법 제115조, 종부세법 제16조' },
+    { item: '소방분 지역자원시설세', rule: '주택 건물 시가표준액 × 주택 공정시장가액비율에 0.04~0.12% 누진, 재산세 납기·분할납부·150% 상한 준용', law: '지방세법 제146조③④·제147조②' },
+    { item: '분할납부·분납', rule: '재산세 납기별 250만원 초과: 500만원 이하는 초과분, 초과는 50% 이하를 3개월 이내 / 종부세 6개월 이내', law: '지방세법 제118조, 시행령 제116조, 종부세법 제20조' },
   ]);
 
   return Object.freeze({ VERSION, MODES, P, PROP_STD, PROP_ONE, CMT_UPTO2, CMT_3PLUS, BASIS, progressive, fmvFor, specialRateApplies, propertyTax, calc, installmentPortion, agePct, holdPct });

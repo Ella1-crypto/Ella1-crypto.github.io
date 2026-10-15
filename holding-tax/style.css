@@ -299,3 +299,17 @@ tr:last-child > * { border-bottom: 0; }
 .house-note { margin: 10px 0 0; padding: 10px 14px; border-radius: var(--r-md); background: var(--sky); color: var(--ink-2); font-size: 13.5px; line-height: 1.6; }
 .pcard.is-house .grid4 { opacity: .55; }
 .summary .warn-line a { color: inherit; font-weight: 700; }
+
+/* ---------- CF ---------- */
+.cf-band { border-top: 0; }
+.cf-ctl { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.cf-ctl .chk { margin: 0; }
+.cf-year td, .cf-year th, .cf-month td, .cf-month th { font-variant-numeric: tabular-nums; }
+.cf-year tfoot td, .cf-year tfoot th { border-top: 2px solid var(--line-2); font-weight: 700; }
+.cf-month-wrap { max-height: 520px; overflow: auto; }
+.cf-month td:nth-child(2) { text-align: left; white-space: normal; min-width: 240px; }
+.cf-month tr.m-first > * { border-top: 2px solid var(--line-2); }
+.cf-month .dot { display: inline-block; margin-right: 6px; vertical-align: middle; }
+.tag-defer { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 99px; background: var(--warn-bg); color: var(--warn); margin-left: 4px; }
+.band h4 { margin: 22px 0 8px; font-size: 14.5px; }
+@media print { .cf-ctl { display: none !important; } .cf-month-wrap { max-height: none; overflow: visible; } }

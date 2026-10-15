@@ -111,6 +111,18 @@
   </details>
 </section>
 
+<section class="band cf-band" id="cf">
+  <div class="h-row"><h2>현금흐름(CF)</h2>
+    <div class="cf-ctl">
+      <label class="inline">공시가격 연 <input id="cf-growth" type="number" min="0" max="30" step="0.5" value="0"> % 상승</label>
+      <label class="inline">기간 <select id="cf-years" class="sel"><option value="1">1년</option><option value="3">3년</option><option value="5">5년</option><option value="10">10년</option></select></label>
+      <label class="chk"><input id="cf-install" type="checkbox"> 분할납부 신청</label>
+      <button type="button" class="btn primary" data-act="xlsx">엑셀 다운로드</button>
+    </div>
+  </div>
+  <div id="cf-table"></div>
+</section>
+
 <section class="prose" id="rates">
   <h2>2026년 주택 보유세 세율표</h2>
   <div class="tw"><table>
@@ -172,6 +184,9 @@
 
 <script src="js/config.js"></script>
 <script src="js/house-engine.js"></script>
+<script src="js/cf.js"></script>
+<script src="js/cf-view.js"></script>
+<script src="js/xlsx-export.js"></script>
 <script src="js/house-app.js"></script>
 </body>
 </html>

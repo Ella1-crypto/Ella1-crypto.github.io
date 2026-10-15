@@ -54,7 +54,7 @@
     }
     if (f.startsWith('bld.')) {
       const k = f.slice(4);
-      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain'];
+      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain', 'prevFire'];
       const v = numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
     }
@@ -74,7 +74,46 @@
     $('#schedule').innerHTML = V.schedule(result);
     $('#projection').innerHTML = V.projection(result, state.growth);
     $('#mbar-total').textContent = `${V.won(result.totals.total)}원`;
+    $('#cf-table').innerHTML = window.HTMCFView.render(currentCF());
     return result;
+  }
+
+  const currentCF = () => window.HTMCF.commercial(state, { years: state.cfYears, installments: state.cfInstall });
+
+  async function downloadXlsx() {
+    const r = C.compute(state);
+    const cf = currentCF();
+    const t = r.totals;
+    const summary = [
+      ['연간 예상 보유세 합계', t.total, `${r.year}년 기준`],
+      ['건축물분 재산세·교육세·소방분 (7월)', t.building],
+      ['토지분 재산세·도시지역분·교육세 (9월)', t.landProp],
+      ['종합부동산세 결정세액 (12월)', t.cmtMain],
+      ['농어촌특별세', t.nong],
+      [`${cf.years}년 CF 합계${cf.installments ? ' (분할납부 반영)' : ''}`, cf.total],
+    ];
+    const inputs = [['소유자', state.ownerType], ['공시지가 연 상승률', `${state.growth}%`]].concat(state.parcels.map((p, i) => [
+      `필지 ${i + 1} ${p.addr || ''}`.trim(),
+      p.hasHouse ? '주택 — 제외' : `${(p.area || 0).toLocaleString('ko-KR')}㎡ × ${(p.price || 0).toLocaleString('ko-KR')}원 · ${HT.CLASS[p.cls].label} · 지분 ${p.share}%${p.bld ? ' · 건물 있음' : ''}`,
+    ]));
+    const extra = [
+      { item: '건축물분 재산세', rule: '시가표준액 × 70% × 0.25%(공장 0.5%, 골프장·고급오락장 4%)', law: '지방세법 제110조·제111조①2' },
+      { item: '소방분 지역자원시설세', rule: '건축물 과세표준 0.04~0.12% 누진, 화재위험 ×2·대형 ×3, 150% 상한', law: '지방세법 제146조③·제147조②' },
+      { item: '분할납부', rule: '재산세 250만원 초과: 500만원 이하는 초과분, 초과는 50% 이하를 3개월 이내 / 종부세 6개월 이내 분납', law: '지방세법 제118조, 시행령 제116조, 종부세법 제20조' },
+    ];
+    if (!cf.entries.length) { toast('계산된 세금이 없어 엑셀로 낼 내용이 없습니다.'); return; }
+    const btn = document.querySelector('[data-act="xlsx"]');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    toast('엑셀 파일을 만드는 중…');
+    try {
+      await window.HTMXlsx.download({ fileName: `보유세맵_상업용_${r.year}.xlsx`, title: '보유세맵 — 상업용 부동산 보유세 계산', modeLabel: C.MODES[state.mode].label, summary, inputs, cf, basis: [...HT.BASIS, ...extra] });
+      toast('엑셀 파일을 내려받았습니다.');
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   function render() {
@@ -85,6 +124,8 @@
     document.querySelectorAll('[data-owner]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.owner === state.ownerType)));
     $('#growth').value = state.growth;
     $('#mode').value = state.mode;
+    $('#cf-years').value = String(state.cfYears);
+    $('#cf-install').checked = state.cfInstall;
     document.querySelectorAll('[data-prev]').forEach(el => {
       if (document.activeElement !== el) el.value = state.prev[el.dataset.prev] > 0 ? Number(state.prev[el.dataset.prev]).toLocaleString('ko-KR') : '';
     });
@@ -200,6 +241,7 @@
       }
     },
     print: () => window.print(),
+    xlsx: () => downloadXlsx(),
     save: () => {
       const r = C.compute(state);
       const name = state.parcels.map(p => p.addr).filter(Boolean).slice(0, 2).join(', ') || `필지 ${state.parcels.length}개`;
@@ -309,6 +351,8 @@
     document.addEventListener('pointercancel', release, true);
     $('#search').addEventListener('submit', onSearch);
     document.querySelectorAll('[data-owner]').forEach(b => b.addEventListener('click', () => setOwner(b.dataset.owner)));
+    $('#cf-years').addEventListener('change', e => setState({ ...state, cfYears: Number(e.target.value) }));
+    $('#cf-install').addEventListener('change', e => setState({ ...state, cfInstall: e.target.checked }));
     $('#mode').addEventListener('change', e => setState({ ...state, mode: e.target.value === '2027reform' ? '2027reform' : '2026' }));
     document.querySelectorAll('[data-prev]').forEach(el => el.addEventListener('change', () => setState({ ...state, prev: { ...state.prev, [el.dataset.prev]: parseNum(el.value) } })));
     $('#growth').addEventListener('change', e => setState({ ...state, growth: Math.min(30, parseNum(e.target.value)) }));

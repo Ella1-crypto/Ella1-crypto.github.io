@@ -5,7 +5,7 @@
  *  · 세율 (§111①2): 골프장·고급오락장 4%, 시 지역 주거지역 등 공장용 0.5%, 그 밖의 건축물 0.25%
  *  · 도시지역분 과세표준 × 0.14% (§112①2) — 지방교육세 과세표준에서 제외 (§151①6)
  *  · 지방교육세 = 재산세액 × 20% (§151①6)
- *  · 세 부담 상한: 본세·도시지역분 각각 직전 연도의 150% (§122, 주택 제외)
+ *  · 세 부담 상한: 본세·도시지역분 각각 직전 연도의 150% (§122, 주택 제외). 소방분도 150% (§147② — §122 본문 준용)
  *  · 소방분 누진세율, 화재위험 ×2 · 대형 화재위험 ×3 (§146③, 시행령 §138), 겸용은 구·동별 안분 (시행규칙 §75)
  *  · 납기 7.16~7.31 (§115①2)
  * 주택은 토지·건물을 합친 주택분으로 과세되므로 여기서 계산하지 않는다.
@@ -70,6 +70,7 @@
       bldUrban: ['on', 'off'].includes(r.bldUrban) ? r.bldUrban : 'auto',
       bldPrevMain: num(r.bldPrevMain),
       bldPrevUrban: num(r.bldPrevUrban),
+      bldPrevFire: num(r.bldPrevFire),
     };
   }
 
@@ -129,12 +130,13 @@
     const main = mainCap.value, urbanTax = urbanCap.value;
     const prop = floor10(main + urbanTax);
     const edu = floor10(main * EDU_RATE);
-    const fire = sum(rows.map(x => x.fire));
+    const fireCap = capped(sum(rows.map(x => x.fire)), r.bldPrevFire);
+    const fire = fireCap.value;
     return {
       rows, excluded, inputKind, urban,
       base: sum(rows.map(x => x.base)),
       main, urbanTax, prop, edu, fire,
-      capReduced: mainCap.reduced + urbanCap.reduced,
+      capReduced: mainCap.reduced + urbanCap.reduced + fireCap.reduced,
       total: prop + edu + fire,
     };
   }

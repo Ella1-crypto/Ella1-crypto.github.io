@@ -78,6 +78,7 @@
       <div class="grid4">
         ${field('건축면적(바닥면적)', numInput(p.id, 'bld.footprint', b.footprint, '㎡'), '별도합산 2%·5% 기준 판정용 (건축물대장)')}
         ${field('작년 건축물 재산세', numInput(p.id, 'bld.prevMain', b.prevMain, '원'), '선택 — 고지서 본세(내 몫), 150% 상한')}
+        ${field('작년 소방분', numInput(p.id, 'bld.prevFire', b.prevFire, '원'), '선택 — 지역자원시설세(내 몫), 150% 상한')}
       </div>
       ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
       ${summary}
