@@ -1,9 +1,9 @@
 // lab-core.js 의 규칙을 화면에 연결한다. 모든 텍스트는 textContent 로만 넣는다(innerHTML 미사용).
 import {
-  BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
+  BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, buildQueueFile, queueEntry, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261013n';
-import { requestAnalysis } from './llm.js?v=20261013n';
+} from './lab-core.js?v=20261015a';
+import { requestAnalysis } from './llm.js?v=20261015a';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
 const SAMPLE_NAMES = '건조대, 선 정리함, 거치대, 회전 트레이';
@@ -130,6 +130,106 @@ function runCheck() {
     h('p', 'mode-line', `${linkAllowed ? '링크 버전' : '링크 없는 버전'} 기준으로 확인했습니다.`),
     ...batch, ...cards, ...(linkAllowed ? [disclosureCard()] : []),
   );
+  renderQueue(posts, linkAllowed, productNames);
+}
+
+// ── 예약 파일로 내보내기 ── 검수한 그 글 그대로만 담는다(검수 뒤 글을 고치면 다시 검수해야 한다).
+let checkedBatch = null;
+
+function tomorrowKst() {
+  return kstDateString(new Date(Date.now() + 86_400_000));
+}
+
+function rowEntry(row) {
+  const { posts, linkAllowed, productNames, mode } = checkedBatch;
+  const date = $('queue-date').value;
+  const result = queueEntry({
+    text: posts[Number(row.dataset.index)], date, time: row.querySelector('input[type=time]').value,
+    link: row.querySelector('.link')?.value || '', linkAllowed, productNames, now: new Date(),
+  });
+  // '기준일 따라'로 검수했으면, 올릴 날짜의 기간도 같은지 본다(오늘은 링크 없는 기간인데 링크 기간 날짜로 예약하는 경우).
+  const day = mode === 'auto' ? dayNumber(date) : null;
+  if (result.ok && day !== null && phaseFor(day).linkAllowed !== linkAllowed) {
+    const label = phaseFor(day).linkAllowed ? '링크 버전' : '링크 없는 버전';
+    return { ok: false, problems: [`올릴 날짜(D${day})는 ${label} 기간입니다. 기준일을 그 날짜로 바꿔 다시 검수해 주세요.`] };
+  }
+  return result;
+}
+
+function refreshRow(row) {
+  const result = rowEntry(row);
+  const box = row.querySelector('input[type=checkbox]');
+  if (result.ok && row.classList.contains('blocked')) box.checked = true;   // 고쳐서 담을 수 있게 되면 다시 고른다
+  row.classList.toggle('blocked', !result.ok);
+  box.disabled = !result.ok;
+  if (!result.ok) box.checked = false;
+  row.querySelector('.why').textContent = result.ok
+    ? (result.item.warnings.length ? `확인: ${result.item.warnings.join(' · ')}` : '')
+    : result.problems.join(' · ');
+}
+
+function queueRow(post, index, linkAllowed) {
+  const row = h('li', 'queue-row');
+  row.dataset.index = String(index);
+  const box = h('input');
+  box.type = 'checkbox';
+  box.checked = true;
+  box.setAttribute('aria-label', `글 ${index + 1} 예약에 담기`);
+  const time = h('input');
+  time.type = 'time';
+  time.value = SLOTS[index] || '20:00';
+  time.setAttribute('aria-label', `글 ${index + 1} 올릴 시각`);
+  row.append(box, h('span', 'first', `글 ${index + 1} · ${splitLines(post)[0] || ''}`), time);
+  if (linkAllowed) {
+    const link = h('input', 'link');
+    link.type = 'text';
+    link.placeholder = '첫 댓글에 달 링크 (https://…) — 비우면 댓글 없음';
+    link.autocomplete = 'off';
+    link.setAttribute('aria-label', `글 ${index + 1} 첫 댓글 링크`);
+    link.addEventListener('input', () => refreshRow(row));
+    row.append(link);
+  }
+  row.append(h('p', 'why'));
+  time.addEventListener('input', () => refreshRow(row));
+  return row;
+}
+
+function renderQueue(posts, linkAllowed, productNames) {
+  checkedBatch = { posts, linkAllowed, productNames, mode: document.querySelector('input[name="mode"]:checked').value };
+  if (!$('queue-date').value || $('queue-date').value < tomorrowKst()) $('queue-date').value = tomorrowKst();
+  const rows = posts.map((post, index) => queueRow(post, index, linkAllowed));
+  $('queue-rows').replaceChildren(...rows);
+  rows.forEach(refreshRow);
+  $('queue-status').textContent = '';
+  $('queue-panel').hidden = false;
+}
+
+function downloadQueue() {
+  const status = $('queue-status');
+  if (!checkedBatch) return;
+  if (JSON.stringify(splitBatch($('draft').value)) !== JSON.stringify(checkedBatch.posts)) {
+    status.textContent = '검수한 뒤 글이 바뀌었습니다. 검수하기를 다시 눌러 주세요.';
+    return;
+  }
+  const picked = [...$('queue-rows').children].filter((row) => row.querySelector('input[type=checkbox]').checked);
+  const results = picked.map(rowEntry);
+  if (results.some((result) => !result.ok)) {
+    picked.forEach(refreshRow);
+    status.textContent = '담을 수 없는 글이 있습니다. 빨간 안내를 확인해 주세요.';
+    return;
+  }
+  if (results.length === 0) { status.textContent = '담을 글을 하나 이상 골라 주세요.'; return; }
+  const file = buildQueueFile(results.map((result) => result.item), new Date());
+  const blob = new Blob([JSON.stringify(file, null, 1)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = h('a');
+  link.href = url;
+  link.download = `threads-queue-${$('queue-date').value}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  status.textContent = `글 ${results.length}개를 담은 예약 파일을 내려받았습니다. PC 앱 ⏰ 7. 예약 발행 탭에서 가져오세요.`;
 }
 
 function fillSample() {
@@ -261,6 +361,8 @@ function clearAll() {
   $('draft').value = '';
   $('names').value = '';
   $('results').replaceChildren(h('p', 'empty', '아직 검수한 글이 없습니다.'));
+  checkedBatch = null;
+  $('queue-panel').hidden = true;
 }
 
 $('date-input').value = kstDateString(new Date());
@@ -270,6 +372,8 @@ $('run').addEventListener('click', runCheck);
 $('sample').addEventListener('click', fillSample);
 $('clear').addEventListener('click', clearAll);
 $('generate').addEventListener('click', generateDrafts);
+$('queue-download').addEventListener('click', downloadQueue);
+$('queue-date').addEventListener('input', () => [...$('queue-rows').children].forEach(refreshRow));
 $('save-key').addEventListener('change', rememberKey);
 $('api-key').addEventListener('input', rememberKey);
 loadSavedKey();

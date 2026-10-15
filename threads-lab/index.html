@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Silkscreen&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261013n">
+  <link rel="stylesheet" href="style.css?v=20261015a">
 </head>
 <body>
   <div class="sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
@@ -96,7 +96,7 @@
         <li><b>초안 만들기를 누른다</b>수십 초 걸립니다. 다 되면 글 5개가 아래 <a href="#check-heading">04 · CHECKER</a> 칸에 <code>---</code>로 구분되어 들어갑니다.</li>
         <li><b>오늘 단계에 맞게 고친다</b>맨 위 TODAY 카드의 단계를 봅니다. 링크 없는 기간이면 마지막 줄을 질문형으로, 링크 기간이면 <code>링크 댓글에</code>로 끝냅니다.</li>
         <li><b>검수한다</b>❌가 없을 때까지 고칩니다. 첫 줄 상품명, 직접 써 본 표현, 본문 주소, 5줄 초과가 주로 걸립니다.</li>
-        <li><b>사람이 올린다</b>게시는 직접 합니다. 02 · TIMETABLE에서 메인 계정과 30분 이상 떨어졌는지 먼저 확인하고, 링크와 고지문은 첫 댓글에 답니다.</li>
+        <li><b>사람이 올리거나 예약한다</b>직접 올리거나, 검수기 아래 <b>예약 파일로 내보내기</b>로 PC 앱의 자동 발행에 넘깁니다. 02 · TIMETABLE에서 메인 계정과 30분 이상 떨어졌는지 먼저 확인하고, 링크와 고지문은 첫 댓글에 답니다.</li>
       </ol>
       <div class="split">
         <div class="glass panel">
@@ -172,6 +172,18 @@
           <p class="empty">아직 검수한 글이 없습니다. 왼쪽에 글을 붙여 넣거나 <b>예시 넣기</b>를 눌러 보세요.</p>
         </div>
       </div>
+      <div class="glass panel queue" id="queue-panel" hidden>
+        <h3>예약 파일로 내보내기</h3>
+        <p class="hint">검수에서 <b>수정</b>이 없는 글만 담깁니다. 내려받은 파일을 PC의 content-automation 앱 <b>⏰ 7. 예약 발행</b> 탭에서 가져오면, 자동 발행이 켜져 있을 때 그 시각에 올라갑니다. 링크를 넣은 글은 고지문과 링크가 첫 댓글로 달립니다.</p>
+        <label class="field" for="queue-date"><span>올릴 날짜</span>
+          <input type="date" id="queue-date">
+        </label>
+        <ol class="queue-rows" id="queue-rows"></ol>
+        <div class="actions">
+          <button type="button" class="btn primary" id="queue-download">예약 파일 내려받기</button>
+        </div>
+        <p class="hint" id="queue-status" role="status"></p>
+      </div>
     </section>
 
     <section class="block" aria-labelledby="rules-heading">
@@ -181,7 +193,7 @@
         <li class="glass"><b>지어내지 않는다</b><span>읽지 못한 조회수·좋아요는 [확인 불가]. 확인 못 한 가격·효과·배송은 글에 넣지 않는다.</span></li>
         <li class="glass"><b>써 본 척하지 않는다</b><span>"써봤어", "샀어" 같은 경험 표현 대신 발견·비교·전언만 쓴다.</span></li>
         <li class="glass"><b>계정 행동은 하지 않는다</b><span>팔로우·좋아요·댓글·리포스트·프로필 수정은 사람이 한다. 자동화는 글 게시만.</span></li>
-        <li class="glass"><b>링크는 만들지 않는다</b><span>제휴 링크 생성과 링크 댓글은 계정 주인이 직접. 고지문은 빠뜨리지 않는다.</span></li>
+        <li class="glass"><b>링크는 만들지 않는다</b><span>제휴 링크는 계정 주인이 직접 만들어 넣는다. 자동 발행은 넣어 준 링크만 고지문과 함께 첫 댓글로 단다.</span></li>
         <li class="glass"><b>원본을 다시 올리지 않는다</b><span>쇼츠는 자막과 컷을 새로 얹은 2차 창작으로만 지시하고 원본 계정을 적는다.</span></li>
         <li class="glass"><b>의심스러우면 뺀다</b><span>정품 여부가 의심되는 상품, 타깃과 맞지 않는 상품은 후보에서 빼고 사유를 남긴다.</span></li>
       </ul>
@@ -193,6 +205,6 @@
     <a href="../#content">← ELLA'S SIDE LEDGER</a>
   </footer>
 
-  <script type="module" src="app.js?v=20261013n"></script>
+  <script type="module" src="app.js?v=20261015a"></script>
 </body>
 </html>

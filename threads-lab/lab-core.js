@@ -249,3 +249,56 @@ export function buildBlogPrompt(items) {
     ...list,
   ].join('\n');
 }
+
+// ── 예약 파일 내보내기 ── content-automation 앱(7번 탭 '예약 파일 가져오기')이 읽는 형식.
+// 공개 페이지라 토큰·계정 이름은 담지 않는다. 실제 게시는 PC 앱의 자동 발행이 한다.
+export const QUEUE_FORMAT = 'threads-lab-queue';
+export const QUEUE_VERSION = 1;
+export const THREADS_TEXT_LIMIT = 500;
+const PLACEHOLDER_RE = /\[확인 필요\]|\[\s*_{2,}|example\.com/;
+const LINK_RE = /^https?:\/\/\S+$/i;
+
+/**
+ * 검수한 글 하나를 예약 항목으로 만든다. 검수에서 '수정'이 하나라도 있으면 담지 않는다.
+ * @param {{text: string, date: string, time: string, link?: string, linkAllowed: boolean, productNames?: string[], now: Date}} input
+ * @returns {{ok: boolean, problems: string[], item?: {publish_at: string, text: string, reply_text: string, source: string, warnings: string[]}}}
+ */
+export function queueEntry({ text, date, time, link = '', linkAllowed, productNames = [], now }) {
+  const body = splitLines(text).join('\n');
+  const findings = checkPost(body, { linkAllowed, productNames });
+  const problems = findings.filter((f) => f.level === 'fail').map((f) => f.message);
+  const cleanLink = (link || '').trim();
+  const minutes = toMinutes(time || '');
+  const day = toUtcDay(date);
+
+  if (!body) problems.push('글이 비어 있습니다.');
+  if (body.length > THREADS_TEXT_LIMIT) problems.push(`${body.length}자입니다. 스레드는 ${THREADS_TEXT_LIMIT}자까지입니다.`);
+  if (PLACEHOLDER_RE.test(body)) problems.push('[확인 필요]·빈칸 같은 미완성 표시가 남아 있습니다.');
+  if (day === null || minutes === null) problems.push('날짜와 시각을 확인해 주세요.');
+  if (cleanLink && !linkAllowed) problems.push('링크 없는 버전인데 링크가 들어 있습니다.');
+  if (cleanLink && !LINK_RE.test(cleanLink)) problems.push('링크는 https:// 로 시작하는 주소 하나만 넣습니다.');
+  if (linkAllowed && !cleanLink && /링크/.test(splitLines(body).at(-1) || '')) {
+    problems.push('마지막 줄이 "링크 댓글에"인데 링크가 없습니다. 첫 댓글에 달 링크를 넣어 주세요.');
+  }
+
+  const publishAt = day === null || minutes === null ? '' : `${date}T${toClock(minutes)}+09:00`;
+  if (publishAt && now && new Date(publishAt).getTime() <= now.getTime()) problems.push('이미 지난 시각입니다.');
+  if (problems.length) return { ok: false, problems };
+
+  return {
+    ok: true,
+    problems: [],
+    item: {
+      publish_at: publishAt,
+      text: body,
+      reply_text: cleanLink ? `${DISCLOSURE}\n구매 링크: ${cleanLink}` : '',
+      source: 'threads-lab',
+      warnings: findings.filter((f) => f.level === 'warn').map((f) => `${f.message}${f.evidence ? ` (${f.evidence})` : ''}`),
+    },
+  };
+}
+
+/** @param {object[]} items queueEntry 의 item 들 @param {Date} now @returns {object} 내려받을 파일 내용 */
+export function buildQueueFile(items, now) {
+  return { format: QUEUE_FORMAT, version: QUEUE_VERSION, exported_at: now.toISOString(), items };
+}
