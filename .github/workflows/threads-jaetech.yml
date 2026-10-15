@@ -5,14 +5,14 @@ name: threads-jaetech
 on:
   schedule:
     - cron: "*/5 3-4 * * *"   # 매일 12:00~13:55 KST, 5분마다 (올릴 글이 없으면 바로 끝남)
-    - cron: "0 0 * * 1"       # 매주 월요일 09:00 KST, 토큰 점검
+    - cron: "0 0 * * 1"       # 매주 월요일 09:00 KST, 토큰 점검 + 자동 갱신
   workflow_dispatch:
     inputs:
       mode:
-        description: "publish = 예약 글 올리기, check = 토큰만 점검"
+        description: "publish = 예약 글 올리기, check = 토큰만 점검, refresh = 토큰 점검 후 갱신"
         default: publish
         type: choice
-        options: [publish, check]
+        options: [publish, check, refresh]
 
 permissions:
   contents: write
@@ -35,13 +35,21 @@ jobs:
           git config user.name "threads-jaetech-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Check token
-        if: github.event.schedule == '0 0 * * 1' || inputs.mode == 'check'
+        if: github.event.schedule == '0 0 * * 1' || inputs.mode == 'check' || inputs.mode == 'refresh'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
         run: python _automation/jaetech_publish.py --check
+      - name: Refresh token
+        if: github.event.schedule == '0 0 * * 1' || inputs.mode == 'refresh'
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GH_SECRETS_PAT: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          pip install --quiet pynacl==1.5.0
+          python _automation/refresh_token.py
       - name: Publish due post
-        if: github.event.schedule != '0 0 * * 1' && inputs.mode != 'check'
+        if: github.event.schedule != '0 0 * * 1' && inputs.mode != 'check' && inputs.mode != 'refresh'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
