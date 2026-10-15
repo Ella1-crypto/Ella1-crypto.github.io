@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const H = window.HouseTax;
+  const RL = window.HTMRelief;
   const $ = s => document.querySelector(s);
   const STORE = 'htm.house.v1';
   const HISTORY = 'htm.house.history.v1';
@@ -25,7 +26,7 @@
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
   /* ---------- 상태 ---------- */
-  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0, bldValue: 0, prevFire: 0 });
+  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0, bldValue: 0, prevFire: 0, kind: 'none', rentalSize: 'none', region: 'metro', construction: false });
   function clean(raw) {
     const s = raw && typeof raw === 'object' ? raw : {};
     const houses = (Array.isArray(s.houses) ? s.houses : []).filter(h => h && typeof h === 'object').slice(0, MAX_HOUSES).map(h => ({
@@ -37,6 +38,10 @@
       prevPrice: num(h.prevPrice, 1e12),
       bldValue: num(h.bldValue, 1e12),
       prevFire: num(h.prevFire, 1e10),
+      kind: own(H.KINDS, h.kind) ? h.kind : 'none',
+      rentalSize: own(RL.RENTAL_SIZE, h.rentalSize) ? h.rentalSize : 'none',
+      region: h.region === 'local' ? 'local' : 'metro',
+      construction: h.construction === true,
     }));
     return {
       mode: own(H.MODES, s.mode) ? s.mode : '2026',
@@ -50,6 +55,8 @@
       cfYears: [1, 3, 5, 10].includes(Number(s.cfYears)) ? Number(s.cfYears) : 5,
       cfInstall: s.cfInstall === true,
       cfGrowth: Math.min(30, num(s.cfGrowth, 30)),
+      corpGeneral: s.corpGeneral === true,
+      joint: s.joint === true,
       houses: houses.length ? houses : [newHouse()],
     };
   }
@@ -67,7 +74,7 @@
   const unb64 = t => new TextDecoder().decode(Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
 
   function input() {
-    return { ...state, houses: state.houses.map(h => ({ price: h.price, share: h.share, urban: h.urban, prevPrice: h.prevPrice, bldValue: h.bldValue, prevFire: h.prevFire })) };
+    return { ...state, houses: state.houses.map(h => ({ price: h.price, share: h.share, urban: h.urban, prevPrice: h.prevPrice, bldValue: h.bldValue, prevFire: h.prevFire, kind: h.kind, rentalSize: h.rentalSize, region: h.region, construction: h.construction })) };
   }
 
   /* ---------- 렌더 ---------- */
@@ -90,6 +97,7 @@
           <label class="fld"><span class="fld-l">작년 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="prevPrice" value="${esc(fmt(h.prevPrice))}"><em>원</em></span><span class="fld-h">선택 — 과세표준상한(5%) 계산</span></label>
           <label class="fld"><span class="fld-l">재산세</span><span class="fld-h house-tax">${row ? `<b>${won(row.ownTotal)}원</b> (본세 ${won(row.ownMain)} · 도시 ${won(row.ownUrban)} · 교육 ${won(row.ownEdu)}${row.ownFire ? ` · 소방 ${won(row.ownFire)}` : ''})` : '—'}</span></label>
         </div>
+        ${houseRelief(h, row)}
         <details class="more"><summary>소방분(지역자원시설세) 넣기 — 건물분 시가표준액</summary>
           <div class="grid4">
             <label class="fld"><span class="fld-l">건물 시가표준액</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="bldValue" value="${esc(fmt(h.bldValue))}"><em>원</em></span><span class="fld-h">재산세 고지서·위택스의 건축물 시가표준액(토지 제외)</span></label>
@@ -99,6 +107,50 @@
         <label class="chk"><input type="checkbox" data-hid="${esc(h.id)}" data-f="urban"${h.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 — 대부분의 시 지역 주택은 해당</label>
       </article>`;
     }).join('');
+  }
+
+  function houseRelief(h, row) {
+    const kind = H.KINDS[h.kind] || H.KINDS.none;
+    const rental = RL.RENTAL_SIZE[h.rentalSize] || RL.RENTAL_SIZE.none;
+    const rel = row && row.relief;
+    const opt = (v, l, cur) => `<option value="${esc(v)}"${String(v) === String(cur) ? ' selected' : ''}>${esc(l)}</option>`;
+    return `
+        <details class="relief"${h.kind !== 'none' || h.rentalSize !== 'none' ? ' open' : ''}>
+          <summary>특례·감면 ${h.kind !== 'none' || h.rentalSize !== 'none' ? `<b>${esc([h.kind !== 'none' ? kind.label : '', h.rentalSize !== 'none' ? `임대 ${rental.label}` : ''].filter(Boolean).join(' · '))}</b>` : '<span class="muted">— 임대주택·상속주택·일시적 2주택·지방 저가주택 등</span>'}</summary>
+          <div class="grid4">
+            <label class="fld"><span class="fld-l">종부세 구분</span><select data-hid="${esc(h.id)}" data-f="kind">${Object.entries(H.KINDS).map(([k, v]) => opt(k, v.label, h.kind)).join('')}</select></label>
+            <label class="fld"><span class="fld-l">임대주택 재산세 감면</span><select data-hid="${esc(h.id)}" data-f="rentalSize">${Object.entries(RL.RENTAL_SIZE).map(([k, v]) => opt(k, v.label, h.rentalSize)).join('')}</select><span class="fld-h">장기일반·공공지원민간임대 등록</span></label>
+            <label class="fld"><span class="fld-l">소재지</span><select data-hid="${esc(h.id)}" data-f="region">${opt('metro', '수도권', h.region)}${opt('local', '수도권 밖', h.region)}</select></label>
+            <label class="chk"><input type="checkbox" data-hid="${esc(h.id)}" data-f="construction"${h.construction ? ' checked' : ''}> 민간건설임대(수도권 9억 기준)</label>
+          </div>
+          ${h.kind !== 'none' ? `<p class="law-line"><b>${esc(kind.law)}</b></p><p class="need-line">요건: ${esc(kind.need)}</p>` : ''}
+          ${rel ? `<p class="law-line"><b>${esc(rel.law)}</b> — ${rel.overCap ? `공시가격이 감면 기준 ${eok(rel.cap)}을 넘어 감면되지 않습니다.` : `재산세 −${won(rel.total)}원 (${Math.round(rel.rate * 1000) / 10}%${rel.minTax ? ', 최소납부세제로 85%' : ''}${rel.urban ? ', 도시지역분 포함' : ''})`}</p>` : ''}
+        </details>`;
+  }
+
+  function jointCompare() {
+    if (!(state.joint && state.ownerType === '개인' && state.houses.length === 1 && state.houses[0].price > 0)) return '';
+    const h = input().houses[0];
+    const mine = Math.min(100, h.share || 50);
+    const spouse = 100 - mine;
+    if (spouse <= 0) return '<div class="cmp-card"><p class="warn-line">공동명의 비교: 위 주택의 "내 지분"을 50처럼 넣으세요(배우자 지분 = 100 − 내 지분).</p></div>';
+    const base = { ...input(), oneHouse: true, prevTotal: 0 }; // 작년 세액은 부부 합계라 각자 상한 비교에 쓰지 않는다
+    const a1 = H.calc({ ...base, jointEach: true, houses: [{ ...h, share: mine }] });
+    const a2 = H.calc({ ...base, jointEach: true, houses: [{ ...h, share: spouse }] });
+    const b = H.calc({ ...base, houses: [{ ...h, share: 100 }] });
+    const A = { prop: a1.prop.total + a2.prop.total, cmt: (a1.cmt ? a1.cmt.total : 0) + (a2.cmt ? a2.cmt.total : 0) };
+    const B = { prop: b.prop.total, cmt: b.cmt ? b.cmt.total : 0 };
+    const tA = A.prop + A.cmt, tB = B.prop + B.cmt;
+    const best = tB < tA ? 'B' : 'A';
+    return `<div class="cmp-card">
+      <h3>부부 공동명의 1주택 — 어느 쪽이 유리할까</h3>
+      <div class="tw"><table><thead><tr><th></th><th>재산세 등</th><th>종부세·농특세</th><th>합계(부부)</th></tr></thead><tbody>
+        <tr${best === 'A' ? ' class="win"' : ''}><th>A. 각자 과세 (각 9억 공제)</th><td>${won(A.prop)}</td><td>${won(A.cmt)}</td><td><b>${won(tA)}</b></td></tr>
+        <tr${best === 'B' ? ' class="win"' : ''}><th>B. 공동명의 1주택자 특례 (12억 공제·세액공제)</th><td>${won(B.prop)}</td><td>${won(B.cmt)}</td><td><b>${won(tB)}</b></td></tr>
+      </tbody></table></div>
+      <p class="law-line"><b>${best === 'B' ? `특례 신청이 ${won(tA - tB)}원 유리` : tA === tB ? '차이 없음' : `각자 과세가 ${won(tB - tA)}원 유리`}</b> — 종부세법 제10조의2, 9.16~9.30 관할세무서에 신청</p>
+      <p class="need-line">B는 지분이 큰 사람(50:50이면 부부 중 선택한 1인)을 납세의무자로 보고 위 나이·보유기간으로 세액공제를 계산합니다. 세대원 누구도 다른 주택이 없어야 합니다.</p>
+    </div>`;
   }
 
   function summary(r) {
@@ -146,6 +198,10 @@
     return `<h4>주택분 종합부동산세 — 납세자별 합산</h4>
       <div class="tw"><table><tbody>${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v < 0 ? '−' : ''}${won(Math.abs(v))}</td></tr>`).join('')}</tbody></table></div>
       ${c.decided === 0 && c.base === 0 ? `<p class="formula">공시가격 합계가 공제액 ${eok(c.deduction)} 이하라 종부세가 없습니다.</p>` : ''}
+      ${r.opt.oneHouse && ((Number(state.age) || 0) >= 60 || (Number(state.holdYears) || 0) >= 5) && c.decided > 1e6
+        ? `<p class="formula">종부세가 100만원을 넘어 <b>납부유예</b>를 신청할 수 있습니다 — 직전 연도 총급여 7천만원(종합소득 6천만원) 이하, 담보 제공, 양도·상속 때 이자와 함께 납부(종부세법 제20조의2).</p>` : ''}
+      ${c.excluded.length ? `<p class="formula">합산배제 임대주택 ${c.excluded.length}채(${eok(c.excluded.reduce((s, x) => s + x.value, 0))})는 과세표준에서 뺐습니다. 세율 판정 주택 수 ${c.count}채.</p>` : ''}
+      ${c.mainShare < 1 ? `<p class="formula">고령자·장기보유 공제는 상속·지방 저가·일시적 2주택 신규주택분을 뺀 ${Math.round(c.mainShare * 100)}%에만 적용했습니다(종부세법 제9조⑦⑨).</p>` : ''}
       ${r.cmtInstallment > 0 ? `<p class="formula">종부세 ${eok(c.decided)}은 250만원을 넘어 ${eok(r.cmtInstallment)}까지 6개월 분납할 수 있습니다.</p>` : ''}`;
   }
 
@@ -172,6 +228,11 @@
     $('#detail').innerHTML = detail(r);
     $('#schedule').innerHTML = schedule(r);
     $('#compare').innerHTML = compare();
+    $('#joint-card').innerHTML = jointCompare();
+    $('#corp-wrap').hidden = state.ownerType !== '법인';
+    $('#corpGeneral').checked = state.corpGeneral;
+    $('#joint-wrap').hidden = !(state.ownerType === '개인' && state.houses.length === 1);
+    $('#joint').checked = state.joint;
     $('#mbar-total').textContent = `${won(r.total)}원`;
     $('#cf-table').innerHTML = window.HTMCFView.render(currentCF());
     $('#cf-years').value = String(state.cfYears);
@@ -179,7 +240,9 @@
     if (document.activeElement !== $('#cf-growth')) $('#cf-growth').value = state.cfGrowth;
     document.querySelectorAll('[data-owner]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.owner === state.ownerType)));
     $('#mode').value = state.mode;
-    const single = state.houses.length === 1 && state.ownerType === '개인' && !(state.houseCount > 1);
+    // 일반 주택 1채(상속·지방 저가·일시적 2주택·합산배제 임대주택은 함께 있어도 됨), 목록 밖 주택 없음
+    const regular = state.houses.filter(h => h.price > 0 && !(H.KINDS[h.kind] || {}).keepOneHouse).length;
+    const single = state.ownerType === '개인' && regular <= 1 && !(state.houseCount > state.houses.length);
     $('#oneHouse').checked = state.oneHouse && single;
     $('#oneHouse').disabled = !single;
     $('#one-opts').hidden = !(state.oneHouse && single);
@@ -274,7 +337,9 @@
     if (!el || !el.dataset.hid) return;
     const f = el.dataset.f;
     const v = el.type === 'checkbox' ? el.checked : el.value;
-    const houses = state.houses.map(h => (h.id !== el.dataset.hid ? h : { ...h, [f]: f === 'name' ? v : f === 'urban' ? v : num(v, 1e12) }));
+    const textual = ['name', 'kind', 'rentalSize', 'region'];
+    const bool = ['urban', 'construction'];
+    const houses = state.houses.map(h => (h.id !== el.dataset.hid ? h : { ...h, [f]: textual.includes(f) || bool.includes(f) ? v : num(v, 1e12) }));
     state = clean({ ...state, houses });
     save();
     if (e.type === 'change' && pointerDown) pendingRender = true; // 버튼 누르는 중 다시 그리면 클릭이 사라진다
@@ -313,6 +378,8 @@
     $('#cf-install').addEventListener('change', e => setState({ ...state, cfInstall: e.target.checked }));
     $('#cf-growth').addEventListener('change', e => setState({ ...state, cfGrowth: num(e.target.value, 30) }));
     $('#oneHouse').addEventListener('change', e => setState({ ...state, oneHouse: e.target.checked }));
+    $('#corpGeneral').addEventListener('change', e => setState({ ...state, corpGeneral: e.target.checked }));
+    $('#joint').addEventListener('change', e => setState({ ...state, joint: e.target.checked }));
     $('#resident').addEventListener('change', e => setState({ ...state, resident: e.target.checked }));
     ['age', 'holdYears', 'houseCount', 'prevTotal'].forEach(k => $(`#${k}`).addEventListener('change', e => setState({ ...state, [k]: num(e.target.value, 1e12) })));
     $('#basis').innerHTML = `<div class="tw"><table class="basis"><thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead><tbody>${H.BASIS.map(b => `<tr><th>${esc(b.item)}</th><td>${esc(b.rule)}</td><td>${esc(b.law)}</td></tr>`).join('')}</tbody></table></div>`;

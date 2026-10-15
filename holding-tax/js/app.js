@@ -50,6 +50,8 @@
       case 'cls': return { ...p, cls: raw, clsAuto: false };
       case 'urban': return { ...p, urban: Boolean(raw) };
       case 'hasHouse': return { ...p, hasHouse: Boolean(raw) };
+      case 'relief.key': case 'relief.region': return { ...p, relief: { ...p.relief, [f.slice(7)]: raw } };
+      case 'relief.custom': case 'relief.years': return { ...p, relief: { ...p.relief, [f.slice(7)]: parseNum(raw) } };
       default: break;
     }
     if (f.startsWith('bld.')) {
@@ -70,7 +72,7 @@
   function renderResults() {
     const result = C.compute(state);
     $('#summary').innerHTML = V.summary(result, cfg);
-    $('#detail').innerHTML = V.landDetail(result.land) + V.buildingDetail(result.buildings, state.parcels);
+    $('#detail').innerHTML = V.reliefDetail(result, state.parcels) + V.landDetail(result.land) + V.buildingDetail(result.buildings, state.parcels);
     $('#schedule').innerHTML = V.schedule(result);
     $('#projection').innerHTML = V.projection(result, state.growth);
     $('#mbar-total').textContent = `${V.won(result.totals.total)}원`;
@@ -90,6 +92,7 @@
       ['토지분 재산세·도시지역분·교육세 (9월)', t.landProp],
       ['종합부동산세 결정세액 (12월)', t.cmtMain],
       ['농어촌특별세', t.nong],
+      ['감면 적용액', -t.relief, r.reliefs.map(x => `${x.label}(${x.law})`).join(' / ')],
       [`${cf.years}년 CF 합계${cf.installments ? ' (분할납부 반영)' : ''}`, cf.total],
     ];
     const inputs = [['소유자', state.ownerType], ['공시지가 연 상승률', `${state.growth}%`]].concat(state.parcels.map((p, i) => [
@@ -107,6 +110,7 @@
     btn.disabled = true;
     toast('엑셀 파일을 만드는 중…');
     try {
+      extra.push(...window.HTMRelief.NOTES);
       await window.HTMXlsx.download({ fileName: `보유세맵_상업용_${r.year}.xlsx`, title: '보유세맵 — 상업용 부동산 보유세 계산', modeLabel: C.MODES[state.mode].label, summary, inputs, cf, basis: [...HT.BASIS, ...extra] });
       toast('엑셀 파일을 내려받았습니다.');
     } catch (err) {

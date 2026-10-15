@@ -5,7 +5,7 @@
   const MAX_PARCELS = 20;
   const MAX_ROWS = 10;
   const CLASSES = ['sep', 'jong', 'b007', 'b02', 'b4'];
-  const RATES = ['general', 'factory', 'luxury'];
+  const RATES = () => Object.keys(window.BuildingTax.RATES); // 건물 엔진 세율표와 항상 같게(과밀억제권역 중과 포함)
 
   const num = (v, max = 1e13) => {
     const n = Number(v);
@@ -50,13 +50,24 @@
       structure: own(BV.STRUCTURE, b.structure) ? b.structure : 'rc',
       builtYear: Math.round(num(b.builtYear, BV.BASE_YEAR)) || 2010,
       floors: Math.round(num(b.floors, 200)),
-      rate: pick(b.rate, RATES, 'general'),
+      rate: pick(b.rate, RATES(), 'general'),
       fire: [1, 2, 3].includes(Number(b.fire)) ? Number(b.fire) : 'auto',
       direct: num(b.direct),
       footprint: num(b.footprint, 1e7),
       prevMain: num(b.prevMain),
       prevFire: num(b.prevFire),
       rows: rows.length ? rows : newBuilding().rows,
+    };
+  }
+
+  function cleanRelief(r) {
+    const RL = window.HTMRelief;
+    const v = r && typeof r === 'object' ? r : {};
+    return {
+      key: Object.prototype.hasOwnProperty.call(RL.COMMERCIAL, v.key) ? v.key : 'none',
+      region: Object.prototype.hasOwnProperty.call(RL.REGIONS, v.region) ? v.region : 'metro',
+      custom: Math.min(100, num(v.custom, 100)),
+      years: Math.round(num(v.years, 30)),
     };
   }
 
@@ -79,6 +90,7 @@
       clsAuto: o.clsAuto !== false,
       urban: o.urban !== false,
       hasHouse: o.hasHouse === true,
+      relief: cleanRelief(o.relief),
       sgg: str(o.sgg, 10),
       sggName: str(o.sggName, 40),
       geom: cleanGeom(o.geom),

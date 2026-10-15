@@ -73,17 +73,10 @@
    */
   function commercial(state, opt = {}) {
     const years = Math.max(1, Math.min(MAX_YEARS, Math.round(opt.years || 5)));
-    const g = (Number(state.growth) || 0) / 100;
     const startYear = (C.MODES[state.mode] || C.MODES['2026']).year;
-    let cur = state;
     const entries = [];
-    for (let i = 0; i < years; i += 1) {
-      const year = startYear + i;
-      const factor = Math.pow(1 + g, i);
-      const scaled = { ...cur, parcels: cur.parcels.map(p => ({ ...p, price: p.price * factor })) };
-      const r = C.compute(scaled, { year, skipProjection: true });
+    for (const { year, r } of C.series(state, years)) {
       const tag = e => ({ ...e, taxYear: year });
-
       for (const b of r.buildings.filter(x => x.own && !x.error)) {
         const p = state.parcels.find(x => x.id === b.parcelId) || {};
         const name = p.addr || '건물';
@@ -91,28 +84,12 @@
         if (s.now > 0) entries.push(tag(entry(year, 7, 'bld', `건축물분 재산세·교육세·소방분 — ${name}`, s.now, '7.16 ~ 7.31')));
         if (s.later > 0) entries.push(tag(entry(year, 10, 'bld', `건축물분 분할납부 — ${name}`, s.later, '10.31까지', true)));
       }
-      if (r.land && r.totals.landProp > 0) {
-        const s = split(r.land.prop.notice.prop, r.totals.landProp, opt.installments);
+      if (r.totals.landProp > 0) {
+        const s = split(r.totals.landBill, r.totals.landProp, opt.installments);
         entries.push(tag(entry(year, 9, 'land', '토지분 재산세·도시지역분·교육세', s.now, '9.16 ~ 9.30')));
         if (s.later > 0) entries.push(tag(entry(year, 12, 'land', '토지분 재산세 분할납부', s.later, '12.31까지', true)));
       }
       cmtEntries(year, r.totals.cmtMain, r.totals.nong, opt.installments).forEach(e => entries.push(tag(e)));
-
-      // 다음 해 세부담상한 기준: 올해 계산액으로 연쇄 (토지 재산세·종부세, 건축물 본세·소방분)
-      const prev = r.land ? {
-        propSep: r.land.prop.sepTax, propJong: r.land.prop.jongTax, cmtSep: r.land.cmt.sep.decided, cmtJong: r.land.cmt.jong.decided,
-      } : cur.prev;
-      const byId = new Map(r.buildings.filter(x => x.own && !x.error).map(x => [x.parcelId, x]));
-      cur = {
-        ...cur,
-        prev,
-        parcels: cur.parcels.map(p => {
-          const b = byId.get(p.id);
-          if (!b || !p.bld) return p;
-          const k = b.share / 100;
-          return { ...p, bld: { ...p.bld, prevMain: Math.floor(b.tax.main * k), prevFire: b.own.fire } };
-        }),
-      };
     }
     return { kind: 'commercial', startYear, years, installments: Boolean(opt.installments), entries, ...summarize(entries, startYear, years) };
   }

@@ -4,6 +4,7 @@
   const HT = window.HoldingTax;
   const BV = window.BuildingValue;
   const BT = window.BuildingTax;
+  const RL = window.HTMRelief;
 
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const won = n => Math.round(Number(n) || 0).toLocaleString('ko-KR');
@@ -93,6 +94,25 @@
     return `${stale}공시가격 ${eok(p.price * p.area)}`;
   }
 
+  function reliefPanel(p) {
+    const r = p.relief || { key: 'none', region: 'metro' };
+    const def = RL.COMMERCIAL[r.key] || RL.COMMERCIAL.none;
+    const rule = RL.commercialRule(r.key, r.region, r.custom);
+    const pct = rule ? `${Math.round(rule.rate * 1000) / 10}%` : '';
+    return `
+    <details class="relief"${r.key !== 'none' ? ' open' : ''}>
+      <summary>재산세 감면 ${r.key !== 'none' ? `<b>${esc(def.label)} · ${esc(pct)}</b>` : '<span class="muted">— 지식산업센터·산업단지·창업중소기업 등</span>'}</summary>
+      <div class="grid4">
+        ${field('감면 규정', `<select data-pid="${esc(p.id)}" data-f="relief.key">${Object.entries(RL.COMMERCIAL).map(([k, v]) => opt(k, v.label, r.key)).join('')}</select>`)}
+        ${field('소재 지역', `<select data-pid="${esc(p.id)}" data-f="relief.region">${Object.entries(RL.REGIONS).map(([k, v]) => opt(k, v, r.region)).join('')}</select>`, '감면율이 지역별로 다를 때 사용')}
+        ${r.key === 'custom' ? field('감면율', numInput(p.id, 'relief.custom', r.custom, '%')) : ''}
+        ${r.key !== 'none' ? field('남은 감면 연수', numInput(p.id, 'relief.years', r.years, '년'), '올해 포함 — 비우면 계속 적용(CF·전망)') : ''}
+      </div>
+      ${rule ? `<p class="law-line"><b>${esc(rule.law)}</b> · ${esc(rule.period)}</p><p class="need-line">요건: ${esc(rule.need)}</p>
+        <p class="need-line">재산세 본세${rule.urban ? '·도시지역분' : ''}에 적용하고 지방교육세는 함께 줄어듭니다. 소방분은 감면되지 않습니다.${rule.rate >= 1 ? ' 면제라도 재산세가 50만원을 넘으면 최소납부세제로 85%만 감면됩니다(지특법 §177의2).' : ''}</p>` : ''}
+    </details>`;
+  }
+
   function parcelCard(p, i, bres, active) {
     const cls = HT.estimateClass(p.jimok, p.zone, window.HTMApp ? window.HTMApp.ownerType() : '법인');
     const urb = HT.estimateUrban(p.zone);
@@ -119,7 +139,8 @@
       <label class="chk house-chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="hasHouse"${p.hasHouse ? ' checked' : ''}> 이 땅에 주택(아파트·빌라·단독주택 등)이 있습니다</label>
       ${p.hasHouse ? `<p class="house-note">주택과 그 부속토지는 토지분이 아니라 <b>주택분</b>(공시가격 60%·주택 세율)으로 과세돼 이 계산에서 뺐습니다. 주택 공시가격으로 <a href="house.html">주택 계산기</a>에서 계산하세요. 상가주택처럼 주택과 상가가 섞여 있으면 주택 부분만 주택 계산기로, 나머지는 이 체크를 풀고 면적을 나눠 넣으세요.</p>` : `
       <label class="chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="urban"${p.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 <span class="muted">— ${esc(urb.note)}</span></label>
-      ${buildingPanel(p, bres)}`}
+      ${buildingPanel(p, bres)}
+      ${reliefPanel(p)}`}
     </article>`;
   }
 
@@ -163,6 +184,7 @@
       <p class="total-sub">${total > 0 ? `약 ${eok(total)} · 월 평균 ${eok(total / 12)}` : '필지를 담으면 바로 계산됩니다'}</p>
       ${bar}
       <ul class="parts">${parts.map(x => `<li><i class="dot seg-${x.k}"></i><span>${x.label}<small>${x.when} 납부</small></span><b>${won(x.v)}</b></li>`).join('')}</ul>
+      ${result.totals.relief > 0 ? `<p class="relief-line">감면 적용 −${won(result.totals.relief)}원 (계산 근거에 조문별 표시)</p>` : ''}
       ${warnLines(result)}
       ${result.housing ? `<p class="warn-line">주택이 있는 필지 ${result.housing}건은 주택분이라 합계에서 뺐습니다 — <a href="house.html">주택 계산기</a></p>` : ''}
       ${result.missing ? `<p class="warn-line">공시지가·면적이 비어 있는 필지 ${result.missing}건은 합계에서 빠졌습니다.</p>` : ''}
@@ -207,6 +229,25 @@
       <tbody>${ok.map(b => `<tr><th>${esc(nameOf(b.parcelId))}</th><td>${won(b.value)}</td><td>${won(b.tax.base)}</td><td>${won(b.tax.main)}</td><td>${won(b.tax.urbanTax)}</td><td>${won(b.tax.edu)}</td><td>${won(b.tax.fire)}</td><td><b>${won(b.tax.total)}</b></td></tr>`).join('')}</tbody></table></div>`;
   }
 
+  /** 적용된 감면·중과 근거표 */
+  function reliefDetail(result, parcelList) {
+    const nameOf = id => {
+      const i = parcelList.findIndex(p => p.id === id);
+      return i < 0 ? '' : `${i + 1}. ${parcelList[i].addr || '직접 입력'}`;
+    };
+    const rows = (result.reliefs || []).map(it => `<tr><th>${esc(nameOf(it.parcelId))}</th><td>${esc(it.label)}</td>
+      <td>${Math.round((it.land || it.bld || { rate: it.rate }).rate * 1000) / 10}%${(it.land && it.land.minTax) || (it.bld && it.bld.minTax) ? ' (최소납부세제)' : ''}</td>
+      <td>${won(it.land ? it.land.total : 0)}</td><td>${won(it.bld ? it.bld.total : 0)}</td><td><b>−${won(it.total)}</b></td><td>${esc(it.law)}</td></tr>`).join('');
+    const heavy = result.buildings.filter(b => b.tax && !b.error && b.rate && b.rate !== 'general')
+      .map(b => `<tr><th>${esc(nameOf(b.parcelId))}</th><td colspan="5">${esc(BT.RATES[b.rate].label)} — 건축물 재산세 중과·특례세율</td><td>${esc(BT.RATES[b.rate].law)}</td></tr>`).join('');
+    const split = (result.warnings || []).filter(w => w.split)
+      .map(w => `<tr><th>${esc(nameOf(w.parcelId))}</th><td colspan="5">건물 가액이 토지의 ${(w.ratio * 100).toFixed(1)}% — 바닥면적 외 토지 종합합산</td><td>지방세법 시행령 제101조①1</td></tr>`).join('');
+    if (!rows && !heavy && !split) return '';
+    return `<h4>감면·중과 적용 내역</h4>
+      <div class="tw"><table><thead><tr><th>필지</th><th>규정</th><th>감면율</th><th>토지분 감면</th><th>건축물분 감면</th><th>합계</th><th>근거</th></tr></thead>
+      <tbody>${rows}${heavy}${split}</tbody></table></div>`;
+  }
+
   function schedule(result) {
     if (!result.schedule.length) return '<p class="muted">납부할 세금이 계산되면 여기에 일정이 표시됩니다.</p>';
     return `<ol class="timeline">${result.schedule.map(s => `
@@ -232,8 +273,8 @@
       { item: '경과연수별 잔가율(2026)', rule: '1 − 상각률 × 경과연수, 최종 10% (내용연수 50·40·30·20·10년 → 0.018·0.0225·0.030·0.045·0.090)', law: '2026년 지방세 시가표준액 조사·산정 업무요령' },
     ];
     return `<div class="tw"><table class="basis"><thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
-      <tbody>${[...HT.BASIS, ...extra].map(b => `<tr><th>${esc(b.item)}</th><td>${esc(b.rule)}</td><td>${esc(b.law)}</td></tr>`).join('')}</tbody></table></div>`;
+      <tbody>${[...HT.BASIS, ...extra, ...RL.NOTES].map(b => `<tr><th>${esc(b.item)}</th><td>${esc(b.rule)}</td><td>${esc(b.law)}</td></tr>`).join('')}</tbody></table></div>`;
   }
 
-  ns.views = Object.freeze({ esc, won, eok, parcels, summary, landDetail, buildingDetail, schedule, projection, basis });
+  ns.views = Object.freeze({ esc, won, eok, parcels, summary, landDetail, buildingDetail, reliefDetail, schedule, projection, basis });
 })(window.HTM = window.HTM || {});

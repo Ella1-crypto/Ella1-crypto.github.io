@@ -65,7 +65,9 @@
     </div>
 
     <div class="opts">
-      <label class="chk"><input id="oneHouse" type="checkbox" checked> 1세대1주택자 (주택 1채, 개인)</label>
+      <label class="chk"><input id="oneHouse" type="checkbox" checked> 1세대1주택자 (일반 주택 1채, 개인 — 상속·지방 저가·일시적 2주택·합산배제 임대주택은 함께 있어도 됨)</label>
+      <label class="chk" id="joint-wrap"><input id="joint" type="checkbox"> 부부 공동명의 1주택 — 특례 신청 vs 각자 과세 비교 (위 "내 지분"에 내 지분 입력)</label>
+      <label class="chk" id="corp-wrap" hidden><input id="corpGeneral" type="checkbox"> 공익법인·공공주택사업자 등 일반 누진세율 적용 법인 (종부세법 §9②1·2)</label>
       <div id="one-opts" class="grid4">
         <label class="fld"><span class="fld-l">나이 (6월 1일 기준)</span><span class="num"><input id="age" type="text" inputmode="numeric" maxlength="3"><em>세</em></span><span class="fld-h">60세 이상 20~40% 공제</span></label>
         <label class="fld"><span class="fld-l">보유기간</span><span class="num"><input id="holdYears" type="text" inputmode="numeric" maxlength="3"><em>년</em></span><span class="fld-h">5년 이상 20~50% 공제</span></label>
@@ -85,6 +87,7 @@
       <button type="button" class="ghost" data-act="add">＋ 주택 추가</button>
     </div>
     <div id="houses" class="parcels"></div>
+    <div id="joint-card"></div>
 
     <section id="history" class="history" hidden aria-label="계산 기록">
       <div class="h-row"><h3>이 기기에 저장한 계산</h3><button type="button" class="link-btn" data-act="history-clear">기록 지우기</button></div>
@@ -163,6 +166,7 @@
   <h2>자주 묻는 질문</h2>
   <details><summary>1주택자는 종부세를 언제부터 내나요?</summary><p>1세대1주택자는 공시가격 12억원까지 종부세가 없습니다. 개편안이 통과되면 실거주 1주택은 14억원, 비거주 1주택은 9억원으로 바뀝니다.</p></details>
   <details><summary>공동명의는 종부세가 줄어드나요?</summary><p>공동명의면 각자 지분만큼의 공시가격에서 9억원씩 공제받습니다. 단독명의 1세대1주택(12억원 공제, 고령자·장기보유 최대 80% 공제)과 비교해 유리한 쪽을 고르면 됩니다. 각자 지분을 넣어 두 번 계산해 보세요.</p></details>
+  <details><summary>생애최초 주택 감면은 왜 없나요?</summary><p>생애최초 주택 구입 감면(최대 200만원)은 <b>취득세</b> 감면입니다(지방세특례제한법 제36조의3). 매년 내는 재산세·종부세에는 적용되지 않습니다. 보유세에는 1세대1주택 특례, 임대주택 재산세 감면, 종부세 합산배제·주택 수 제외, 부부 공동명의 1주택 특례, 고령자·장기보유 공제, 납부유예가 있고 이 계산기에 모두 반영돼 있습니다.</p></details>
   <details><summary>공시가격은 어디서 보나요?</summary><p><a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 공동주택가격(아파트·빌라)이나 개별단독주택가격을 확인하세요.</p></details>
   <details><summary>계산 결과가 고지서와 다른 이유는?</summary><p>주택 수 판정(상속·지방 저가주택·합산배제 임대주택), 감면, 지자체 조례 세율, 지역자원시설세(건물분) 등이 빠져 있으면 차이가 납니다.</p></details>
 </section>
@@ -183,6 +187,7 @@
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="js/config.js"></script>
+<script src="js/relief.js"></script>
 <script src="js/house-engine.js"></script>
 <script src="js/cf.js"></script>
 <script src="js/cf-view.js"></script>

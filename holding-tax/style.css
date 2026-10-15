@@ -313,3 +313,15 @@ tr:last-child > * { border-bottom: 0; }
 .tag-defer { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 99px; background: var(--warn-bg); color: var(--warn); margin-left: 4px; }
 .band h4 { margin: 22px 0 8px; font-size: 14.5px; }
 @media print { .cf-ctl { display: none !important; } .cf-month-wrap { max-height: none; overflow: visible; } }
+
+/* ---------- 감면·중과 ---------- */
+.relief { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 10px; }
+.relief summary { cursor: pointer; font-size: 14px; font-weight: 600; }
+.relief summary b { color: var(--land); }
+.relief .grid4 { margin-top: 10px; }
+.law-line { margin: 10px 0 0; font-size: 13px; color: var(--ink); }
+.need-line { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.relief-line { margin: 0 0 8px; color: #a8e0b8; font-size: 13px; font-weight: 600; }
+.cmp-card { margin-top: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 18px; }
+.cmp-card table { margin-top: 8px; }
+.cmp-card .win { color: var(--land); font-weight: 700; }

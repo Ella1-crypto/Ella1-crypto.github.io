@@ -26,6 +26,7 @@
     general: { rate: 0.0025, label: '그 밖의 건축물 0.25%', law: '지방세법 §111①2다' },
     factory: { rate: 0.005, label: '주거지역 등 공장용 0.5%', law: '지방세법 §111①2나' },
     luxury: { rate: 0.04, label: '골프장·고급오락장 4%', law: '지방세법 §111①2가' },
+    overcrowd: { rate: 0.0125, label: '과밀억제권역 공장 신설·증설 1.25%(5년간)', law: '지방세법 §111② — 0.25%의 500%' },
   });
   const FIRE = Object.freeze({
     1: { label: '일반 ×1', law: '지방세법 §146③1' },

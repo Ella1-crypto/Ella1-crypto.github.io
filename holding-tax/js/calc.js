@@ -7,11 +7,11 @@
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = factory(require('./engine.js'), require('./building-engine.js'), require('./valuation.js'));
+    module.exports = factory(require('./engine.js'), require('./building-engine.js'), require('./valuation.js'), require('./relief.js'));
   } else {
-    root.HTMCalc = factory(root.HoldingTax, root.BuildingTax, root.BuildingValue);
+    root.HTMCalc = factory(root.HoldingTax, root.BuildingTax, root.BuildingValue, root.HTMRelief);
   }
-}(typeof self !== 'undefined' ? self : this, function (HT, BT, BV) {
+}(typeof self !== 'undefined' ? self : this, function (HT, BT, BV, RL) {
   'use strict';
 
   const PROJECTION_YEARS = 5;
@@ -117,45 +117,127 @@
     return { prop: land.prop.notice.total, cmt: cmtMain + nong, cmtMain, nong };
   }
 
-  function projection(state, rows) {
-    const startYear = modeOf(state.mode).year;
-    const tp = { id: 'me', name: '본인', type: state.ownerType, prev: prevFor(state) };
-    const landCf = rows.length
-      ? HT.projectCashflow({ parcels: rows.map(r => ({ ...r, tp: 'me' })), taxpayers: [tp], startYear, years: PROJECTION_YEARS, growthPct: state.growth || 0 })
-      : null;
-    return Array.from({ length: PROJECTION_YEARS }, (_, i) => {
-      const year = startYear + i;
-      const landRow = landCf ? landCf.annual[i] : { prop: 0, cmt: 0, value: 0 };
-      // 작년 건축물 세액(150% 상한)은 첫해에만 비교 — 이후 연도는 매년 앞 연도 대비라 단순 전망에서는 적용하지 않는다
-      const parcels = i === 0 ? state.parcels : state.parcels.map(p => (p.bld ? { ...p, bld: { ...p.bld, prevMain: 0 } } : p));
-      const bld = parcels.map(p => buildingFor(p, year)).filter(b => b && b.own && !b.error);
-      const building = sum(bld.map(b => b.own.total));
-      return { year, landValue: landRow.value, land: Math.floor(landRow.prop), cmt: Math.floor(landRow.cmt), building, total: Math.floor(landRow.prop) + Math.floor(landRow.cmt) + building };
-    });
+  /* ---------- 감면 ---------- */
+  /** 감면이 이 연도에 적용되는지 — relief.years(남은 감면 연수, 올해 포함)가 비어 있으면 계속 적용 */
+  const reliefActive = (p, yearIndex) => p.relief && p.relief.key && p.relief.key !== 'none'
+    && (!(Number(p.relief.years) > 0) || yearIndex < Number(p.relief.years));
+
+  /** 토지 행의 재산세를 필지별로 나눈다 — 시·군·구·과세구분 안에서 과세표준 비율로 안분, 세부담상한 비율 반영 */
+  function landAlloc(land, row) {
+    const base = row.price * row.area * (row.share / 100) * HT.PARAMS.propFmv;
+    const urban = row.urban ? base * HT.PARAMS.urbanRate : 0;
+    if (HT.isBunri(row.cls)) return { main: base * HT.CLASS[row.cls].rate, urban };
+    const reg = land.regions.find(r => r.sgg === (row.sgg || 'manual'));
+    const key = row.cls === 'sep' ? 'sep' : 'jong';
+    const raw = key === 'sep' ? land.prop.sepTaxRaw : land.prop.jongTaxRaw;
+    const capped = key === 'sep' ? land.prop.sepTax : land.prop.jongTax;
+    const regTax = reg ? reg[key + 'Tax'] : 0;
+    const regBase = reg ? reg[key + 'Base'] : 0;
+    const capRatio = raw > 0 ? capped / raw : 1;
+    return { main: regBase > 0 ? regTax * base / regBase * capRatio : 0, urban };
+  }
+
+  /** 필지별 감면을 토지분·건축물분에 적용한다. 반환: 감면 내역과 줄어든 건물 귀속액 */
+  function applyReliefs(parcels, land, rows, buildings, yearIndex) {
+    const items = [];
+    const landCut = { main: 0, urban: 0, edu: 0 };
+    const bldOwn = new Map();
+    for (const p of parcels.filter(x => !isHouse(x) && reliefActive(x, yearIndex))) {
+      const rule = RL.commercialRule(p.relief.key, p.relief.region, p.relief.custom);
+      if (!rule) continue;
+      const item = { parcelId: p.id, ...rule, land: null, bld: null };
+      if (land) {
+        const mine = rows.filter(r => r.id === p.id).map(r => landAlloc(land, r));
+        const tax = { main: Math.floor(sum(mine.map(m => m.main))), urban: Math.floor(sum(mine.map(m => m.urban))) };
+        const cut = RL.apply(tax, rule);
+        const eduCut = Math.floor(cut.mainCut * HT.PARAMS.eduRate);
+        item.land = { ...cut, eduCut, total: cut.mainCut + cut.urbanCut + eduCut };
+        landCut.main += cut.mainCut; landCut.urban += cut.urbanCut; landCut.edu += eduCut;
+      }
+      const b = buildings.find(x => x.parcelId === p.id && x.own && !x.error);
+      if (b) {
+        const k = b.share / 100;
+        const tax = { main: Math.floor(b.tax.main * k), urban: Math.floor(b.tax.urbanTax * k) };
+        const cut = RL.apply(tax, rule);
+        const eduCut = Math.floor(cut.mainCut * BT.EDU_RATE);
+        item.bld = { ...cut, eduCut, total: cut.mainCut + cut.urbanCut + eduCut };
+        bldOwn.set(b.parcelId, { ...b.own, prop: b.own.prop - cut.mainCut - cut.urbanCut, edu: b.own.edu - eduCut, total: b.own.total - item.bld.total });
+      }
+      item.total = (item.land ? item.land.total : 0) + (item.bld ? item.bld.total : 0);
+      items.push(item);
+    }
+    return { items, landCut, bldOwn };
   }
 
   /**
    * @param {{ownerType:'개인'|'법인', growth:number, mode?:string, prev?:object, parcels:Array}} state
+   * @param {{year?:number, yearIndex?:number, skipProjection?:boolean}} [opts]
    */
   function compute(state, opts = {}) {
     const parcels = state.parcels || [];
-    const year = opts.year || modeOf(state.mode).year; // CF 다년 계산은 연도를 바꿔 부른다(건물 잔가율 기준연도)
-    const buildings = parcels.map(p => buildingFor(p, year)).filter(Boolean);
-    const split = landSplit(parcels, buildings, state.mode);
+    const year = opts.year || modeOf(state.mode).year; // 다년 계산은 연도를 바꿔 부른다(건물 잔가율 기준연도)
+    const yearIndex = opts.yearIndex || 0;
+    const rawBuildings = parcels.map(p => buildingFor(p, year)).filter(Boolean);
+    const split = landSplit(parcels, rawBuildings, state.mode);
     const land = split.rows.length ? HT.calcTaxpayer(split.rows, prevFor(state)) : null;
     const lt = landTotals(land);
+    const relief = applyReliefs(parcels, land, split.rows, rawBuildings, yearIndex);
+    const buildings = rawBuildings.map(b => (relief.bldOwn.has(b.parcelId) ? { ...b, own: relief.bldOwn.get(b.parcelId), relieved: true } : b));
     const okBuildings = buildings.filter(b => b.own && !b.error);
     const bld = sum(okBuildings.map(b => b.own.total));
-    const totals = { landProp: lt.prop, cmt: lt.cmt, cmtMain: lt.cmtMain, nong: lt.nong, building: bld, total: lt.prop + lt.cmt + bld };
+    const lc = relief.landCut;
+    const landProp = Math.max(0, lt.prop - lc.main - lc.urban - lc.edu);
+    const landBill = land ? Math.max(0, land.prop.notice.prop - lc.main - lc.urban) : 0; // 분할납부 판정 기준(재산세 본세+도시지역분)
+    const reliefTotal = sum(relief.items.map(i => i.total));
+    const totals = { landProp, landBill, cmt: lt.cmt, cmtMain: lt.cmtMain, nong: lt.nong, building: bld, relief: reliefTotal, total: landProp + lt.cmt + bld };
     const schedule = [
       { month: 7, due: '7.16 ~ 7.31', item: '건축물분 재산세·지방교육세·지역자원시설세(소방분)', amount: bld },
-      { month: 9, due: '9.16 ~ 9.30', item: '토지분 재산세·도시지역분·지방교육세', amount: lt.prop },
+      { month: 9, due: '9.16 ~ 9.30', item: '토지분 재산세·도시지역분·지방교육세', amount: landProp },
       { month: 12, due: '12.1 ~ 12.15', item: '종합부동산세·농어촌특별세', amount: lt.cmt },
     ].filter(s => s.amount > 0);
     const housing = parcels.filter(isHouse).length;
     const missing = parcels.filter(p => !isHouse(p) && !isLandReady(p)).length;
-    return { mode: state.mode || '2026', year, land, buildings, totals, schedule, warnings: split.warnings, projection: opts.skipProjection ? [] : projection(state, split.rows), missing, housing, parcelCount: parcels.length };
+    const result = { mode: state.mode || '2026', year, land, buildings, totals, reliefs: relief.items, schedule, warnings: split.warnings, missing, housing, parcelCount: parcels.length };
+    return opts.skipProjection ? { ...result, projection: [] } : { ...result, projection: projection(state) };
   }
 
-  return Object.freeze({ MODES, compute, buildingFor, landSplit, landTotals, PROJECTION_YEARS });
+  /**
+   * 연도별 계산 — 공시지가 상승률을 적용하고, 세부담상한 기준(작년 세액)은 앞 연도 계산액으로 연쇄한다.
+   * CF와 5년 전망이 같은 결과를 쓰도록 한 곳에서 계산한다.
+   */
+  function series(state, years) {
+    const g = (Number(state.growth) || 0) / 100;
+    const startYear = modeOf(state.mode).year;
+    let cur = state;
+    const out = [];
+    for (let i = 0; i < years; i += 1) {
+      const year = startYear + i;
+      const factor = Math.pow(1 + g, i);
+      const scaled = { ...cur, parcels: cur.parcels.map(p => ({ ...p, price: p.price * factor })) };
+      const r = compute(scaled, { year, yearIndex: i, skipProjection: true });
+      out.push({ year, i, r });
+      const prev = r.land
+        ? { propSep: r.land.prop.sepTax, propJong: r.land.prop.jongTax, cmtSep: r.land.cmt.sep.decided, cmtJong: r.land.cmt.jong.decided }
+        : cur.prev;
+      const byId = new Map(r.buildings.filter(x => x.own && !x.error).map(x => [x.parcelId, x]));
+      cur = {
+        ...cur,
+        prev,
+        parcels: cur.parcels.map(p => {
+          const b = byId.get(p.id);
+          if (!b || !p.bld) return p;
+          return { ...p, bld: { ...p.bld, prevMain: Math.floor(b.tax.main * b.share / 100), prevFire: b.own.fire } };
+        }),
+      };
+    }
+    return out;
+  }
+
+  function projection(state) {
+    return series(state, PROJECTION_YEARS).map(({ year, r }) => ({
+      year, land: r.totals.landProp, cmt: r.totals.cmt, building: r.totals.building, total: r.totals.total,
+    }));
+  }
+
+  return Object.freeze({ MODES, compute, series, buildingFor, landSplit, landTotals, landAlloc, PROJECTION_YEARS });
 }));
