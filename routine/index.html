@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="5개 재테크 정보원 일일 루틴 체크, 인사이트 노트, 복리 적립 계산기">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>복리 루틴 통장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a bank passbook — ruled "ledger" sheets on a tinted desk, red seals mark a finished routine */
+:root {
+  --paper: #EEF4F3;
+  --sheet: #FFFFFF;
+  --ink: #14233A;
+  --muted: #5A6A7C;
+  --rule: #D5E2E1;
+  --accent: #1F5F8B;
+  --accent-soft: #E3EEF6;
+  --seal: #C8382E;
+  --gain: #2E7D5B;
+  --heat-0: #E4ECEB;
+  --font-display: "Nanum Myeongjo", "Batang", serif;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E161E; --sheet: #15202B; --ink: #E5ECF2; --muted: #8C9DB0; --rule: #263441;
+    --accent: #72B3E2; --accent-soft: #1B2E3E; --seal: #F0695C; --gain: #5CC28E; --heat-0: #1C2935;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E161E; --sheet: #15202B; --ink: #E5ECF2; --muted: #8C9DB0; --rule: #263441;
+  --accent: #72B3E2; --accent-soft: #1B2E3E; --seal: #F0695C; --gain: #5CC28E; --heat-0: #1C2935;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1020px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 22px; }
+h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.7rem); line-height: 1.15; }
+h2 { font-size: 1.3rem; }
+.eyebrow { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.muted { color: var(--muted); }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+header.top { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; justify-content: space-between; }
+header.top .intro { min-width: 0; max-width: 60ch; display: grid; gap: 6px; }
+header.top p { margin: 0; }
+.save-pill { font-size: 0.78rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); background: var(--sheet); justify-self: start; }
+.save-pill[data-mode="cloud"] { color: var(--gain); border-color: color-mix(in srgb, var(--gain) 40%, transparent); }
+
+.streak { display: flex; align-items: center; gap: 14px; }
+.seal-big { width: 86px; height: 86px; border-radius: 50%; border: 3px solid var(--seal); color: var(--seal); display: grid; place-items: center; text-align: center; transform: rotate(-8deg); font-family: var(--font-display); line-height: 1.05; }
+.seal-big b { font-size: 1.9rem; display: block; }
+.seal-big span { font-size: 0.72rem; font-weight: 700; }
+
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 22px clamp(16px, 3vw, 28px); display: grid; gap: 16px; min-width: 0; }
+.sheet-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+
+.grid-main { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 820px) { .grid-main { grid-template-columns: 1fr; } }
+
+/* Routine ledger */
+.ledger { list-style: none; margin: 0; padding: 0; display: grid; }
+.row { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: 12px; align-items: center; padding-block: 14px; border-top: 1px dashed var(--rule); }
+.row:first-child { border-top: 0; }
+.row[data-off="true"] { opacity: 0.45; }
+.row .idx { font-family: var(--font-num); color: var(--muted); font-size: 0.85rem; }
+.row .body { min-width: 0; display: grid; gap: 2px; }
+.row .name { font-weight: 600; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.row .name a { color: var(--accent); text-decoration: none; font-size: 0.8rem; font-weight: 500; }
+.row .name a:hover, .row .name a:focus-visible { text-decoration: underline; }
+.row .todo { font-size: 0.88rem; color: var(--muted); }
+.row .pick { font-size: 0.75rem; color: var(--muted); display: inline-flex; gap: 4px; align-items: center; cursor: pointer; }
+
+.stamp-btn { width: 54px; height: 54px; border-radius: 50%; border: 2px dashed var(--rule); background: transparent; color: var(--muted); font: 600 0.72rem var(--font-body); cursor: pointer; display: grid; place-items: center; transition: transform 160ms ease, border-color 160ms ease; }
+.stamp-btn:hover { border-color: var(--seal); color: var(--seal); }
+.stamp-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.stamp-btn[aria-pressed="true"] { border: 2.5px solid var(--seal); color: var(--seal); font-family: var(--font-display); font-size: 1.15rem; transform: rotate(-12deg); }
+.stamp-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-btn.just { animation: thunk 260ms ease-out; }
+  @keyframes thunk { 0% { transform: scale(1.5) rotate(-4deg); opacity: 0.2; } 100% { transform: scale(1) rotate(-12deg); opacity: 1; } }
+}
+.progress { height: 6px; background: var(--heat-0); border-radius: 3px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--seal); width: 0; transition: width 240ms ease; }
+
+/* Calendar */
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.cal .dow { font-size: 0.7rem; color: var(--muted); text-align: center; }
+.cal .cell { aspect-ratio: 1; max-width: 100%; border-radius: 4px; background: var(--heat-0); position: relative; }
+.cal .cell[data-today="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
+.cal .cell[data-future="true"] { background: transparent; border: 1px dashed var(--rule); }
+.legend { display: flex; gap: 6px; align-items: center; font-size: 0.75rem; color: var(--muted); flex-wrap: wrap; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stat { display: grid; gap: 0; }
+.stat b { font-family: var(--font-num); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 0.75rem; color: var(--muted); }
+
+/* Notes */
+form.note-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+form.note-form textarea { grid-column: 1 / -1; min-height: 76px; resize: vertical; }
+form.note-form .actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+label.field { display: grid; gap: 4px; font-size: 0.78rem; color: var(--muted); min-width: 0; }
+select, input, textarea { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; width: 100%; min-width: 0; }
+select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.btn { font: 600 0.9rem var(--font-body); border: 0; border-radius: 4px; padding: 9px 18px; background: var(--accent); color: var(--sheet); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.notes { list-style: none; margin: 0; padding: 0; display: grid; }
+.note { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr) auto; gap: 12px; padding-block: 12px; border-top: 1px solid var(--rule); align-items: start; }
+.note .date { font-family: var(--font-num); font-size: 0.8rem; color: var(--muted); padding-top: 2px; }
+.note .txt { min-width: 0; overflow-wrap: anywhere; display: grid; gap: 4px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 0.7rem; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chip[data-act="실행했음"] { background: color-mix(in srgb, var(--gain) 16%, transparent); color: var(--gain); }
+.chip[data-act="관심종목"] { background: color-mix(in srgb, var(--seal) 13%, transparent); color: var(--seal); }
+.del { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 0.78rem; padding: 2px 4px; }
+.del:hover, .del[data-armed="true"] { color: var(--seal); }
+.empty { padding: 18px; border: 1px dashed var(--rule); border-radius: 4px; color: var(--muted); font-size: 0.9rem; }
+
+/* Calculator */
+.calc-inputs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 560px) { .calc-inputs { grid-template-columns: 1fr; } form.note-form { grid-template-columns: 1fr; } .note { grid-template-columns: minmax(0, 1fr) auto; } .note .date { grid-column: 1 / -1; } }
+.result { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: baseline; }
+.result .big { font-family: var(--font-num); font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.3rem); font-variant-numeric: tabular-nums; }
+.result .part { font-size: 0.85rem; color: var(--muted); }
+.result .part b { font-family: var(--font-num); color: var(--ink); font-weight: 500; }
+.result .part b.gain { color: var(--gain); }
+.chart-box { overflow-x: auto; }
+.chart-box svg { display: block; width: 100%; min-width: 420px; height: auto; }
+.disclaimer { font-size: 0.78rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 12px; margin: 0; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="intro">
+      <span class="eyebrow">재테크 루틴 · 5개 정보원</span>
+      <h1>복리 루틴 통장</h1>
+      <p class="muted">매일 정보원 하나를 읽고 도장을 찍으세요. 읽은 내용은 인사이트 노트에 한 줄로 남기고, 아래 계산기로 꾸준한 적립이 얼마나 불어나는지 확인합니다.</p>
+      <span class="save-pill" id="savePill" data-mode="local">저장소 연결 중…</span>
+    </div>
+    <div class="streak" aria-live="polite">
+      <div class="seal-big" aria-label="연속 달성 일수"><div><b id="streakNum" class="num">0</b><span>일 연속</span></div></div>
+    </div>
+  </header>
+
+  <div class="grid-main">
+    <section class="sheet" aria-labelledby="todayH">
+      <div class="sheet-head">
+        <h2 id="todayH">오늘의 루틴</h2>
+        <span class="muted num" id="todayLabel"></span>
+      </div>
+      <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+      <ol class="ledger" id="ledger"></ol>
+      <p class="muted" style="margin:0;font-size:0.82rem">포함 체크를 끄면 내 루틴에서 빠집니다. 다섯 개 중 맞는 것만 골라 꾸준히 하는 게 핵심입니다.</p>
+    </section>
+
+    <section class="sheet" aria-labelledby="calH">
+      <div class="sheet-head"><h2 id="calH">최근 5주</h2></div>
+      <div class="cal" id="cal"></div>
+      <div class="legend"><span>적음</span><i style="background:var(--heat-0)"></i><i style="background:color-mix(in srgb,var(--seal) 35%,var(--heat-0))"></i><i style="background:color-mix(in srgb,var(--seal) 65%,var(--heat-0))"></i><i style="background:var(--seal)"></i><span>루틴 완료</span></div>
+      <div class="stats">
+        <div class="stat"><b id="statDays">0</b><span>도장 찍은 날</span></div>
+        <div class="stat"><b id="statBest">0</b><span>최장 연속</span></div>
+        <div class="stat"><b id="statNotes">0</b><span>인사이트</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="sheet" aria-labelledby="notesH">
+    <div class="sheet-head">
+      <h2 id="notesH">인사이트 노트</h2>
+      <span class="muted" style="font-size:0.82rem">읽은 것을 행동으로 바꾸는 칸</span>
+    </div>
+    <form class="note-form" id="noteForm">
+      <label class="field" for="noteSrc">정보원<select id="noteSrc"></select></label>
+      <label class="field" for="noteAct">다음 행동
+        <select id="noteAct">
+          <option value="더 공부">더 공부하기</option>
+          <option value="관심종목">관심종목에 추가</option>
+          <option value="실행했음">실행했음 (청약·적립·절세 등)</option>
+          <option value="참고만">참고만</option>
+        </select>
+      </label>
+      <label class="field" for="noteText" style="grid-column:1/-1">한 줄 인사이트
+        <textarea id="noteText" maxlength="400" placeholder="예: 청약통장 월 납입 인정액이 25만원으로 올라서 자동이체 금액을 바꿀 것" required></textarea>
+      </label>
+      <div class="actions"><button class="btn" type="submit">노트 저장</button></div>
+    </form>
+    <ul class="notes" id="notes"></ul>
+  </section>
+
+  <section class="sheet" aria-labelledby="calcH">
+    <div class="sheet-head">
+      <h2 id="calcH">복리 적립 계산기</h2>
+      <span class="muted" style="font-size:0.82rem">월복리 · 매월 말 적립 기준</span>
+    </div>
+    <div class="calc-inputs">
+      <label class="field" for="cMonthly">월 적립액 (원)<input id="cMonthly" type="number" inputmode="numeric" min="0" step="10000" value="500000"></label>
+      <label class="field" for="cRate">연 수익률 가정 (%)<input id="cRate" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="5"></label>
+      <label class="field" for="cYears">기간 (년)<input id="cYears" type="number" inputmode="numeric" min="1" max="40" step="1" value="10"></label>
+    </div>
+    <div class="result">
+      <div><div class="part">예상 평가액</div><div class="big" id="rTotal">-</div></div>
+      <div class="part">원금 <b id="rPrincipal">-</b></div>
+      <div class="part">복리 수익 <b class="gain" id="rGain">-</b></div>
+    </div>
+    <div class="chart-box" id="chart"></div>
+    <p class="disclaimer">계산기의 수익률은 사용자가 넣은 가정값이며 세금·수수료·손실 가능성은 반영하지 않았습니다. 이 페이지는 정보 습관을 돕는 도구이고 특정 상품이나 종목의 매수·매도를 권하지 않습니다. 실제 투자 결정은 본인 판단과 책임으로 하세요.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const SOURCES = [
+    { name: "KBthink", todo: "금융·투자 정보 글 1개 읽고 핵심 한 줄 남기기", url: "https://search.naver.com/search.naver?query=KBthink", link: "검색" },
+    { name: "네이버페이 머니스토리", todo: "주택청약·절세·생활 머니 팁 1개 확인", url: "https://search.naver.com/search.naver?query=%EB%84%A4%EC%9D%B4%EB%B2%84%ED%8E%98%EC%9D%B4+%EB%A8%B8%EB%8B%88%EC%8A%A4%ED%86%A0%EB%A6%AC", link: "검색" },
+    { name: "한국경제TV 당장사", todo: "출근길에 시청, 언급된 섹터·종목 메모", url: "https://www.youtube.com/results?search_query=%ED%95%9C%EA%B5%AD%EA%B2%BD%EC%A0%9CTV+%EB%8B%B9%EC%9E%A5%EC%82%AC", link: "유튜브" },
+    { name: "네이버증권 리서치", todo: "많이 본 리포트 1개 요약부터 읽기", url: "https://finance.naver.com/research/", link: "바로가기" },
+    { name: "리포트서머리 · 기업모니터", todo: "기업·산업 요약 1개 훑고 관심 기업 표시", url: "https://www.google.com/search?q=%EB%A6%AC%ED%8F%AC%ED%8A%B8%EC%84%9C%EB%A8%B8%EB%A6%AC+%EA%B8%B0%EC%97%85%EB%AA%A8%EB%8B%88%ED%84%B0", link: "구글 검색" }
+  ];
+  const LOCAL_KEY = "jaetech-routine-v1";
+  const SAVE_DELAY_MS = 800;
+  const MAX_NOTES = 300;
+  const CAL_WEEKS = 5;
+
+  const won = new Intl.NumberFormat("ko-KR");
+  const $ = (id) => document.getElementById(id);
+  const dayKey = (d) => d.toLocaleDateString("sv-SE");
+
+  let state = defaultState();
+  let store = null;      // { ref } when db is available
+  let saveTimer = null;
+  let saveChain = Promise.resolve();
+  let armedDelete = null;
+
+  function defaultState() {
+    return { v: 1, picks: SOURCES.map(() => true), days: {}, notes: [], calc: { m: 500000, r: 5, y: 10 } };
+  }
+
+  function normalize(raw) {
+    const base = defaultState();
+    if (!raw || typeof raw !== "object") return base;
+    return {
+      v: 1,
+      picks: Array.isArray(raw.picks) && raw.picks.length === SOURCES.length ? raw.picks.map(Boolean) : base.picks,
+      days: raw.days && typeof raw.days === "object" ? raw.days : {},
+      notes: Array.isArray(raw.notes) ? raw.notes.slice(0, MAX_NOTES) : [],
+      calc: raw.calc && typeof raw.calc === "object" ? { ...base.calc, ...raw.calc } : base.calc
+    };
+  }
+
+  /* ---------- persistence ---------- */
+  function setPill(mode, text) { const p = $("savePill"); p.dataset.mode = mode; p.textContent = text; }
+
+  function readLocal() {
+    try { const s = localStorage.getItem(LOCAL_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; }
+  }
+  function writeLocal() {
+    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: state lives for this visit only */ }
+  }
+
+  function scheduleSave() {
+    writeLocal();
+    if (!store) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const snapshot = JSON.parse(JSON.stringify(state));
+      saveChain = saveChain.then(() => store.ref.set(snapshot)).then(
+        () => setPill("cloud", "내 계정에 저장됨"),
+        (err) => setPill("local", err && err.code === "quota_exceeded" ? "저장 공간이 가득 참 · 오래된 노트를 지워 주세요" : "클라우드 저장 실패 · 이 브라우저에 임시 저장")
+      );
+    }, SAVE_DELAY_MS);
+  }
+
+  async function connect() {
+    const local = readLocal();
+    if (local) { state = normalize(local); renderAll(); }
+    setPill("local", "이 브라우저에만 저장");
+    if (!window.claude || typeof window.claude.use !== "function") return;
+    try {
+      const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+      if (!db || !user) return;
+      const uid = await user.id();
+      if (!uid) return;
+      const ref = db.doc("data/users/" + uid + "/routine");
+      const snap = await ref.get();
+      store = { ref };
+      if (snap.exists) { state = normalize(snap.data()); renderAll(); writeLocal(); setPill("cloud", "내 계정에 저장됨"); }
+      else { setPill("cloud", "내 계정에 저장됨"); if (local) scheduleSave(); }
+    } catch (e) {
+      store = null;
+      setPill("local", "이 브라우저에만 저장");
+    }
+  }
+
+  /* ---------- routine ---------- */
+  function todayIds() { return state.days[dayKey(new Date())] || []; }
+  function activeCount() { return state.picks.filter(Boolean).length || 1; }
+
+  function renderLedger() {
+    const done = todayIds();
+    const ol = $("ledger");
+    ol.textContent = "";
+    SOURCES.forEach((s, i) => {
+      const on = state.picks[i];
+      const li = document.createElement("li");
+      li.className = "row"; li.dataset.off = String(!on);
+
+      const idx = document.createElement("span"); idx.className = "idx"; idx.textContent = String(i + 1).padStart(2, "0");
+
+      const body = document.createElement("div"); body.className = "body";
+      const name = document.createElement("div"); name.className = "name";
+      const strong = document.createElement("span"); strong.textContent = s.name;
+      const a = document.createElement("a"); a.href = s.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = s.link + " ↗";
+      name.append(strong, a);
+      const todo = document.createElement("div"); todo.className = "todo"; todo.textContent = s.todo;
+      const pick = document.createElement("label"); pick.className = "pick"; pick.htmlFor = "pick" + i;
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "pick" + i; cb.checked = on; cb.style.width = "auto";
+      cb.addEventListener("change", () => { state = { ...state, picks: state.picks.map((p, j) => (j === i ? cb.checked : p)) }; scheduleSave(); renderAll(); });
+      pick.append(cb, document.createTextNode("내 루틴에 포함"));
+      body.append(name, todo, pick);
+
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "stamp-btn"; btn.id = "stamp" + i;
+      const isDone = done.includes(i);
+      btn.setAttribute("aria-pressed", String(isDone));
+      btn.setAttribute("aria-label", s.name + (isDone ? " 완료 취소" : " 완료 도장 찍기"));
+      btn.textContent = isDone ? "完" : "도장";
+      btn.disabled = !on;
+      btn.addEventListener("click", () => toggleStamp(i));
+
+      li.append(idx, body, btn);
+      ol.append(li);
+    });
+    const doneActive = done.filter((i) => state.picks[i]).length;
+    $("progressBar").style.width = Math.min(100, (doneActive / activeCount()) * 100) + "%";
+    $("todayLabel").textContent = new Date().toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "short" }) + " · " + doneActive + "/" + state.picks.filter(Boolean).length;
+  }
+
+  function toggleStamp(i) {
+    const key = dayKey(new Date());
+    const cur = state.days[key] || [];
+    const next = cur.includes(i) ? cur.filter((x) => x !== i) : [...cur, i];
+    const days = { ...state.days };
+    if (next.length) days[key] = next; else delete days[key];
+    state = { ...state, days };
+    scheduleSave();
+    renderAll();
+    const b = $("stamp" + i);
+    if (b && next.includes(i)) { b.classList.add("just"); b.focus(); } else if (b) b.focus();
+  }
+
+  /* ---------- streaks & calendar ---------- */
+  function streaks() {
+    const has = (d) => (state.days[dayKey(d)] || []).length > 0;
+    const d = new Date();
+    if (!has(d)) d.setDate(d.getDate() - 1);
+    let cur = 0;
+    while (has(d)) { cur++; d.setDate(d.getDate() - 1); }
+    const keys = Object.keys(state.days).filter((k) => state.days[k].length).sort();
+    let best = 0, run = 0, prev = null;
+    keys.forEach((k) => {
+      const t = new Date(k + "T00:00:00");
+      run = prev && Math.round((t - prev) / 86400000) === 1 ? run + 1 : 1;
+      best = Math.max(best, run); prev = t;
+    });
+    return { cur, best, total: keys.length };
+  }
+
+  function renderCalendar() {
+    const cal = $("cal");
+    cal.textContent = "";
+    ["월", "화", "수", "목", "금", "토", "일"].forEach((w) => { const s = document.createElement("span"); s.className = "dow"; s.textContent = w; cal.append(s); });
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const mondayOffset = (today.getDay() + 6) % 7;
+    const start = new Date(today); start.setDate(today.getDate() - mondayOffset - (CAL_WEEKS - 1) * 7);
+    const total = activeCount();
+    for (let n = 0; n < CAL_WEEKS * 7; n++) {
+      const d = new Date(start); d.setDate(start.getDate() + n);
+      const cell = document.createElement("span"); cell.className = "cell";
+      const k = dayKey(d);
+      const cnt = (state.days[k] || []).length;
+      if (d > today) cell.dataset.future = "true";
+      else if (cnt) { const pct = Math.min(100, Math.round(20 + (cnt / total) * 80)); cell.style.background = "color-mix(in srgb, var(--seal) " + pct + "%, var(--heat-0))"; }
+      if (d.getTime() === today.getTime()) cell.dataset.today = "true";
+      cell.title = k + (cnt ? " · " + cnt + "개 완료" : "");
+      cal.append(cell);
+    }
+    const s = streaks();
+    $("streakNum").textContent = s.cur;
+    $("statDays").textContent = s.total;
+    $("statBest").textContent = s.best;
+    $("statNotes").textContent = state.notes.length;
+  }
+
+  /* ---------- notes ---------- */
+  function renderNotes() {
+    const ul = $("notes");
+    ul.textContent = "";
+    if (!state.notes.length) {
+      const e = document.createElement("li"); e.className = "empty";
+      e.textContent = "아직 노트가 없습니다. 오늘 읽은 정보원과 한 줄 인사이트, 다음 행동을 골라 첫 노트를 남겨 보세요.";
+      ul.append(e); return;
+    }
+    state.notes.forEach((n) => {
+      const li = document.createElement("li"); li.className = "note";
+      const date = document.createElement("span"); date.className = "date"; date.textContent = n.d;
+      const txt = document.createElement("div"); txt.className = "txt";
+      const chips = document.createElement("div"); chips.className = "chips";
+      const c1 = document.createElement("span"); c1.className = "chip"; c1.textContent = n.src;
+      const c2 = document.createElement("span"); c2.className = "chip"; c2.dataset.act = n.act; c2.textContent = n.act;
+      chips.append(c1, c2);
+      const p = document.createElement("div"); p.textContent = n.text;
+      txt.append(chips, p);
+      const del = document.createElement("button"); del.type = "button"; del.className = "del";
+      const armed = armedDelete === n.id;
+      del.dataset.armed = String(armed);
+      del.textContent = armed ? "정말 삭제" : "삭제";
+      del.addEventListener("click", () => {
+        if (armedDelete !== n.id) { armedDelete = n.id; renderNotes(); return; }
+        armedDelete = null;
+        state = { ...state, notes: state.notes.filter((x) => x.id !== n.id) };
+        scheduleSave(); renderAll();
+      });
+      li.append(date, txt, del);
+      ul.append(li);
+    });
+  }
+
+  function setupNoteForm() {
+    const sel = $("noteSrc");
+    SOURCES.forEach((s) => { const o = document.createElement("option"); o.value = s.name; o.textContent = s.name; sel.append(o); });
+    const o = document.createElement("option"); o.value = "기타"; o.textContent = "기타"; sel.append(o);
+    $("noteForm").addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const text = $("noteText").value.trim();
+      if (!text) { $("noteText").focus(); return; }
+      const note = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), d: dayKey(new Date()), src: sel.value, act: $("noteAct").value, text: text.slice(0, 400) };
+      state = { ...state, notes: [note, ...state.notes].slice(0, MAX_NOTES) };
+      $("noteText").value = "";
+      scheduleSave(); renderAll();
+    });
+  }
+
+  /* ---------- compound calculator ---------- */
+  function project(monthly, ratePct, years) {
+    const r = ratePct / 100 / 12;
+    const rows = [];
+    let bal = 0;
+    for (let m = 1; m <= years * 12; m++) {
+      bal = bal * (1 + r) + monthly;
+      if (m % 12 === 0) rows.push({ year: m / 12, principal: monthly * m, total: bal });
+    }
+    return rows;
+  }
+
+  function fmtWon(v) {
+    if (v >= 1e8) { const eok = Math.floor(v / 1e8); const man = Math.round((v % 1e8) / 1e4); return eok + "억 " + (man ? won.format(man) + "만원" : "원"); }
+    return won.format(Math.round(v / 1e4)) + "만원";
+  }
+  function shortWon(v) { return v >= 1e8 ? (v / 1e8).toFixed(1) + "억" : Math.round(v / 1e4) + "만"; }
+
+  function clampNum(el, lo, hi, fallback) {
+    const v = parseFloat(el.value);
+    return Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : fallback;
+  }
+
+  function renderCalc() {
+    const { m, r, y } = state.calc;
+    const rows = project(m, r, y);
+    const last = rows[rows.length - 1] || { principal: 0, total: 0 };
+    $("rTotal").textContent = fmtWon(last.total);
+    $("rPrincipal").textContent = fmtWon(last.principal);
+    $("rGain").textContent = "+" + fmtWon(Math.max(0, last.total - last.principal));
+    drawChart(rows);
+  }
+
+  function drawChart(rows) {
+    const W = 760, H = 260, padL = 52, padR = 12, padT = 14, padB = 30;
+    const maxV = Math.max(1, ...rows.map((d) => d.total));
+    const step = niceStep(maxV / 4);
+    const top = Math.ceil(maxV / step) * step;
+    const y = (v) => padT + (H - padT - padB) * (1 - v / top);
+    const bw = (W - padL - padR) / rows.length;
+    const barW = Math.max(3, bw * 0.62);
+    let g = "";
+    for (let v = 0; v <= top + 1; v += step) {
+      g += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--rule)" stroke-width="1"/>';
+      g += '<text x="' + (padL - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--font-num)">' + shortWon(v) + "</text>";
+    }
+    const labelEvery = Math.ceil(rows.length / 10);
+    rows.forEach((d, i) => {
+      const x = padL + i * bw + (bw - barW) / 2;
+      const isLast = i === rows.length - 1;
+      g += '<rect x="' + x + '" y="' + y(d.total) + '" width="' + barW + '" height="' + (y(d.principal) - y(d.total)) + '" fill="var(--gain)" opacity="' + (isLast ? 1 : 0.75) + '"><title>' + d.year + "년차 복리 수익 " + fmtWon(d.total - d.principal) + "</title></rect>";
+      g += '<rect x="' + x + '" y="' + y(d.principal) + '" width="' + barW + '" height="' + (y(0) - y(d.principal)) + '" fill="var(--accent)" opacity="' + (isLast ? 1 : 0.8) + '"><title>' + d.year + "년차 원금 " + fmtWon(d.principal) + "</title></rect>";
+      if ((i + 1) % labelEvery === 0 || isLast) g += '<text x="' + (x + barW / 2) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--font-num)">' + d.year + "년</text>";
+    });
+    const legend = '<g font-size="11" fill="var(--muted)"><rect x="' + (padL + 4) + '" y="' + padT + '" width="10" height="10" fill="var(--accent)"/><text x="' + (padL + 19) + '" y="' + (padT + 9) + '">원금</text><rect x="' + (padL + 56) + '" y="' + padT + '" width="10" height="10" fill="var(--gain)"/><text x="' + (padL + 71) + '" y="' + (padT + 9) + '">복리 수익</text></g>';
+    $("chart").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="연도별 원금과 복리 수익 누적 막대 그래프">' + g + legend + "</svg>";
+  }
+
+  function niceStep(raw) {
+    const p = Math.pow(10, Math.floor(Math.log10(raw)));
+    const n = raw / p;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p;
+  }
+
+  function setupCalc() {
+    const onInput = () => {
+      state = { ...state, calc: { m: clampNum($("cMonthly"), 0, 1e9, 0), r: clampNum($("cRate"), 0, 30, 0), y: Math.round(clampNum($("cYears"), 1, 40, 1)) } };
+      renderCalc(); scheduleSave();
+    };
+    ["cMonthly", "cRate", "cYears"].forEach((id) => $(id).addEventListener("input", onInput));
+  }
+  function syncCalcInputs() { $("cMonthly").value = state.calc.m; $("cRate").value = state.calc.r; $("cYears").value = state.calc.y; }
+
+  function renderAll() { renderLedger(); renderCalendar(); renderNotes(); syncCalcInputs(); renderCalc(); }
+
+  setupNoteForm();
+  setupCalc();
+  renderAll();
+  connect();
+})();
+</script>
+
+</body>
+</html>
