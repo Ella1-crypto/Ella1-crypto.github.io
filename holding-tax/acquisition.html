@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 취득세 계산기 — 생애최초·다주택 중과·법인 취득세 | 보유세맵</title>
+<meta name="description" content="주택·상가·토지 취득세, 지방교육세, 농어촌특별세를 계산합니다. 생애최초(200만·소형 300만), 출산·양육(500만) 감면과 다주택·법인 8%·12% 중과, 대도시 법인·사치성재산 중과, 창업·지식산업센터·산업단지 감면을 법령 근거와 함께 보여 줍니다.">
+<meta name="keywords" content="취득세 계산기, 생애최초 취득세 감면, 다주택 취득세 중과, 법인 취득세, 상가 취득세, 출산 취득세 감면, 지방교육세, 농어촌특별세">
+<link rel="canonical" href="https://ella1-crypto.github.io/holding-tax/acquisition.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="보유세맵 — 2026 취득세 계산기">
+<meta property="og:description" content="생애최초·출산 감면, 다주택·법인 중과까지 법령 근거와 함께 계산.">
+<meta property="og:url" content="https://ella1-crypto.github.io/holding-tax/acquisition.html">
+<meta property="og:locale" content="ko_KR">
+<meta name="theme-color" content="#1f3a5f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f3a5f'/%3E%3Cpath d='M8 22V12l8-5 8 5v10' fill='none' stroke='%23f5f2ea' stroke-width='2.4'/%3E%3Cpath d='M13 22v-6h6v6' fill='%23c48a2c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","name":"보유세맵 취득세 계산기","url":"https://ella1-crypto.github.io/holding-tax/acquisition.html","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"생애최초 주택 취득세 감면은 얼마인가요?","acceptedAnswer":{"@type":"Answer","text":"본인과 배우자가 주택을 소유한 적이 없고 취득가액이 12억원 이하이면 취득세를 200만원까지 감면합니다. 전용 60㎡ 이하 등 소형주택은 300만원까지입니다(지방세특례제한법 제36조의3)."}},
+{"@type":"Question","name":"2주택 취득세는 몇 %인가요?","acceptedAnswer":{"@type":"Answer","text":"조정대상지역에서 두 번째 주택을 사면 8%, 비조정대상지역은 세 번째 주택부터 8%입니다. 일시적 2주택은 일반세율(1~3%)을 적용합니다. 법인은 주택 수와 관계없이 12%입니다."}}
+]}]}
+</script>
+</head>
+<body>
+<a class="skip" href="#calc">계산기로 바로 가기</a>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
+  <nav aria-label="계산기 종류" class="kind">
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html" aria-current="page">취득세</a><a href="transfer.html">양도세</a>
+  </nav>
+  <span class="stamp" title="세율·감면 요건을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
+</header>
+
+<main>
+<section class="hero">
+  <p class="kicker">집·상가·토지를 사기 전에</p>
+  <h1>살 때 내는 세금,<br><em>감면과 중과까지</em> 먼저 계산하세요.</h1>
+  <p class="lead">취득세·지방교육세·농어촌특별세를 한 번에 계산합니다. 생애최초·출산 감면, 다주택·법인 중과, 대도시 법인·사치성재산 중과, 창업·지식산업센터·산업단지·임대주택 감면을 고르면 적용 조문과 요건이 함께 표시됩니다.</p>
+  <ul class="chips"><li>지방세법 §11·§13·§13의2</li><li>지특법 감면 9종</li><li>최소납부세제 반영</li><li>무료 · 가입 없음</li></ul>
+</section>
+
+<section class="tool" id="calc" aria-label="취득세 계산기">
+  <form class="tool-main" id="form" onsubmit="return false">
+    <div class="controls">
+      <div class="seg owner" role="radiogroup" aria-label="취득자">
+        <button type="button" role="radio" data-owner="개인" aria-checked="true">개인</button>
+        <button type="button" role="radio" data-owner="법인" aria-checked="false">법인</button>
+      </div>
+      <input type="hidden" data-f="buyer" value="개인">
+    </div>
+
+    <div class="opts">
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">취득 원인</span><select data-f="cause">
+          <option value="sale">매매(유상)</option><option value="new">신축·증축(원시)</option><option value="gift">증여(무상)</option><option value="inherit">상속</option>
+        </select></label>
+        <label class="fld"><span class="fld-l">물건</span><select data-f="asset">
+          <option value="house">주택</option><option value="nonres">상가·건물·토지(비주거)</option><option value="farm">농지</option>
+        </select></label>
+        <label class="fld"><span class="fld-l">취득가액(과세표준)</span><span class="num"><input type="text" inputmode="numeric" data-f="price" data-t="money" placeholder="500,000,000"><em>원</em></span><span class="fld-h" id="price-h">유상은 실거래가, 증여·상속은 시가인정액·시가표준액</span></label>
+        <label class="fld"><span class="fld-l">취득(잔금)일</span><input type="date" data-f="date" data-t="date"><span class="fld-h">신고기한 계산</span></label>
+      </div>
+
+      <div id="house-opts" class="grid4">
+        <label class="fld"><span class="fld-l">취득 후 세대 주택 수</span><span class="num"><input type="text" inputmode="numeric" maxlength="2" data-f="houseCount" data-t="int" value="1"><em>채</em></span><span class="fld-h">이번 주택 포함, 분양권·입주권·주거용 오피스텔 포함</span></label>
+        <label class="chk"><input type="checkbox" data-f="adjusted" data-t="bool"> 조정대상지역 주택</label>
+        <label class="chk"><input type="checkbox" data-f="temporary2" data-t="bool"> 일시적 2주택 (종전주택 처분 예정)</label>
+        <label class="chk"><input type="checkbox" data-f="over85" data-t="bool"> 전용 85㎡ 초과 (농특세 과세)</label>
+        <label class="chk"><input type="checkbox" data-f="heavyExcluded" data-t="bool"> 중과 제외 주택 (시가표준액 1억 이하 등)</label>
+        <label class="chk" id="gift-wrap" hidden><input type="checkbox" data-f="giftHeavy" data-t="bool"> 조정대상지역 시가표준액 3억 이상 증여 (12%)</label>
+      </div>
+
+      <div class="grid4">
+        <label class="chk" id="metro-wrap" hidden><input type="checkbox" data-f="metroCorp" data-t="bool"> 대도시(과밀억제권역) 설립 5년 내 법인·지점 설치용</label>
+        <label class="chk"><input type="checkbox" data-f="luxury" data-t="bool"> 사치성재산 (골프장·고급주택·고급오락장)</label>
+        <label class="chk" id="abroad-wrap" hidden><input type="checkbox" data-f="abroad" data-t="bool"> 상속인이 외국에 주소 (신고 9개월)</label>
+      </div>
+
+      <div class="relief">
+        <div class="grid4">
+          <label class="fld" style="grid-column: span 3"><span class="fld-l">감면·특례</span><select data-f="relief" id="relief-sel"></select></label>
+          <label class="fld" id="custom-wrap" hidden><span class="fld-l">감면율</span><span class="num"><input type="text" inputmode="decimal" data-f="customRate" maxlength="5"><em>%</em></span></label>
+        </div>
+        <div id="relief-info"></div>
+      </div>
+    </div>
+  </form>
+
+  <aside class="tool-side" aria-label="계산 결과 요약">
+    <div class="sticky">
+      <div id="summary" class="summary"></div>
+      <div class="ad-slot" hidden></div>
+    </div>
+  </aside>
+</section>
+
+<section class="band">
+  <details class="detail" open>
+    <summary>계산 과정 펼쳐 보기 — 세율 판정 · 감면 · 부가세</summary>
+    <div id="detail"></div>
+  </details>
+</section>
+
+<section class="prose" id="rates">
+  <h2>2026년 취득세율표 (취득세 + 지방교육세 + 농특세)</h2>
+  <div class="tw"><table>
+    <thead><tr><th>구분</th><th>취득세</th><th>지방교육세</th><th>농특세(85㎡ 초과)</th><th>합계</th></tr></thead>
+    <tbody>
+      <tr><th>주택 6억 이하</th><td>1%</td><td>0.1%</td><td>0.2%</td><td>1.1% (1.3%)</td></tr>
+      <tr><th>주택 6~9억</th><td>1.01~2.99%</td><td>세율×10%</td><td>0.2%</td><td>—</td></tr>
+      <tr><th>주택 9억 초과</th><td>3%</td><td>0.3%</td><td>0.2%</td><td>3.3% (3.5%)</td></tr>
+      <tr><th>다주택 8% 중과</th><td>8%</td><td>0.4%</td><td>0.6%</td><td>8.4% (9.0%)</td></tr>
+      <tr><th>다주택·법인 12% 중과</th><td>12%</td><td>0.4%</td><td>1.0%</td><td>12.4% (13.4%)</td></tr>
+      <tr><th>상가·토지·건물 매매</th><td>4%</td><td>0.4%</td><td>0.2%</td><td>4.6%</td></tr>
+      <tr><th>신축(원시취득)·상속</th><td>2.8%</td><td>0.16%</td><td>0.2%</td><td>3.16%</td></tr>
+      <tr><th>증여</th><td>3.5%</td><td>0.3%</td><td>0.2%</td><td>4.0%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fine">괄호는 전용 85㎡ 초과 주택. 비주거용은 면적과 관계없이 농특세가 붙습니다.</p>
+</section>
+
+<section class="prose" id="faq">
+  <h2>자주 묻는 질문</h2>
+  <details><summary>생애최초 감면 요건은?</summary><p>본인과 배우자(결혼 예정자 포함)가 주택을 소유한 적이 없고, 취득가액 12억원 이하 주택을 유상으로 사면 취득세를 200만원(소형주택 300만원)까지 감면합니다. 소득 기준은 없습니다. 3개월 안에 전입하지 않거나 3년 안에 팔거나 임대하면 추징됩니다. 생애최초 감면을 받으면 다주택 중과도 적용하지 않습니다(지방세특례제한법 제36조의3).</p></details>
+  <details><summary>출산·양육 감면은 생애최초와 함께 받을 수 있나요?</summary><p>아니요. 둘 다 해당하면 유리한 하나를 고릅니다. 출산·양육 감면은 자녀 출산일부터 5년 안에(출산 전 1년 포함) 12억원 이하 주택을 사서 1가구 1주택이 되면 500만원까지 감면합니다(제36조의5).</p></details>
+  <details><summary>일시적 2주택은 왜 8%가 아닌가요?</summary><p>새 집을 산 뒤 3년 안에 기존 집을 팔면 일반세율(1~3%)을 적용합니다. 두 집이 모두 조정대상지역이면 2026년 10월 1일 이후 성립분부터 2년입니다(2026년 8월 26일 이전 계약은 3년). 기간 안에 팔지 못하면 중과세율과의 차액을 추징합니다.</p></details>
+  <details><summary>중과 제외 주택은 무엇인가요?</summary><p>시가표준액 1억원 이하 주택(정비구역 등 제외), 인구감소지역 등 지방의 일정 저가주택, 공공임대·사원임대용, 가정어린이집, 농어촌주택 등은 주택 수에 넣지 않거나 중과하지 않습니다(지방세법 시행령 제28조의2). 해당하면 「중과 제외 주택」을 체크하세요.</p></details>
+  <details><summary>조정대상지역은 어디인가요?</summary><p>국토교통부가 수시로 지정·해제합니다. 계약일 기준으로 국토교통부 고시를 확인해 체크하세요. 이 계산기는 지역을 자동으로 판정하지 않습니다.</p></details>
+</section>
+
+<section class="prose" id="limits">
+  <h2>이 계산기가 아직 하지 않는 것</h2>
+  <ul class="limits">
+    <li><b>조정대상지역·중과 제외 판정</b> — 주소로 자동 판정하지 않습니다. 체크박스로 직접 고르세요.</li>
+    <li><b>지자체 조례 감면·감면 중복</b> — 조례 감면은 「기타 감면」으로 감면율을 넣으세요. 감면 두 개를 겹쳐 받는 경우는 계산하지 않습니다.</li>
+    <li><b>부속토지·지분·건물 신축 원가 산정</b> — 과세표준(취득가액)을 직접 넣어야 합니다.</li>
+  </ul>
+</section>
+
+<section class="prose" id="basis-sec">
+  <h2>계산 근거</h2>
+  <div id="basis"></div>
+  <p class="fine">2026년 10월 15일 국가법령정보센터 현행 조문(지방세법·같은 법 시행령, 지방세특례제한법, 농어촌특별세법)으로 확인했습니다.</p>
+</section>
+</main>
+
+<footer class="foot">
+  <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 실제 세액은 주택 수 판정, 감면 요건 충족 여부, 조례 등에 따라 달라질 수 있으며 세무 자문이 아닙니다.</p>
+  <p><a href="./">상업용 보유세</a> · <a href="house.html">주택 보유세</a> · <a href="transfer.html">양도세</a> · <a href="../">← Ella's Side Ledger</a></p>
+</footer>
+
+<div class="mbar" aria-hidden="true"><span>취득 시 세금</span><b id="mbar-total">0원</b><a href="#summary" tabindex="-1">결과 보기</a></div>
+
+<script src="js/config.js"></script>
+<script src="js/kit.js"></script>
+<script src="js/acquisition-engine.js"></script>
+<script src="js/acquisition-app.js"></script>
+</body>
+</html>

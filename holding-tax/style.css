@@ -328,3 +328,11 @@ tr:last-child > * { border-bottom: 0; }
 
 .limits { max-width: 54em; padding-left: 1.2em; display: grid; gap: 10px; color: var(--ink-2); }
 .limits b { color: var(--ink); }
+
+/* ---------- 계산기 4종 탭 ---------- */
+.top nav.kind a { white-space: nowrap; }
+@media (max-width: 640px) {
+  .top { flex-wrap: wrap; row-gap: 10px; }
+  .top nav.kind { order: 3; width: 100%; margin-left: 0; justify-content: space-between; overflow-x: auto; }
+  .top nav.kind a { flex: 1; text-align: center; padding: 6px 4px; }
+}
