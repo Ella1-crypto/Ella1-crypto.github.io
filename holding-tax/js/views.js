@@ -104,9 +104,9 @@
         <button type="button" class="icon-btn" data-act="del" data-pid="${esc(p.id)}" aria-label="${i + 1}번 필지 삭제">×</button>
       </header>
       <div class="grid4">
-        ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? '지적도 경계로 추정 — 토지대장 면적으로 고치세요' : '')}
+        ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? '지적도 경계로 추정 — 토지대장 면적으로 고치세요' : p.areaSource === 'register' ? '토지대장 면적(자동)' : '')}
         ${field('개별공시지가', numInput(p.id, 'price', p.price, '원/㎡'), priceHint(p))}
-        ${field('용도지역', `<select data-pid="${esc(p.id)}" data-f="zone">${ZONES.map(z => opt(z, z || '선택 안 함', p.zone)).join('')}</select>`)}
+        ${field('용도지역', `<select data-pid="${esc(p.id)}" data-f="zone">${ZONES.map(z => opt(z, z || '선택 안 함', p.zone)).join('')}</select>`, p.zoneName ? esc(p.zoneName) : '')}
         ${field('과세구분', `<select data-pid="${esc(p.id)}" data-f="cls">${HT.CLASS_KEYS.map(k => opt(k, HT.CLASS[k].label, p.cls)).join('')}</select>`,
           esc(p.clsAuto ? `추정: ${cls.note}` : CLS_HELP[p.cls]))}
       </div>

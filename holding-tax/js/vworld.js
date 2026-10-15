@@ -20,7 +20,25 @@
     const domain = String(c.VWORLD_DOMAIN || location.host).replace(/^https?:\/\//, '').replace(/\/.*$/, '');
     return { key: String(c.VWORLD_KEY || '').trim(), domain };
   }
-  const enabled = () => Boolean(cfg().key);
+  const apiBase = () => String((window.HTM_CONFIG || {}).API_BASE || '').replace(/\/+$/, '');
+  const enabled = () => Boolean(apiBase() || cfg().key);
+
+  /** 중계 서버(Worker) 호출 */
+  async function viaApi(path, params) {
+    const res = await fetch(`${apiBase()}${path}?${new URLSearchParams(params)}`, { signal: AbortSignal.timeout(15000) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `조회 실패(${res.status})`);
+    return data;
+  }
+
+  /** 토지특성의 용도지역명 → 화면 선택지 */
+  function zoneGroup(name) {
+    const z = String(name || '');
+    const groups = ['주거', '상업', '공업', '녹지', '관리', '농림'];
+    const g = groups.find(k => z.includes(k));
+    if (g) return `${g}지역`;
+    return z.includes('자연환경보전') ? '자연환경보전지역' : '';
+  }
 
   function jsonp(url, params) {
     return new Promise((resolve, reject) => {
@@ -76,6 +94,7 @@
 
   /** 주소 검색 — 지번 우선, 없으면 도로명 */
   async function search(query) {
+    if (apiBase()) return (await viaApi('/search', { q: query })).items || [];
     const parcel = await searchCategory(query, 'parcel');
     return parcel.length ? parcel : searchCategory(query, 'road');
   }
@@ -141,6 +160,12 @@
 
   /** 좌표의 연속지적도 필지(공시지가 포함) */
   async function parcelAt(lat, lng) {
+    if (apiBase()) {
+      const p = (await viaApi('/parcel', { lat: lat.toFixed(7), lng: lng.toFixed(7) })).parcel;
+      if (!p) return null;
+      const area = p.area > 0 ? p.area : Math.round(polygonArea(p.geom) * 10) / 10;
+      return { ...p, area, areaSource: p.area > 0 ? 'register' : 'polygon', zoneName: p.zone, zone: zoneGroup(p.zone) };
+    }
     const result = unwrap(await call('req/data', {
       service: 'data', request: 'GetFeature', data: 'LP_PA_CBND_BUBUN', crs: 'EPSG:4326',
       size: '1', page: '1', geometry: 'true', attribute: 'true', geomFilter: `POINT(${lng} ${lat})`,

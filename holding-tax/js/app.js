@@ -122,7 +122,8 @@
       if (!found) { toast('이 위치에서 필지를 찾지 못했습니다.'); return; }
       const dup = state.parcels.find(p => p.pnu === found.pnu);
       if (dup) { select(dup.id); toast('이미 담은 필지입니다.'); return; }
-      addParcel(found);
+      const added = addParcel(found);
+      if (added && found.zone) setState(mapParcel(added.id, x => withZone(x, found.zone))); // 용도지역 → 도시지역분·과세구분 추정
       toast(`${found.jibun} 필지를 담았습니다 — 면적·과세구분을 확인하세요.`);
       scrollToCard(activeId);
     } catch (err) {
