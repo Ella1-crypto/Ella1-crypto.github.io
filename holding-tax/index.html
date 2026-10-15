@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 상업용 부동산 보유세 계산기 — 재산세·종부세 지도로 계산 | 보유세맵</title>
+<meta name="description" content="지도에서 필지를 누르면 2026년 공시지가로 토지분 재산세, 건축물분 재산세(2026 신축가격기준액·잔가율 반영), 종합부동산세, 소방분까지 계산합니다. 상가·사무실·공장·창고 보유자를 위한 무료 보유세 계산기.">
+<meta name="keywords" content="보유세 계산기, 재산세 계산기, 종부세 계산기, 상가 재산세, 별도합산 종부세, 건물 시가표준액 계산, 2026 잔가율, 건물신축가격기준액">
+<link rel="canonical" href="https://ella1-crypto.github.io/holding-tax/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="보유세맵 — 2026 상업용 부동산 보유세 계산기">
+<meta property="og:description" content="필지를 찍으면 재산세·종부세·소방분이 한 번에. 2026년 신축가격기준액·잔가율 반영.">
+<meta property="og:url" content="https://ella1-crypto.github.io/holding-tax/">
+<meta property="og:locale" content="ko_KR">
+<meta name="theme-color" content="#1f3a5f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f3a5f'/%3E%3Cpath d='M8 22V12l8-5 8 5v10' fill='none' stroke='%23f5f2ea' stroke-width='2.4'/%3E%3Cpath d='M13 22v-6h6v6' fill='%23c48a2c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","name":"보유세맵","url":"https://ella1-crypto.github.io/holding-tax/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"description":"상업용 부동산의 토지분·건축물분 재산세와 종합부동산세를 지도에서 필지를 골라 계산하는 2026년 기준 보유세 계산기"},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"상가 토지는 종부세가 나오나요?","acceptedAnswer":{"@type":"Answer","text":"건물이 있는 상가·사무실 부속토지는 대부분 별도합산 토지입니다. 별도합산 토지는 한 사람(법인)이 전국에 가진 공시가격 합계가 80억원을 넘을 때만 종합부동산세가 과세됩니다."}},
+{"@type":"Question","name":"건물분 재산세는 언제 내나요?","acceptedAnswer":{"@type":"Answer","text":"건축물분 재산세는 7월 16일~31일, 토지분 재산세는 9월 16일~30일, 종합부동산세는 12월 1일~15일에 냅니다."}},
+{"@type":"Question","name":"2026년 건물 시가표준액은 어떻게 바뀌었나요?","acceptedAnswer":{"@type":"Answer","text":"2026년 건물신축가격기준액이 상업용 ㎡당 83만원에서 86만원으로 올랐습니다. 경과연수별 잔가율은 내용연수별 상각률을 적용하고 최종 잔가율 10%에서 멈춥니다."}},
+{"@type":"Question","name":"계산 결과가 고지서와 다른 이유는?","acceptedAnswer":{"@type":"Answer","text":"과세구분(별도합산·종합합산·분리과세) 판정, 지방자치단체 조례 세율, 감면, 전년도 세액 기준 세부담상한, 건물의 가감산율 등이 반영되지 않으면 차이가 납니다."}}
+]}]}
+</script>
+</head>
+<body>
+<a class="skip" href="#calc">계산기로 바로 가기</a>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="보유세맵 처음으로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
+  <nav aria-label="페이지 안내">
+    <a href="#calc">계산기</a><a href="#rates">2026 세율표</a><a href="#changes">올해 바뀐 점</a><a href="#faq">자주 묻는 질문</a>
+  </nav>
+  <span class="stamp" title="세율·공정시장가액비율·신축가격기준액·잔가율을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
+</header>
+
+<main>
+<section class="hero">
+  <p class="kicker">상가 · 사무실 · 공장 · 창고 보유자를 위한</p>
+  <h1>고지서가 오기 전에,<br><em>내 건물 보유세</em>를 먼저 계산하세요.</h1>
+  <p class="lead">지도에서 필지를 누르면 공시지가를 불러와 토지분 재산세와 종합부동산세를, 건물 구조·용도·연도를 넣으면 2026년 기준 건물 시가표준액과 건축물분 재산세·소방분까지 계산합니다.</p>
+  <ul class="chips">
+    <li>2026 신축가격기준액 86만원/㎡</li><li>2026 잔가율표(최종 10%)</li><li>시·군·구별 합산 · 전국 종부세 합산</li><li>무료 · 가입 없음</li>
+  </ul>
+</section>
+
+<section class="tool" id="calc" aria-label="보유세 계산기">
+  <div class="tool-main">
+    <div class="controls">
+      <div class="seg owner" role="radiogroup" aria-label="소유자">
+        <button type="button" role="radio" data-owner="법인" aria-checked="true">법인</button>
+        <button type="button" role="radio" data-owner="개인" aria-checked="false">개인</button>
+      </div>
+      <form id="search" class="search" role="search">
+        <label class="sr" for="q">주소 검색</label>
+        <input id="q" type="search" placeholder="지번 주소 검색 (예: 역삼동 825-2)" autocomplete="off">
+        <button type="submit" class="btn primary">찾기</button>
+        <ul id="results" class="results" aria-live="polite"></ul>
+      </form>
+    </div>
+    <p id="vw-off" class="notice" hidden>지도 조회 준비 중입니다. 지금은 <button type="button" class="link-btn" data-act="manual">공시지가를 직접 입력</button>해 계산할 수 있습니다. 개별공시지가는 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 확인하세요.</p>
+    <div id="map" class="map" role="application" aria-label="필지 선택 지도 — 땅을 누르면 계산 목록에 담깁니다"></div>
+    <div class="list-head">
+      <h2>담은 필지 <span id="pcount" class="muted"></span></h2>
+      <button type="button" class="ghost" data-act="manual">＋ 직접 입력</button>
+    </div>
+    <div id="parcels" class="parcels"></div>
+  </div>
+
+  <aside class="tool-side" aria-label="계산 결과 요약">
+    <div class="sticky">
+      <div id="summary" class="summary"></div>
+      <div class="ad-slot" hidden></div>
+    </div>
+  </aside>
+</section>
+
+<section class="band" id="result-detail">
+  <div class="cols">
+    <div>
+      <h2>납부 일정</h2>
+      <div id="schedule"></div>
+    </div>
+    <div>
+      <div class="h-row"><h2>5년 전망</h2>
+        <label class="inline">공시지가 연 <input id="growth" type="number" min="0" max="30" step="0.5" value="3"> % 상승</label></div>
+      <div id="projection"></div>
+    </div>
+  </div>
+  <details class="detail" open>
+    <summary>계산 과정 펼쳐 보기 — 과세표준 · 세율 · 공제 · 결정세액</summary>
+    <div id="detail"></div>
+  </details>
+</section>
+
+<section class="prose" id="rates">
+  <h2>2026년 보유세 세율표 (토지·비주거 건물)</h2>
+  <p>재산세 과세표준은 토지·건축물 모두 시가표준액(공시가격)의 <b>70%</b>입니다. 토지는 납세자별로 같은 시·군·구 안의 토지를 과세구분마다 합산해 누진세율을 적용합니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>구분</th><th>과세표준</th><th>세율</th></tr></thead>
+    <tbody>
+      <tr><th rowspan="3">별도합산 토지 재산세<br><small>상가·사무실 부속토지</small></th><td>2억원 이하</td><td>0.2%</td></tr>
+      <tr><td>2억원 초과 10억원 이하</td><td>40만원 + 초과분 0.3%</td></tr>
+      <tr><td>10억원 초과</td><td>280만원 + 초과분 0.4%</td></tr>
+      <tr><th rowspan="3">종합합산 토지 재산세<br><small>나대지·잡종지 등</small></th><td>5천만원 이하</td><td>0.2%</td></tr>
+      <tr><td>5천만원 초과 1억원 이하</td><td>10만원 + 초과분 0.3%</td></tr>
+      <tr><td>1억원 초과</td><td>25만원 + 초과분 0.5%</td></tr>
+      <tr><th>분리과세 토지</th><td colspan="2">농지·목장·보전임야 0.07% · 공장용지 등 0.2% · 골프장·고급오락장 4%</td></tr>
+      <tr><th>건축물(비주거)</th><td colspan="2">0.25% · 주거지역 등 공장 0.5% · 골프장·고급오락장 4%</td></tr>
+      <tr><th>도시지역분 · 지방교육세</th><td colspan="2">과세표준 × 0.14% · 재산세 × 20%</td></tr>
+      <tr><th rowspan="3">종부세 별도합산<br><small>(공시가격 합계 − 80억원)</small></th><td>200억원 이하</td><td>0.5%</td></tr>
+      <tr><td>200억원 초과 400억원 이하</td><td>1억원 + 초과분 0.6%</td></tr>
+      <tr><td>400억원 초과</td><td>2억2천만원 + 초과분 0.7%</td></tr>
+      <tr><th rowspan="3">종부세 종합합산<br><small>(공시가격 합계 − 5억원)</small></th><td>15억원 이하</td><td>1%</td></tr>
+      <tr><td>15억원 초과 45억원 이하</td><td>1,500만원 + 초과분 2%</td></tr>
+      <tr><td>45억원 초과</td><td>7,500만원 + 초과분 3%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fine">종부세에서는 같은 토지에 부과된 재산세 상당액을 공제하고, 결정세액의 20%를 농어촌특별세로 더 냅니다. 재산세·종부세 모두 직전 연도 세액의 150%를 넘지 않습니다(세부담상한).</p>
+</section>
+
+<div class="ad-slot wide" hidden></div>
+
+<section class="prose" id="changes">
+  <h2>2026년에 바뀐 점 — 계산기에 반영한 것</h2>
+  <ol class="changes">
+    <li><b>건물신축가격기준액 인상</b> (행정안전부고시 제2025-82호, 2026.6.1. 시행) — 상업용 ㎡당 83만원 → <b>86만원</b>, 주거용 84만 → 86만, 공업용 82만 → 84만원. 같은 건물이라도 건축물 시가표준액이 약 3.6% 오릅니다.</li>
+    <li><b>경과연수별 잔가율</b> (2026 시가표준액 조사·산정 업무요령) — 내용연수 50·40·30·20·10년 구조에 매년 1.8%·2.25%·3%·4.5%·9%씩 감가하고, 최종 잔가율 <b>10%</b>에서 멈춥니다. 철근콘크리트조는 40년, 철골철근콘크리트조는 50년, 철골조는 30년입니다.</li>
+    <li><b>도시지역분 비과세 범위 정비</b> (지방세법 제112조③④, 2026.1.1. 시행) — 미집행 도시·군계획시설 부지(주택 부속토지 포함)와 건축물 등 이용시설이 없는 개발제한구역 토지는 도시지역분을 매기지 않습니다. 해당하면 필지 카드에서 도시지역분 체크를 해제하세요.</li>
+    <li><b>바뀌지 않은 것</b> — 재산세·종부세 세율, 토지·건축물 공정시장가액비율 70%, 종부세 토지 공정시장가액비율 100%, 별도합산 공제 80억원·종합합산 공제 5억원, 소방분 누진세율은 2025년과 같습니다.</li>
+  </ol>
+</section>
+
+<section class="prose" id="faq">
+  <h2>자주 묻는 질문</h2>
+  <details><summary>상가 토지는 종부세가 나오나요?</summary><p>건물이 있는 상가·사무실 부속토지는 대부분 <b>별도합산</b> 토지입니다. 한 사람(법인)이 전국에 가진 별도합산 토지 공시가격 합계가 80억원을 넘을 때만 종부세가 나옵니다. 나대지·잡종지처럼 종합합산이면 5억원부터 과세됩니다.</p></details>
+  <details><summary>지도에서 나온 면적이 토지대장과 다릅니다.</summary><p>지도 면적은 지적도 경계선으로 계산한 근사치입니다. 토지대장이나 등기부의 면적으로 고쳐 넣으세요. 공유 지분이면 내 지분만큼의 면적을 넣으면 됩니다.</p></details>
+  <details><summary>건물 가감산율은 무엇인가요?</summary><p>건물의 특성에 따라 시가표준액을 더하거나 빼는 비율입니다. 예를 들어 5~10층 건물의 1층 상가는 +0.27, 5층 미만 건물의 1층 상가는 +0.17, 인텔리전트 빌딩(관리요소 5가지 이상)은 +0.10입니다. 해당 없으면 1.00을 그대로 두세요.</p></details>
+  <details><summary>주택이나 오피스텔도 계산되나요?</summary><p>이 계산기는 상업용 토지와 비주거 건물 전용입니다. 주택은 토지와 건물을 합친 주택분으로 따로 과세되고, 오피스텔은 별도의 표준가격기준액 방식을 씁니다.</p></details>
+  <details><summary>계산 결과가 고지서와 다른 이유는?</summary><p>과세구분 판정, 지방자치단체 조례 세율, 감면, 전년도 세액 기준 세부담상한, 건물의 가감산율과 부대설비 등이 반영되지 않으면 차이가 납니다. 고지서와 다르면 전문가 검토를 권합니다.</p></details>
+</section>
+
+<section class="prose" id="basis-sec">
+  <h2>계산 근거</h2>
+  <div id="basis"></div>
+  <p class="fine">국가법령정보센터 현행 조문(지방세법 2026.1.1. 시행본, 지방세법 시행령 2026.10.1. 시행본, 종합부동산세법 2026.1.1. 시행본)과 행정안전부 「2026년 지방세 시가표준액 조사·산정 업무요령」으로 2026년 10월 15일에 확인했습니다.</p>
+</section>
+</main>
+
+<footer class="foot">
+  <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 실제 부과세액은 과세구분, 감면, 지방자치단체 조례, 전년도 과세내역 등에 따라 달라질 수 있으며, 이 계산은 세무 자문이 아닙니다.</p>
+  <p><a href="../">← Ella's Side Ledger</a> · 지도 © VWorld / OpenStreetMap</p>
+</footer>
+
+<div class="mbar" aria-hidden="true"><span>연간 예상</span><b id="mbar-total">0원</b><a href="#summary" tabindex="-1">결과 보기</a></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/config.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/building-engine.js"></script>
+<script src="js/valuation.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/state.js"></script>
+<script src="js/vworld.js"></script>
+<script src="js/map.js"></script>
+<script src="js/views.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
