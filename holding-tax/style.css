@@ -37,6 +37,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--sans); font-feature-settings: "tnum" 1; }
 a { color: var(--navy); }
@@ -270,3 +271,26 @@ tr:last-child > * { border-bottom: 0; }
   .tw { overflow: visible; }
   .foot { padding-bottom: 0; }
 }
+
+/* ---------- 계산기 종류 전환 · 주택 화면 ---------- */
+.top nav.kind { gap: 6px; padding: 3px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); }
+.top nav.kind a { padding: 6px 14px; border-radius: 999px; }
+.top nav.kind a[aria-current="page"] { background: var(--navy); color: var(--navy-ink); font-weight: 600; }
+.sel { height: 36px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); padding: 0 12px; margin-left: 6px; }
+.opts { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 18px 16px; display: grid; gap: 12px; margin-bottom: 4px; }
+.opts .chk { margin: 0; font-weight: 600; }
+.more summary { cursor: pointer; color: var(--ink-2); font-size: 13.5px; }
+.more .grid4 { margin-top: 12px; }
+.house-tax { color: var(--ink); font-size: 13px; padding-top: 10px; }
+.house-tax b { font-size: 16px; color: var(--bld); }
+.history { margin-top: 18px; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 18px; }
+.history h3 { margin: 0; font-size: 15px; }
+.history ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.history button { width: 100%; display: flex; justify-content: space-between; gap: 12px; text-align: left; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-sm); padding: 9px 12px; cursor: pointer; }
+.history button:hover { border-color: var(--ink-2); }
+.history button span { color: var(--muted); font-size: 12.5px; }
+.summary .actions { grid-template-columns: 1fr 1fr; }
+.cmp .pcol.is-on b { color: var(--cmt); }
+.cmp .pcol small { text-align: center; line-height: 1.3; }
+@media (max-width: 1000px) { .top nav.kind { display: flex; margin-left: auto; } .top nav.kind a { font-size: 12.5px; padding: 5px 10px; } .stamp { display: none; } }
+@media print { .opts, .history, .top nav.kind, .more { display: none !important; } }

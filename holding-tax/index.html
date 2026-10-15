@@ -36,8 +36,8 @@
 
 <header class="top">
   <a class="brand" href="./" aria-label="보유세맵 처음으로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
-  <nav aria-label="페이지 안내">
-    <a href="#calc">계산기</a><a href="#rates">2026 세율표</a><a href="#changes">올해 바뀐 점</a><a href="#faq">자주 묻는 질문</a>
+  <nav aria-label="계산기 종류" class="kind">
+    <a href="./" aria-current="page">상업용 (토지·건물)</a><a href="house.html">주택·아파트</a>
   </nav>
   <span class="stamp" title="세율·공정시장가액비율·신축가격기준액·잔가율을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
 </header>
@@ -59,6 +59,12 @@
         <button type="button" role="radio" data-owner="법인" aria-checked="true">법인</button>
         <button type="button" role="radio" data-owner="개인" aria-checked="false">개인</button>
       </div>
+      <label class="inline">기준
+        <select id="mode" class="sel">
+          <option value="2026">2026년 (현행)</option>
+          <option value="2027reform">2027년 — 개편안 미리보기</option>
+        </select>
+      </label>
       <form id="search" class="search" role="search">
         <label class="sr" for="q">주소 검색</label>
         <input id="q" type="search" placeholder="지번 주소 검색 (예: 역삼동 825-2)" autocomplete="off">
@@ -68,11 +74,24 @@
     </div>
     <p id="vw-off" class="notice" hidden>지도 조회 준비 중입니다. 지금은 <button type="button" class="link-btn" data-act="manual">공시지가를 직접 입력</button>해 계산할 수 있습니다. 개별공시지가는 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 확인하세요.</p>
     <div id="map" class="map" role="application" aria-label="필지 선택 지도 — 땅을 누르면 계산 목록에 담깁니다"></div>
+    <details class="more opts">
+      <summary>추가 옵션 — 작년 세액(세부담상한 150%)</summary>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">작년 별도합산 재산세</span><span class="num"><input id="prev-propSep" data-prev="propSep" type="text" inputmode="numeric"><em>원</em></span><span class="fld-h">토지분 고지서의 재산세 본세(별도합산)</span></label>
+        <label class="fld"><span class="fld-l">작년 종합합산 재산세</span><span class="num"><input id="prev-propJong" data-prev="propJong" type="text" inputmode="numeric"><em>원</em></span><span class="fld-h">나대지 등 종합합산 본세</span></label>
+        <label class="fld"><span class="fld-l">작년 종부세(별도합산)</span><span class="num"><input id="prev-cmtSep" data-prev="cmtSep" type="text" inputmode="numeric"><em>원</em></span><span class="fld-h">결정세액(농특세 제외)</span></label>
+        <label class="fld"><span class="fld-l">작년 종부세(종합합산)</span><span class="num"><input id="prev-cmtJong" data-prev="cmtJong" type="text" inputmode="numeric"><em>원</em></span><span class="fld-h">결정세액(농특세 제외)</span></label>
+      </div>
+    </details>
     <div class="list-head">
       <h2>담은 필지 <span id="pcount" class="muted"></span></h2>
       <button type="button" class="ghost" data-act="manual">＋ 직접 입력</button>
     </div>
     <div id="parcels" class="parcels"></div>
+    <section id="history" class="history" hidden aria-label="계산 기록">
+      <div class="h-row"><h3>이 기기에 저장한 계산</h3><button type="button" class="link-btn" data-act="history-clear">기록 지우기</button></div>
+      <ul id="history-list"></ul>
+    </section>
   </div>
 
   <aside class="tool-side" aria-label="계산 결과 요약">
@@ -157,7 +176,7 @@
 
 <footer class="foot">
   <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 실제 부과세액은 과세구분, 감면, 지방자치단체 조례, 전년도 과세내역 등에 따라 달라질 수 있으며, 이 계산은 세무 자문이 아닙니다.</p>
-  <p><a href="../">← Ella's Side Ledger</a> · 지도 © VWorld / OpenStreetMap</p>
+  <p><a href="house.html">주택·아파트 계산기</a> · <a href="../">← Ella's Side Ledger</a> · 지도 © VWorld / OpenStreetMap</p>
 </footer>
 
 <div class="mbar" aria-hidden="true"><span>연간 예상</span><b id="mbar-total">0원</b><a href="#summary" tabindex="-1">결과 보기</a></div>

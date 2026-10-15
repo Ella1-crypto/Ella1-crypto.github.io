@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 주택 보유세 계산기 — 아파트 재산세·종부세 계산 (2027 개편안 비교) | 보유세맵</title>
+<meta name="description" content="아파트·주택 공시가격만 넣으면 2026년 재산세(1세대1주택 특례 43~45%)와 종합부동산세(고령자·장기보유 공제, 세부담상한)를 계산하고, 2027년 세제개편안 적용 시와 비교합니다. 공동명의·다주택·법인 지원.">
+<meta name="keywords" content="종부세 계산기, 재산세 계산기, 아파트 보유세, 1세대1주택 재산세, 종부세 개편안 2027, 공동명의 종부세, 고령자 공제, 장기보유 공제">
+<link rel="canonical" href="https://ella1-crypto.github.io/holding-tax/house.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="보유세맵 — 2026 주택 재산세·종부세 계산기">
+<meta property="og:description" content="공시가격만 넣으면 재산세·종부세·농특세와 7·9·12월 납부액. 2027 정부 개편안과 비교.">
+<meta property="og:url" content="https://ella1-crypto.github.io/holding-tax/house.html">
+<meta property="og:locale" content="ko_KR">
+<meta name="theme-color" content="#1f3a5f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f3a5f'/%3E%3Cpath d='M8 22V12l8-5 8 5v10' fill='none' stroke='%23f5f2ea' stroke-width='2.4'/%3E%3Cpath d='M13 22v-6h6v6' fill='%23c48a2c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","name":"보유세맵 주택 보유세 계산기","url":"https://ella1-crypto.github.io/holding-tax/house.html","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"1주택자는 종부세를 언제부터 내나요?","acceptedAnswer":{"@type":"Answer","text":"1세대1주택자는 공시가격 12억원까지 종부세가 없습니다. 2026년 정부 개편안이 통과되면 실거주 1주택은 14억원, 비거주 1주택은 9억원으로 공제가 달라집니다."}},
+{"@type":"Question","name":"공동명의는 종부세가 줄어드나요?","acceptedAnswer":{"@type":"Answer","text":"공동명의면 각자 지분만큼의 공시가격에서 9억원씩 공제받습니다. 1세대1주택 단독명의(12억원 공제·고령자·장기보유 공제)와 어느 쪽이 유리한지는 공시가격과 나이·보유기간에 따라 다릅니다."}},
+{"@type":"Question","name":"재산세는 언제 내나요?","acceptedAnswer":{"@type":"Answer","text":"주택 재산세는 7월과 9월에 절반씩 냅니다. 연세액이 20만원 이하면 7월에 한 번에 냅니다. 종부세는 12월 1일~15일입니다."}}
+]}]}
+</script>
+</head>
+<body>
+<a class="skip" href="#calc">계산기로 바로 가기</a>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
+  <nav aria-label="계산기 종류" class="kind">
+    <a href="./">상업용 (토지·건물)</a><a href="house.html" aria-current="page">주택·아파트</a>
+  </nav>
+  <span class="stamp" title="세율·공정시장가액비율을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
+</header>
+
+<main>
+<section class="hero">
+  <p class="kicker">아파트 · 빌라 · 단독주택 보유자를 위한</p>
+  <h1>공시가격 하나로,<br><em>올해 재산세·종부세</em>를 계산하세요.</h1>
+  <p class="lead">1세대1주택 특례(공정시장가액비율 43~45%, 9억 이하 특례세율), 고령자·장기보유 공제, 공동명의, 다주택·법인 세율과 세부담상한까지 반영합니다. 2027년 정부 개편안이 통과될 때와도 비교해 보세요.</p>
+  <ul class="chips"><li>부동산계산기.com 6개 사례 원 단위 대조</li><li>2027 개편안 비교</li><li>공동명의·다주택·법인</li><li>무료 · 가입 없음</li></ul>
+</section>
+
+<section class="tool" id="calc" aria-label="주택 보유세 계산기">
+  <div class="tool-main">
+    <div class="controls">
+      <div class="seg owner" role="radiogroup" aria-label="소유자">
+        <button type="button" role="radio" data-owner="개인" aria-checked="true">개인</button>
+        <button type="button" role="radio" data-owner="법인" aria-checked="false">법인</button>
+      </div>
+      <label class="inline">기준
+        <select id="mode" class="sel">
+          <option value="2026">2026년 (현행)</option>
+          <option value="2027law">2027년 — 현행법이 그대로면</option>
+          <option value="2027reform">2027년 — 정부 개편안 반영</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="opts">
+      <label class="chk"><input id="oneHouse" type="checkbox" checked> 1세대1주택자 (주택 1채, 개인)</label>
+      <div id="one-opts" class="grid4">
+        <label class="fld"><span class="fld-l">나이 (6월 1일 기준)</span><span class="num"><input id="age" type="text" inputmode="numeric" maxlength="3"><em>세</em></span><span class="fld-h">60세 이상 20~40% 공제</span></label>
+        <label class="fld"><span class="fld-l">보유기간</span><span class="num"><input id="holdYears" type="text" inputmode="numeric" maxlength="3"><em>년</em></span><span class="fld-h">5년 이상 20~50% 공제</span></label>
+        <label class="fld" id="resident-wrap" hidden><span class="fld-l">실거주</span><span class="chk"><input id="resident" type="checkbox" checked> 거주 중 (개편안 공제 14억, 비거주 9억)</span></label>
+      </div>
+      <details class="more">
+        <summary>추가 옵션 — 다른 주택 수, 작년 세액(세부담상한)</summary>
+        <div class="grid4">
+          <label class="fld"><span class="fld-l">총 주택 수</span><span class="num"><input id="houseCount" type="text" inputmode="numeric" maxlength="3"><em>채</em></span><span class="fld-h">여기 넣지 않은 주택까지 포함(3채 이상 세율 판정)</span></label>
+          <label class="fld"><span class="fld-l">작년 재산세+종부세</span><span class="num"><input id="prevTotal" type="text" inputmode="numeric"><em>원</em></span><span class="fld-h">개인 세부담상한 150% 계산 (고지서 본세 기준)</span></label>
+        </div>
+      </details>
+    </div>
+
+    <div class="list-head">
+      <h2>주택 목록</h2>
+      <button type="button" class="ghost" data-act="add">＋ 주택 추가</button>
+    </div>
+    <div id="houses" class="parcels"></div>
+
+    <section id="history" class="history" hidden aria-label="계산 기록">
+      <div class="h-row"><h3>이 기기에 저장한 계산</h3><button type="button" class="link-btn" data-act="history-clear">기록 지우기</button></div>
+      <ul id="history-list"></ul>
+    </section>
+  </div>
+
+  <aside class="tool-side" aria-label="계산 결과 요약">
+    <div class="sticky">
+      <div id="summary" class="summary"></div>
+      <div class="ad-slot" hidden></div>
+    </div>
+  </aside>
+</section>
+
+<section class="band">
+  <div class="cols">
+    <div><h2>납부 일정</h2><div id="schedule"></div></div>
+    <div><h2>2026 vs 2027 비교</h2><div id="compare"></div></div>
+  </div>
+  <details class="detail" open>
+    <summary>계산 과정 펼쳐 보기 — 공제 · 과세표준 · 세액공제 · 결정세액</summary>
+    <div id="detail"></div>
+  </details>
+</section>
+
+<section class="prose" id="rates">
+  <h2>2026년 주택 보유세 세율표</h2>
+  <div class="tw"><table>
+    <thead><tr><th>구분</th><th>과세표준</th><th>일반</th><th>1세대1주택(공시 9억 이하)</th></tr></thead>
+    <tbody>
+      <tr><th rowspan="4">재산세</th><td>6천만원 이하</td><td>0.1%</td><td>0.05%</td></tr>
+      <tr><td>1억5천만원 이하</td><td>6만원 + 0.15%</td><td>3만원 + 0.1%</td></tr>
+      <tr><td>3억원 이하</td><td>19.5만원 + 0.25%</td><td>12만원 + 0.2%</td></tr>
+      <tr><td>3억원 초과</td><td>57만원 + 0.4%</td><td>42만원 + 0.35%</td></tr>
+    </tbody>
+  </table></div>
+  <p>재산세 과세표준은 공시가격 × 60%입니다. 2026년 1세대1주택은 공시가격 3억 이하 43%, 6억 이하 44%, 6억 초과 45%를 적용합니다. 도시지역분 0.14%와 지방교육세(재산세의 20%)가 함께 부과됩니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>종부세 과세표준</th><th>2주택 이하</th><th>3주택 이상</th></tr></thead>
+    <tbody>
+      <tr><td>3억원 이하</td><td>0.5%</td><td>0.5%</td></tr>
+      <tr><td>6억원 이하</td><td>0.7%</td><td>0.7%</td></tr>
+      <tr><td>12억원 이하</td><td>1.0% <small>(개편안 1.3%)</small></td><td>1.0% <small>(개편안 1.3%)</small></td></tr>
+      <tr><td>25억원 이하</td><td>1.3%</td><td>2.0%</td></tr>
+      <tr><td>50억원 이하</td><td>1.5%</td><td>3.0%</td></tr>
+      <tr><td>94억원 이하</td><td>2.0%</td><td>4.0%</td></tr>
+      <tr><td>94억원 초과</td><td>2.7%</td><td>5.0%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fine">종부세 과세표준 = (공시가격 합계 − 공제) × 60%. 공제는 1세대1주택 12억원, 개인 9억원, 법인 0원이며 법인은 2.7%(3주택 이상 5%) 단일세율입니다.</p>
+</section>
+
+<section class="prose" id="changes">
+  <h2>2027년에 달라질 수 있는 것</h2>
+  <ol class="changes">
+    <li><b>1세대1주택 특례가 2026년분으로 끝납니다(현행법).</b> 공정시장가액비율 43~45% 특례와 9억 이하 특례세율 모두 2026년 납세의무분까지만 규정돼 있습니다. 연장되지 않으면 2027년 재산세는 60%·일반세율로 계산됩니다.</li>
+    <li><b>정부 개편안(2026.8 발표, 국회 심의 중)</b>은 9억 이하 1주택 특례세율을 2029년까지 연장하고, 종부세 1주택 공제를 실거주 14억원·비거주 9억원으로 나누며, 과세표준 6~12억원 구간 세율을 1.0%에서 1.3%로 올립니다.</li>
+    <li>개편안의 공정시장가액비율 인상 폭, 가액 기준 세율표 전환, 세액공제 기준 변경은 수치가 아직 공개되지 않아 계산에 넣지 않았습니다.</li>
+  </ol>
+</section>
+
+<section class="prose" id="faq">
+  <h2>자주 묻는 질문</h2>
+  <details><summary>1주택자는 종부세를 언제부터 내나요?</summary><p>1세대1주택자는 공시가격 12억원까지 종부세가 없습니다. 개편안이 통과되면 실거주 1주택은 14억원, 비거주 1주택은 9억원으로 바뀝니다.</p></details>
+  <details><summary>공동명의는 종부세가 줄어드나요?</summary><p>공동명의면 각자 지분만큼의 공시가격에서 9억원씩 공제받습니다. 단독명의 1세대1주택(12억원 공제, 고령자·장기보유 최대 80% 공제)과 비교해 유리한 쪽을 고르면 됩니다. 각자 지분을 넣어 두 번 계산해 보세요.</p></details>
+  <details><summary>공시가격은 어디서 보나요?</summary><p><a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 공동주택가격(아파트·빌라)이나 개별단독주택가격을 확인하세요.</p></details>
+  <details><summary>계산 결과가 고지서와 다른 이유는?</summary><p>주택 수 판정(상속·지방 저가주택·합산배제 임대주택), 감면, 지자체 조례 세율, 지역자원시설세(건물분) 등이 빠져 있으면 차이가 납니다.</p></details>
+</section>
+
+<section class="prose" id="basis-sec">
+  <h2>계산 근거</h2>
+  <div id="basis"></div>
+  <p class="fine">2026년 10월 15일 국가법령정보센터 현행 조문으로 확인했습니다. 부동산계산기.com 보유세 계산기와 6개 사례(1주택 8·20·30억, 2주택, 3주택, 법인)를 원 단위로 대조했습니다.</p>
+</section>
+</main>
+
+<footer class="foot">
+  <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 실제 부과세액은 주택 수 판정, 감면, 지방자치단체 조례 등에 따라 달라질 수 있으며 세무 자문이 아닙니다.</p>
+  <p><a href="./">상업용 계산기</a> · <a href="../">← Ella's Side Ledger</a></p>
+</footer>
+
+<div class="mbar" aria-hidden="true"><span>연간 예상</span><b id="mbar-total">0원</b><a href="#summary" tabindex="-1">결과 보기</a></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="js/config.js"></script>
+<script src="js/house-engine.js"></script>
+<script src="js/house-app.js"></script>
+</body>
+</html>

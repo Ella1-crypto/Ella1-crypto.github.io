@@ -93,13 +93,15 @@
 
   /**
    * 종부세 한 과세유형(별도/종합).
-   * 공제할 재산세액(시행령 §5의3) = 부과 재산세 × [누진(종부세 과표 × 70%)] ÷ [누진(재산세 과표 합계)]
-   * — 상한·지자체 분할이 없으면 누진(종부세 과표 × 70%)과 같다(보유세_검토용 엑셀 131행과 동일).
+   * 공제할 재산세액(시행령 §5의3) = 부과 재산세 × (종부세 과표 × 70% × 표준세율) ÷ (토지를 합산해 표준세율로 계산한 재산세)
+   * 분모는 전국 토지 과세표준을 합산해 누진 표준세율을 적용한 값("합산하여", 2024.2.29 개정 문구).
+   * 표준세율은 공제액을 넘는 최상위 구간의 세율 — 별도합산 0.4%, 종합합산 0.5% (국세청 과세표준계산명세서 서식).
+   * 2026-10-15 수정: 이전 판은 분자를 누진(종부세 과표 × 70%)로 계산해 공제가 작았다(종부세 과다).
    */
-  function cmtPart({ value, deduction, brackets, propBrackets, propTax, propBase, prevTotal }) {
+  function cmtPart({ value, deduction, brackets, propBrackets, propTopRate, propTax, propBase, prevTotal }) {
     const base = Math.max(0, value - deduction) * PARAMS.cmtFmv;
     const computed = progressive(base, brackets);
-    const propOnCmt = progressive(base * PARAMS.propFmv, propBrackets);
+    const propOnCmt = base * PARAMS.propFmv * propTopRate;
     const propStd = progressive(propBase, propBrackets);
     const creditRatio = base > 0 && propStd > 0 ? Math.min(1, propOnCmt / propStd) : 0;
     const credit = Math.min(computed, propTax * creditRatio);
@@ -138,11 +140,11 @@
     values.total = values.sep + values.jong + values.bunri;
 
     const sep = cmtPart({
-      value: values.sep, deduction: PARAMS.cmtSepDeduction, brackets: BRACKETS.cmtSep, propBrackets: BRACKETS.propSep,
+      value: values.sep, deduction: PARAMS.cmtSepDeduction, brackets: BRACKETS.cmtSep, propBrackets: BRACKETS.propSep, propTopRate: 0.004,
       propTax: sepTax, propBase: total('sepBase'), prevTotal: p0.cmtSep,
     });
     const jong = cmtPart({
-      value: values.jong, deduction: PARAMS.cmtJongDeduction, brackets: BRACKETS.cmtJong, propBrackets: BRACKETS.propJong,
+      value: values.jong, deduction: PARAMS.cmtJongDeduction, brackets: BRACKETS.cmtJong, propBrackets: BRACKETS.propJong, propTopRate: 0.005,
       propTax: jongTax, propBase: total('jongBase'), prevTotal: p0.cmtJong,
     });
     const decided = sep.decided + jong.decided;
@@ -338,7 +340,7 @@
     { item: '종부세 과세표준', rule: '(별도합산 − 80억) 또는 (종합합산 − 5억) × 100%', law: '종부세법 제13조, 시행령 제2조의4' },
     { item: '종부세 별도합산', rule: '200억 이하 0.5% · 400억 이하 1억+0.6% · 초과 2.2억+0.7%', law: '종부세법 제14조④' },
     { item: '종부세 종합합산', rule: '15억 이하 1% · 45억 이하 1,500만+2% · 초과 7,500만+3%', law: '종부세법 제14조①' },
-    { item: '공제할 재산세액', rule: '부과 재산세 × 누진(종부세 과표 × 70%) ÷ 누진(재산세 과표 합계) — 상한 없으면 누진(종부세 과표 × 70%)', law: '종부세법 제14조③⑥, 시행령 제5조의3' },
+    { item: '공제할 재산세액', rule: '부과 재산세 × (종부세 과표 × 70% × 0.4%[종합합산 0.5%]) ÷ 누진 표준세율(전국 과세표준 합산)', law: '종부세법 제14조③⑥, 시행령 제5조의3' },
     { item: '농어촌특별세', rule: '종부세 결정세액 × 20%', law: '농어촌특별세법 제5조' },
     { item: '납기·분납', rule: '토지 재산세 9.16~9.30(250만 초과 시 3개월 내 분할) · 종부세 12.1~12.15(250만 초과 시 6개월 내 분납)', law: '지방세법 제115조·제118조, 종부세법 제16조·제20조' },
   ]);

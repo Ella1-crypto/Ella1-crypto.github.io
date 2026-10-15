@@ -61,12 +61,12 @@ test('재산세 등은 v0.1(엑셀 v1.1 대사) 결과와 일치 — 종부세 �
   }
 });
 
-test('공제할 재산세액 = 누진(종부세 과표 × 70%) — 보유세_검토용 131행과 동일(상한·지자체 분할 없음)', () => {
+test('공제할 재산세액 = 재산세 × (종부세 과표 × 70% × 0.4%) ÷ 표준세율 재산세 (국세청 서식)', () => {
   const r = HT.calcTaxpayer([P({ cls: 'sep', price: 1e7, area: 1000 })]); // 공시가격 100억
   near(r.cmt.sep.base, 2e9);
-  near(r.cmt.sep.propOnCmt, HT.progressive(2e9 * 0.7, HT.BRACKETS.propSep)); // 440만
-  near(r.cmt.sep.credit, 4.4e6);
-  near(r.cmt.sep.decided, 1e7 - 4.4e6);
+  near(r.cmt.sep.propOnCmt, 2e9 * 0.7 * 0.004); // 560만
+  near(r.cmt.sep.credit, 5.6e6);                // 재산세 2,680만 × 560만/2,680만
+  near(r.cmt.sep.decided, 1e7 - 5.6e6);
 });
 
 test('재산세는 시·군·구별로 합산 — 다른 지자체 토지는 누진 합산하지 않음', () => {
@@ -81,9 +81,9 @@ test('종합합산 재산세·종부세·재산세액 공제·농특세', () => 
   near(r.prop.jongTax, 3.25e6);
   near(r.cmt.jong.base, 5e8);
   near(r.cmt.jong.computed, 5e6);
-  near(r.cmt.jong.credit, 1.5e6);   // 누진(3.5억) = 25만 + 2.5억 × 0.5%
-  near(r.cmt.jong.decided, 3.5e6);
-  near(r.cmt.nong, 7e5);
+  near(r.cmt.jong.credit, 1.75e6);  // 5억 × 70% × 0.5%
+  near(r.cmt.jong.decided, 3.25e6);
+  near(r.cmt.nong, 6.5e5);
 });
 
 test('분리과세 세율 0.07% / 4%', () => {
@@ -104,7 +104,7 @@ test('세부담상한 — 재산세 150% / 종부세 (재산세+종부세) 150%'
   const sep100 = [P({ cls: 'sep', price: 1e7, area: 1000 })];
   const free = HT.calcTaxpayer(sep100);
   near(free.prop.sepTax, 2.68e7);
-  near(free.cmt.sep.beforeCap, 1e7 - 4.4e6);
+  near(free.cmt.sep.beforeCap, 1e7 - 5.6e6);
   const capped = HT.calcTaxpayer(sep100, { cmtSep: 2e7 });
   near(capped.cmt.sep.decided, 3.2e6); // 한도 3,000만 − 재산세 2,680만
 });

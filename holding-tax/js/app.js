@@ -8,6 +8,8 @@
   const cfg = window.HTM_CONFIG || {};
   const $ = sel => document.querySelector(sel);
   const SAVE_DELAY_MS = 400;
+  const HISTORY_KEY = 'htm.public.history.v1';
+  const MAX_HISTORY = 12;
 
   let state = S.initial();
   let activeId = null;
@@ -41,6 +43,7 @@
   function applyField(p, f, raw, i) {
     switch (f) {
       case 'area': return { ...p, area: parseNum(raw), areaSource: 'manual' };
+      case 'share': return { ...p, share: Math.max(0.01, Math.min(100, parseNum(raw) || 100)) };
       case 'price': return { ...p, price: parseNum(raw), priceYear: null }; // 사용자가 넣은 값은 연도 경고를 끈다
       case 'addr': return { ...p, addr: String(raw).slice(0, 80) };
       case 'zone': return withZone(p, raw);
@@ -50,7 +53,7 @@
     }
     if (f.startsWith('bld.')) {
       const k = f.slice(4);
-      const numeric = ['builtYear', 'floors', 'direct'];
+      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain'];
       const v = numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
     }
@@ -80,6 +83,10 @@
     $('#pcount').textContent = state.parcels.length ? `${state.parcels.length}필지` : '';
     document.querySelectorAll('[data-owner]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.owner === state.ownerType)));
     $('#growth').value = state.growth;
+    $('#mode').value = state.mode;
+    document.querySelectorAll('[data-prev]').forEach(el => {
+      if (document.activeElement !== el) el.value = state.prev[el.dataset.prev] > 0 ? Number(state.prev[el.dataset.prev]).toLocaleString('ko-KR') : '';
+    });
     ns.map.sync(state.parcels, activeId, select);
     restoreFocus(focus);
   }
@@ -192,7 +199,41 @@
       }
     },
     print: () => window.print(),
+    save: () => {
+      const r = C.compute(state);
+      const name = state.parcels.map(p => p.addr).filter(Boolean).slice(0, 2).join(', ') || `필지 ${state.parcels.length}개`;
+      const entry = { name: name.slice(0, 40), at: new Date().toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }), total: r.totals.total, state: { ...state, parcels: state.parcels.map(p => ({ ...p, geom: null })) } };
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify([entry, ...readHistory()].slice(0, MAX_HISTORY)));
+        toast('이 기기에 계산을 저장했습니다.');
+      } catch (_) { toast('이 브라우저에서는 저장할 수 없습니다.'); }
+    },
+    history: showHistory,
+    restore: d => {
+      const h = readHistory()[Number(d.i)];
+      if (!h) return;
+      activeId = null;
+      setState(S.clean(h.state));
+      toast(`"${h.name}" 계산을 불러왔습니다.`);
+    },
+    'history-clear': () => { try { localStorage.removeItem(HISTORY_KEY); } catch (_) { /* 무시 */ } showHistory(); },
   };
+
+  function readHistory() {
+    try {
+      const r = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      return Array.isArray(r) ? r.slice(0, MAX_HISTORY) : [];
+    } catch (_) { return []; }
+  }
+
+  function showHistory() {
+    const list = readHistory();
+    $('#history').hidden = false;
+    $('#history-list').innerHTML = list.length
+      ? list.map((h, i) => `<li><button type="button" data-act="restore" data-i="${i}"><b>${V.esc(h.name)}</b><span>${V.esc(h.at)} · ${V.won(h.total)}원</span></button></li>`).join('')
+      : '<li class="muted">저장한 계산이 없습니다. "계산 기록 저장"을 누르면 이 기기에 보관됩니다.</li>';
+    $('#history').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   function onClick(e) {
     const btn = e.target.closest('[data-act]');
@@ -259,12 +300,16 @@
     $('#parcels').addEventListener('change', onParcelsEvent);
     document.addEventListener('click', onClick);
     document.addEventListener('pointerdown', () => { pointerDown = true; }, true);
-    document.addEventListener('pointerup', () => {
+    const release = () => {
       pointerDown = false;
       if (pendingRender) { pendingRender = false; setTimeout(render, 0); } // click 처리 뒤
-    }, true);
+    };
+    document.addEventListener('pointerup', release, true);
+    document.addEventListener('pointercancel', release, true);
     $('#search').addEventListener('submit', onSearch);
     document.querySelectorAll('[data-owner]').forEach(b => b.addEventListener('click', () => setOwner(b.dataset.owner)));
+    $('#mode').addEventListener('change', e => setState({ ...state, mode: e.target.value === '2027reform' ? '2027reform' : '2026' }));
+    document.querySelectorAll('[data-prev]').forEach(el => el.addEventListener('change', () => setState({ ...state, prev: { ...state.prev, [el.dataset.prev]: parseNum(el.value) } })));
     $('#growth').addEventListener('change', e => setState({ ...state, growth: Math.min(30, parseNum(e.target.value)) }));
     $('#basis').innerHTML = V.basis();
     render();

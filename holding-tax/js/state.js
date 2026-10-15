@@ -53,6 +53,8 @@
       rate: pick(b.rate, RATES, 'general'),
       fire: [1, 2, 3].includes(Number(b.fire)) ? Number(b.fire) : 'auto',
       direct: num(b.direct),
+      footprint: num(b.footprint, 1e7),
+      prevMain: num(b.prevMain),
       rows: rows.length ? rows : newBuilding().rows,
     };
   }
@@ -70,6 +72,7 @@
       areaSource: ['polygon', 'register'].includes(o.areaSource) ? o.areaSource : 'manual',
       zoneName: str(o.zoneName, 30),
       price: num(o.price, 1e9),
+      share: Math.max(0.01, Math.min(100, num(o.share, 100) || 100)),
       priceYear: Math.round(num(o.priceYear, 2100)) || null,
       cls: pick(o.cls, CLASSES, 'sep'),
       clsAuto: o.clsAuto !== false,
@@ -86,6 +89,8 @@
     return {
       ownerType: s.ownerType === '개인' ? '개인' : '법인',
       growth: Math.min(30, num(s.growth, 30)),
+      mode: s.mode === '2027reform' ? '2027reform' : '2026',
+      prev: { propSep: num(s.prev && s.prev.propSep), propJong: num(s.prev && s.prev.propJong), cmtSep: num(s.prev && s.prev.cmtSep), cmtJong: num(s.prev && s.prev.cmtJong) },
       parcels: (Array.isArray(s.parcels) ? s.parcels : []).slice(0, MAX_PARCELS).map(cleanParcel),
     };
   }

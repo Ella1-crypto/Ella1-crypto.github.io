@@ -63,3 +63,44 @@ test('용도 구분을 나눠도 소방분 누진세율은 건물 전체 가액�
   const fireStd = Math.floor(49100 + (base - 64e6) * 0.0012);
   assert.equal(split.tax.fire, fireStd * 2);
 });
+
+test('지분 50%: 토지·건물 세액이 절반(건물은 전체 세액을 계산한 뒤 지분 안분)', () => {
+  const mk = share => ({ ownerType: '법인', growth: 0, parcels: [{ id: 's', price: 3e6, area: 500, cls: 'sep', sgg: '1', urban: true, share,
+    bld: { mode: 'direct', direct: 2e9, rate: 'general', fire: 1 } }] });
+  const full = C.compute(mk(100));
+  const half = C.compute(mk(50));
+  assert.ok(Math.abs(half.totals.building - full.totals.building / 2) <= 3);
+  assert.ok(half.totals.landProp < full.totals.landProp);
+  assert.equal(half.buildings[0].tax.total, full.buildings[0].tax.total); // 건물 전체 세액은 같다
+});
+
+test('별도합산 부속토지 2% 기준: 건물 가액이 토지 가액의 2% 미만이면 바닥면적 외 토지는 종합합산', () => {
+  const parcel = { id: 'o', price: 1e7, area: 1000, cls: 'sep', sgg: '1', urban: true,
+    bld: { mode: 'direct', direct: 1.5e8, rate: 'general', fire: 1, footprint: 200 } }; // 1.5억 / 100억 = 1.5%
+  const r = C.compute({ ownerType: '법인', growth: 0, parcels: [parcel] });
+  assert.equal(r.warnings.length, 1);
+  assert.equal(r.warnings[0].split, true);
+  assert.equal(r.land.values.sep, 1e7 * 200);
+  assert.equal(r.land.values.jong, 1e7 * 800);
+  const noFoot = C.compute({ ownerType: '법인', growth: 0, parcels: [{ ...parcel, bld: { ...parcel.bld, footprint: 0 } }] });
+  assert.equal(noFoot.warnings[0].split, false); // 건축면적이 없으면 경고만
+  assert.equal(noFoot.land.values.jong, 0);
+});
+
+test('2027 개편안 미리보기: 기준이 5%로 올라 3% 건물도 종합합산 대상이 된다', () => {
+  const parcel = { id: 'r', price: 1e7, area: 1000, cls: 'sep', sgg: '1', urban: true,
+    bld: { mode: 'direct', direct: 3e8, rate: 'general', fire: 1, footprint: 300 } }; // 3%
+  assert.equal(C.compute({ ownerType: '법인', growth: 0, parcels: [parcel] }).warnings.length, 0);
+  const reform = C.compute({ ownerType: '법인', growth: 0, mode: '2027reform', parcels: [parcel] });
+  assert.equal(reform.year, 2027);
+  assert.equal(reform.warnings.length, 1);
+  assert.ok(reform.land.values.jong > 0);
+});
+
+test('작년 세액을 넣으면 토지분 재산세 세부담상한(150%)이 적용된다', () => {
+  const st = prev => ({ ownerType: '법인', growth: 0, prev, parcels: [{ id: 'c', price: 1e6, area: 1000, cls: 'sep', sgg: '1', urban: false }] });
+  const free = C.compute(st({}));
+  const capped = C.compute(st({ propSep: 1e6 }));
+  assert.equal(capped.land.prop.sepTax, 1.5e6);
+  assert.ok(capped.totals.landProp < free.totals.landProp);
+});

@@ -75,6 +75,10 @@
         ${field('건축물 시가표준액', numInput(p.id, 'bld.direct', b.direct, '원'), '위택스·고지서의 건축물 시가표준액')}
         ${field('재산세율', `<select data-pid="${esc(p.id)}" data-f="bld.rate">${Object.entries(BT.RATES).map(([k, r]) => opt(k, r.label, b.rate)).join('')}</select>`)}
       </div>`}
+      <div class="grid4">
+        ${field('건축면적(바닥면적)', numInput(p.id, 'bld.footprint', b.footprint, '㎡'), '별도합산 2%·5% 기준 판정용 (건축물대장)')}
+        ${field('작년 건축물 재산세', numInput(p.id, 'bld.prevMain', b.prevMain, '원'), '선택 — 고지서 본세(내 몫), 150% 상한')}
+      </div>
       ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
       ${summary}
     </div>`;
@@ -104,6 +108,7 @@
         <button type="button" class="icon-btn" data-act="del" data-pid="${esc(p.id)}" aria-label="${i + 1}번 필지 삭제">×</button>
       </header>
       <div class="grid4">
+        ${field('내 지분', numInput(p.id, 'share', p.share, '%'), '공유·공동명의면 내 지분')}
         ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? '지적도 경계로 추정 — 토지대장 면적으로 고치세요' : p.areaSource === 'register' ? '토지대장 면적(자동)' : '')}
         ${field('개별공시지가', numInput(p.id, 'price', p.price, '원/㎡'), priceHint(p))}
         ${field('용도지역', `<select data-pid="${esc(p.id)}" data-f="zone">${ZONES.map(z => opt(z, z || '선택 안 함', p.zone)).join('')}</select>`, p.zoneName ? esc(p.zoneName) : '')}
@@ -127,6 +132,13 @@
     return state.parcels.map((p, i) => parcelCard(p, i, byId.get(p.id), p.id === activeId)).join('');
   }
 
+  function warnLines(result) {
+    return (result.warnings || []).map(w => `<p class="warn-line">건물 가액이 토지 가액의 ${(w.ratio * 100).toFixed(1)}%로 ${Math.round(w.ratioMin * 100)}% 미만 — ${w.split
+      ? `바닥면적 ${w.footprint.toLocaleString('ko-KR')}㎡ 외 토지를 종합합산으로 계산했습니다.`
+      : '바닥면적 외 토지가 종합합산될 수 있습니다. 건물 칸에 건축면적을 넣으세요.'}</p>`).join('')
+      + (result.mode === '2027reform' ? '<p class="warn-line">정부 개편안(국회 심의 중)의 별도합산 5% 기준을 적용한 미리보기입니다.</p>' : '');
+  }
+
   function summary(result, cfg) {
     const t = result.totals;
     const parts = [
@@ -143,15 +155,18 @@
       cfg.PRO_URL ? `<a class="btn" href="${esc(cfg.PRO_URL)}" target="_blank" rel="noopener" data-track="pro">${esc(cfg.PRO_LABEL)}</a>` : '',
     ].join('');
     return `
-      <p class="eyebrow">2026년 예상 보유세 (연간)</p>
+      <p class="eyebrow">${result.mode === '2027reform' ? '2027년 개편안 미리보기' : '2026년'} 예상 보유세 (연간)</p>
       <p class="total" aria-live="polite"><span>${won(total)}</span>원</p>
       <p class="total-sub">${total > 0 ? `약 ${eok(total)} · 월 평균 ${eok(total / 12)}` : '필지를 담으면 바로 계산됩니다'}</p>
       ${bar}
       <ul class="parts">${parts.map(x => `<li><i class="dot seg-${x.k}"></i><span>${x.label}<small>${x.when} 납부</small></span><b>${won(x.v)}</b></li>`).join('')}</ul>
+      ${warnLines(result)}
       ${result.missing ? `<p class="warn-line">공시지가·면적이 비어 있는 필지 ${result.missing}건은 합계에서 빠졌습니다.</p>` : ''}
       <div class="actions">
         <button type="button" class="btn" data-act="share">링크 복사</button>
         <button type="button" class="btn" data-act="print">PDF 보고서</button>
+        <button type="button" class="btn" data-act="save">계산 기록 저장</button>
+        <button type="button" class="btn" data-act="history">기록 보기</button>
       </div>
       ${ctas ? `<div class="cta">${ctas}</div>` : ''}
       <p class="fine">간편 추정치입니다. 감면·조례 세율·전년도 세부담상한·과세구분 판정에 따라 실제 고지액과 다를 수 있습니다.</p>`;
