@@ -77,6 +77,7 @@
       cls: pick(o.cls, CLASSES, 'sep'),
       clsAuto: o.clsAuto !== false,
       urban: o.urban !== false,
+      hasHouse: o.hasHouse === true,
       sgg: str(o.sgg, 10),
       sggName: str(o.sggName, 40),
       geom: cleanGeom(o.geom),

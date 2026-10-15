@@ -49,6 +49,7 @@
       case 'zone': return withZone(p, raw);
       case 'cls': return { ...p, cls: raw, clsAuto: false };
       case 'urban': return { ...p, urban: Boolean(raw) };
+      case 'hasHouse': return { ...p, hasHouse: Boolean(raw) };
       default: break;
     }
     if (f.startsWith('bld.')) {

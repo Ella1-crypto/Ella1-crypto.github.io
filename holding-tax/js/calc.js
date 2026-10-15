@@ -21,7 +21,8 @@
   });
   const modeOf = m => MODES[m] || MODES['2026'];
   const sum = arr => arr.reduce((s, n) => s + n, 0);
-  const isLandReady = p => p.price > 0 && p.area > 0;
+  const isHouse = p => p.hasHouse === true; // 주택 부속토지·주택은 주택분(주택 계산기)으로 과세 — 여기서는 뺀다
+  const isLandReady = p => !isHouse(p) && p.price > 0 && p.area > 0;
   const shareOf = p => (Number(p.share) > 0 ? Math.min(100, Number(p.share)) : 100);
 
   /** 건물 1건의 동·구 행 → 시가표준액 행 */
@@ -49,7 +50,7 @@
 
   /** 건물 1건의 보유세 — tax는 건물 전체(100%), own은 내 지분 귀속분 */
   function buildingFor(parcel, baseYear = BV.BASE_YEAR) {
-    if (!parcel.bld) return null;
+    if (!parcel.bld || isHouse(parcel)) return null;
     const rows = valueRows(parcel, baseYear);
     const rowError = rows.find(r => r.est && r.est.error);
     if (!rows.length) return { parcelId: parcel.id, rows, error: '건물 정보를 입력하면 건물분을 계산합니다.' };
@@ -149,8 +150,9 @@
       { month: 9, due: '9.16 ~ 9.30', item: '토지분 재산세·도시지역분·지방교육세', amount: lt.prop },
       { month: 12, due: '12.1 ~ 12.15', item: '종합부동산세·농어촌특별세', amount: lt.cmt },
     ].filter(s => s.amount > 0);
-    const missing = parcels.filter(p => !isLandReady(p)).length;
-    return { mode: state.mode || '2026', year, land, buildings, totals, schedule, warnings: split.warnings, projection: projection(state, split.rows), missing, parcelCount: parcels.length };
+    const housing = parcels.filter(isHouse).length;
+    const missing = parcels.filter(p => !isHouse(p) && !isLandReady(p)).length;
+    return { mode: state.mode || '2026', year, land, buildings, totals, schedule, warnings: split.warnings, projection: projection(state, split.rows), missing, housing, parcelCount: parcels.length };
   }
 
   return Object.freeze({ MODES, compute, buildingFor, landSplit, landTotals, PROJECTION_YEARS });

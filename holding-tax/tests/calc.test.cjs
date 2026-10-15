@@ -104,3 +104,15 @@ test('작년 세액을 넣으면 토지분 재산세 세부담상한(150%)이 �
   assert.equal(capped.land.prop.sepTax, 1.5e6);
   assert.ok(capped.totals.landProp < free.totals.landProp);
 });
+
+test('주택이 있는 필지는 토지분·건물분에서 빼고 개수만 알린다', () => {
+  const land = { id: 'l', price: 5e6, area: 300, cls: 'sep', sgg: '1', urban: true };
+  const house = { id: 'h', price: 8e6, area: 200, cls: 'sep', sgg: '1', urban: true, hasHouse: true,
+    bld: { mode: 'direct', direct: 1e9, rate: 'general', fire: 1 } };
+  const only = C.compute({ ownerType: '개인', growth: 0, parcels: [land] });
+  const both = C.compute({ ownerType: '개인', growth: 0, parcels: [land, house] });
+  assert.equal(both.totals.total, only.totals.total);
+  assert.equal(both.housing, 1);
+  assert.equal(both.missing, 0);
+  assert.equal(both.buildings.length, 0);
+});

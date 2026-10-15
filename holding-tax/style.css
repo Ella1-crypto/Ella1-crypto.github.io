@@ -294,3 +294,8 @@ tr:last-child > * { border-bottom: 0; }
 .cmp .pcol small { text-align: center; line-height: 1.3; }
 @media (max-width: 1000px) { .top nav.kind { display: flex; margin-left: auto; } .top nav.kind a { font-size: 12.5px; padding: 5px 10px; } .stamp { display: none; } }
 @media print { .opts, .history, .top nav.kind, .more { display: none !important; } }
+
+.house-chk { font-weight: 600; }
+.house-note { margin: 10px 0 0; padding: 10px 14px; border-radius: var(--r-md); background: var(--sky); color: var(--ink-2); font-size: 13.5px; line-height: 1.6; }
+.pcard.is-house .grid4 { opacity: .55; }
+.summary .warn-line a { color: inherit; font-weight: 700; }

@@ -96,9 +96,9 @@
     const cls = HT.estimateClass(p.jimok, p.zone, window.HTMApp ? window.HTMApp.ownerType() : '법인');
     const urb = HT.estimateUrban(p.zone);
     const title = p.addr ? `${p.addr}` : `직접 입력한 필지 ${i + 1}`;
-    const missing = !(p.price > 0 && p.area > 0);
+    const missing = !p.hasHouse && !(p.price > 0 && p.area > 0);
     return `
-    <article class="pcard${active ? ' is-active' : ''}${missing ? ' is-missing' : ''}" data-card="${esc(p.id)}">
+    <article class="pcard${active ? ' is-active' : ''}${missing ? ' is-missing' : ''}${p.hasHouse ? ' is-house' : ''}" data-card="${esc(p.id)}">
       <header>
         <span class="pno">${i + 1}</span>
         <div class="ptitle">
@@ -115,8 +115,10 @@
         ${field('과세구분', `<select data-pid="${esc(p.id)}" data-f="cls">${HT.CLASS_KEYS.map(k => opt(k, HT.CLASS[k].label, p.cls)).join('')}</select>`,
           esc(p.clsAuto ? `추정: ${cls.note}` : CLS_HELP[p.cls]))}
       </div>
+      <label class="chk house-chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="hasHouse"${p.hasHouse ? ' checked' : ''}> 이 땅에 주택(아파트·빌라·단독주택 등)이 있습니다</label>
+      ${p.hasHouse ? `<p class="house-note">주택과 그 부속토지는 토지분이 아니라 <b>주택분</b>(공시가격 60%·주택 세율)으로 과세돼 이 계산에서 뺐습니다. 주택 공시가격으로 <a href="house.html">주택 계산기</a>에서 계산하세요. 상가주택처럼 주택과 상가가 섞여 있으면 주택 부분만 주택 계산기로, 나머지는 이 체크를 풀고 면적을 나눠 넣으세요.</p>` : `
       <label class="chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="urban"${p.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 <span class="muted">— ${esc(urb.note)}</span></label>
-      ${buildingPanel(p, bres)}
+      ${buildingPanel(p, bres)}`}
     </article>`;
   }
 
@@ -161,6 +163,7 @@
       ${bar}
       <ul class="parts">${parts.map(x => `<li><i class="dot seg-${x.k}"></i><span>${x.label}<small>${x.when} 납부</small></span><b>${won(x.v)}</b></li>`).join('')}</ul>
       ${warnLines(result)}
+      ${result.housing ? `<p class="warn-line">주택이 있는 필지 ${result.housing}건은 주택분이라 합계에서 뺐습니다 — <a href="house.html">주택 계산기</a></p>` : ''}
       ${result.missing ? `<p class="warn-line">공시지가·면적이 비어 있는 필지 ${result.missing}건은 합계에서 빠졌습니다.</p>` : ''}
       <div class="actions">
         <button type="button" class="btn" data-act="share">링크 복사</button>
