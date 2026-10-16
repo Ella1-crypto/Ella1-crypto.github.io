@@ -81,7 +81,10 @@
         ${field('작년 건축물 재산세', numInput(p.id, 'bld.prevMain', b.prevMain, '원'), '선택 — 고지서 본세(내 몫), 150% 상한')}
         ${field('작년 소방분', numInput(p.id, 'bld.prevFire', b.prevFire, '원'), '선택 — 지역자원시설세(내 몫), 150% 상한')}
       </div>
-      ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
+      <div class="grid4">
+        ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
+        ${field('중과 대상 부분', numInput(p.id, 'bld.fireShare', b.fireShare, '%'), '일부만 중과 용도면 그 과세표준 비율 (시행규칙 §75)')}
+      </div>
       ${b.rate === 'overcrowd' ? `<div class="grid4">${field('중과 최초 과세연도', `<select data-pid="${esc(p.id)}" data-f="bld.overcrowdFrom">${opt(0, '모름 — 모든 연도 중과', b.overcrowdFrom)}${[2022, 2023, 2024, 2025, 2026, 2027].map(y => opt(y, `${y}년 (${y + 4}년까지 중과)`, b.overcrowdFrom)).join('')}</select>`, '신설·증설 후 첫 6월 1일이 속한 해')}</div>
       <p class="warn-line">과밀억제권역 공장 중과는 최초 과세기준일부터 5년간만 적용됩니다(지방세법 제111조②). ${b.overcrowdFrom ? `CF·전망은 ${b.overcrowdFrom + 5}년부터 0.25%로 계산합니다.` : '최초 과세연도를 고르면 CF·전망이 6년째부터 0.25%로 바뀝니다.'}</p>` : ''}
       ${summary}

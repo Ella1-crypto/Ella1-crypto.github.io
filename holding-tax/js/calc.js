@@ -48,6 +48,12 @@
     return BT.suggestFire({ purpose, floorsAbove: Number(b.floors) || 0, totalArea });
   }
 
+  /** 소방분 중과 대상 부분 비율 0~1 (구분 사용 건축물, 시행규칙 §75③) — 비어 있으면 건물 전체 */
+  function fireShareOf(parcel) {
+    const v = Number(parcel.bld.fireShare);
+    return parcel.bld.fireShare === '' || parcel.bld.fireShare == null || !Number.isFinite(v) ? 1 : Math.min(100, Math.max(0, v)) / 100;
+  }
+
   /** 건물 1건의 보유세 — tax는 건물 전체(100%), own은 내 지분 귀속분 */
   const OVERCROWD_YEARS = 5;
 
@@ -67,7 +73,7 @@
     const prevFire = Number(parcel.bld.prevFire) || 0;
     // 용도 구분은 가액 산정용일 뿐 한 동이므로, 소방분 누진·재산세 끝수는 동 전체 가액에 한 번 적용한다
     const tax = BT.calc({
-      units: [{ name: '건물', use: '', amount: sum(rows.map(r => r.value)), rate, fire: fire.fire }],
+      units: [{ name: '건물', use: '', amount: sum(rows.map(r => r.value)), rate, fire: fire.fire, fireShare: fireShareOf(parcel) }],
       bldInput: 'value',
       bldUrban: parcel.urban === false ? 'off' : 'on',
       bldPrevMain: prevMain > 0 ? prevMain / k : null,

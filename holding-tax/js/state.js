@@ -53,6 +53,7 @@
       rate: pick(b.rate, RATES(), 'general'),
       overcrowdFrom: Math.round(num(b.overcrowdFrom, 2100)) || 0, // 과밀억제권역 중과 최초 과세연도
       fire: [1, 2, 3].includes(Number(b.fire)) ? Number(b.fire) : 'auto',
+      fireShare: b.fireShare === '' || b.fireShare == null ? 100 : Math.min(100, num(b.fireShare, 100)), // 중과 대상 부분 % (시행규칙 §75)
       direct: num(b.direct),
       footprint: num(b.footprint, 1e7),
       prevMain: num(b.prevMain),

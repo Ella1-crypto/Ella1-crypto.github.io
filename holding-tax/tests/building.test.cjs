@@ -86,3 +86,28 @@ test('소방분 배수 제안: 층수·창고 연면적', () => {
   assert.match(wh.note, /×3/);
   assert.equal(B.suggestFire({ purpose: '아파트', floorsAbove: 20 }).fire, 1);
 });
+
+test('겸용 1구 건축물: 전체 과세표준으로 누진 후 중과 부분만 가산 (시행규칙 §75③ X+Y+Z)', () => {
+  // X = 49,100 + (160,000,000 − 64,000,000) × 0.12% = 164,300
+  const x = B.fireProgressive(1.6e8);
+  assert.equal(x, 164300);
+  const r2 = B.calc({ bldInput: 'base', units: [{ amount: 1.6e8, rate: 'general', fire: 2, fireShare: 0.9 }] }, { urban: true });
+  assert.equal(r2.fire, 312170);                  // X + X×90%
+  const r3 = B.calc({ bldInput: 'base', units: [{ amount: 1.6e8, rate: 'general', fire: 3, fireShare: 0.5 }] }, { urban: true });
+  assert.equal(r3.fire, 328600);                  // X + 2X×50%
+  // 비율을 안 주면 건물 전체 중과 (기존 동작)
+  const all = B.calc({ bldInput: 'base', units: [{ amount: 1.6e8, rate: 'general', fire: 2 }] }, { urban: true });
+  assert.equal(all.fire, 328600);
+  // 용도별로 행을 나눠 각자 누진하면 덜 나온다 → 같은 1구는 한 행 + 비율로 넣어야 한다
+  const split = B.calc({ bldInput: 'base', units: [
+    { amount: 1.44e8, rate: 'general', fire: 2 }, { amount: 1.6e7, rate: 'general', fire: 1 },
+  ] }, { urban: true });
+  assert.ok(split.fire < r2.fire);
+});
+
+test('중과 대상 비율은 0~1로 정리, 범위 밖·빈 값은 100%', () => {
+  assert.equal(B.clean({ units: [{ amount: 1, fire: 2, fireShare: 1.5 }] }).units[0].fireShare, 1);
+  assert.equal(B.clean({ units: [{ amount: 1, fire: 2, fireShare: -1 }] }).units[0].fireShare, 1);
+  assert.equal(B.clean({ units: [{ amount: 1, fire: 2 }] }).units[0].fireShare, 1);
+  assert.equal(B.clean({ units: [{ amount: 1, fire: 2, fireShare: 0 }] }).units[0].fireShare, 0);
+});

@@ -6,7 +6,8 @@
  *  · 도시지역분 과세표준 × 0.14% (§112①2) — 지방교육세 과세표준에서 제외 (§151①6)
  *  · 지방교육세 = 재산세액 × 20% (§151①6)
  *  · 세 부담 상한: 본세·도시지역분 각각 직전 연도의 150% (§122, 주택 제외). 소방분도 150% (§147② — §122 본문 준용)
- *  · 소방분 누진세율, 화재위험 ×2 · 대형 화재위험 ×3 (§146③, 시행령 §138), 겸용은 구·동별 안분 (시행규칙 §75)
+ *  · 소방분 누진세율, 화재위험 ×2 · 대형 화재위험 ×3 (§146③, 시행령 §138)
+ *  · 구분 사용: 1구(구가 여럿이면 1동) 전체 과세표준으로 누진한 X에 중과 부분 비율만큼 X·2X 가산 (시행규칙 §75③, 2026-10-16 확인)
  *  · 납기 7.16~7.31 (§115①2)
  * 주택은 토지·건물을 합친 주택분으로 과세되므로 여기서 계산하지 않는다.
  */
@@ -15,7 +16,7 @@
   else root.BuildingTax = factory();
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
-  const VERSION = '2026-10-15';
+  const VERSION = '2026-10-16';
   const FMV = 0.7;
   const URBAN_RATE = 0.0014;
   const EDU_RATE = 0.2;
@@ -43,6 +44,8 @@
   const floor10 = n => Math.floor(sfloor(n) / 10) * 10;
   const num = v => (v === '' || v == null || !Number.isFinite(Number(v)) || Number(v) < 0 ? null : Math.min(1e15, Number(v)));
   const text = (v, n) => (typeof v === 'string' ? v.slice(0, n) : '');
+  // 중과 대상 부분 비율 0~1 — 비었거나 범위 밖이면 건물 전체(1)
+  const share = v => (v === '' || v == null || !Number.isFinite(Number(v)) || Number(v) < 0 || Number(v) > 1 ? 1 : Number(v));
 
   /** 소방분 표준세액(배수 적용 전) */
   function fireProgressive(base) {
@@ -64,6 +67,7 @@
       amount: num(u && u.amount),
       rate: u && RATES[u.rate] ? u.rate : 'general',
       fire: [1, 2, 3].includes(Number(u && u.fire)) ? Number(u.fire) : 1,
+      fireShare: share(u && u.fireShare),
     }));
     return {
       units,
@@ -98,7 +102,10 @@
     const main = sfloor(base * RATES[u.rate].rate);
     const urbanTax = urban ? sfloor(base * URBAN_RATE) : 0;
     const fireStd = sfloor(fireProgressive(base));
-    return { ...u, base, main, urban: urbanTax, fireStd, fire: fireStd * u.fire };
+    // 시행규칙 §75③: X(1구 전체 누진) + 중과 부분 비율만큼 X(×2) 또는 2X(×3) 가산
+    const fireShare = share(u.fireShare);
+    const fire = sfloor(fireStd * (1 + (u.fire - 1) * fireShare));
+    return { ...u, base, main, urban: urbanTax, fireStd, fireShare, fire };
   }
 
   /** 직전 연도 150% 상한 — 본세·도시지역분 각각 (§122) */
