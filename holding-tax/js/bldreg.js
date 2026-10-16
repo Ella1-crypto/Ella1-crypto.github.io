@@ -61,9 +61,10 @@
     return pick(STRUCTURES, String(name || ''), null);
   }
 
-  /** 용도 이름 → valuation 용도 키. 주택·오피스텔은 이 계산기에서 다루지 않으므로 그대로 표시만 한다 */
+  /** 용도 이름 → valuation 용도 키. 주택·오피스텔은 이 계산기에서 다루지 않으므로 그대로 표시만 한다.
+   * 대장의 기타용도(detail)가 더 구체적이다 — 예: 주용도 '기타일반업무시설', 기타용도 '주차장' → 주차장 */
   function useKey(purpose, detail) {
-    return pick(USES, `${purpose || ''} ${detail || ''}`, null);
+    return pick(USES, String(detail || ''), null) || pick(USES, String(purpose || ''), null);
   }
 
   /** 층별개요 → 용도별 면적 행 (지하·지상 합산, 면적 큰 순, 최대 MAX_ROWS) */

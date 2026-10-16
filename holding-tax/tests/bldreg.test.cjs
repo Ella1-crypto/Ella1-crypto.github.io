@@ -26,6 +26,10 @@ test('용도 이름: 근린생활·업무·창고·주택·오피스텔', () => 
   assert.equal(R.useKey('창고시설', '냉동창고'), 'coldStorage');
   assert.equal(R.useKey('공동주택', '아파트'), 'house');
   assert.equal(R.useKey('', ''), null);
+  // 실제 대장 층별개요 형태: 주용도는 세부 명칭, 기타용도에 분류·실제 쓰임
+  assert.equal(R.useKey('기타일반업무시설', '주차장'), 'parking');
+  assert.equal(R.useKey('소매점', '제1종근린생활시설(소매점)'), 'retail');
+  assert.equal(R.useKey('기타일반업무시설', '기계실, 전기실, 휀룸'), 'office');
 });
 
 test('층별개요를 용도별 면적으로 묶고 큰 순으로 정렬한다', () => {
