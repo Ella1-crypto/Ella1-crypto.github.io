@@ -126,7 +126,7 @@
       footprint: b.archArea > 0 ? b.archArea : 0,
       totalArea: b.totalArea > 0 ? b.totalArea : 0,
       purpose: [...new Set([b.purpose, b.purposeDetail].filter(Boolean))].join(' · '), // 주용도=기타용도면 한 번만
-      collective: /집합/.test(b.regKind || ''),
+      collective: /집합/.test(b.regKind || '') || b.regKind === '표제부', // 집합건축물 표제부의 종류명은 '표제부'(일반은 '일반건축물')
       rawDong: typeof b.dong === 'string' ? b.dong : undefined, // 호 목록 조회용
       raw: { structure: b.structure, builtYear: b.builtYear, floorsAbove: b.floorsAbove },
       fire: 'auto',

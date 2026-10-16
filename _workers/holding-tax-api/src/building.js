@@ -66,7 +66,7 @@ export function normalize(titles, floors) {
       name: text(t.dongNm) || text(t.bldNm) || '건물',
       dong: text(t.dongNm),                       // 호 목록(/units) 조회용 원래 동 이름(비어 있을 수 있음)
       main: !/부속/.test(text(t.mainAtchGbCdNm)),
-      regKind: text(t.regstrKindCdNm),          // 일반건축물 / 집합건축물(표제부)
+      regKind: text(t.regstrGbCdNm) || text(t.regstrKindCdNm), // 대장구분 '일반'/'집합' (종류명은 '표제부'·'일반건축물')
       structure: text(t.strctCdNm) || text(t.etcStrct),
       purpose: text(t.mainPurpsCdNm),
       purposeDetail: text(t.etcPurps),

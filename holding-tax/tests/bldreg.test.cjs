@@ -192,3 +192,10 @@ test('표제부 동 → 호 조회용 원래 동 이름과 원자료(구조·연
   assert.deepEqual(d.raw, { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 });
   assert.equal(R.toUnit({ ho: '301', floor: 3, purpose: '사무소', excl: 10 }, d.raw).floors, 8);
 });
+
+test('집합건축물 판별: 대장구분 집합, 또는 종류명 표제부(예전 응답)', () => {
+  assert.equal(R.toDong({ regKind: '집합', purpose: '업무시설', totalArea: 1 }).collective, true);
+  assert.equal(R.toDong({ regKind: '표제부', purpose: '업무시설', totalArea: 1 }).collective, true);
+  assert.equal(R.toDong({ regKind: '일반건축물', purpose: '업무시설', totalArea: 1 }).collective, false);
+  assert.equal(R.toDong({ regKind: '일반', purpose: '업무시설', totalArea: 1 }).collective, false);
+});
