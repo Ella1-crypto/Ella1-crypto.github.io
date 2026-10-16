@@ -75,7 +75,7 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(http.calls, [])
 
     def test_late_post_fails_without_publishing(self):
-        self.write([item("a", "2026-10-19T10:00+09:00")])
+        self.write([item("a", "2026-10-19T07:00+09:00")])
         http = FakeHttp()
         self.run_once(http)
         self.assertEqual(self.statuses(), {"a": "실패"})
@@ -86,6 +86,11 @@ class RunOnceTest(unittest.TestCase):
         http = FakeHttp()
         self.assertIn("주소", self.run_once(http))
         self.assertEqual(http.calls, [])
+
+    def test_post_three_hours_late_still_publishes(self):
+        self.write([item("a", "2026-10-19T09:30+09:00")])
+        self.run_once(FakeHttp())
+        self.assertEqual(self.statuses(), {"a": "올림"})
 
     def test_only_one_post_per_run(self):
         self.write([item("a", "2026-10-19T12:05+09:00"), item("b", "2026-10-19T12:10+09:00")])

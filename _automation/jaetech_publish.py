@@ -26,7 +26,7 @@ from typing import Callable
 KST = timezone(timedelta(hours=9))
 BASE = "https://graph.threads.net/v1.0"
 QUEUE_PATH = Path(__file__).resolve().parent / "jaetech-queue.json"
-LATE_LIMIT = timedelta(minutes=90)
+LATE_LIMIT = timedelta(hours=4)  # GitHub 예약 실행은 몇 시간씩 밀릴 수 있다(2026-10-16 실측 약 3시간)
 TEXT_LIMIT = 500
 EXPECTED_USERNAME = "heeya.dailyfit"
 PUBLISH_RETRY_WAIT_SECONDS = 15
@@ -128,7 +128,7 @@ def pick_due(items: list[dict], now: datetime) -> tuple[dict | None, list[dict]]
         if at > now:
             continue
         if now - at > LATE_LIMIT:
-            updated = with_status(updated, item["id"], status=FAILED, note="예약 시각보다 90분 넘게 늦어 올리지 않음")
+            updated = with_status(updated, item["id"], status=FAILED, note="예약 시각보다 4시간 넘게 늦어 올리지 않음")
             continue
         if due is None:
             due = item
