@@ -459,7 +459,7 @@
       scrollToCard(h.id);
     },
     del: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.filter(h => h.id !== d.hid) }); },
-    unlocate: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.map(h => (h.id === d.hid ? { ...h, ...HP.EMPTY_LOC } : h)) }); },
+    unlocate: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.map(h => (h.id === d.hid ? { ...h, ...HP.EMPTY_LOC, name: '' } : h)) }); },
     share: async () => {
       // 정확한 좌표·PNU는 링크에 넣지 않는다(주소 표시는 남김)
       const shared = { ...state, houses: state.houses.map(h => ({ ...h, lat: null, lng: null, pnu: '' })) };
