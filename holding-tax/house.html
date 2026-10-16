@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -81,6 +82,19 @@
         </div>
       </details>
     </div>
+
+    <section class="locate" aria-labelledby="locate-h">
+      <div class="list-head"><h2 id="locate-h">지도에서 집 찾기 <span class="muted">선택</span></h2></div>
+      <form id="search" class="search" role="search">
+        <label class="sr" for="q">주소 검색</label>
+        <input id="q" type="search" placeholder="주소 검색 (예: 반포동 1-1, 올림픽로 435)" autocomplete="off">
+        <button type="submit" class="btn primary">찾기</button>
+        <ul id="results" class="results" aria-live="polite"></ul>
+      </form>
+      <p class="fine">검색하거나 지도에서 집이 있는 땅을 누르면 고른 주택에 주소·시·군·구·대지 면적·개별공시지가가 채워집니다. <b>주택 공시가격</b>은 지도에서 받을 수 없어 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 확인해 직접 넣어 주세요.</p>
+      <p id="vw-off" class="notice" hidden>지도 조회 준비 중입니다. 아래 주택 목록에 공시가격을 직접 넣어 계산할 수 있습니다.</p>
+      <div id="map" class="map map-sm" role="application" aria-label="주택 위치 지도 — 땅을 누르면 고른 주택에 주소가 채워집니다"></div>
+    </section>
 
     <div class="list-head">
       <h2>주택 목록</h2>
@@ -186,12 +200,17 @@
 <div class="mbar" aria-hidden="true"><span>연간 예상</span><b id="mbar-total">0원</b><a href="#summary" tabindex="-1">결과 보기</a></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js/config.js"></script>
 <script src="js/relief.js"></script>
 <script src="js/house-engine.js"></script>
 <script src="js/cf.js"></script>
 <script src="js/cf-view.js"></script>
 <script src="js/xlsx-export.js"></script>
+<script src="js/regulated.js"></script>
+<script src="js/vworld.js"></script>
+<script src="js/map.js"></script>
+<script src="js/house-parcel.js"></script>
 <script src="js/house-app.js"></script>
 </body>
 </html>

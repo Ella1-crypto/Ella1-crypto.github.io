@@ -383,3 +383,14 @@ tr:last-child > * { border-bottom: 0; }
   .cols > *, .tool-main, .tool-side { min-width: 0; }
 }
 .opts { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- 주택 화면 지도 ---------- */
+.locate { margin: 22px 0 0; }
+.locate .list-head { margin-top: 0; }
+.locate .search { margin: 0 0 6px; min-width: 0; }
+.locate > .fine { margin: 0 0 10px; }
+.map.map-sm { height: clamp(260px, 40vh, 400px); }
+.pcard .loc { margin: -4px 0 14px; }
+.pcard .loc .law-line { margin-top: 0; overflow-wrap: anywhere; }
+.pcard .loc .link-btn { font-size: 12.5px; margin-left: 4px; }
+@media print { .locate { display: none !important; } }

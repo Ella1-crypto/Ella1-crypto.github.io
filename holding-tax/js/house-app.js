@@ -3,11 +3,15 @@
   'use strict';
   const H = window.HouseTax;
   const RL = window.HTMRelief;
+  const HP = window.HouseParcel;
+  const ns = window.HTM || {};
   const $ = s => document.querySelector(s);
   const STORE = 'htm.house.v1';
   const HISTORY = 'htm.house.history.v1';
   const MAX_HOUSES = 20;
   const MAX_HISTORY = 12;
+  const MAX_OUTLINES = 5; // 새로고침 뒤 다시 그릴 필지 경계 수(중계 서버 호출 수)
+  const EXAMPLE = Object.freeze({ name: '예시 아파트', price: 1.5e9 });
 
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const won = n => Math.round(Number(n) || 0).toLocaleString('ko-KR');
@@ -26,7 +30,7 @@
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
   /* ---------- 상태 ---------- */
-  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0, bldValue: 0, prevFire: 0, kind: 'none', rentalSize: 'none', region: 'metro', construction: false });
+  const newHouse = () => ({ id: uid(), name: '', price: 0, share: 100, urban: true, prevPrice: 0, bldValue: 0, prevFire: 0, kind: 'none', rentalSize: 'none', region: 'metro', construction: false, ...HP.EMPTY_LOC });
   function clean(raw) {
     const s = raw && typeof raw === 'object' ? raw : {};
     const houses = (Array.isArray(s.houses) ? s.houses : []).filter(h => h && typeof h === 'object').slice(0, MAX_HOUSES).map(h => ({
@@ -42,6 +46,7 @@
       rentalSize: own(RL.RENTAL_SIZE, h.rentalSize) ? h.rentalSize : 'none',
       region: h.region === 'local' ? 'local' : 'metro',
       construction: h.construction === true,
+      ...HP.cleanLoc(h),
     }));
     return {
       mode: own(H.MODES, s.mode) ? s.mode : '2026',
@@ -63,6 +68,10 @@
   let state = clean({});
   let pointerDown = false;
   let pendingRender = false;
+  let activeId = null; // 지도에서 누른 필지를 채울 주택
+  let mapReady = false;
+  const geoms = new Map(); // 주택 id → 필지 경계(저장·공유하지 않음)
+  const drawn = new Map(); // 주택 id → 지도에 그린 경계
 
   function load() {
     try { const r = localStorage.getItem(STORE); return r ? clean(JSON.parse(r)) : null; } catch (_) { return null; }
@@ -91,6 +100,7 @@
             <p>${row ? `과세표준 ${eok(row.base)} (공시가격 × ${Math.round(row.fmv * 100)}%)${row.capped ? ' · 과세표준상한 적용' : ''}${row.special ? ' · 1주택 특례세율' : ''}` : '공시가격을 입력하세요'}</p></div>
           ${state.houses.length > 1 ? `<button type="button" class="icon-btn" data-act="del" data-hid="${esc(h.id)}" aria-label="${i + 1}번 주택 삭제">×</button>` : ''}
         </header>
+        ${locLine(h)}
         <div class="grid4">
           <label class="fld"><span class="fld-l">주택 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="price" value="${esc(fmt(h.price))}"><em>원</em></span><span class="fld-h">${h.price > 0 ? eok(h.price) : '<a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>'}</span></label>
           <label class="fld"><span class="fld-l">내 지분</span><span class="num"><input type="text" inputmode="decimal" data-hid="${esc(h.id)}" data-f="share" value="${esc(h.share)}"><em>%</em></span><span class="fld-h">공동명의면 내 지분</span></label>
@@ -107,6 +117,29 @@
         <label class="chk"><input type="checkbox" data-hid="${esc(h.id)}" data-f="urban"${h.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 — 대부분의 시 지역 주택은 해당</label>
       </article>`;
     }).join('');
+  }
+
+  const today = () => {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  };
+
+  /** 지도에서 받은 위치 — 계산에는 쓰지 않는 참고 정보 */
+  function locLine(h) {
+    if (!h.addr) return '';
+    const R = window.Regulated;
+    const reg = R ? R.check(h.sggName || h.addr, today()) : null;
+    const regCls = reg && (reg.status === 'yes' ? 'reg-yes' : reg.status === 'no' ? 'reg-no' : 'reg-unk');
+    const regTag = reg && (reg.status === 'yes' ? '조정대상지역' : reg.status === 'no' ? '비조정' : '확인 필요');
+    const facts = [h.sggName, h.region === 'local' ? '수도권 밖' : '수도권', h.zone].filter(Boolean).map(esc).join(' · ');
+    const land = h.landArea > 0 && h.landPrice > 0
+      ? `<p class="need-line">대지 ${h.landArea.toLocaleString('ko-KR')}㎡${h.landAreaApprox ? '(경계 도형 근사)' : ''} × 개별공시지가 ㎡당 ${won(h.landPrice)}원${h.landYear ? `(${h.landYear}년)` : ''} = 토지 ${eok(HP.landValue(h))} — 참고값입니다. 아파트·빌라는 단지 전체 땅이라 내 대지권과 다르고, 세금은 주택 공시가격으로만 계산합니다.</p>`
+      : '';
+    return `<div class="loc">
+          <p class="law-line"><b>${esc(h.addr)}</b>${facts ? ` · ${facts}` : ''} <button type="button" class="link-btn" data-act="unlocate" data-hid="${esc(h.id)}">위치 지우기</button></p>
+          ${land}
+          ${reg ? `<p class="reg-line ${regCls}"><b>${regTag}</b> — ${esc(reg.note)}. 주택 재산세·종부세 세율과는 무관합니다(취득세·양도세 판단용).</p>` : ''}
+        </div>`;
   }
 
   function houseRelief(h, row) {
@@ -250,10 +283,115 @@
     ['age', 'holdYears', 'houseCount'].forEach(k => { if (document.activeElement !== $(`#${k}`)) $(`#${k}`).value = state[k] || ''; });
     if (document.activeElement !== $('#prevTotal')) $('#prevTotal').value = fmt(state.prevTotal);
     $('#resident').checked = state.resident;
+    markActive();
     if (focus && focus.f) {
       const el = document.querySelector(`[data-hid="${CSS.escape(focus.hid || '')}"][data-f="${CSS.escape(focus.f)}"]`);
       if (el) el.focus({ preventScroll: true });
     }
+  }
+
+  /* ---------- 지도 ---------- */
+  function markActive() {
+    if (!state.houses.some(h => h.id === activeId)) activeId = state.houses[0].id;
+    document.querySelectorAll('[data-card]').forEach(el => el.classList.toggle('is-active', state.houses.length > 1 && el.dataset.card === activeId));
+    syncMap();
+  }
+
+  function syncMap() {
+    if (!mapReady) return;
+    const list = state.houses.map(h => ({ id: h.id, jibun: h.name || '주택', geom: geoms.get(h.id) || null }));
+    // 바뀐 게 없으면 다시 그리지 않는다(입력할 때마다 지번 라벨을 다시 붙이지 않도록)
+    const sig = JSON.stringify([activeId, list.map(p => [p.id, p.jibun, Boolean(p.geom)])]);
+    if (sig === syncMap.sig && list.every(p => (drawn.get(p.id) || null) === p.geom)) return;
+    syncMap.sig = sig;
+    // map.sync는 이미 그린 경계를 다시 그리지 않으므로 위치가 바뀐 주택은 한 번 빼서 지운다
+    const stale = list.filter(p => drawn.has(p.id) && drawn.get(p.id) !== p.geom).map(p => p.id);
+    if (stale.length) ns.map.sync(list.filter(p => !stale.includes(p.id)), activeId, selectHouse);
+    ns.map.sync(list, activeId, selectHouse);
+    drawn.clear();
+    list.forEach(p => { if (p.geom) drawn.set(p.id, p.geom); });
+  }
+
+  function selectHouse(id) {
+    activeId = id;
+    markActive();
+    if (mapReady && geoms.has(id)) ns.map.focus({ id });
+    scrollToCard(id);
+  }
+
+  function scrollToCard(id) {
+    const el = document.querySelector(`[data-card="${CSS.escape(id)}"]`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  /** 누른 곳의 필지 → 고른 주택에 주소·시군구·대지 면적·공시지가 채우기(주택 공시가격은 사용자가 넣는다) */
+  async function locateAt(latlng) {
+    if (!ns.vworld || !ns.vworld.enabled()) { toast('지도 조회가 아직 준비되지 않았습니다. 공시가격을 직접 넣어 계산하세요.'); return; }
+    toast('필지를 조회하는 중…');
+    try {
+      const found = await ns.vworld.parcelAt(latlng.lat, latlng.lng);
+      if (!found) { toast('이 위치에서 필지를 찾지 못했습니다.'); return; }
+      const target = state.houses.find(h => h.id === activeId) || state.houses[0];
+      const dup = state.houses.find(h => h.id !== target.id && h.pnu && h.pnu === found.pnu);
+      if (dup) { selectHouse(dup.id); toast('이미 넣은 주택입니다.'); return; }
+      const next = HP.applyParcel(target, HP.fromParcel(found, latlng), EXAMPLE);
+      activeId = next.id;
+      if (found.geom) geoms.set(next.id, found.geom); else geoms.delete(next.id);
+      setState({ ...state, houses: state.houses.map(h => (h.id === next.id ? next : h)) });
+      const no = state.houses.findIndex(h => h.id === next.id) + 1;
+      toast(next.price > 0 ? `${no}번 주택 위치를 ${next.addr}(으)로 넣었습니다.` : `${no}번 주택 위치: ${next.addr} — 주택 공시가격을 입력하세요.`);
+      scrollToCard(next.id);
+    } catch (err) {
+      toast(err.message);
+    }
+  }
+
+  async function onSearch(e) {
+    e.preventDefault();
+    const q = $('#q').value.trim();
+    const box = $('#results');
+    if (!q) return;
+    if (!ns.vworld || !ns.vworld.enabled()) { toast('주소 검색이 아직 준비되지 않았습니다. 공시가격을 직접 넣어 계산하세요.'); return; }
+    box.innerHTML = '<li class="muted">검색 중…</li>';
+    try {
+      const items = await ns.vworld.search(q);
+      box.innerHTML = items.length
+        ? items.map((it, k) => `<li><button type="button" data-k="${k}">${esc(it.title)}<small>${esc(it.sub)}</small></button></li>`).join('')
+        : '<li class="muted">검색 결과가 없습니다. 지번이나 도로명 주소로 다시 검색해 보세요.</li>';
+      box.onclick = ev => {
+        const b = ev.target.closest('[data-k]');
+        if (!b) return;
+        const it = items[Number(b.dataset.k)];
+        box.innerHTML = '';
+        if (mapReady) ns.map.flyTo(it.lat, it.lng);
+        locateAt({ lat: it.lat, lng: it.lng });
+      };
+    } catch (err) {
+      box.innerHTML = `<li class="muted">${esc(err.message)}</li>`;
+    }
+  }
+
+  /** 새로고침·공유 링크로 연 주택의 필지 경계를 다시 받아 그린다(실패해도 입력값은 그대로) */
+  async function redrawOutlines() {
+    const located = state.houses.filter(h => h.pnu && h.lat !== null).slice(0, MAX_OUTLINES);
+    if (!located.length) return;
+    ns.map.flyTo(located[0].lat, located[0].lng, 17);
+    for (const h of located) {
+      try {
+        const p = await ns.vworld.parcelAt(h.lat, h.lng);
+        const live = state.houses.find(x => x.id === h.id); // 기다리는 동안 위치를 지우거나 바꿨을 수 있다
+        if (p && p.geom && live && live.pnu === h.pnu && p.pnu === h.pnu && !geoms.has(h.id)) { geoms.set(h.id, p.geom); syncMap(); }
+      } catch (_) { /* 경계만 못 그린다 */ }
+    }
+  }
+
+  function initMap() {
+    const on = Boolean(ns.vworld && ns.vworld.enabled());
+    $('#vw-off').hidden = on;
+    if (!(window.L && ns.map)) { $('#map').hidden = true; return; } // 지도 라이브러리를 못 받으면 검색만
+    ns.map.init($('#map'), { onClick: locateAt });
+    mapReady = true;
+    if (on) redrawOutlines();
   }
 
   const currentCF = () => window.HTMCF.house(input(), { years: state.cfYears, installments: state.cfInstall, growth: state.cfGrowth });
@@ -269,7 +407,7 @@
       [`${cf.years}년 CF 합계${cf.installments ? ' (분할납부 반영)' : ''}`, cf.total],
     ];
     const inputs = [['소유자', state.ownerType], ['1세대1주택', state.oneHouse ? '예' : '아니오'], ['나이·보유기간', `${state.age || '-'}세 · ${state.holdYears || '-'}년`], ['공시가격 연 상승률', `${state.cfGrowth}%`]]
-      .concat(state.houses.map((h, i) => [`주택 ${i + 1} ${h.name || ''}`.trim(), `공시가격 ${h.price.toLocaleString('ko-KR')}원 · 지분 ${h.share}%`]));
+      .concat(state.houses.map((h, i) => [`주택 ${i + 1} ${h.name || ''}`.trim(), `공시가격 ${h.price.toLocaleString('ko-KR')}원 · 지분 ${h.share}%${h.addr ? ` · ${h.addr}` : ''}`]));
     if (!cf.entries.length) { toast('계산된 세금이 없어 엑셀로 낼 내용이 없습니다.'); return; }
     const btn = document.querySelector('[data-act="xlsx"]');
     if (btn.disabled) return;
@@ -313,10 +451,19 @@
   }
 
   const actions = {
-    add: () => { if (state.houses.length >= MAX_HOUSES) return; setState({ ...state, houses: [...state.houses, newHouse()], oneHouse: false }); },
-    del: d => setState({ ...state, houses: state.houses.filter(h => h.id !== d.hid) }),
+    add: () => {
+      if (state.houses.length >= MAX_HOUSES) return;
+      const h = newHouse();
+      activeId = h.id;
+      setState({ ...state, houses: [...state.houses, h], oneHouse: false });
+      scrollToCard(h.id);
+    },
+    del: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.filter(h => h.id !== d.hid) }); },
+    unlocate: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.map(h => (h.id === d.hid ? { ...h, ...HP.EMPTY_LOC } : h)) }); },
     share: async () => {
-      const url = `${location.origin}${location.pathname}#s=${b64(JSON.stringify(state))}`;
+      // 정확한 좌표·PNU는 링크에 넣지 않는다(주소 표시는 남김)
+      const shared = { ...state, houses: state.houses.map(h => ({ ...h, lat: null, lng: null, pnu: '' })) };
+      const url = `${location.origin}${location.pathname}#s=${b64(JSON.stringify(shared))}`;
       try { await navigator.clipboard.writeText(url); toast('계산 결과 링크를 복사했습니다.'); } catch (_) { history.replaceState(null, '', url); toast('주소창의 링크를 복사해 공유하세요.'); }
     },
     print: () => window.print(),
@@ -360,14 +507,22 @@
       try { shared = clean(JSON.parse(unb64(m[1]))); } catch (_) { shared = null; }
       history.replaceState(null, '', location.pathname);
     }
-    state = shared || load() || clean({ houses: [{ ...newHouse(), name: '예시 아파트', price: 1.5e9 }] });
+    state = shared || load() || clean({ houses: [{ ...newHouse(), ...EXAMPLE }] });
     if (m) toast(shared ? '공유된 계산을 불러왔습니다.' : '공유 링크를 읽지 못했습니다.');
     $('#houses').addEventListener('input', onHouseInput);
     $('#houses').addEventListener('change', onHouseInput);
     document.addEventListener('click', e => {
       const b = e.target.closest('[data-act]');
-      if (b && actions[b.dataset.act]) actions[b.dataset.act](b.dataset);
+      if (b && actions[b.dataset.act]) { actions[b.dataset.act](b.dataset); return; }
+      const card = e.target.closest('[data-card]');
+      if (card && card.dataset.card !== activeId && !e.target.closest('input,select,button,label,summary')) selectHouse(card.dataset.card);
     });
+    // 주택 칸을 고치기 시작하면 그 주택이 지도 대상 — 다시 그리지 않고 표시만 바꾼다(입력 중 포커스 유지)
+    $('#houses').addEventListener('focusin', e => {
+      const card = e.target.closest('[data-card]');
+      if (card && card.dataset.card !== activeId) { activeId = card.dataset.card; markActive(); }
+    });
+    $('#search').addEventListener('submit', onSearch);
     document.addEventListener('pointerdown', () => { pointerDown = true; }, true);
     const release = () => { pointerDown = false; if (pendingRender) { pendingRender = false; setTimeout(() => render(true), 0); } };
     document.addEventListener('pointerup', release, true);
@@ -383,6 +538,7 @@
     $('#resident').addEventListener('change', e => setState({ ...state, resident: e.target.checked }));
     ['age', 'holdYears', 'houseCount', 'prevTotal'].forEach(k => $(`#${k}`).addEventListener('change', e => setState({ ...state, [k]: num(e.target.value, 1e12) })));
     $('#basis').innerHTML = `<div class="tw"><table class="basis"><thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead><tbody>${H.BASIS.map(b => `<tr><th>${esc(b.item)}</th><td>${esc(b.rule)}</td><td>${esc(b.law)}</td></tr>`).join('')}</tbody></table></div>`;
+    initMap();
     render(false);
   }
 
