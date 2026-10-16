@@ -17,6 +17,7 @@
   let pointerDown = false;
   let pendingRender = false;
   const register = new Map(); // 필지 id → 건축물대장 목록 {status, list, picked, error} — 화면에서만 쓰고 저장하지 않는다
+  let regSeq = 0; // 늦게 온 응답이 닫았거나 다시 연 목록을 덮지 않게 요청마다 번호를 붙인다
 
   window.HTMApp = Object.freeze({ ownerType: () => state.ownerType });
 
@@ -206,18 +207,65 @@
   async function loadRegister(pid) {
     const p = state.parcels.find(x => x.id === pid);
     if (!p || !p.pnu) return;
-    register.set(pid, { status: 'loading' });
+    const seq = ++regSeq;
+    register.set(pid, { status: 'loading', seq });
     render();
+    const current = () => register.get(pid) && register.get(pid).seq === seq;
     try {
       const list = (await ns.vworld.buildingsAt(p.pnu)).map(window.HTMBldReg.toDong);
+      if (!current()) return;
       // 처음에는 계산할 수 있는 주건축물을 골라 둔다(없으면 계산 가능한 첫 동)
       const usable = list.map((x, i) => (x.skip ? -1 : i)).filter(i => i >= 0);
       const mains = usable.filter(i => list[i].main);
-      register.set(pid, { status: 'ok', list, picked: new Set(mains.length ? mains : usable.slice(0, 1)) });
+      register.set(pid, { status: 'ok', seq, list, picked: new Set(mains.length ? mains : usable.slice(0, 1)) });
     } catch (err) {
-      register.set(pid, { status: 'error', error: err.message || '건축물대장을 불러오지 못했습니다.' });
+      if (!current()) return;
+      register.set(pid, { status: 'error', seq, error: err.message || '건축물대장을 불러오지 못했습니다.' });
     }
     render();
+  }
+
+  /** 집합건축물 동의 호 목록 */
+  async function loadUnits(pid, i) {
+    const p = state.parcels.find(x => x.id === pid);
+    const r = register.get(pid);
+    if (!p || !r || r.status !== 'ok' || !r.list[i]) return;
+    if (r.units && r.units.i === i && r.units.status === 'loading') return;
+    const title = r.list[i];
+    // 예전 응답(동 원래 이름 없음): 동이 하나면 이름 없이, 여러 개면 표시 이름으로 조회
+    const dong = title.rawDong !== undefined ? title.rawDong : r.list.length === 1 || title.name === '건물' ? '' : title.name;
+    const seq = ++regSeq;
+    register.set(pid, { ...r, units: { i, seq, status: 'loading' } });
+    render();
+    const live = () => {
+      const cur = register.get(pid);
+      return cur && cur.units && cur.units.seq === seq ? cur : null;
+    };
+    try {
+      const res = await ns.vworld.unitsAt(p.pnu, dong);
+      const cur = live();
+      if (!cur) return;
+      const list = (res.units || []).map(u => window.HTMBldReg.toUnit(u, title.raw));
+      register.set(pid, { ...cur, units: { i, seq, status: 'ok', list, picked: new Set(), truncated: Boolean(res.truncated) } });
+    } catch (err) {
+      const cur = live();
+      if (!cur) return;
+      register.set(pid, { ...cur, units: { i, seq, status: 'error', error: err.message || '호 목록을 불러오지 못했습니다.' } });
+    }
+    render();
+  }
+
+  /** 고른 호를 각각 한 '동' 입력으로 — 호마다 따로 계산 */
+  function applyUnits(pid) {
+    const r = register.get(pid);
+    const u = r && r.units;
+    if (!u || u.status !== 'ok') return;
+    const picked = u.list.filter((x, j) => u.picked.has(j) && !x.skip).slice(0, S.MAX_DONGS);
+    if (!picked.length) return;
+    const dongs = picked.map(x => ({ name: x.name, structure: x.structure, builtYear: x.builtYear || 2010, floors: x.floors, fire: 'auto', rows: x.rows }));
+    register.delete(pid);
+    setState(mapParcel(pid, p => ({ ...p, bld: { ...(p.bld || S.newBuilding()), mode: 'estimate', dongs } })));
+    toast(`${picked.length}개 호를 넣었습니다. 토지 '내 지분'은 대지권 비율로 고치세요.`);
   }
 
   /** 고른 동을 건물 입력에 넣는다 — 한 동이면 기존 입력칸에, 여러 동이면 동 목록으로 */
@@ -331,6 +379,20 @@
     },
     'reg-apply': d => applyRegister(d.pid),
     'reg-close': d => { register.delete(d.pid); render(); },
+    'unit-load': d => loadUnits(d.pid, Number(d.i)),
+    'unit-pick': d => {
+      const r = register.get(d.pid);
+      if (!r || !r.units || r.units.status !== 'ok') return;
+      const picked = new Set(r.units.picked);
+      const j = Number(d.i);
+      if (picked.has(j)) picked.delete(j);
+      else if (picked.size < S.MAX_DONGS) picked.add(j);
+      else toast(`호는 한 번에 ${S.MAX_DONGS}개까지 넣을 수 있습니다.`);
+      register.set(d.pid, { ...r, units: { ...r.units, picked } });
+      render();
+    },
+    'unit-apply': d => applyUnits(d.pid),
+    'unit-close': d => { const r = register.get(d.pid); if (r) { register.set(d.pid, { ...r, units: null }); render(); } },
     'dong-del': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, dongs: p.bld.dongs.filter((_, j) => j !== Number(d.i)) } }))),
     'dong-clear': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, dongs: [] } }))),
     'bld-mode': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, mode: d.v } }))),

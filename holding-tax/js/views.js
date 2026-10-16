@@ -57,12 +57,30 @@
     const R = window.HTMBldReg;
     const items = r.list.map((d, i) => `
       <li><label class="chk${d.skip ? ' is-off' : ''}"><input type="checkbox" data-act="reg-pick" data-pid="${esc(p.id)}" data-i="${i}"${r.picked.has(i) ? ' checked' : ''}${d.skip ? ' disabled' : ''}>
-        <span><b>${esc(d.name)}</b> <span class="muted">${esc(R.label(d))}</span>${d.skip ? ` <em class="stale">${esc(d.skip)}</em>` : ''}${d.collective ? ' <em class="muted">집합건축물 — 내 호실만 소유하면 면적을 고치세요</em>' : ''}</span></label></li>`).join('');
+        <span><b>${esc(d.name)}</b> <span class="muted">${esc(R.label(d))}</span>${d.skip ? ` <em class="stale">${esc(d.skip)}</em>` : ''}</span></label>${d.collective ? ` <button type="button" class="link-btn" data-act="unit-load" data-pid="${esc(p.id)}" data-i="${i}">호별로 고르기</button>` : ''}
+        ${r.units && r.units.i === i ? unitBox(p, r.units) : ''}</li>`).join('');
     return `<div class="reg">
       <p class="reg-t">건축물대장 — 계산할 동을 고르세요 (여러 동 선택 가능)</p>
       <ul class="reg-list">${items}</ul>
       <div class="reg-act"><button type="button" class="ghost sm" data-act="reg-apply" data-pid="${esc(p.id)}"${r.picked.size ? '' : ' disabled'}>선택한 ${r.picked.size}개 동 넣기</button>${close}</div>
       <p class="fld-h">구조·사용승인연도·지상층수·층별 용도 면적·건축면적을 채웁니다. 가감산율(1층 상가 등)은 직접 고치세요.</p>
+    </div>`;
+  }
+
+  /** 집합건축물 호 목록 — 고른 호마다 따로 계산(소방분은 구별 누진, 시행규칙 §75③) */
+  function unitBox(p, u) {
+    const close = `<button type="button" class="link-btn" data-act="unit-close" data-pid="${esc(p.id)}">호 선택 닫기</button>`;
+    if (u.status === 'loading') return `<div class="units"><p class="muted">호 목록을 불러오는 중…</p></div>`;
+    if (u.status === 'error') return `<div class="units"><p class="warn-line">${esc(u.error)}</p>${close}</div>`;
+    if (!u.list.length) return `<div class="units"><p class="muted">이 동의 전유부(호) 정보가 없습니다.</p>${close}</div>`;
+    const max = window.HTM.state.MAX_DONGS;
+    const items = u.list.map((x, j) => `<li><label class="chk${x.skip ? ' is-off' : ''}"><input type="checkbox" data-act="unit-pick" data-pid="${esc(p.id)}" data-i="${j}"${u.picked.has(j) ? ' checked' : ''}${x.skip ? ' disabled' : ''}>
+      <span><b>${esc(x.name)}</b> <span class="muted">${esc(x.floorLabel)} · ${esc(x.purpose)} · 전유 ${fmt(x.excl)}㎡ + 공용 ${fmt(x.common)}㎡</span>${x.skip ? ` <em class="stale">${esc(x.skip)}</em>` : ''}</span></label></li>`).join('');
+    return `<div class="units">
+      <p class="reg-t">내가 가진 호를 고르세요 (최대 ${max}개)${u.truncated ? ' — 호가 많아 앞부분만 불러왔습니다' : ''}</p>
+      <ul class="reg-list unit-list">${items}</ul>
+      <div class="reg-act"><button type="button" class="ghost sm" data-act="unit-apply" data-pid="${esc(p.id)}"${u.picked.size ? '' : ' disabled'}>선택한 ${u.picked.size}개 호 넣기</button>${close}</div>
+      <p class="fld-h">면적은 전유 + 공용(분양면적)으로 계산합니다. 토지는 대지권만큼만 내 몫이니 위 '내 지분'을 대지권 비율로 고치세요.</p>
     </div>`;
   }
 

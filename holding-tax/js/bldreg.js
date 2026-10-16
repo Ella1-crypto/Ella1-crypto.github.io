@@ -127,10 +127,40 @@
       totalArea: b.totalArea > 0 ? b.totalArea : 0,
       purpose: [...new Set([b.purpose, b.purposeDetail].filter(Boolean))].join(' · '), // 주용도=기타용도면 한 번만
       collective: /집합/.test(b.regKind || ''),
+      rawDong: typeof b.dong === 'string' ? b.dong : undefined, // 호 목록 조회용
+      raw: { structure: b.structure, builtYear: b.builtYear, floorsAbove: b.floorsAbove },
       fire: 'auto',
       rows,
       skip,
       notes,
+    };
+  }
+
+  /**
+   * 집합건축물 호 1개 → 계산기 동 입력 1개. 소방분은 구(호)별로 누진(시행규칙 §75③)하고,
+   * 화재위험 배수는 1동 기준(층수)이라 표제부의 지상층수를 쓴다. 면적 = 전유 + 공용.
+   */
+  function toUnit(u, title) {
+    const use = useKey(u.purpose, u.detail);
+    let skip = null;
+    if (use === 'house') skip = '주택';
+    else if (use === 'officetel') skip = '오피스텔 — 시가표준액 직접 입력';
+    const k = use || 'office';
+    const shop = SHOP_USES.includes(k) && !u.under && Number(u.floor) === 1;
+    const area = Math.round(((Number(u.excl) || 0) + (Number(u.common) || 0)) * 100) / 100;
+    const t = title || {};
+    return {
+      name: `${u.dong ? `${u.dong} ` : ''}${u.ho}${/호$/.test(u.ho) ? '' : '호'}`.slice(0, 40),
+      structure: structureKey(t.structure) || 'rc',
+      builtYear: t.builtYear > 0 ? t.builtYear : 0,
+      floors: Math.max(0, Number(t.floorsAbove) || 0),
+      fire: 'auto',
+      rows: [{ use: k, area, adjust: shop ? groundShopAdjust(t.floorsAbove) : 1, ...(shop ? { memo: '1층 상가' } : {}) }],
+      floorLabel: `${u.under ? '지하' : ''}${u.floor || '?'}층`,
+      purpose: [...new Set([u.purpose, u.detail].filter(Boolean))].join(' · '),
+      excl: Number(u.excl) || 0,
+      common: Number(u.common) || 0,
+      skip,
     };
   }
 
@@ -142,5 +172,5 @@
     return [d.main ? '주건축물' : '부속건축물', d.purpose, fl, area, year].filter(Boolean).join(' · ');
   }
 
-  return Object.freeze({ structureKey, useKey, rowsOf, toDong, label, groundShopAdjust, MAX_ROWS });
+  return Object.freeze({ structureKey, useKey, rowsOf, toDong, toUnit, label, groundShopAdjust, MAX_ROWS });
 }));

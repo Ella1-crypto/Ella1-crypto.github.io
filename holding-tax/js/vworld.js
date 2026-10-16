@@ -190,8 +190,14 @@
     return (await viaApi('/building', { pnu })).buildings || [];
   }
 
+  /** 집합건축물 호별 전유·공용면적 — 동 이름을 주면 그 동만 */
+  async function unitsAt(pnu, dong) {
+    if (!apiBase()) throw new Error('건축물대장은 중계 서버가 설정돼야 불러올 수 있습니다.');
+    return viaApi('/units', dong ? { pnu, dong } : { pnu });
+  }
+
   ns.vworld = Object.freeze({
-    enabled, search, parcelAt, buildingsAt, splitJibun, polygonArea, sggName,
+    enabled, search, parcelAt, buildingsAt, unitsAt, splitJibun, polygonArea, sggName,
     registerEnabled: () => Boolean(apiBase()), tileKey: () => cfg().key,
   });
 })(window.HTM = window.HTM || {});

@@ -147,3 +147,48 @@ test('1층 상가는 따로 떼고 층수에 따라 가감산율(5층 미만 1.1
   assert.equal(tall.rows[0].adjust, 1);
   assert.match(tall.notes.join(), /11층 이상/);
 });
+
+test('집합건축물 호: 전유+공용 면적, 1층 상가 가감산, 층수는 표제부(1동) 기준', () => {
+  const title = { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 };
+  const shop = R.toUnit({ dong: '', ho: '101', under: false, floor: 1, purpose: '소매점', detail: '제1종근린생활시설', excl: 40.5, common: 20.25 }, title);
+  assert.equal(shop.name, '101호');
+  assert.deepEqual(shop.rows, [{ use: 'retail', area: 60.75, adjust: 1.27, memo: '1층 상가' }]);
+  assert.equal(shop.floors, 8);
+  assert.equal(shop.structure, 'rc');
+  const office = R.toUnit({ dong: 'A동', ho: '702호', under: false, floor: 7, purpose: '사무소', detail: '업무시설', excl: 100, common: 30 }, title);
+  assert.equal(office.name, 'A동 702호');
+  assert.deepEqual(office.rows, [{ use: 'office', area: 130, adjust: 1 }]);
+  assert.match(R.toUnit({ ho: '1', purpose: '업무시설', detail: '오피스텔', excl: 30 }, title).skip, /오피스텔/);
+});
+
+test('여러 호: 호마다 소방분 누진을 따로 한다(시행규칙 §75③ 각 구별)', () => {
+  const title = { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 };
+  const units = [701, 702, 703].map(n => R.toUnit({ ho: String(n), floor: 7, purpose: '사무소', detail: '업무시설', excl: 300, common: 100 }, title));
+  const parcel = { id: 'u', price: 5000000, area: 1000, cls: 'sep', sgg: '11680', urban: true, bld: { mode: 'estimate', rate: 'general', rows: [], dongs: units } };
+  const r = C.buildingFor(parcel);
+  assert.equal(r.error, null);
+  assert.ok(r.dongs.every(d => d.fire.fire === 2)); // 4~10층 비주거
+  const each = r.dongs.reduce((t, d) => t + B.calc({ bldInput: 'value', units: [{ amount: d.value, rate: 'general', fire: 2 }] }, { urban: true }).fire, 0);
+  assert.equal(r.tax.fire, each);
+});
+
+test('중계 서버: 전유공용면적 → 호별 합계(공용 더하기, 복층은 낮은 지상층)', async () => {
+  const { unitsOf } = await relay();
+  const list = unitsOf([
+    { dongNm: '', hoNm: '101', exposPubuseGbCdNm: '전유', flrGbCdNm: '지상', flrNo: '1', mainPurpsCdNm: '소매점', etcPurps: '근린생활시설', area: '40.5' },
+    { dongNm: '', hoNm: '101', exposPubuseGbCdNm: '공용', flrGbCdNm: '지상', flrNo: '1', mainPurpsCdNm: '계단실', area: '12.1' },
+    { dongNm: '', hoNm: '101', exposPubuseGbCdNm: '공용', flrGbCdNm: '지하', flrNo: '1', mainPurpsCdNm: '주차장', area: '8.15' },
+    { dongNm: '', hoNm: '201', exposPubuseGbCdNm: '전유', flrGbCdNm: '지상', flrNo: '3', mainPurpsCdNm: '사무소', area: '50' },
+    { dongNm: '', hoNm: '201', exposPubuseGbCdNm: '전유', flrGbCdNm: '지상', flrNo: '2', mainPurpsCdNm: '사무소', area: '50' },
+    { dongNm: '', hoNm: '999', exposPubuseGbCdNm: '공용', area: '5' },
+  ]);
+  assert.deepEqual(list.map(u => [u.ho, u.floor, u.excl, u.common]), [['101', 1, 40.5, 20.25], ['201', 2, 100, 0]]);
+});
+
+test('표제부 동 → 호 조회용 원래 동 이름과 원자료(구조·연도·층수)를 남긴다', () => {
+  const d = R.toDong({ name: '본관', dong: '', regKind: '집합건축물', structure: '철근콘크리트구조', purpose: '업무시설', builtYear: 2015, floorsAbove: 8, totalArea: 900, floors: [] });
+  assert.equal(d.collective, true);
+  assert.equal(d.rawDong, '');
+  assert.deepEqual(d.raw, { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 });
+  assert.equal(R.toUnit({ ho: '301', floor: 3, purpose: '사무소', excl: 10 }, d.raw).floors, 8);
+});

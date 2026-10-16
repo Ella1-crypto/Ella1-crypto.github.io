@@ -119,7 +119,7 @@
     });
     const own = tax.error ? null : BT.forOwners(tax, [{ tp: 'me', share: shareOf(parcel) }])[0];
     const fires = dongs.map(d => `${d.name} ×${d.fire.fire}`).join(', ');
-    const fire = { fire: Math.max(...dongs.map(d => d.fire.fire)), note: `동별 — ${fires}` };
+    const fire = { fire: Math.max(...dongs.map(d => d.fire.fire)), note: `동·호별 — ${fires}` };
     const value = sum(dongs.map(d => d.value));
     return { parcelId: parcel.id, rows, dongs, fire, rate, tax, own, share: shareOf(parcel), value, error: tax.error || null };
   }
