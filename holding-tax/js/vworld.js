@@ -94,7 +94,11 @@
 
   /** 주소 검색 — 지번 우선, 없으면 도로명 */
   async function search(query) {
-    if (apiBase()) return (await viaApi('/search', { q: query })).items || [];
+    if (apiBase()) {
+      try { return (await viaApi('/search', { q: query })).items || []; } catch (err) {
+        if (!cfg().key) throw err; // 중계 서버가 안 되면 브라우저에서 직접 조회(공시지가는 전년도까지)
+      }
+    }
     const parcel = await searchCategory(query, 'parcel');
     return parcel.length ? parcel : searchCategory(query, 'road');
   }
@@ -161,10 +165,16 @@
   /** 좌표의 연속지적도 필지(공시지가 포함) */
   async function parcelAt(lat, lng) {
     if (apiBase()) {
-      const p = (await viaApi('/parcel', { lat: lat.toFixed(7), lng: lng.toFixed(7) })).parcel;
-      if (!p) return null;
-      const area = p.area > 0 ? p.area : Math.round(polygonArea(p.geom) * 10) / 10;
-      return { ...p, area, areaSource: p.area > 0 ? 'register' : 'polygon', zoneName: p.zone, zone: zoneGroup(p.zone) };
+      let p;
+      try { p = (await viaApi('/parcel', { lat: lat.toFixed(7), lng: lng.toFixed(7) })).parcel; } catch (err) {
+        if (!cfg().key) throw err;
+        p = undefined; // 중계 서버 장애 → 아래 직접 조회로
+      }
+      if (p === null) return null;
+      if (p) {
+        const area = p.area > 0 ? p.area : Math.round(polygonArea(p.geom) * 10) / 10;
+        return { ...p, area, areaSource: p.area > 0 ? 'register' : 'polygon', zoneName: p.zone, zone: zoneGroup(p.zone) };
+      }
     }
     const result = unwrap(await call('req/data', {
       service: 'data', request: 'GetFeature', data: 'LP_PA_CBND_BUBUN', crs: 'EPSG:4326',
