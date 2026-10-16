@@ -68,7 +68,7 @@
       rate: u && RATES[u.rate] ? u.rate : 'general',
       fire: [1, 2, 3].includes(Number(u && u.fire)) ? Number(u.fire) : 1,
       fireShare: share(u && u.fireShare),
-      fireBase: num(u && u.fireBase), // 고지서의 소방분 과세표준(재산세 과세표준과 다를 때) — 비우면 재산세 과세표준
+      fireBase: num(u && u.fireBase), // 고지서 소방분 과세표준 덮어쓰기 — 비우면 null(재산세 과세표준)
     }));
     return {
       units,
@@ -102,7 +102,9 @@
     const base = inputKind === 'base' ? sfloor(u.amount) : sfloor(u.amount * FMV);
     const main = sfloor(base * RATES[u.rate].rate);
     const urbanTax = urban ? sfloor(base * URBAN_RATE) : 0;
-    const fireBase = u.fireBase > 0 ? sfloor(u.fireBase) : base; // 비었거나 0이면 재산세 과세표준
+    // 지방세법 §146④: 소방분 과세표준 = §110 가액(비주택 건축물이면 재산세 과세표준과 같음) → 비었거나 0이면 그대로.
+    // 실제 고지서가 사유 표시 없이 다른 과세표준을 적는 경우가 있어, 입력하면 그 값으로 덮어쓴다(§75③ 비율은 그 위에 적용)
+    const fireBase = u.fireBase > 0 ? sfloor(u.fireBase) : base;
     const fireStd = sfloor(fireProgressive(fireBase));
     // 시행규칙 §75③: X(1구 전체 누진) + 중과 부분 비율만큼 X(×2) 또는 2X(×3) 가산
     const fireShare = share(u.fireShare);
