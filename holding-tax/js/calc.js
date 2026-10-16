@@ -73,7 +73,7 @@
     const prevFire = Number(parcel.bld.prevFire) || 0;
     // 용도 구분은 가액 산정용일 뿐 한 동이므로, 소방분 누진·재산세 끝수는 동 전체 가액에 한 번 적용한다
     const tax = BT.calc({
-      units: [{ name: '건물', use: '', amount: sum(rows.map(r => r.value)), rate, fire: fire.fire, fireShare: fireShareOf(parcel) }],
+      units: [{ name: '건물', use: '', amount: sum(rows.map(r => r.value)), rate, fire: fire.fire, fireShare: fireShareOf(parcel), fireBase: parcel.bld.fireBase }],
       bldInput: 'value',
       bldUrban: parcel.urban === false ? 'off' : 'on',
       bldPrevMain: prevMain > 0 ? prevMain / k : null,

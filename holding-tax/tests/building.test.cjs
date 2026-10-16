@@ -111,3 +111,27 @@ test('중과 대상 비율은 0~1로 정리, 범위 밖·빈 값은 100%', () =>
   assert.equal(B.clean({ units: [{ amount: 1, fire: 2 }] }).units[0].fireShare, 1);
   assert.equal(B.clean({ units: [{ amount: 1, fire: 2, fireShare: 0 }] }).units[0].fireShare, 0);
 });
+
+test('소방분 과세표준 별도 입력: 소방분만 그 과세표준으로, 중과 비율은 그 위에 적용', () => {
+  // 합성 수치 — 재산세 과세표준 20,000,000 / 고지서 소방분 과세표준 15,000,000
+  const unit = { amount: 2e7, rate: 'general' };
+  // 별도 과세표준: 2,400 + 3,500 + (15,000,000 − 13,000,000) × 0.06% = 7,100
+  const x1 = B.calc({ bldInput: 'base', units: [{ ...unit, fire: 1, fireBase: 1.5e7 }] }, { urban: true });
+  assert.equal(x1.rows[0].fireBase, 1.5e7);
+  assert.equal(x1.fire, 7100);
+  assert.equal(x1.main, 50000);                    // 재산세는 그대로 재산세 과세표준
+  assert.equal(x1.base, 2e7);
+  // ×2, 중과 부분 90%: 7,100 × (1 + 0.9) = 13,490
+  const x2 = B.calc({ bldInput: 'base', units: [{ ...unit, fire: 2, fireShare: 0.9, fireBase: 1.5e7 }] }, { urban: true });
+  assert.equal(x2.fire, 13490);
+  // 비우면 §146④ 기본값(재산세 과세표준): 2,400 + 3,500 + 7,000,000 × 0.06% = 10,100
+  for (const fireBase of [undefined, null, '', 0]) {
+    const r = B.calc({ bldInput: 'base', units: [{ ...unit, fire: 1, fireBase }] }, { urban: true });
+    assert.equal(r.fire, 10100);
+    assert.equal(r.rows[0].fireBase, 2e7);
+  }
+  // 시가표준액 입력이어도 소방분 과세표준은 이미 과세표준이므로 공정시장가액비율을 다시 곱하지 않는다
+  const v = B.calc({ bldInput: 'value', units: [{ amount: 3e7, rate: 'general', fire: 1, fireBase: 1.5e7 }] }, { urban: true });
+  assert.equal(v.fire, 7100);
+  assert.equal(B.clean({ units: [{ amount: 1, fireBase: '' }] }).units[0].fireBase, null);
+});

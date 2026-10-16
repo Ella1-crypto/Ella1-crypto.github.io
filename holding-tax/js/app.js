@@ -56,9 +56,11 @@
     }
     if (f.startsWith('bld.')) {
       const k = f.slice(4);
-      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain', 'prevFire', 'overcrowdFrom', 'fireShare'];
-      const blankShare = k === 'fireShare' && String(raw).trim() === ''; // 비우면 건물 전체 중과(100%)
-      const v = blankShare ? 100 : numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
+      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain', 'prevFire', 'overcrowdFrom', 'fireShare', 'fireBase'];
+      const blank = String(raw).trim() === '';
+      const blankShare = k === 'fireShare' && blank; // 비우면 건물 전체 중과(100%)
+      const blankFireBase = k === 'fireBase' && blank; // 비우면 재산세 과세표준 사용
+      const v = blankShare ? 100 : blankFireBase ? null : numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
     }
     if (f.startsWith('row.')) {

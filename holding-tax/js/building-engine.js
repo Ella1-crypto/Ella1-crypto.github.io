@@ -68,6 +68,7 @@
       rate: u && RATES[u.rate] ? u.rate : 'general',
       fire: [1, 2, 3].includes(Number(u && u.fire)) ? Number(u.fire) : 1,
       fireShare: share(u && u.fireShare),
+      fireBase: num(u && u.fireBase), // 고지서의 소방분 과세표준(재산세 과세표준과 다를 때) — 비우면 재산세 과세표준
     }));
     return {
       units,
@@ -101,11 +102,12 @@
     const base = inputKind === 'base' ? sfloor(u.amount) : sfloor(u.amount * FMV);
     const main = sfloor(base * RATES[u.rate].rate);
     const urbanTax = urban ? sfloor(base * URBAN_RATE) : 0;
-    const fireStd = sfloor(fireProgressive(base));
+    const fireBase = u.fireBase > 0 ? sfloor(u.fireBase) : base; // 비었거나 0이면 재산세 과세표준
+    const fireStd = sfloor(fireProgressive(fireBase));
     // 시행규칙 §75③: X(1구 전체 누진) + 중과 부분 비율만큼 X(×2) 또는 2X(×3) 가산
     const fireShare = share(u.fireShare);
     const fire = sfloor(fireStd * (1 + (u.fire - 1) * fireShare));
-    return { ...u, base, main, urban: urbanTax, fireStd, fireShare, fire };
+    return { ...u, base, main, urban: urbanTax, fireBase, fireStd, fireShare, fire };
   }
 
   /** 직전 연도 150% 상한 — 본세·도시지역분 각각 (§122) */
