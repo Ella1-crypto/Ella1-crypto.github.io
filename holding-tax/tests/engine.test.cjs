@@ -160,3 +160,18 @@ test('PNU 생성 — 법정동코드 + 산 + 본번 4 + 부번 4', () => {
   assert.equal(HT.makePnu('4113510300', '산 12'), '4113510300200120000');
   assert.equal(HT.makePnu('123', '1-1'), '');
 });
+
+test('고지서 끝수 — 딱 떨어지는 과세표준이 이진 오차로 1원·10원 깎이지 않음 (합성 수치)', () => {
+  // 15만원/㎡ × 40,000㎡ × 0.7 = 42억 → float로는 4,199,999,999.9999995가 되어 버림에서 손실이 났다
+  const r = HT.calcTaxpayer([
+    { sgg: '44131', price: 150000, urban: true, share: 100, cls: 'sep', area: 40000 },
+    { sgg: '44131', price: 150000, urban: true, share: 100, cls: 'b02', area: 10000 },
+  ]);
+  assert.equal(r.prop.sepBase, 4200000000);
+  assert.equal(Math.floor(r.prop.sepTax), 15600000);
+  assert.equal(Math.floor(r.prop.bunriTax), 2100000);
+  assert.equal(Math.floor(r.prop.urban), 7350000);
+  assert.equal(r.prop.notice.prop, 25050000);
+  assert.equal(r.prop.notice.edu, 3540000);
+  assert.equal(r.prop.notice.total, 28590000);
+});

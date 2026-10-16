@@ -69,24 +69,28 @@
     return map;
   }
 
-  const floor10 = n => Math.floor(n / 10) * 10;
+  // 공시지가 × 면적 × 0.7 같은 곱의 이진 오차(4,199,999,999.9999995)가 버림에서 1원·10원을 깎지 않게 1e-6 단위로 정리
+  const r6 = n => Math.round(n * 1e6) / 1e6;
+  const sfloor = n => Math.floor(r6(n));
+  const floor10 = n => Math.floor(sfloor(n) / 10) * 10;
   const applyCap = (tax, prevTax) => (prevTax > 0 ? Math.min(tax, prevTax * PARAMS.capRate) : tax);
 
   /** 재산세는 시·군·구 단위로 합산(누진) — 서로 다른 지자체 토지는 합산하지 않는다 */
   function regionTax(sgg, list) {
     const valueOf = cls => sum(list.filter(p => p.cls === cls).map(landValue));
-    const sepBase = valueOf('sep') * PARAMS.propFmv;
-    const jongBase = valueOf('jong') * PARAMS.propFmv;
+    const sepBase = r6(valueOf('sep') * PARAMS.propFmv);
+    const jongBase = r6(valueOf('jong') * PARAMS.propFmv);
     const bunriParcels = list.filter(p => isBunri(p.cls));
+    // 분리과세 과표는 표시용(세액은 필지별 계산) — 기존 표시값 유지를 위해 정리하지 않음
     const bunriBase = sum(bunriParcels.map(landValue)) * PARAMS.propFmv;
-    const bunriTax = sum(bunriParcels.map(p => landValue(p) * PARAMS.propFmv * CLASS[p.cls].rate));
-    const urban = sum(list.filter(p => p.urban !== false).map(p => landValue(p) * PARAMS.propFmv * PARAMS.urbanRate));
+    const bunriTax = r6(sum(bunriParcels.map(p => landValue(p) * PARAMS.propFmv * CLASS[p.cls].rate)));
+    const urban = r6(sum(list.filter(p => p.urban !== false).map(p => landValue(p) * PARAMS.propFmv * PARAMS.urbanRate)));
     return {
       sgg,
       sggName: list[0].sggName || sgg,
       sepBase, jongBase, bunriBase,
-      sepTax: progressive(sepBase, BRACKETS.propSep),
-      jongTax: progressive(jongBase, BRACKETS.propJong),
+      sepTax: r6(progressive(sepBase, BRACKETS.propSep)),
+      jongTax: r6(progressive(jongBase, BRACKETS.propJong)),
       bunriTax, urban,
     };
   }
@@ -153,8 +157,8 @@
     const nong = decided * PARAMS.nongRate;
 
     // 고지서 끝수: 세목별 원 미만 버림 → 재산세 합계·지방교육세 10원 미만 절사 (실제 고지서로 대사)
-    const noticeMain = Math.floor(sepTax) + Math.floor(jongTax) + Math.floor(bunriTax);
-    const noticeProp = floor10(noticeMain + Math.floor(urban));
+    const noticeMain = sfloor(sepTax) + sfloor(jongTax) + sfloor(bunriTax);
+    const noticeProp = floor10(noticeMain + sfloor(urban));
     const noticeEdu = floor10(noticeMain * PARAMS.eduRate);
     const prop = {
       sepBase: total('sepBase'), jongBase: total('jongBase'), bunriBase: total('bunriBase'),
