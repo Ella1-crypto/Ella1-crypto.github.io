@@ -57,8 +57,20 @@
   /** 건물 1건의 보유세 — tax는 건물 전체(100%), own은 내 지분 귀속분 */
   const OVERCROWD_YEARS = 5;
 
+  const multiDong = b => b.mode !== 'direct' && Array.isArray(b.dongs) && b.dongs.length > 0;
+
+  /** 여러 동 — 동마다 시가표준액·소방분 배수를 따로 매긴다(소방분 누진은 동 단위) */
+  function dongUnits(parcel, baseYear) {
+    return parcel.bld.dongs.map(d => {
+      const one = { ...parcel, bld: { ...parcel.bld, ...d, mode: 'estimate', dongs: [] } };
+      const rows = valueRows(one, baseYear).map(r => ({ ...r, label: `${d.name} ${r.label}` }));
+      return { name: d.name, rows, fire: fireMultiplier(one, rows), value: sum(rows.map(r => r.value || 0)) };
+    });
+  }
+
   function buildingFor(parcel, baseYear = BV.BASE_YEAR) {
     if (!parcel.bld || isHouse(parcel)) return null;
+    if (multiDong(parcel.bld)) return multiBuildingFor(parcel, baseYear);
     const rows = valueRows(parcel, baseYear);
     const rowError = rows.find(r => r.est && r.est.error);
     if (!rows.length) return { parcelId: parcel.id, rows, error: '건물 정보를 입력하면 건물분을 계산합니다.' };
@@ -81,6 +93,35 @@
     });
     const own = tax.error ? null : BT.forOwners(tax, [{ tp: 'me', share: shareOf(parcel) }])[0];
     return { parcelId: parcel.id, rows, fire, rate, tax, own, share: shareOf(parcel), value: sum(rows.map(r => r.value)), error: tax.error || null };
+  }
+
+  function rateFor(parcel, baseYear) {
+    const from = Number(parcel.bld.overcrowdFrom) || 0;
+    const expired = parcel.bld.rate === 'overcrowd' && from > 0 && baseYear >= from + OVERCROWD_YEARS;
+    return expired ? 'general' : (parcel.bld.rate || 'general');
+  }
+
+  function multiBuildingFor(parcel, baseYear) {
+    const dongs = dongUnits(parcel, baseYear);
+    const rows = dongs.flatMap(d => d.rows);
+    const rowError = rows.find(r => r.est && r.est.error);
+    if (rowError) return { parcelId: parcel.id, rows, error: rowError.est.error };
+    const rate = rateFor(parcel, baseYear);
+    const k = shareOf(parcel) / 100;
+    const prevMain = Number(parcel.bld.prevMain) || 0;
+    const prevFire = Number(parcel.bld.prevFire) || 0;
+    const tax = BT.calc({
+      units: dongs.map(d => ({ name: d.name, use: '', amount: d.value, rate, fire: d.fire.fire })),
+      bldInput: 'value',
+      bldUrban: parcel.urban === false ? 'off' : 'on',
+      bldPrevMain: prevMain > 0 ? prevMain / k : null,
+      bldPrevFire: prevFire > 0 ? prevFire / k : null,
+    });
+    const own = tax.error ? null : BT.forOwners(tax, [{ tp: 'me', share: shareOf(parcel) }])[0];
+    const fires = dongs.map(d => `${d.name} ×${d.fire.fire}`).join(', ');
+    const fire = { fire: Math.max(...dongs.map(d => d.fire.fire)), note: `동별 — ${fires}` };
+    const value = sum(dongs.map(d => d.value));
+    return { parcelId: parcel.id, rows, dongs, fire, rate, tax, own, share: shareOf(parcel), value, error: tax.error || null };
   }
 
   /**

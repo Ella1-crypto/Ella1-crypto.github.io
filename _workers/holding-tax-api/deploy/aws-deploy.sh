@@ -10,10 +10,21 @@ ROLE=holding-tax-relay-role
 ORIGIN=https://ella1-crypto.github.io
 cd "$(dirname "$0")/.."
 
+# 이미 배포된 함수가 있으면 저장된 키를 그대로 쓴다(Enter만 누르면 유지)
+current_env() {
+  aws lambda get-function-configuration --function-name "$FN" --region "$REGION"     --query "Environment.Variables.$1" --output text 2>/dev/null | grep -v '^None$' || true
+}
 if [ -z "${VWORLD_KEY:-}" ]; then
-  read -r -s -p "VWorld 인증키를 붙여 넣고 Enter (화면에 안 보임): " VWORLD_KEY; echo
+  read -r -s -p "VWorld 인증키 (화면에 안 보임, 기존 값 유지는 Enter): " VWORLD_KEY; echo
+  [ -z "$VWORLD_KEY" ] && VWORLD_KEY=$(current_env VWORLD_KEY)
 fi
-if ! [[ "$VWORLD_KEY" =~ ^[A-Za-z0-9-]{20,64}$ ]]; then echo "인증키 형식이 아닙니다."; exit 1; fi
+if ! [[ "$VWORLD_KEY" =~ ^[A-Za-z0-9-]{20,64}$ ]]; then echo "VWorld 인증키 형식이 아닙니다."; exit 1; fi
+if [ -z "${BLD_KEY:-}" ]; then
+  read -r -s -p "공공데이터포털 건축물대장 일반 인증키(Decoding) (화면에 안 보임, 기존 값 유지·생략은 Enter): " BLD_KEY; echo
+  [ -z "$BLD_KEY" ] && BLD_KEY=$(current_env BLD_KEY)
+fi
+if [ -n "$BLD_KEY" ] && ! [[ "$BLD_KEY" =~ ^[A-Za-z0-9+/=-]{20,200}$ ]]; then echo "건축물대장 인증키 형식이 아닙니다(Encoding 키가 아니라 Decoding 키를 넣으세요)."; exit 1; fi
+[ -z "$BLD_KEY" ] && echo "   건축물대장 키 없음 — /building은 503을 돌려줍니다."
 
 echo "1/5 실행 역할 확인"
 if ! ROLE_ARN=$(aws iam get-role --role-name "$ROLE" --query Role.Arn --output text 2>/dev/null); then
@@ -28,7 +39,10 @@ echo "2/5 코드 묶기"
 rm -f /tmp/relay.zip
 zip -q -r /tmp/relay.zip lambda.mjs memory-cache.mjs package.json src
 
-ENV_JSON="{\"Variables\":{\"VWORLD_KEY\":\"$VWORLD_KEY\",\"VWORLD_DOMAIN\":\"ella1-crypto.github.io\",\"ALLOWED_ORIGINS\":\"$ORIGIN\"}}"
+# 손으로 넣어 둔 다른 환경변수(BLD_BASE 등)는 그대로 두고 키·출처만 덮어쓴다
+OLD_ENV=$(aws lambda get-function-configuration --function-name "$FN" --region "$REGION" --query Environment.Variables --output json 2>/dev/null || true)
+[ -z "$OLD_ENV" ] || [ "$OLD_ENV" = "null" ] && OLD_ENV='{}'
+ENV_JSON=$(jq -cn --argjson old "$OLD_ENV" --arg v "$VWORLD_KEY" --arg b "$BLD_KEY" --arg o "$ORIGIN"   '{Variables: ($old + {VWORLD_KEY: $v, VWORLD_DOMAIN: "ella1-crypto.github.io", ALLOWED_ORIGINS: $o} + (if $b == "" then {} else {BLD_KEY: $b} end))}')
 
 echo "3/5 함수 만들기·갱신"
 if aws lambda get-function --function-name "$FN" --region "$REGION" >/dev/null 2>&1; then
@@ -53,7 +67,7 @@ if ! URL=$(aws lambda get-function-url-config --function-name "$FN" --region "$R
   aws lambda add-permission --function-name "$FN" --region "$REGION" --statement-id public-invoke \
     --action lambda:InvokeFunction --principal '*' --invoked-via-function-url >/dev/null 2>&1 || true
 fi
-unset VWORLD_KEY ENV_JSON
+unset VWORLD_KEY BLD_KEY ENV_JSON OLD_ENV
 
 echo "5/5 확인"
 sleep 3

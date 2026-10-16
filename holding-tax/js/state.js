@@ -37,14 +37,36 @@
     return { mode: 'estimate', structure: 'rc', builtYear: 2010, floors: 5, rate: 'general', fire: 'auto', direct: 0, rows: [{ use: 'office', area: 0, adjust: 1 }] };
   }
 
-  function cleanBuilding(b) {
-    if (!b || typeof b !== 'object') return null;
+  const MAX_DONGS = 30;
+
+  function cleanRows(list) {
     const BV = window.BuildingValue;
-    const rows = (Array.isArray(b.rows) ? b.rows : []).slice(0, MAX_ROWS).map(r => ({
+    return (Array.isArray(list) ? list : []).slice(0, MAX_ROWS).map(r => ({
       use: own(BV.USE, r && r.use) ? r.use : 'office',
       area: num(r && r.area, 1e7),
       adjust: num(r && r.adjust, 3) || 1,
     }));
+  }
+
+  /** 건축물대장에서 고른 동(여러 동일 때) — 동마다 구조·연도·층수·소방분 배수가 따로다 */
+  function cleanDong(d) {
+    const BV = window.BuildingValue;
+    const o = d && typeof d === 'object' ? d : {};
+    const rows = cleanRows(o.rows);
+    return {
+      name: str(o.name, 40) || '건물',
+      structure: own(BV.STRUCTURE, o.structure) ? o.structure : 'rc',
+      builtYear: Math.round(num(o.builtYear, BV.BASE_YEAR)) || 2010,
+      floors: Math.round(num(o.floors, 200)),
+      fire: [1, 2, 3].includes(Number(o.fire)) ? Number(o.fire) : 'auto',
+      rows,
+    };
+  }
+
+  function cleanBuilding(b) {
+    if (!b || typeof b !== 'object') return null;
+    const BV = window.BuildingValue;
+    const rows = cleanRows(b.rows);
     return {
       mode: b.mode === 'direct' ? 'direct' : 'estimate',
       structure: own(BV.STRUCTURE, b.structure) ? b.structure : 'rc',
@@ -60,6 +82,7 @@
       prevMain: num(b.prevMain),
       prevFire: num(b.prevFire),
       rows: rows.length ? rows : newBuilding().rows,
+      dongs: (Array.isArray(b.dongs) ? b.dongs : []).slice(0, MAX_DONGS).map(cleanDong),
     };
   }
 
@@ -150,5 +173,5 @@
     }
   }
 
-  ns.state = Object.freeze({ initial, clean, cleanParcel, newBuilding, load, save, encode, decode, uid, MAX_PARCELS, MAX_ROWS });
+  ns.state = Object.freeze({ initial, clean, cleanParcel, newBuilding, cleanDong, MAX_DONGS, load, save, encode, decode, uid, MAX_PARCELS, MAX_ROWS });
 })(window.HTM = window.HTM || {});

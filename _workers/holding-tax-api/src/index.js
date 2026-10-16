@@ -5,13 +5,17 @@
  *
  *   GET /search?q=역삼동 825        → 주소 후보 [{title, sub, lat, lng}]
  *   GET /parcel?lat=37.5&lng=127.0  → 필지 1건 {pnu, addr, jibun, jimok, area, price, priceYear, zone, geom, …}
+ *   GET /building?pnu=…(19자리)     → 건축물대장 표제부·층별개요 {buildings: […]} (공공데이터포털 키 BLD_KEY, src/building.js)
  */
+import { buildings } from './building.js';
+
 const VWORLD = 'http://api.vworld.kr/'; // Workers에서 https 연결 시 520(2026-10-15 실측)
 const ATTEMPTS = 3;            // VWorld가 정상 키에도 간헐적으로 INCORRECT_KEY를 돌려준다(2026-10-15 실측)
 const RETRY_DELAY_MS = 350;
 const TIMEOUT_MS = 8000;
 const CACHE_PARCEL_SEC = 7 * 24 * 3600;
 const CACHE_SEARCH_SEC = 24 * 3600;
+const CACHE_BUILDING_SEC = 24 * 3600;
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 90;           // IP당 분당 요청(인스턴스 단위 근사치)
 const MAX_QUERY = 80;
@@ -196,6 +200,12 @@ async function handle(request, env, ctx) {
     }
     maxAge = CACHE_PARCEL_SEC;
     produce = async () => ({ parcel: await parcel(lat.toFixed(7), lng.toFixed(7), env) });
+  } else if (url.pathname === '/building') {
+    const pnu = url.searchParams.get('pnu') || '';
+    if (!/^\d{19}$/.test(pnu)) return json({ error: 'PNU는 숫자 19자리입니다' }, 400, origin);
+    if (!env.BLD_KEY) return json({ error: '건축물대장 키가 아직 설정되지 않았습니다' }, 503, origin);
+    maxAge = CACHE_BUILDING_SEC;
+    produce = async () => ({ buildings: await buildings(pnu, env) });
   } else {
     return json({ error: '없는 경로' }, 404, origin);
   }
@@ -208,7 +218,8 @@ async function handle(request, env, ctx) {
     return json(body, 200, origin, maxAge);
   } catch (err) {
     console.error('upstream', url.pathname, err.message); // 서버 로그(주소 원문은 남기지 않음)
-    return json({ error: 'VWorld 조회에 실패했습니다. 잠시 후 다시 시도하세요.' }, 502, origin);
+    const source = url.pathname === '/building' ? '건축물대장' : 'VWorld';
+    return json({ error: `${source} 조회에 실패했습니다. 잠시 후 다시 시도하세요.` }, 502, origin);
   }
 }
 

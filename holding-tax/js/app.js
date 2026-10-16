@@ -16,6 +16,7 @@
   let saveTimer = null;
   let pointerDown = false;
   let pendingRender = false;
+  const register = new Map(); // 필지 id → 건축물대장 목록 {status, list, picked, error} — 화면에서만 쓰고 저장하지 않는다
 
   window.HTMApp = Object.freeze({ ownerType: () => state.ownerType });
 
@@ -62,6 +63,10 @@
       const blankFireBase = k === 'fireBase' && blank; // 비우면 재산세 과세표준 사용
       const v = blankShare ? 100 : blankFireBase ? null : numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
+    }
+    if (f === 'dong.fire') {
+      const v = raw === 'auto' ? 'auto' : Number(raw);
+      return { ...p, bld: { ...p.bld, dongs: p.bld.dongs.map((d, j) => (j === i ? { ...d, fire: v } : d)) } };
     }
     if (f.startsWith('row.')) {
       const k = f.slice(4);
@@ -126,7 +131,7 @@
   function render() {
     const focus = document.activeElement && document.activeElement.dataset ? { ...document.activeElement.dataset } : null;
     const result = renderResults();
-    $('#parcels').innerHTML = V.parcels(state, result, activeId);
+    $('#parcels').innerHTML = V.parcels(state, result, activeId, register);
     $('#pcount').textContent = state.parcels.length ? `${state.parcels.length}필지` : '';
     document.querySelectorAll('[data-owner]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.owner === state.ownerType)));
     $('#growth').value = state.growth;
@@ -154,6 +159,45 @@
     el.classList.add('show');
     clearTimeout(toast.t);
     toast.t = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  /* ---------- 건축물대장 ---------- */
+  async function loadRegister(pid) {
+    const p = state.parcels.find(x => x.id === pid);
+    if (!p || !p.pnu) return;
+    register.set(pid, { status: 'loading' });
+    render();
+    try {
+      const list = (await ns.vworld.buildingsAt(p.pnu)).map(window.HTMBldReg.toDong);
+      // 처음에는 계산할 수 있는 주건축물을 골라 둔다(없으면 계산 가능한 첫 동)
+      const usable = list.map((x, i) => (x.skip ? -1 : i)).filter(i => i >= 0);
+      const mains = usable.filter(i => list[i].main);
+      register.set(pid, { status: 'ok', list, picked: new Set(mains.length ? mains : usable.slice(0, 1)) });
+    } catch (err) {
+      register.set(pid, { status: 'error', error: err.message || '건축물대장을 불러오지 못했습니다.' });
+    }
+    render();
+  }
+
+  /** 고른 동을 건물 입력에 넣는다 — 한 동이면 기존 입력칸에, 여러 동이면 동 목록으로 */
+  function applyRegister(pid) {
+    const r = register.get(pid);
+    if (!r || r.status !== 'ok') return;
+    const picked = r.list.filter((d, i) => r.picked.has(i) && !d.skip);
+    if (!picked.length) return;
+    const footprint = picked.reduce((s, d) => s + d.footprint, 0);
+    const dong = d => ({ name: d.name, structure: d.structure, builtYear: d.builtYear || 2010, floors: d.floors, fire: 'auto', rows: d.rows });
+    register.delete(pid);
+    setState(mapParcel(pid, p => {
+      const base = { ...(p.bld || S.newBuilding()), mode: 'estimate', footprint: footprint || (p.bld && p.bld.footprint) || 0 };
+      if (picked.length === 1) {
+        const { name, ...one } = dong(picked[0]); // eslint-disable-line no-unused-vars — 한 동은 기존 입력칸 그대로
+        return { ...p, bld: { ...base, ...one, dongs: [] } };
+      }
+      return { ...p, bld: { ...base, dongs: picked.map(dong) } };
+    }));
+    const notes = picked.flatMap(d => d.notes);
+    toast(notes.length ? notes[0] : `건축물대장 ${picked.length}개 동을 넣었습니다. 가감산율은 직접 확인하세요.`);
   }
 
   /* ---------- 필지 추가 ---------- */
@@ -233,6 +277,20 @@
     demo,
     'bld-add': d => setState(mapParcel(d.pid, p => ({ ...p, bld: S.newBuilding() }))),
     'bld-del': d => setState(mapParcel(d.pid, p => ({ ...p, bld: null }))),
+    'reg-load': d => loadRegister(d.pid),
+    'reg-pick': d => {
+      const r = register.get(d.pid);
+      if (!r || r.status !== 'ok') return;
+      const picked = new Set(r.picked);
+      const i = Number(d.i);
+      if (picked.has(i)) picked.delete(i); else picked.add(i);
+      register.set(d.pid, { ...r, picked });
+      render();
+    },
+    'reg-apply': d => applyRegister(d.pid),
+    'reg-close': d => { register.delete(d.pid); render(); },
+    'dong-del': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, dongs: p.bld.dongs.filter((_, j) => j !== Number(d.i)) } }))),
+    'dong-clear': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, dongs: [] } }))),
     'bld-mode': d => setState(mapParcel(d.pid, p => ({ ...p, bld: { ...p.bld, mode: d.v } }))),
     'row-add': d => setState(mapParcel(d.pid, p => (p.bld.rows.length >= S.MAX_ROWS ? p
       : { ...p, bld: { ...p.bld, rows: [...p.bld.rows, { use: 'retail', area: 0, adjust: 1 }] } }))),

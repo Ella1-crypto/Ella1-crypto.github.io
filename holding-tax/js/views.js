@@ -43,27 +43,69 @@
       </div>`).join('');
   }
 
-  function buildingPanel(p, bres) {
+  const regOn = p => Boolean(p.pnu && ns.vworld && ns.vworld.registerEnabled());
+  const regButton = p => (regOn(p)
+    ? `<button type="button" class="ghost sm" data-act="reg-load" data-pid="${esc(p.id)}">건축물대장 불러오기</button>` : '');
+
+  /** 건축물대장 동 목록 — 여러 동을 골라 한 번에 넣는다 */
+  function registerBox(p, r) {
+    if (!r) return '';
+    const close = `<button type="button" class="link-btn" data-act="reg-close" data-pid="${esc(p.id)}">닫기</button>`;
+    if (r.status === 'loading') return `<div class="reg"><p class="muted">건축물대장을 불러오는 중…</p></div>`;
+    if (r.status === 'error') return `<div class="reg"><p class="warn-line">${esc(r.error)}</p>${close}</div>`;
+    if (!r.list.length) return `<div class="reg"><p class="muted">이 지번에 등록된 건축물대장(표제부)이 없습니다. 직접 입력하세요.</p>${close}</div>`;
+    const R = window.HTMBldReg;
+    const items = r.list.map((d, i) => `
+      <li><label class="chk${d.skip ? ' is-off' : ''}"><input type="checkbox" data-act="reg-pick" data-pid="${esc(p.id)}" data-i="${i}"${r.picked.has(i) ? ' checked' : ''}${d.skip ? ' disabled' : ''}>
+        <span><b>${esc(d.name)}</b> <span class="muted">${esc(R.label(d))}</span>${d.skip ? ` <em class="stale">${esc(d.skip)}</em>` : ''}${d.collective ? ' <em class="muted">집합건축물 — 내 호실만 소유하면 면적을 고치세요</em>' : ''}</span></label></li>`).join('');
+    return `<div class="reg">
+      <p class="reg-t">건축물대장 — 계산할 동을 고르세요 (여러 동 선택 가능)</p>
+      <ul class="reg-list">${items}</ul>
+      <div class="reg-act"><button type="button" class="ghost sm" data-act="reg-apply" data-pid="${esc(p.id)}"${r.picked.size ? '' : ' disabled'}>선택한 ${r.picked.size}개 동 넣기</button>${close}</div>
+      <p class="fld-h">구조·사용승인연도·지상층수·층별 용도 면적·건축면적을 채웁니다. 가감산율(1층 상가 등)은 직접 고치세요.</p>
+    </div>`;
+  }
+
+  /** 여러 동 입력 — 동마다 소방분 배수를 따로 고른다 */
+  function dongList(p, bres) {
+    const dres = bres && bres.dongs ? bres.dongs : [];
+    return `<ul class="dong-list">${p.bld.dongs.map((d, i) => {
+      const area = d.rows.reduce((s, r) => s + (Number(r.area) || 0), 0);
+      const r = dres[i];
+      return `<li>
+        <div><b>${esc(d.name)}</b> <span class="muted">${esc(BV.STRUCTURE[d.structure].label)} · ${esc(d.builtYear)}년 · 지상 ${esc(d.floors)}층 · ${fmt(area)}㎡${r ? ` · 시가표준액 ${eok(r.value)}` : ''}</span></div>
+        <select data-pid="${esc(p.id)}" data-f="dong.fire" data-i="${i}" aria-label="${esc(d.name)} 소방분 배수">${opt('auto', `자동${r ? ` (×${r.fire.fire})` : ''}`, d.fire)}${opt(1, '×1', d.fire)}${opt(2, '×2', d.fire)}${opt(3, '×3', d.fire)}</select>
+        <button type="button" class="icon-btn" data-act="dong-del" data-pid="${esc(p.id)}" data-i="${i}" aria-label="${esc(d.name)} 빼기">×</button>
+      </li>`;
+    }).join('')}</ul>
+    <button type="button" class="link-btn" data-act="dong-clear" data-pid="${esc(p.id)}">동 목록 지우고 한 동으로 직접 입력</button>`;
+  }
+
+  function buildingPanel(p, bres, reg) {
     if (!p.bld) {
-      return `<button type="button" class="ghost add-bld" data-act="bld-add" data-pid="${esc(p.id)}">＋ 이 땅의 건물(비주거)도 계산</button>`;
+      return `<div class="bld-start"><button type="button" class="ghost add-bld" data-act="bld-add" data-pid="${esc(p.id)}">＋ 이 땅의 건물(비주거)도 계산</button>${regButton(p)}</div>${registerBox(p, reg)}`;
     }
     const b = p.bld;
-    const est = b.mode === 'estimate';
+    const multi = b.mode === 'estimate' && b.dongs && b.dongs.length > 0;
+    const est = b.mode === 'estimate' && !multi;
     const summary = bres && !bres.error
       ? `<p class="bld-sum">시가표준액 <b>${eok(bres.value)}</b> · 소방분 ×${bres.fire.fire} <span class="muted">(${esc(bres.fire.note)})</span></p>
-         ${est ? bres.rows.map(r => `<p class="formula">${esc(r.label)}: ${esc(r.est.formula)} = ${won(r.value)}원</p>`).join('') : ''}`
+         ${est || multi ? bres.rows.map(r => `<p class="formula">${esc(r.label)}: ${esc(r.est.formula)} = ${won(r.value)}원</p>`).join('') : ''}`
       : `<p class="warn-line">${esc(bres ? bres.error : '')}</p>`;
     return `
     <div class="bld">
       <div class="bld-head">
         <strong>건물분</strong>
         <div class="seg" role="radiogroup" aria-label="건물 가액 입력 방식">
-          <button type="button" role="radio" aria-checked="${est}" data-act="bld-mode" data-v="estimate" data-pid="${esc(p.id)}">2026 기준 추정</button>
-          <button type="button" role="radio" aria-checked="${!est}" data-act="bld-mode" data-v="direct" data-pid="${esc(p.id)}">시가표준액 직접 입력</button>
+          <button type="button" role="radio" aria-checked="${b.mode === 'estimate'}" data-act="bld-mode" data-v="estimate" data-pid="${esc(p.id)}">2026 기준 추정</button>
+          <button type="button" role="radio" aria-checked="${b.mode === 'direct'}" data-act="bld-mode" data-v="direct" data-pid="${esc(p.id)}">시가표준액 직접 입력</button>
         </div>
+        ${regButton(p)}
         <button type="button" class="link-btn" data-act="bld-del" data-pid="${esc(p.id)}">건물 빼기</button>
       </div>
-      ${est ? `
+      ${registerBox(p, reg)}
+      ${multi ? `<div class="grid4">${field('재산세율', `<select data-pid="${esc(p.id)}" data-f="bld.rate">${Object.entries(BT.RATES).map(([k, r]) => opt(k, r.label, b.rate)).join('')}</select>`)}</div>
+      ${dongList(p, bres)}` : est ? `
       <div class="grid4">
         ${field('구조', `<select data-pid="${esc(p.id)}" data-f="bld.structure">${Object.entries(BV.STRUCTURE).map(([k, s]) => opt(k, `${s.label} (${s.index.toFixed(2)})`, b.structure)).join('')}</select>`)}
         ${field('사용승인연도', `<span class="num"><input type="text" inputmode="numeric" maxlength="4" data-pid="${esc(p.id)}" data-f="bld.builtYear" value="${esc(b.builtYear)}"><em>년</em></span>`)}
@@ -81,11 +123,11 @@
         ${field('작년 건축물 재산세', numInput(p.id, 'bld.prevMain', b.prevMain, '원'), '선택 — 고지서 본세(내 몫), 150% 상한')}
         ${field('작년 소방분', numInput(p.id, 'bld.prevFire', b.prevFire, '원'), '선택 — 지역자원시설세(내 몫), 150% 상한')}
       </div>
-      <div class="grid4">
+      ${multi ? '' : `<div class="grid4">
         ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
         ${field('중과 대상 부분', numInput(p.id, 'bld.fireShare', b.fireShare, '%'), '일부만 중과 용도면 그 과세표준 비율 (시행규칙 §75)')}
         ${field('소방분 과세표준', numInput(p.id, 'bld.fireBase', b.fireBase, '원'), '비우면 지방세법 §146④에 따라 재산세 과세표준 사용 · 고지서 값이 다르면 입력')}
-      </div>
+      </div>`}
       ${b.rate === 'overcrowd' ? `<div class="grid4">${field('중과 최초 과세연도', `<select data-pid="${esc(p.id)}" data-f="bld.overcrowdFrom">${opt(0, '모름 — 모든 연도 중과', b.overcrowdFrom)}${[2022, 2023, 2024, 2025, 2026, 2027].map(y => opt(y, `${y}년 (${y + 4}년까지 중과)`, b.overcrowdFrom)).join('')}</select>`, '신설·증설 후 첫 6월 1일이 속한 해')}</div>
       <p class="warn-line">과밀억제권역 공장 중과는 최초 과세기준일부터 5년간만 적용됩니다(지방세법 제111조②). ${b.overcrowdFrom ? `CF·전망은 ${b.overcrowdFrom + 5}년부터 0.25%로 계산합니다.` : '최초 과세연도를 고르면 CF·전망이 6년째부터 0.25%로 바뀝니다.'}</p>` : ''}
       ${summary}
@@ -119,7 +161,7 @@
     </details>`;
   }
 
-  function parcelCard(p, i, bres, active) {
+  function parcelCard(p, i, bres, active, reg) {
     const cls = HT.estimateClass(p.jimok, p.zone, window.HTMApp ? window.HTMApp.ownerType() : '법인');
     const urb = HT.estimateUrban(p.zone);
     const title = p.addr ? `${p.addr}` : `직접 입력한 필지 ${i + 1}`;
@@ -145,12 +187,12 @@
       <label class="chk house-chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="hasHouse"${p.hasHouse ? ' checked' : ''}> 이 땅에 주택(아파트·빌라·단독주택 등)이 있습니다</label>
       ${p.hasHouse ? `<p class="house-note">주택과 그 부속토지는 토지분이 아니라 <b>주택분</b>(공시가격 60%·주택 세율)으로 과세돼 이 계산에서 뺐습니다. 주택 공시가격으로 <a href="house.html">주택 계산기</a>에서 계산하세요. 상가주택처럼 주택과 상가가 섞여 있으면 주택 부분만 주택 계산기로, 나머지는 이 체크를 풀고 면적을 나눠 넣으세요.</p>` : `
       <label class="chk"><input type="checkbox" data-pid="${esc(p.id)}" data-f="urban"${p.urban ? ' checked' : ''}> 도시지역분(0.14%) 부과 <span class="muted">— ${esc(urb.note)}</span></label>
-      ${buildingPanel(p, bres)}
+      ${buildingPanel(p, bres, reg)}
       ${reliefPanel(p)}`}
     </article>`;
   }
 
-  function parcels(state, result, activeId) {
+  function parcels(state, result, activeId, reg = new Map()) {
     if (!state.parcels.length) {
       return `<div class="empty">
         <p class="empty-t">아직 담은 필지가 없습니다.</p>
@@ -159,7 +201,7 @@
       </div>`;
     }
     const byId = new Map(result.buildings.map(b => [b.parcelId, b]));
-    return state.parcels.map((p, i) => parcelCard(p, i, byId.get(p.id), p.id === activeId)).join('');
+    return state.parcels.map((p, i) => parcelCard(p, i, byId.get(p.id), p.id === activeId, reg.get(p.id))).join('');
   }
 
   function warnLines(result) {

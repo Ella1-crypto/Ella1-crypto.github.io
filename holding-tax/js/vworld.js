@@ -184,5 +184,14 @@
     return f ? toParcel(f) : null;
   }
 
-  ns.vworld = Object.freeze({ enabled, search, parcelAt, splitJibun, polygonArea, sggName, tileKey: () => cfg().key });
+  /** 지번의 건축물대장(표제부·층별개요) — 공공데이터포털 키가 서버에만 있어 중계 서버로만 부른다 */
+  async function buildingsAt(pnu) {
+    if (!apiBase()) throw new Error('건축물대장은 중계 서버가 설정돼야 불러올 수 있습니다.');
+    return (await viaApi('/building', { pnu })).buildings || [];
+  }
+
+  ns.vworld = Object.freeze({
+    enabled, search, parcelAt, buildingsAt, splitJibun, polygonArea, sggName,
+    registerEnabled: () => Boolean(apiBase()), tileKey: () => cfg().key,
+  });
 })(window.HTM = window.HTM || {});

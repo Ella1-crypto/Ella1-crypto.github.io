@@ -29,5 +29,7 @@ export function envFromProcess() {
     VWORLD_DOMAIN: process.env.VWORLD_DOMAIN || 'ella1-crypto.github.io',
     VWORLD_BASE: process.env.VWORLD_BASE || 'https://api.vworld.kr/', // 국내 서버에서는 https로 키를 보낸다
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || 'https://ella1-crypto.github.io',
+    BLD_KEY: process.env.BLD_KEY || '',     // 공공데이터포털 건축물대장 일반 인증키(Decoding)
+    BLD_BASE: process.env.BLD_BASE || '',
   };
 }
