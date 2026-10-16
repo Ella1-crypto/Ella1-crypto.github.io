@@ -105,7 +105,7 @@
       floors: Math.max(0, Number(b.floorsAbove) || 0),
       footprint: b.archArea > 0 ? b.archArea : 0,
       totalArea: b.totalArea > 0 ? b.totalArea : 0,
-      purpose: [b.purpose, b.purposeDetail].filter(Boolean).join(' · '),
+      purpose: [...new Set([b.purpose, b.purposeDetail].filter(Boolean))].join(' · '), // 주용도=기타용도면 한 번만
       collective: /집합/.test(b.regKind || ''),
       fire: 'auto',
       rows,
