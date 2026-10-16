@@ -45,6 +45,7 @@
       use: own(BV.USE, r && r.use) ? r.use : 'office',
       area: num(r && r.area, 1e7),
       adjust: num(r && r.adjust, 3) || 1,
+      ...(r && typeof r.memo === 'string' && r.memo ? { memo: str(r.memo, 20) } : {}), // 대장에서 뗀 줄 표시(예: 1층 상가)
     }));
   }
 

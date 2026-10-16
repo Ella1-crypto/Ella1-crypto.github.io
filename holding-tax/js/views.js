@@ -38,7 +38,7 @@
       <div class="brow">
         ${field('용도', `<select data-pid="${esc(p.id)}" data-f="row.use" data-i="${i}">${Object.entries(BV.USE).map(([k, u]) => opt(k, `${u.label} (${u.index.toFixed(2)})`, r.use)).join('')}</select>`)}
         ${field('면적', numInput(p.id, 'row.area', r.area, '㎡', `data-i="${i}"`))}
-        ${field('가감산율', numInput(p.id, 'row.adjust', r.adjust, '배', `data-i="${i}"`), '1층 상가 +0.17 등')}
+        ${field('가감산율', numInput(p.id, 'row.adjust', r.adjust, '배', `data-i="${i}"`), r.memo ? `${esc(r.memo)} — 5층 미만 1.17, 5~10층 1.27` : '1층 상가 +0.17 등')}
         ${b.rows.length > 1 ? `<button type="button" class="icon-btn" data-act="row-del" data-pid="${esc(p.id)}" data-i="${i}" aria-label="${i + 1}번째 용도 삭제">×</button>` : ''}
       </div>`).join('');
   }
@@ -115,7 +115,7 @@
       ${buildingRows(p)}
       <button type="button" class="ghost sm" data-act="row-add" data-pid="${esc(p.id)}">＋ 용도 구분 추가 (층별 용도가 다를 때)</button>`
     : `<div class="grid4">
-        ${field('건축물 시가표준액', numInput(p.id, 'bld.direct', b.direct, '원'), '위택스·고지서의 건축물 시가표준액')}
+        ${field('건축물 시가표준액', numInput(p.id, 'bld.direct', b.direct, '원'), '위택스·고지서의 건축물 시가표준액 (업무용 오피스텔은 여기에)')}
         ${field('재산세율', `<select data-pid="${esc(p.id)}" data-f="bld.rate">${Object.entries(BT.RATES).map(([k, r]) => opt(k, r.label, b.rate)).join('')}</select>`)}
       </div>`}
       <div class="grid4">
@@ -134,10 +134,13 @@
     </div>`;
   }
 
+  /** 예전에 담아 전년도 공시지가·지적도 추정 면적이 남은 필지 → 중계 서버로 다시 조회 */
+  const refreshBtn = p => (regOn(p) ? `<button type="button" class="link-btn" data-act="refresh" data-pid="${esc(p.id)}">${BV.BASE_YEAR}년 값 다시 불러오기</button> ` : '');
+
   function priceHint(p) {
     if (!(p.price > 0)) return '<a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>에서 확인';
     const stale = p.priceYear && p.priceYear < BV.BASE_YEAR
-      ? `<b class="stale">${esc(p.priceYear)}년 값</b> — ${BV.BASE_YEAR}년 공시지가로 고치면 정확합니다. `
+      ? `<b class="stale">${esc(p.priceYear)}년 값</b> — ${BV.BASE_YEAR}년 공시지가로 고치면 정확합니다. ${refreshBtn(p)}`
       : '';
     return `${stale}공시가격 ${eok(p.price * p.area)}`;
   }
@@ -178,7 +181,7 @@
       </header>
       <div class="grid4">
         ${field('내 지분', numInput(p.id, 'share', p.share, '%'), '공유·공동명의면 내 지분')}
-        ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? '지적도 경계로 추정 — 토지대장 면적으로 고치세요' : p.areaSource === 'register' ? '토지대장 면적(자동)' : '')}
+        ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? `지적도 경계로 추정 — 토지대장 면적으로 고치세요 ${refreshBtn(p)}` : p.areaSource === 'register' ? '토지대장 면적(자동)' : '')}
         ${field('개별공시지가', numInput(p.id, 'price', p.price, '원/㎡'), priceHint(p))}
         ${field('용도지역', `<select data-pid="${esc(p.id)}" data-f="zone">${ZONES.map(z => opt(z, z || '선택 안 함', p.zone)).join('')}</select>`, p.zoneName ? esc(p.zoneName) : '')}
         ${field('과세구분', `<select data-pid="${esc(p.id)}" data-f="cls">${HT.CLASS_KEYS.map(k => opt(k, HT.CLASS[k].label, p.cls)).join('')}</select>`,

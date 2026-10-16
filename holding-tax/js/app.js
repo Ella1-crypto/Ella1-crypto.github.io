@@ -161,6 +161,47 @@
     toast.t = setTimeout(() => el.classList.remove('show'), 2600);
   }
 
+  /* ---------- 다시 조회 ---------- */
+  /** 필지 경계 안의 한 점 — 꼭짓점 평균이 경계 밖이면(ㄷ자 등) 경계 안쪽 꼭짓점 근처로 */
+  function innerPoint(geom) {
+    const ring = geom && geom[0] && geom[0][0];
+    if (!ring || !ring.length) return null;
+    const inside = (lat, lng) => {
+      let hit = false;
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const [ya, xa] = ring[i];
+        const [yb, xb] = ring[j];
+        if ((ya > lat) !== (yb > lat) && lng < ((xb - xa) * (lat - ya)) / (yb - ya) + xa) hit = !hit;
+      }
+      return hit;
+    };
+    const lat = ring.reduce((t, pt) => t + pt[0], 0) / ring.length;
+    const lng = ring.reduce((t, pt) => t + pt[1], 0) / ring.length;
+    if (inside(lat, lng)) return { lat, lng };
+    for (const [a, b] of ring) {
+      const c = { lat: a + (lat - a) * 0.05, lng: b + (lng - b) * 0.05 };
+      if (inside(c.lat, c.lng)) return c;
+    }
+    return null;
+  }
+
+  /** 저장된 필지의 공시지가·면적·지목·용도지역을 지금 값으로 — 지분·건물·감면 입력은 그대로 */
+  async function refreshParcel(pid) {
+    const p = state.parcels.find(x => x.id === pid);
+    const pt = p && innerPoint(p.geom);
+    if (!pt) { toast('경계 정보가 없어 다시 조회할 수 없습니다. 지도에서 다시 담아 주세요.'); return; }
+    toast('필지를 다시 조회하는 중…');
+    try {
+      const found = await ns.vworld.parcelAt(pt.lat, pt.lng);
+      if (!found || found.pnu !== p.pnu) { toast('같은 필지를 찾지 못했습니다. 지도에서 다시 담아 주세요.'); return; }
+      const keep = { price: found.price, priceYear: found.priceYear, area: found.area, areaSource: found.areaSource, jimok: found.jimok, zoneName: found.zoneName, geom: found.geom || p.geom };
+      setState(mapParcel(pid, x => (found.zone ? withZone({ ...x, ...keep }, found.zone) : { ...x, ...keep })));
+      toast(found.priceYear >= window.BuildingValue.BASE_YEAR ? `${found.priceYear}년 공시지가로 바꿨습니다.` : `아직 ${found.priceYear}년 공시지가만 조회됩니다.`);
+    } catch (err) {
+      toast(err.message);
+    }
+  }
+
   /* ---------- 건축물대장 ---------- */
   async function loadRegister(pid) {
     const p = state.parcels.find(x => x.id === pid);
@@ -277,6 +318,7 @@
     demo,
     'bld-add': d => setState(mapParcel(d.pid, p => ({ ...p, bld: S.newBuilding() }))),
     'bld-del': d => setState(mapParcel(d.pid, p => ({ ...p, bld: null }))),
+    refresh: d => refreshParcel(d.pid),
     'reg-load': d => loadRegister(d.pid),
     'reg-pick': d => {
       const r = register.get(d.pid);

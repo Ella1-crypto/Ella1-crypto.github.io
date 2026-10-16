@@ -67,23 +67,42 @@
     return pick(USES, String(detail || ''), null) || pick(USES, String(purpose || ''), null);
   }
 
-  /** 층별개요 → 용도별 면적 행 (지하·지상 합산, 면적 큰 순, 최대 MAX_ROWS) */
+  const SHOP_USES = ['retail', 'market'];
+
+  /** 1층 상가 가감산율 — 화면 안내(index.html FAQ)와 같은 값: 5층 미만 +0.17, 5~10층 +0.27. 11층 이상은 직접 확인 */
+  function groundShopAdjust(floorsAbove) {
+    const n = Number(floorsAbove) || 0;
+    if (n > 0 && n < 5) return 1.17;
+    if (n >= 5 && n <= 10) return 1.27;
+    return 1;
+  }
+
+  /** 층별개요 → 용도별 면적 행 (지하·지상 합산, 1층 상가는 따로, 면적 큰 순, 최대 MAX_ROWS) */
   function rowsOf(b) {
-    const byUse = new Map();
+    const groups = new Map();
+    const add = (key, use, area, extra) => {
+      const g = groups.get(key) || { use, area: 0, adjust: 1, ...extra };
+      g.area += area;
+      groups.set(key, g);
+    };
     for (const f of b.floors || []) {
       const use = useKey(f.purpose, f.purposeDetail);
       if (!(f.area > 0) || use === 'house' || use === 'officetel') continue;
       const k = use || 'office';
-      byUse.set(k, (byUse.get(k) || 0) + f.area);
+      if (SHOP_USES.includes(k) && !f.under && Number(f.no) === 1) {
+        add(`${k}@1F`, k, f.area, { adjust: groundShopAdjust(b.floorsAbove), memo: '1층 상가' });
+      } else {
+        add(k, k, f.area);
+      }
     }
-    if (!byUse.size) {
+    if (!groups.size) {
       const use = useKey(b.purpose, b.purposeDetail);
-      if (b.totalArea > 0 && use !== 'house' && use !== 'officetel') byUse.set(use || 'office', b.totalArea);
+      if (b.totalArea > 0 && use !== 'house' && use !== 'officetel') add('main', use || 'office', b.totalArea);
     }
-    return [...byUse.entries()]
-      .sort((a, c) => c[1] - a[1])
+    return [...groups.values()]
+      .sort((a, c) => (c.memo ? 1 : 0) - (a.memo ? 1 : 0) || c.area - a.area) // 1층 상가를 맨 위에 — 가감산율 확인용
       .slice(0, MAX_ROWS)
-      .map(([use, area]) => ({ use, area: Math.round(area * 100) / 100, adjust: 1 }));
+      .map(g => ({ ...g, area: Math.round(g.area * 100) / 100 }));
   }
 
   /** 대장 건물 1동 → 계산기 동 입력. skip이 있으면 이 계산기 대상이 아님(주택·오피스텔) */
@@ -97,6 +116,7 @@
     if (!structure) notes.push(`구조 '${b.structure || '없음'}' → 철근콘크리트조로 두었습니다`);
     const rows = rowsOf(b);
     if (!skip && !rows.length) skip = '연면적 정보 없음';
+    if (rows.some(r => r.memo) && groundShopAdjust(b.floorsAbove) === 1) notes.push('11층 이상 건물의 1층 상가 가감산율은 직접 확인하세요');
     return {
       name: String(b.name || '건물').slice(0, 40),
       main: b.main !== false,
@@ -122,5 +142,5 @@
     return [d.main ? '주건축물' : '부속건축물', d.purpose, fl, area, year].filter(Boolean).join(' · ');
   }
 
-  return Object.freeze({ structureKey, useKey, rowsOf, toDong, label, MAX_ROWS });
+  return Object.freeze({ structureKey, useKey, rowsOf, toDong, label, groundShopAdjust, MAX_ROWS });
 }));

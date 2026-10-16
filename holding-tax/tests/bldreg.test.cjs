@@ -131,3 +131,19 @@ test('저장·공유 링크: 여러 동이 유지되고, 이상한 동 값은 �
   const many = S.clean({ parcels: [{ id: 'y', price: 1, area: 1, bld: { dongs: Array.from({ length: 99 }, () => good) } }] });
   assert.equal(many.parcels[0].bld.dongs.length, S.MAX_DONGS);
 });
+
+test('1층 상가는 따로 떼고 층수에 따라 가감산율(5층 미만 1.17, 5~10층 1.27)을 채운다', () => {
+  const floors = [
+    { under: false, no: 1, purpose: '소매점', purposeDetail: '제1종근린생활시설(소매점)', area: 300 },
+    { under: false, no: 2, purpose: '소매점', purposeDetail: '제1종근린생활시설(소매점)', area: 300 },
+    { under: true, no: 1, purpose: '일반음식점', purposeDetail: '제2종근린생활시설', area: 200 },
+    { under: false, no: 3, purpose: '사무소', purposeDetail: '업무시설', area: 900 },
+  ];
+  const seven = R.toDong({ purpose: '업무시설', floorsAbove: 7, totalArea: 1700, floors });
+  assert.deepEqual(seven.rows[0], { use: 'retail', area: 300, adjust: 1.27, memo: '1층 상가' });
+  assert.deepEqual(seven.rows.slice(1).map(r => [r.use, r.area, r.adjust]), [['office', 900, 1], ['retail', 500, 1]]);
+  assert.equal(R.toDong({ purpose: '업무시설', floorsAbove: 3, totalArea: 1700, floors }).rows[0].adjust, 1.17);
+  const tall = R.toDong({ purpose: '업무시설', floorsAbove: 15, totalArea: 1700, floors });
+  assert.equal(tall.rows[0].adjust, 1);
+  assert.match(tall.notes.join(), /11층 이상/);
+});
