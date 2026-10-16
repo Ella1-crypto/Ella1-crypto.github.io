@@ -48,7 +48,7 @@ function rateLimited(ip) {
   const recent = (hits.get(ip) || []).filter(t => now - t < RATE_WINDOW_MS);
   recent.push(now);
   hits.set(ip, recent);
-  if (hits.size > 5000) hits.clear(); // 메모리 보호
+  if (hits.size > 5000) hits.delete(hits.keys().next().value); // 메모리 보호 — 가장 오래된 IP부터
   return recent.length > RATE_MAX;
 }
 
@@ -56,7 +56,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /** VWorld 호출 — 키 오류·일시 오류는 몇 번 더 시도한다. ok(data)가 true일 때만 성공으로 본다. */
 async function vworld(path, params, env, ok) {
-  const url = `${VWORLD}${path}?${new URLSearchParams({ ...params, format: 'json', key: env.VWORLD_KEY, domain: env.VWORLD_DOMAIN })}`;
+  const url = `${env.VWORLD_BASE || VWORLD}${path}?${new URLSearchParams({ ...params, format: 'json', key: env.VWORLD_KEY, domain: env.VWORLD_DOMAIN })}`;
   let last = null;
   for (let i = 0; i < ATTEMPTS; i += 1) {
     try {

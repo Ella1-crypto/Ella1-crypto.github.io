@@ -51,6 +51,7 @@
       builtYear: Math.round(num(b.builtYear, BV.BASE_YEAR)) || 2010,
       floors: Math.round(num(b.floors, 200)),
       rate: pick(b.rate, RATES(), 'general'),
+      overcrowdFrom: Math.round(num(b.overcrowdFrom, 2100)) || 0, // 과밀억제권역 중과 최초 과세연도
       fire: [1, 2, 3].includes(Number(b.fire)) ? Number(b.fire) : 'auto',
       direct: num(b.direct),
       footprint: num(b.footprint, 1e7),

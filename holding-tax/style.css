@@ -336,3 +336,35 @@ tr:last-child > * { border-bottom: 0; }
   .top nav.kind { order: 3; width: 100%; margin-left: 0; justify-content: space-between; overflow-x: auto; }
   .top nav.kind a { flex: 1; text-align: center; padding: 6px 4px; }
 }
+
+/* ---------- 조정대상지역 판정 · 비교표 ---------- */
+.reg-line { margin: 6px 0 0; font-size: 13px; padding: 7px 12px; border-radius: var(--r-sm); background: var(--paper-2); color: var(--ink-2); }
+.reg-line.reg-yes b { color: var(--warn); }
+.reg-line.reg-no b { color: var(--land); }
+.reg-line.reg-unk b { color: var(--muted); }
+.addr-fld { grid-column: span 2; }
+.cmp-card tr.win th, .cmp-card tr.win td { color: var(--land); font-weight: 700; }
+
+/* ---------- 생애주기 ---------- */
+.summary .seg-house, .dot.seg-house { background: #c9a4e8; }
+.cf-year td.neg, .grid-irr td.neg { color: var(--warn); }
+.grid-irr td.pos { color: var(--land); font-weight: 700; }
+.grid-irr td, .grid-irr th { text-align: center; font-variant-numeric: tabular-nums; }
+.sub-h { margin: 0 0 8px; font-size: 15px; }
+.pro-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 99px; font-size: 11.5px; font-weight: 700; vertical-align: middle; background: var(--cmt); color: #1b1307; letter-spacing: .02em; }
+.pro-box { margin-top: 18px; padding: 14px 18px; border-radius: var(--r-lg); border: 1px dashed var(--line-2); background: var(--paper-2); }
+.pro-box p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+.pro-box .cta { margin-top: 10px; }
+
+/* ---------- 휴대폰: 금액 칸은 한 줄 전체 ---------- */
+.num input { font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) {
+  .grid4 > .fld:has(.num input[inputmode="numeric"]:not([maxlength])) { grid-column: 1 / -1; }
+  .num input { padding-right: 34px; font-size: 16px; }
+  .grid4 > .fld[style*="span"], .grid4 > .chk[style*="span"] { grid-column: 1 / -1 !important; }
+}
+@media (max-width: 1000px) {
+  .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols > *, .tool-main, .tool-side { min-width: 0; }
+}
+.opts { grid-template-columns: minmax(0, 1fr); }

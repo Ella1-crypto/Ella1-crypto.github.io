@@ -83,6 +83,42 @@ test('거주기간은 보유기간까지만, 자경농지 감면은 토지에만
   assert.equal(h.relief, null);
 });
 
+test('같은 해 두 번째 양도: 먼저 판 과세표준 1억에 합산해 누진 증가분만', () => {
+  const t = { ...base, acqDate: '2021-05-01', asset: 'land', price: 3e8, cost: 2e8 };
+  const r = T.calc({ ...t, priorBase: 1e8, basicUsed: true });
+  // 과세표준 9,000만(장특 10%, 기본공제 없음) → basic(1.9억) − basic(1억)
+  assert.equal(r.base, 9e7);
+  assert.equal(r.computed, Math.floor(T.basicTax(1.9e8) - T.basicTax(1e8)));
+});
+
+test('환산취득가액: 양도가 × 취득 기준시가/양도 기준시가 + 개산공제 3%', () => {
+  const r = T.calc({ ...base, asset: 'land', price: 5e8, useConversion: true, acqStd: 1e8, saleStd: 2.5e8 });
+  assert.equal(r.cost, 2e8);
+  assert.equal(r.expense, 3e6);
+});
+
+test('이월과세: 증여자 취득가액으로 더 큰 세금이면 적용, 증여세는 필요경비', () => {
+  const t = { ...base, asset: 'land', acqDate: '2023-03-01', cost: 5e8, price: 6e8, carryover: true, donorAcqDate: '2010-01-01', donorCost: 1e8, giftTax: 5e7 };
+  const r = T.calc(t);
+  assert.equal(r.carryoverApplied, true);
+  assert.equal(r.gain, 6e8 - 1e8 - 5e7);
+  assert.equal(r.years, 16);
+  const off = T.calc({ ...t, carryover: false });
+  assert.ok(r.total > off.total);
+  // 2022년 이전 증여는 5년 — 7년 뒤 양도면 적용하지 않는다
+  const old = T.calc({ ...t, acqDate: '2020-03-01', saleDate: '2027-03-01' });
+  assert.equal(old.carryoverApplied, undefined);
+});
+
+test('일시적 2주택 종전주택: 1세대1주택 비과세, 입주권은 인가 전 차익만 장특공', () => {
+  const r = T.calc({ ...base, asset: 'house', price: 1e9, cost: 5e8, houseCount: 2, temporary2: true, adjustedNow: true });
+  assert.equal(r.exempt, true);
+  const m = T.calc({ ...base, asset: 'membership', price: 1e9, cost: 3e8, approvalDate: '2022-05-01', rightValue: 6e8 });
+  assert.equal(m.preGain, 3e8);
+  assert.equal(m.lt.rate, 0.12);
+  assert.equal(m.longTerm, 3.6e7);
+});
+
 test('예정신고 기한: 양도일이 속하는 달의 말일부터 2개월, 지방소득세는 4개월', () => {
   assert.equal(T.monthEndPlus('2026-06-15', 2), '2026-08-31');
   assert.equal(T.monthEndPlus('2026-12-03', 2), '2027-02-28');

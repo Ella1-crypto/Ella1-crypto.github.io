@@ -67,5 +67,119 @@
     return html ? `<div class="cta">${html}</div>` : '';
   }
 
-  window.TaxKit = Object.freeze({ esc, won, pct, eok, money, today, read, write, store, moneyInputs, basisTable, cta });
+  /* ---------- 공유 링크 · 계산 기록 · PDF · 엑셀 ---------- */
+  const b64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const unb64 = t => new TextDecoder().decode(Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
+  const MAX_HISTORY = 12;
+  const MAX_SHARE = 6000;
+
+  function toast(msg) {
+    let el = document.getElementById('toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  const toolbar = () => `<div class="actions">
+        <button type="button" class="btn" data-act="share">링크 복사</button>
+        <button type="button" class="btn" data-act="print">PDF 보고서</button>
+        <button type="button" class="btn" data-act="save">계산 기록 저장</button>
+        <button type="button" class="btn" data-act="history">기록 보기</button>
+        <button type="button" class="btn" data-act="xlsx" style="grid-column: span 2">엑셀 다운로드</button>
+      </div>`;
+
+  /** 해시(#s=)에 담긴 공유 상태 — 읽으면 주소창에서 지운다 */
+  function sharedState() {
+    const m = location.hash.match(/^#s=([A-Za-z0-9_-]{1,6000})$/);
+    if (!m) return null;
+    history.replaceState(null, '', location.pathname);
+    try { const v = JSON.parse(unb64(m[1])); return v && typeof v === 'object' && !Array.isArray(v) ? v : null; } catch (e) { return null; }
+  }
+
+  /**
+   * @param {{key:string, form:HTMLFormElement, state:()=>object, apply:(object)=>void, label:()=>string, total:()=>number, xlsx:()=>Promise}} o
+   */
+  function tools(o) {
+    const histKey = `${o.key}:history`;
+    const box = document.createElement('section');
+    box.className = 'history'; box.hidden = true; box.setAttribute('aria-label', '계산 기록');
+    box.innerHTML = '<div class="h-row"><h3>이 기기에 저장한 계산</h3><button type="button" class="link-btn" data-act="history-clear">기록 지우기</button></div><ul></ul>';
+    o.form.after(box);
+    const readHist = () => { try { const r = JSON.parse(localStorage.getItem(histKey) || '[]'); return Array.isArray(r) ? r.slice(0, MAX_HISTORY) : []; } catch (e) { return []; } };
+    const show = () => {
+      const list = readHist();
+      box.hidden = false;
+      box.querySelector('ul').innerHTML = list.length
+        ? list.map((h, i) => `<li><button type="button" data-act="restore" data-i="${i}"><b>${esc(h.name)}</b><span>${esc(h.at)} · ${won(h.total)}원</span></button></li>`).join('')
+        : '<li class="muted">저장한 계산이 없습니다. "계산 기록 저장"을 누르면 이 기기에 보관됩니다.</li>';
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+    let busy = false;
+    const acts = {
+      share: async () => {
+        const enc = b64(JSON.stringify(o.state()));
+        if (enc.length > MAX_SHARE) { toast('입력이 너무 길어 링크로 만들 수 없습니다.'); return; }
+        const url = `${location.origin}${location.pathname}#s=${enc}`;
+        try { await navigator.clipboard.writeText(url); toast('계산 결과 링크를 복사했습니다.'); } catch (e) { history.replaceState(null, '', url); toast('주소창의 링크를 복사해 공유하세요.'); }
+      },
+      print: () => window.print(),
+      save: () => {
+        const entry = { name: String(o.label()).slice(0, 40), at: new Date().toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }), total: o.total(), state: o.state() };
+        try { localStorage.setItem(histKey, JSON.stringify([entry, ...readHist()].slice(0, MAX_HISTORY))); toast('이 기기에 계산을 저장했습니다.'); } catch (e) { toast('이 브라우저에서는 저장할 수 없습니다.'); }
+      },
+      history: show,
+      restore: d => { const h = readHist()[Number(d.i)]; if (h && h.state) { o.apply(h.state); toast(`"${h.name}" 계산을 불러왔습니다.`); } },
+      'history-clear': () => { try { localStorage.removeItem(histKey); } catch (e) { /* 저장소 없음 */ } show(); },
+      xlsx: async () => {
+        if (busy) return;
+        busy = true;
+        toast('엑셀 파일을 만드는 중…');
+        try { await o.xlsx(); toast('엑셀 파일을 내려받았습니다.'); } catch (e) { toast(e && e.message ? e.message : '엑셀을 만들지 못했습니다.'); } finally { busy = false; }
+      },
+    };
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]');
+      if (b && acts[b.dataset.act]) { e.preventDefault(); acts[b.dataset.act](b.dataset); }
+    });
+    const hadHash = /^#s=/.test(location.hash);
+    const shared = sharedState();
+    if (hadHash) toast(shared ? '공유된 계산을 불러왔습니다.' : '공유 링크를 읽지 못했습니다.');
+    return { shared, toast };
+  }
+
+  /* ---------- 조정대상지역 자동 판정 ---------- */
+  /**
+   * 주소·날짜가 바뀌면 해당 체크박스를 판정 결과로 맞춘다(사용자가 나중에 바꾸면 그대로 둔다).
+   * @param {HTMLFormElement} form
+   * @param {string} addrField
+   * @param {Array<[string, string]>} pairs [날짜 필드, 체크박스 필드]
+   * @param {Event|null} ev 변경 이벤트(null이면 처음 그릴 때)
+   * @returns {Array<{field:string, res:object}>}
+   */
+  function regulatedSync(form, addrField, pairs, ev) {
+    const R = window.Regulated;
+    if (!R) return [];
+    const val = f => (form.querySelector(`[data-f="${f}"]`) || {}).value || '';
+    const changed = ev && ev.target && ev.target.dataset ? ev.target.dataset.f : null;
+    return pairs.map(([dateF, boxF]) => {
+      const res = R.check(val(addrField), val(dateF));
+      const box = form.querySelector(`[data-f="${boxF}"]`);
+      if (box && (changed === addrField || changed === dateF) && res.status !== 'unknown') box.checked = res.status === 'yes';
+      return { field: boxF, res };
+    });
+  }
+
+  const regLine = (label, res) => {
+    const cls = res.status === 'yes' ? 'reg-yes' : res.status === 'no' ? 'reg-no' : 'reg-unk';
+    const tag = res.status === 'yes' ? '조정대상지역' : res.status === 'no' ? '비조정' : '확인 필요';
+    return `<p class="reg-line ${cls}"><b>${esc(label)}: ${tag}</b>${res.name ? ` · ${esc(res.name)}` : ''} — ${esc(res.note)}</p>`;
+  };
+
+  window.TaxKit = Object.freeze({ esc, won, pct, eok, money, today, read, write, store, moneyInputs, basisTable, cta, toast, toolbar, tools, regulatedSync, regLine });
 }());

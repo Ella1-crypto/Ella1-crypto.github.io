@@ -116,3 +116,18 @@ test('주택이 있는 필지는 토지분·건물분에서 빼고 개수만 알
   assert.equal(both.missing, 0);
   assert.equal(both.buildings.length, 0);
 });
+
+test('과밀억제권역 공장 중과는 최초 과세연도부터 5년간만 — 6년째는 0.25%', () => {
+  const parcel = { id: 'o', price: 1, area: 1, urban: false, bld: { mode: 'direct', direct: 1e9, rate: 'overcrowd', overcrowdFrom: 2022, fire: 1 } };
+  assert.equal(C.buildingFor(parcel, 2026).rate, 'overcrowd');
+  assert.equal(C.buildingFor(parcel, 2027).rate, 'general');
+  assert.equal(C.buildingFor({ ...parcel, bld: { ...parcel.bld, overcrowdFrom: 0 } }, 2030).rate, 'overcrowd');
+});
+
+test('감면받은 토지: 종부세 공제할 재산세는 감면 후 금액 → 종부세가 감면 전보다 크다', () => {
+  const big = { id: 'g', price: 5e6, area: 3000, cls: 'sep', sgg: '11680', urban: true };
+  const base = C.compute({ ownerType: '법인', growth: 0, parcels: [big] });
+  const cut = C.compute({ ownerType: '법인', growth: 0, parcels: [{ ...big, relief: { key: 'custom', custom: 50 } }] });
+  assert.ok(base.totals.cmt > 0);
+  assert.ok(cut.totals.cmt > base.totals.cmt);
+});

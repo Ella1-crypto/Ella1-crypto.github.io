@@ -34,7 +34,7 @@
 <header class="top">
   <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
   <nav aria-label="계산기 종류" class="kind">
-    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html" aria-current="page">양도세</a>
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html" aria-current="page">양도세</a><a href="lifecycle.html">한 번에</a>
   </nav>
   <span class="stamp" title="세율·공제·감면 요건을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
 </header>
@@ -67,6 +67,11 @@
         <label class="fld"><span class="fld-l">필요경비</span><span class="num"><input type="text" inputmode="numeric" data-f="expense" data-t="money"><em>원</em></span><span class="fld-h">취득세·중개수수료·자본적 지출</span></label>
       </div>
 
+      <div class="grid4">
+        <label class="fld addr-fld"><span class="fld-l">소재지 주소</span><input type="text" maxlength="80" data-f="addr" placeholder="예: 서울 송파구 잠실동 / 경기 과천시"><span class="fld-h">시·구까지 넣으면 취득·양도 당시 조정대상지역을 자동으로 판정합니다</span></label>
+      </div>
+      <div id="reg-info"></div>
+
       <div class="grid4" id="date-opts">
         <label class="fld"><span class="fld-l">취득일</span><input type="date" data-f="acqDate" data-t="date"></label>
         <label class="fld"><span class="fld-l">양도일</span><input type="date" data-f="saleDate" data-t="date"><span class="fld-h">잔금일·등기접수일 중 빠른 날</span></label>
@@ -85,10 +90,33 @@
           <label class="fld"><span class="fld-l">양도 시 세대 주택 수</span><span class="num"><input type="text" inputmode="numeric" maxlength="2" data-f="houseCount" data-t="int" value="1"><em>채</em></span><span class="fld-h">입주권·분양권 포함</span></label>
           <label class="chk"><input type="checkbox" data-f="adjustedNow" data-t="bool"> 양도 당시 조정대상지역</label>
           <label class="chk" style="grid-column: span 2"><input type="checkbox" data-f="heavyExcluded" data-t="bool"> 중과 제외 주택 (장기임대·지방 저가·상속 5년 내 등)</label>
+          <label class="chk" style="grid-column: span 2" id="temp2-wrap"><input type="checkbox" data-f="temporary2" data-t="bool"> 일시적 2주택 — 신규주택 취득 후 기한 안에 이 종전주택을 양도</label>
         </div>
         <div class="grid4">
           <label class="chk" style="grid-column: span 2"><input type="checkbox" data-f="basicUsed" data-t="bool"> 올해 다른 양도로 기본공제 250만원을 이미 씀</label>
+          <label class="fld" style="grid-column: span 2"><span class="fld-l">올해 먼저 판 건의 과세표준 합계</span><span class="num"><input type="text" inputmode="numeric" data-f="priorBase" data-t="money"><em>원</em></span><span class="fld-h">같은 해 여러 건이면 합산해 누진세율 적용</span></label>
         </div>
+        <div class="grid4" id="right-opts" hidden>
+          <label class="fld"><span class="fld-l">관리처분계획 인가일</span><input type="date" data-f="approvalDate" data-t="date"></label>
+          <label class="fld"><span class="fld-l">권리가액(종전 평가액)</span><span class="num"><input type="text" inputmode="numeric" data-f="rightValue" data-t="money"><em>원</em></span><span class="fld-h">인가 전 차익에 장기보유특별공제</span></label>
+        </div>
+        <details class="more">
+          <summary>취득가액을 모를 때 — 환산취득가액</summary>
+          <div class="grid4">
+            <label class="chk" style="grid-column: span 4"><input type="checkbox" data-f="useConversion" data-t="bool"> 환산취득가액으로 계산 (위 취득가액 대신)</label>
+            <label class="fld"><span class="fld-l">취득 당시 기준시가</span><span class="num"><input type="text" inputmode="numeric" data-f="acqStd" data-t="money"><em>원</em></span><span class="fld-h">공시가격·개별공시지가</span></label>
+            <label class="fld"><span class="fld-l">양도 당시 기준시가</span><span class="num"><input type="text" inputmode="numeric" data-f="saleStd" data-t="money"><em>원</em></span></label>
+          </div>
+        </details>
+        <details class="more">
+          <summary>배우자·부모에게 증여받은 물건 — 이월과세</summary>
+          <div class="grid4">
+            <label class="chk" style="grid-column: span 4"><input type="checkbox" data-f="carryover" data-t="bool"> 배우자·직계존비속에게 증여받아 10년 안에 양도 (위 취득일·취득가액 = 증여일·증여가액)</label>
+            <label class="fld"><span class="fld-l">증여자의 취득일</span><input type="date" data-f="donorAcqDate" data-t="date"></label>
+            <label class="fld"><span class="fld-l">증여자의 취득가액</span><span class="num"><input type="text" inputmode="numeric" data-f="donorCost" data-t="money"><em>원</em></span></label>
+            <label class="fld"><span class="fld-l">낸 증여세</span><span class="num"><input type="text" inputmode="numeric" data-f="giftTax" data-t="money"><em>원</em></span><span class="fld-h">필요경비로 공제</span></label>
+          </div>
+        </details>
         <div class="relief">
           <div class="grid4">
             <label class="fld" style="grid-column: span 3"><span class="fld-l">조세특례 감면</span><select data-f="relief" id="relief-sel"></select></label>
@@ -148,9 +176,11 @@
 <section class="prose" id="limits">
   <h2>이 계산기가 아직 하지 않는 것</h2>
   <ul class="limits">
-    <li><b>1세대1주택·중과 제외 판정</b> — 세대 구성, 일시적 2주택·상속·동거봉양 특례, 장기임대 요건은 자동으로 판정하지 않습니다. 해당하면 체크하세요.</li>
-    <li><b>같은 해 여러 건 합산·이월과세·부당행위</b> — 한 건만 계산합니다. 배우자·직계존비속 증여 후 10년 내 양도(이월과세)는 취득가액을 증여자 기준으로 넣으세요.</li>
-    <li><b>환산취득가액·감가상각 의제</b> — 취득가액을 모르는 경우의 환산과 건물 감가상각 차감은 하지 않습니다.</li>
+    <li><b>조정대상지역</b> — 2023.1.5. 이후 날짜는 주소로 자동 판정합니다. 그 전 서울 밖 지역은 당시 공고로 직접 확인하세요.</li>
+    <li><b>1세대1주택·중과 제외 판정</b> — 주택 수 1채면 1세대1주택으로, 일시적 2주택은 체크하면 특례로 봅니다. 상속·동거봉양·장기임대 요건은 직접 판정해 체크하세요.</li>
+    <li><b>같은 해 여러 건</b> — 먼저 판 건의 과세표준을 넣으면 합산 누진세율로 계산합니다. 양도차손 통산·비교과세의 세부 규칙은 단순화했습니다.</li>
+    <li><b>이월과세·환산</b> — 이월과세 비교와 환산취득가액은 계산하지만, 저가양도 부당행위계산·환산가액 가산세·감가상각 의제는 넣지 않았습니다.</li>
+    <li><b>조합원입주권 비과세</b> — 1세대1주택 입주권 비과세(소득세법 제89조①4)는 판정하지 않습니다.</li>
     <li><b>법인의 다른 손익</b> — 처분이익만 따로 계산합니다. 실제 법인세는 그해 전체 손익으로 정해집니다.</li>
   </ul>
 </section>
@@ -171,6 +201,8 @@
 
 <script src="js/config.js"></script>
 <script src="js/kit.js"></script>
+<script src="js/regulated.js"></script>
+<script src="js/xlsx-export.js"></script>
 <script src="js/transfer-engine.js"></script>
 <script src="js/transfer-app.js"></script>
 </body>

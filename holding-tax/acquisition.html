@@ -34,7 +34,7 @@
 <header class="top">
   <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
   <nav aria-label="계산기 종류" class="kind">
-    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html" aria-current="page">취득세</a><a href="transfer.html">양도세</a>
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html" aria-current="page">취득세</a><a href="transfer.html">양도세</a><a href="lifecycle.html">한 번에</a>
   </nav>
   <span class="stamp" title="세율·감면 요건을 현행 법령으로 확인한 날짜">법령 확인 2026.10.15</span>
 </header>
@@ -69,18 +69,26 @@
         <label class="fld"><span class="fld-l">취득(잔금)일</span><input type="date" data-f="date" data-t="date"><span class="fld-h">신고기한 계산</span></label>
       </div>
 
+      <div class="grid4">
+        <label class="fld addr-fld"><span class="fld-l">소재지 주소</span><input type="text" maxlength="80" data-f="addr" placeholder="예: 서울 마포구 합정동 / 경기 성남시 분당구"><span class="fld-h">시·구까지 넣으면 조정대상지역을 자동으로 판정합니다</span></label>
+      </div>
+      <div id="reg-info"></div>
+
       <div id="house-opts" class="grid4">
         <label class="fld"><span class="fld-l">취득 후 세대 주택 수</span><span class="num"><input type="text" inputmode="numeric" maxlength="2" data-f="houseCount" data-t="int" value="1"><em>채</em></span><span class="fld-h">이번 주택 포함, 분양권·입주권·주거용 오피스텔 포함</span></label>
         <label class="chk"><input type="checkbox" data-f="adjusted" data-t="bool"> 조정대상지역 주택</label>
         <label class="chk"><input type="checkbox" data-f="temporary2" data-t="bool"> 일시적 2주택 (종전주택 처분 예정)</label>
         <label class="chk"><input type="checkbox" data-f="over85" data-t="bool"> 전용 85㎡ 초과 (농특세 과세)</label>
-        <label class="chk"><input type="checkbox" data-f="heavyExcluded" data-t="bool"> 중과 제외 주택 (시가표준액 1억 이하 등)</label>
+        <label class="fld"><span class="fld-l">주택 시가표준액(공시가격)</span><span class="num"><input type="text" inputmode="numeric" data-f="stdValue" data-t="money"><em>원</em></span><span class="fld-h">1억 이하면 다주택 중과 제외</span></label>
+        <label class="chk"><input type="checkbox" data-f="redevZone" data-t="bool"> 정비구역·사업시행구역 안 주택</label>
+        <label class="chk"><input type="checkbox" data-f="heavyExcluded" data-t="bool"> 그 밖의 중과 제외 주택 (공공임대·농어촌·가정어린이집 등)</label>
         <label class="chk" id="gift-wrap" hidden><input type="checkbox" data-f="giftHeavy" data-t="bool"> 조정대상지역 시가표준액 3억 이상 증여 (12%)</label>
       </div>
 
       <div class="grid4">
         <label class="chk" id="metro-wrap" hidden><input type="checkbox" data-f="metroCorp" data-t="bool"> 대도시(과밀억제권역) 설립 5년 내 법인·지점 설치용</label>
         <label class="chk"><input type="checkbox" data-f="luxury" data-t="bool"> 사치성재산 (골프장·고급주택·고급오락장)</label>
+        <label class="chk" id="inh1-wrap" hidden><input type="checkbox" data-f="inheritOneHouse" data-t="bool"> 무주택 상속인 — 상속으로 1가구 1주택 (0.8%)</label>
         <label class="chk" id="abroad-wrap" hidden><input type="checkbox" data-f="abroad" data-t="bool"> 상속인이 외국에 주소 (신고 9개월)</label>
       </div>
 
@@ -90,6 +98,7 @@
           <label class="fld" id="custom-wrap" hidden><span class="fld-l">감면율</span><span class="num"><input type="text" inputmode="decimal" data-f="customRate" maxlength="5"><em>%</em></span></label>
         </div>
         <div id="relief-info"></div>
+        <div id="home-compare"></div>
       </div>
     </div>
   </form>
@@ -139,7 +148,8 @@
 <section class="prose" id="limits">
   <h2>이 계산기가 아직 하지 않는 것</h2>
   <ul class="limits">
-    <li><b>조정대상지역·중과 제외 판정</b> — 주소로 자동 판정하지 않습니다. 체크박스로 직접 고르세요.</li>
+    <li><b>조정대상지역</b> — 2023.1.5. 이후 취득은 주소로 자동 판정합니다(서울 전역·경기 15곳, 2026.10.16. 확인). 그 전 서울 밖 지역과 이후 새 공고는 직접 확인하세요.</li>
+    <li><b>중과 제외 주택</b> — 시가표준액 1억 이하만 자동으로 봅니다. 그 밖의 제외 사유(시행령 제28조의2)는 체크박스로 고르세요.</li>
     <li><b>지자체 조례 감면·감면 중복</b> — 조례 감면은 「기타 감면」으로 감면율을 넣으세요. 감면 두 개를 겹쳐 받는 경우는 계산하지 않습니다.</li>
     <li><b>부속토지·지분·건물 신축 원가 산정</b> — 과세표준(취득가액)을 직접 넣어야 합니다.</li>
   </ul>
@@ -161,6 +171,8 @@
 
 <script src="js/config.js"></script>
 <script src="js/kit.js"></script>
+<script src="js/regulated.js"></script>
+<script src="js/xlsx-export.js"></script>
 <script src="js/acquisition-engine.js"></script>
 <script src="js/acquisition-app.js"></script>
 </body>

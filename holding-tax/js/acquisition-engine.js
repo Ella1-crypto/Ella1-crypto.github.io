@@ -64,6 +64,8 @@
   /** 개인 주택 유상취득 중과율 — 취득 후 세대 주택 수 기준 */
   function houseHeavy(x) {
     if (x.asset !== 'house' || x.cause !== 'sale' || x.heavyExcluded) return 0;
+    // 시가표준액 1억원 이하 주택은 중과하지 않는다(정비구역·사업시행구역 안 주택 제외, 시행령 제28조의2 1호)
+    if (Number(x.stdValue) > 0 && Number(x.stdValue) <= 1e8 && !x.redevZone) return 0;
     if (x.buyer === '법인') return 0.12;
     const n = Number(x.houseCount) || 1;
     if (x.adjusted) {
@@ -97,6 +99,8 @@
     const metro = Boolean(x.metroCorp) && x.buyer === '법인';
     const luxury = Boolean(x.luxury);
 
+    // 무주택 상속인이 상속으로 1가구 1주택이 되는 경우: 표준세율 − 중과기준세율(0.8%)
+    const inheritOne = x.cause === 'inherit' && x.asset === 'house' && Boolean(x.inheritOneHouse);
     let rate = s, rule = '표준세율', law = '지방세법 제11조①';
     let edu, nongBase;
     if (heavy) {
@@ -112,13 +116,14 @@
       edu = price * Math.max(0, s - HEAVY_BASE) * 0.2 * 3;
     } else {
       if (luxury) { rate = s + 4 * HEAVY_BASE; rule = '사치성재산(골프장·고급주택·고급오락장) 중과'; law = '지방세법 제13조⑤'; }
+      else if (inheritOne) { rate = s - HEAVY_BASE; rule = '1가구 1주택 상속 세율 특례'; law = '지방세법 제15조①2가'; }
       const houseSale = x.asset === 'house' && x.cause === 'sale';
       edu = houseSale ? price * s * 0.5 * 0.2 : price * Math.max(0, s - HEAVY_BASE) * 0.2;
     }
     rate = round5(rate);
     const acq = floor(price * rate);
     // 농특세(취득세분): 표준세율을 2%로 본 세액 + 중과분 → 10%
-    nongBase = price * (HEAVY_BASE + Math.max(0, rate - (heavy ? 0.04 : s))) * 0.1;
+    nongBase = inheritOne && !luxury ? 0 : price * (HEAVY_BASE + Math.max(0, rate - (heavy ? 0.04 : s))) * 0.1; // 상속 특례분은 농특세 과세표준이 없다
     const smallHouse = x.asset === 'house' && !x.over85;
     let nong = smallHouse ? 0 : floor(nongBase);
     if (smallHouse) notes.push('전용 85㎡ 이하 주택은 농어촌특별세 비과세입니다(농특세법 제4조⑪).');
@@ -129,7 +134,11 @@
     if (reliefOn) {
       if (rel.cap) {
         if (price > rel.maxPrice) notes.push(`${rel.label}: 취득가액이 ${rel.maxPrice / 1e8}억원을 넘어 감면되지 않습니다.`);
-        else reliefAmt = Math.min(acq, rel.cap);
+        else {
+          reliefAmt = Math.min(acq, rel.cap);
+          // 정액 감면도 감면율(감면액÷산출세액)로 보아 지방교육세를 같은 비율로 줄인다(§151①1다1), 행안부 운영요령)
+          reliefEdu = acq > 0 ? floor(edu * reliefAmt / acq) : 0;
+        }
       } else {
         let r = x.relief === 'custom' ? Math.max(0, Math.min(1, (Number(x.customRate) || 0) / 100)) : rel.rate;
         if (r >= 1 && acq > 2e6) { r = 0.85; minTax = true; notes.push('면제 대상이지만 산출 취득세가 200만원을 넘어 최소납부세제로 85%만 감면합니다(지특법 제177조의2).'); }
@@ -179,6 +188,7 @@
     { item: '생애최초·출산 감면', rule: '12억 이하 주택: 생애최초 200만원(소형주택 300만원), 출산·양육 500만원까지 면제·초과 시 공제 — 생애최초는 중과 미적용', law: '지방세특례제한법 제36조의3·제36조의5' },
     { item: '사업용 감면', rule: '지식산업센터 35%(설립자 수도권 15%) · 창업중소기업 75% · 산업단지 35·50·75% · 등록임대 60㎡ 이하 면제', law: '지방세특례제한법 제58조의2·제58조의3·제78조⑤·제31조의3' },
     { item: '최소납부세제', rule: '취득세 면제라도 산출세액 200만원 초과면 85%만 감면', law: '지방세특례제한법 제177조의2' },
+    { item: '상속 1가구 1주택', rule: '무주택 상속인이 상속으로 1가구 1주택이 되면 2.8% − 2% = 0.8% (지방교육세 0.16%, 농특세 없음)', law: '지방세법 제15조①2가' },
     { item: '신고·납부', rule: '유상 60일 · 증여 말일부터 3개월 · 상속 말일부터 6개월(외국 주소 상속인 9개월)', law: '지방세법 제20조①' },
   ]);
 

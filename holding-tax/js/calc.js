@@ -49,6 +49,8 @@
   }
 
   /** 건물 1건의 보유세 — tax는 건물 전체(100%), own은 내 지분 귀속분 */
+  const OVERCROWD_YEARS = 5;
+
   function buildingFor(parcel, baseYear = BV.BASE_YEAR) {
     if (!parcel.bld || isHouse(parcel)) return null;
     const rows = valueRows(parcel, baseYear);
@@ -56,7 +58,10 @@
     if (!rows.length) return { parcelId: parcel.id, rows, error: '건물 정보를 입력하면 건물분을 계산합니다.' };
     if (rowError) return { parcelId: parcel.id, rows, error: rowError.est.error };
     const fire = fireMultiplier(parcel, rows);
-    const rate = parcel.bld.rate || 'general';
+    // 과밀억제권역 공장 중과는 최초 과세기준일부터 5년간만(지방세법 제111조②) — 그 뒤 연도는 일반 0.25%
+    const from = Number(parcel.bld.overcrowdFrom) || 0;
+    const expired = parcel.bld.rate === 'overcrowd' && from > 0 && baseYear >= from + OVERCROWD_YEARS;
+    const rate = expired ? 'general' : (parcel.bld.rate || 'general');
     const k = shareOf(parcel) / 100;
     const prevMain = Number(parcel.bld.prevMain) || 0; // 내 몫 기준 작년 본세 → 건물 전체로 환산해 상한 비교
     const prevFire = Number(parcel.bld.prevFire) || 0;
@@ -140,16 +145,22 @@
   /** 필지별 감면을 토지분·건축물분에 적용한다. 반환: 감면 내역과 줄어든 건물 귀속액 */
   function applyReliefs(parcels, land, rows, buildings, yearIndex) {
     const items = [];
-    const landCut = { main: 0, urban: 0, edu: 0 };
+    const landCut = { main: 0, urban: 0, edu: 0, sep: 0, jong: 0 };
     const bldOwn = new Map();
     for (const p of parcels.filter(x => !isHouse(x) && reliefActive(x, yearIndex))) {
       const rule = RL.commercialRule(p.relief.key, p.relief.region, p.relief.custom);
       if (!rule) continue;
       const item = { parcelId: p.id, ...rule, land: null, bld: null };
       if (land) {
-        const mine = rows.filter(r => r.id === p.id).map(r => landAlloc(land, r));
+        const own = rows.filter(r => r.id === p.id);
+        const mine = own.map(r => landAlloc(land, r));
         const tax = { main: Math.floor(sum(mine.map(m => m.main))), urban: Math.floor(sum(mine.map(m => m.urban))) };
         const cut = RL.apply(tax, rule);
+        // 본세 감면액을 별도합산·종합합산으로 나눠 둔다(종부세 공제할 재산세 재계산용)
+        own.forEach((r, j) => {
+          const k = r.cls === 'sep' ? 'sep' : r.cls === 'jong' ? 'jong' : null;
+          if (k && tax.main > 0) landCut[k] += cut.mainCut * mine[j].main / tax.main;
+        });
         const eduCut = Math.floor(cut.mainCut * HT.PARAMS.eduRate);
         item.land = { ...cut, eduCut, total: cut.mainCut + cut.urbanCut + eduCut };
         landCut.main += cut.mainCut; landCut.urban += cut.urbanCut; landCut.edu += eduCut;
@@ -179,9 +190,13 @@
     const yearIndex = opts.yearIndex || 0;
     const rawBuildings = parcels.map(p => buildingFor(p, year)).filter(Boolean);
     const split = landSplit(parcels, rawBuildings, state.mode);
-    const land = split.rows.length ? HT.calcTaxpayer(split.rows, prevFor(state)) : null;
+    const land0 = split.rows.length ? HT.calcTaxpayer(split.rows, prevFor(state)) : null;
+    const relief = applyReliefs(parcels, land0, split.rows, rawBuildings, yearIndex);
+    // 감면받은 토지는 종부세에서 빼 주는 재산세도 감면 후 금액이다(종부세법 제14조③·⑥) — 종부세만 다시 계산
+    const cutLand = relief.landCut.sep > 0 || relief.landCut.jong > 0;
+    const land = land0 && cutLand && land0.cmt.total > 0
+      ? HT.calcTaxpayer(split.rows, prevFor(state), { sep: relief.landCut.sep, jong: relief.landCut.jong }) : land0;
     const lt = landTotals(land);
-    const relief = applyReliefs(parcels, land, split.rows, rawBuildings, yearIndex);
     const buildings = rawBuildings.map(b => (relief.bldOwn.has(b.parcelId) ? { ...b, own: relief.bldOwn.get(b.parcelId), relieved: true } : b));
     const okBuildings = buildings.filter(b => b.own && !b.error);
     const bld = sum(okBuildings.map(b => b.own.total));

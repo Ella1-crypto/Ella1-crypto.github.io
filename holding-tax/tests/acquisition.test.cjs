@@ -52,7 +52,8 @@ test('생애최초 5억: 200만 감면, 다주택 중과도 적용하지 않음'
   const r = A.calc({ ...house, price: 5e8, relief: 'firstHome' });
   assert.equal(r.relief.amount, 2e6);
   assert.equal(r.acqFinal, 3e6);
-  assert.equal(r.total, 3.5e6);
+  assert.equal(r.eduFinal, 3e5); // 교육세도 40% 감면 — 부동산계산기.com 대조
+  assert.equal(r.total, 3.3e6);
   // 무주택자가 사서 1주택이 되는 경우만 — 2주택이 되면 감면도 없고 중과 그대로
   const h = A.calc({ ...house, price: 5e8, houseCount: 2, adjusted: true, relief: 'firstHome' });
   assert.equal(h.rate, 0.08);
@@ -82,6 +83,23 @@ test('대도시 법인 중과: 4% → 8%, 교육세 ×3', () => {
   const r = A.calc({ buyer: '법인', asset: 'nonres', cause: 'sale', price: 1e9, metroCorp: true });
   assert.equal(r.rate, 0.08);
   assert.equal(r.edu, 1.2e7);
+});
+
+test('부동산계산기.com 대조: 증여·상속·원시·비조정 3주택', () => {
+  const g = A.calc({ ...house, cause: 'gift', price: 5e8 });
+  assert.equal(g.total, 1.9e7);
+  const gh = A.calc({ ...house, cause: 'gift', price: 5e8, giftHeavy: true, over85: true });
+  assert.equal(gh.total, 6.7e7);
+  assert.equal(A.calc({ ...house, price: 5e8, houseCount: 3 }).total, 4.2e7);
+  const inh = A.calc({ ...house, cause: 'inherit', price: 5e8, over85: true, inheritOneHouse: true });
+  assert.equal(inh.rate, 0.008);
+  assert.equal(inh.total, 4.8e6);
+  assert.equal(A.calc({ ...house, cause: 'new', price: 5e8, over85: true }).total, 1.58e7);
+});
+
+test('시가표준액 1억 이하 주택은 다주택 중과 제외 (정비구역 안은 중과)', () => {
+  assert.equal(A.calc({ ...house, price: 1.5e8, houseCount: 3, adjusted: true, stdValue: 9e7 }).rate, 0.01);
+  assert.equal(A.calc({ ...house, price: 1.5e8, houseCount: 3, adjusted: true, stdValue: 9e7, redevZone: true }).rate, 0.12);
 });
 
 test('신고기한: 유상 60일, 증여 말일+3개월, 상속 말일+6개월', () => {

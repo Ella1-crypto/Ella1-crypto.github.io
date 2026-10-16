@@ -56,7 +56,7 @@
     }
     if (f.startsWith('bld.')) {
       const k = f.slice(4);
-      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain', 'prevFire'];
+      const numeric = ['builtYear', 'floors', 'direct', 'footprint', 'prevMain', 'prevFire', 'overcrowdFrom'];
       const v = numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
     }

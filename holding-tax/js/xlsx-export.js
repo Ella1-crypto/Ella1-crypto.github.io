@@ -143,5 +143,46 @@
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
-  window.HTMXlsx = Object.freeze({ download, KIND });
+  function save(wb, fileName) {
+    return wb.xlsx.writeBuffer().then(buf => {
+      const url = URL.createObjectURL(new Blob([buf], { type: MIME }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    });
+  }
+
+  /**
+   * 표 여러 장을 그대로 내보낸다(취득세·양도세·생애주기 CF).
+   * @param {{fileName:string, title:string, sheets:Array<{name:string, cols:Array<{h:string,w:number,money?:boolean}>, rows:Array<Array>}>, basis?:Array}} d
+   */
+  async function downloadSheets(d) {
+    await loadLib();
+    const wb = new window.ExcelJS.Workbook();
+    wb.creator = '보유세맵';
+    wb.created = new Date();
+    d.sheets.forEach((s, si) => {
+      const ws = wb.addWorksheet(s.name.slice(0, 31));
+      header(ws, s.cols.map((c, i) => ({ h: c.h, k: `c${i}`, w: c.w })));
+      s.rows.forEach(row => {
+        const r = ws.addRow(row);
+        s.cols.forEach((c, i) => { if (c.money) r.getCell(i + 1).numFmt = WON; });
+        if (row.bold) r.font = { ...FONT, bold: true };
+      });
+      styleBody(ws);
+      if (si === 0) {
+        ws.addRow([]);
+        ws.addRow([`${d.title} · 작성 ${new Date().toLocaleString('ko-KR')} · 보유세맵(ella1-crypto.github.io/holding-tax)`]).font = { ...FONT, color: { argb: 'FF68737F' } };
+        ws.addRow(['본 자료는 입력값과 공개된 기준에 따른 추정치이며 세무 자문이 아닙니다.']).font = { ...FONT, italic: true, color: { argb: 'FF68737F' } };
+      }
+    });
+    if (d.basis) basisSheet(wb, d.basis);
+    await save(wb, d.fileName);
+  }
+
+  window.HTMXlsx = Object.freeze({ download, downloadSheets, KIND });
 })();

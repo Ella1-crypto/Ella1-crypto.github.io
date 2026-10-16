@@ -82,7 +82,8 @@
         ${field('작년 소방분', numInput(p.id, 'bld.prevFire', b.prevFire, '원'), '선택 — 지역자원시설세(내 몫), 150% 상한')}
       </div>
       ${field('소방분 배수', `<select data-pid="${esc(p.id)}" data-f="bld.fire">${opt('auto', '자동 제안', b.fire)}${opt(1, '×1 일반', b.fire)}${opt(2, '×2 화재위험(4~10층 등)', b.fire)}${opt(3, '×3 대형 화재위험(11층 이상 등)', b.fire)}</select>`)}
-      ${b.rate === 'overcrowd' ? '<p class="warn-line">과밀억제권역 공장 중과는 최초 과세기준일부터 5년간만 적용됩니다. 기간이 지나면 세율을 「그 밖의 건축물 0.25%」로 바꾸세요 — CF·전망에는 모든 연도에 적용됩니다.</p>' : ''}
+      ${b.rate === 'overcrowd' ? `<div class="grid4">${field('중과 최초 과세연도', `<select data-pid="${esc(p.id)}" data-f="bld.overcrowdFrom">${opt(0, '모름 — 모든 연도 중과', b.overcrowdFrom)}${[2022, 2023, 2024, 2025, 2026, 2027].map(y => opt(y, `${y}년 (${y + 4}년까지 중과)`, b.overcrowdFrom)).join('')}</select>`, '신설·증설 후 첫 6월 1일이 속한 해')}</div>
+      <p class="warn-line">과밀억제권역 공장 중과는 최초 과세기준일부터 5년간만 적용됩니다(지방세법 제111조②). ${b.overcrowdFrom ? `CF·전망은 ${b.overcrowdFrom + 5}년부터 0.25%로 계산합니다.` : '최초 과세연도를 고르면 CF·전망이 6년째부터 0.25%로 바뀝니다.'}</p>` : ''}
       ${summary}
     </div>`;
   }
@@ -110,7 +111,7 @@
         ${r.key !== 'none' ? field('남은 감면 연수', numInput(p.id, 'relief.years', r.years, '년'), '올해 포함 — 비우면 계속 적용(CF·전망)') : ''}
       </div>
       ${rule ? `<p class="law-line"><b>${esc(rule.law)}</b> · ${esc(rule.period)}</p><p class="need-line">요건: ${esc(rule.need)}</p>
-        <p class="need-line">재산세 본세${rule.urban ? '·도시지역분' : ''}에 적용하고 지방교육세는 함께 줄어듭니다. 소방분은 감면되지 않습니다. 종부세가 나오는 토지라면 종부세의 「공제할 재산세」는 감면 전 금액으로 계산해 종부세가 조금 적게 나올 수 있습니다.${rule.rate >= 1 ? ' 면제라도 재산세가 50만원을 넘으면 최소납부세제로 85%만 감면됩니다(지특법 §177의2).' : ''}</p>` : ''}
+        <p class="need-line">재산세 본세${rule.urban ? '·도시지역분' : ''}에 적용하고 지방교육세는 함께 줄어듭니다. 소방분은 감면되지 않습니다. 종부세의 「공제할 재산세」도 감면 후 금액으로 다시 계산합니다.${rule.rate >= 1 ? ' 면제라도 재산세가 50만원을 넘으면 최소납부세제로 85%만 감면됩니다(지특법 §177의2).' : ''}</p>` : ''}
     </details>`;
   }
 

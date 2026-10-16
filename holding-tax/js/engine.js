@@ -116,9 +116,11 @@
    * 납세자 1명의 토지 보유세.
    * @param {Array} parcels 해당 납세자 필지 [{price, area, share, cls, sgg, sggName, urban}]
    * @param {{propSep?:number, propJong?:number, cmtSep?:number, cmtJong?:number}} prev 직전연도 세액(세부담상한용, 선택)
+   * @param {{sep?:number, jong?:number}} [propCut] 감면으로 줄어든 재산세 본세 — 종부세 공제할 재산세는 실제 부과액(감면 후)으로 본다
    */
-  function calcTaxpayer(parcels, prev) {
+  function calcTaxpayer(parcels, prev, propCut) {
     const p0 = prev || {};
+    const cut = propCut || {};
     const regions = [...groupBy(parcels, p => p.sgg || '미상')].map(([sgg, list]) => regionTax(sgg, list));
     const total = key => sum(regions.map(r => r[key]));
 
@@ -141,11 +143,11 @@
 
     const sep = cmtPart({
       value: values.sep, deduction: PARAMS.cmtSepDeduction, brackets: BRACKETS.cmtSep, propBrackets: BRACKETS.propSep, propTopRate: 0.004,
-      propTax: sepTax, propBase: total('sepBase'), prevTotal: p0.cmtSep,
+      propTax: Math.max(0, sepTax - (Number(cut.sep) || 0)), propBase: total('sepBase'), prevTotal: p0.cmtSep,
     });
     const jong = cmtPart({
       value: values.jong, deduction: PARAMS.cmtJongDeduction, brackets: BRACKETS.cmtJong, propBrackets: BRACKETS.propJong, propTopRate: 0.005,
-      propTax: jongTax, propBase: total('jongBase'), prevTotal: p0.cmtJong,
+      propTax: Math.max(0, jongTax - (Number(cut.jong) || 0)), propBase: total('jongBase'), prevTotal: p0.cmtJong,
     });
     const decided = sep.decided + jong.decided;
     const nong = decided * PARAMS.nongRate;

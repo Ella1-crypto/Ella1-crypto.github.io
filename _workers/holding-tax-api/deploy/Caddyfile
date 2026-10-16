@@ -1,0 +1,7 @@
+# 공인 IP가 1.2.3.4 라면 아래 주소를 1-2-3-4.sslip.io 로 바꾼다 (HTTPS 인증서는 Caddy가 자동 발급)
+RELAY_HOST.sslip.io {
+	encode gzip
+	reverse_proxy 127.0.0.1:8787 {
+		header_up X-Real-IP {remote_host}
+	}
+}
