@@ -9,7 +9,7 @@ ALLOWED_ORIGINS = "https://ella1-crypto.github.io,http://localhost:5178"
 
 # 비밀값(저장소에 넣지 않음): npx wrangler secret put VWORLD_KEY
 # 상태(2026-10-15): VWorld가 Cloudflare 서버 IP의 접속을 막아(520/502) 현재 계산기에서 사용하지 않는다.
-# 국내 IP 서버로 옮기면 config.js의 API_BASE에 주소를 넣어 2026 공시지가·토지대장 면적을 자동으로 받는다.
+# 같은 코드를 AWS Lambda 서울(lambda.mjs, RELAY-AWS.md)에서 돌려 국내 IP로 VWorld를 부른다.
 
 [placement]
 region = "aws:ap-northeast-2"

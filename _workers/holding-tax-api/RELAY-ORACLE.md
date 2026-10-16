@@ -1,5 +1,7 @@
 # 보유세맵 중계 서버 — Oracle Cloud 무료 VM에 올리기
 
+> **2026-10-16 시험 결과**: 홈 리전이 오사카(일본)인 계정에서는 VWorld가 해외 IP를 막아(`https` 000, `http` 502) 쓸 수 없었습니다. 실제 배포는 [RELAY-AWS.md](RELAY-AWS.md)(AWS Lambda 서울)로 했습니다. 이 문서는 홈 리전이 서울·춘천인 Oracle 계정용입니다.
+
 VWorld는 Cloudflare 서버 IP를 막지만 국내 IP는 막지 않습니다. 2026-10-16에 이 PC(국내 IP)에서 `server.mjs`를 실행해 보니 역삼동 필지의 **2026년 공시지가**가 정상으로 들어왔습니다. 그래서 Oracle 무료 VM(국내 리전)에서 같은 코드를 돌리면 됩니다.
 
 ```
