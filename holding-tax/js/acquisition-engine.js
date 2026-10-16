@@ -23,7 +23,7 @@
   const VERSION = '2026-10-15';
   const HEAVY_BASE = 0.02; // 중과기준세율(§6 19호)
   const CAUSES = Object.freeze({ sale: '매매(유상)', new: '신축·증축(원시)', gift: '증여(무상)', inherit: '상속' });
-  const ASSETS = Object.freeze({ house: '주택', nonres: '토지·건물·상가(비주거)', farm: '농지' });
+  const ASSETS = Object.freeze({ house: '주택', officetel: '오피스텔', nonres: '토지·건물·상가(비주거)', farm: '농지' });
   const RELIEFS = Object.freeze({
     none: { label: '없음' },
     firstHome: { label: '생애최초 주택 구입 (200만원 한도)', house: true, cap: 2e6, maxPrice: 1.2e9, law: '지방세특례제한법 제36조의3', need: '본인·배우자 무주택, 취득가액 12억 이하, 유상취득, 3년 내 매각·임대 시 추징' },
@@ -83,6 +83,8 @@
     const price = Number(x.price) || 0;
     const notes = [];
     const s = standardRate(x);
+    // 오피스텔은 공부상 업무시설이라 주거용으로 써도 취득세는 비주거 세율(유상 4%) — 다주택 중과·주택 감면 대상 아님
+    if (x.asset === 'officetel') notes.push('오피스텔은 주거용으로 써도 취득할 때는 비주거 세율(매매 4%)입니다. 다만 2020.8.12. 이후 취득해 주택분 재산세가 과세되는 오피스텔은 그 뒤 주택을 살 때 주택 수에 들어갑니다(지방세법 제13조의3).');
     const rel = Object.prototype.hasOwnProperty.call(RELIEFS, x.relief) ? RELIEFS[x.relief] : RELIEFS.none;
     const homeRelief = ['firstHome', 'firstHomeSmall', 'birth'].includes(x.relief);
     // 생애최초·출산 감면: 개인의 유상취득으로 1가구 1주택(생애최초는 무주택 → 1주택)이 되고 12억 이하일 때만

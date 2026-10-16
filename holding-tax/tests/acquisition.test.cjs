@@ -107,3 +107,12 @@ test('신고기한: 유상 60일, 증여 말일+3개월, 상속 말일+6개월',
   assert.equal(A.dueDate('2026-10-15', 'gift'), '2027-01-31');
   assert.equal(A.dueDate('2026-10-15', 'inherit'), '2027-04-30');
 });
+
+test('오피스텔: 주거용이어도 매매 4%(합계 4.6%), 다주택 중과 없음, 주택 수 안내', () => {
+  const A = require('../js/acquisition-engine.js');
+  const o = A.calc({ buyer: '개인', asset: 'officetel', cause: 'sale', price: 3e8, houseCount: 3 });
+  const n = A.calc({ buyer: '개인', asset: 'nonres', cause: 'sale', price: 3e8 });
+  assert.equal(o.total, 13800000);
+  assert.equal(o.total, n.total);
+  assert.match(o.notes.join(), /주택 수/);
+});

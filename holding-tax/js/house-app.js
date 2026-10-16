@@ -102,7 +102,7 @@
         </header>
         ${locLine(h)}
         <div class="grid4">
-          <label class="fld"><span class="fld-l">주택 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="price" value="${esc(fmt(h.price))}"><em>원</em></span><span class="fld-h">${h.price > 0 ? eok(h.price) : '<a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>'}</span></label>
+          <label class="fld"><span class="fld-l">주택 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="price" value="${esc(fmt(h.price))}"><em>원</em></span><span class="fld-h">${h.price > 0 ? eok(h.price) : '<a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a>'} · 주거용 오피스텔은 건물+토지 시가표준액 합계(위택스)</span></label>
           <label class="fld"><span class="fld-l">내 지분</span><span class="num"><input type="text" inputmode="decimal" data-hid="${esc(h.id)}" data-f="share" value="${esc(h.share)}"><em>%</em></span><span class="fld-h">공동명의면 내 지분</span></label>
           <label class="fld"><span class="fld-l">작년 공시가격</span><span class="num"><input type="text" inputmode="numeric" data-hid="${esc(h.id)}" data-f="prevPrice" value="${esc(fmt(h.prevPrice))}"><em>원</em></span><span class="fld-h">선택 — 과세표준상한(5%) 계산</span></label>
           <label class="fld"><span class="fld-l">재산세</span><span class="fld-h house-tax">${row ? `<b>${won(row.ownTotal)}원</b> (본세 ${won(row.ownMain)} · 도시 ${won(row.ownUrban)} · 교육 ${won(row.ownEdu)}${row.ownFire ? ` · 소방 ${won(row.ownFire)}` : ''})` : '—'}</span></label>
