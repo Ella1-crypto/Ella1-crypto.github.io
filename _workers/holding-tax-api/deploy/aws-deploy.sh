@@ -23,7 +23,11 @@ if [ -z "${BLD_KEY:-}" ]; then
   read -r -s -p "공공데이터포털 건축물대장 일반 인증키(Decoding) (화면에 안 보임, 기존 값 유지·생략은 Enter): " BLD_KEY; echo
   [ -z "$BLD_KEY" ] && BLD_KEY=$(current_env BLD_KEY)
 fi
-if [ -n "$BLD_KEY" ] && ! [[ "$BLD_KEY" =~ ^[A-Za-z0-9+/=-]{20,200}$ ]]; then echo "건축물대장 인증키 형식이 아닙니다(Encoding 키가 아니라 Decoding 키를 넣으세요)."; exit 1; fi
+BLD_KEY=$(printf '%s' "$BLD_KEY" | tr -d '[:space:]')                      # 복사할 때 딸려 온 공백·줄바꿈 제거
+if [[ "$BLD_KEY" == *%* ]]; then BLD_KEY=$(printf '%b' "${BLD_KEY//%/\\x}"); echo "   Encoding 키를 Decoding 키로 바꿨습니다."; fi
+if [ -n "$BLD_KEY" ] && ! [[ "$BLD_KEY" =~ ^[A-Za-z0-9+/=-]{20,200}$ ]]; then
+  echo "건축물대장 인증키 형식이 아닙니다 (길이 ${#BLD_KEY}자, 허용 밖 문자: $(printf '%s' "$BLD_KEY" | tr -d 'A-Za-z0-9+/=-' | od -An -c | tr -s ' ' | head -c 40))."; exit 1
+fi
 [ -z "$BLD_KEY" ] && echo "   건축물대장 키 없음 — /building은 503을 돌려줍니다."
 
 echo "1/5 실행 역할 확인"
