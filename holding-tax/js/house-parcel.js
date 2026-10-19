@@ -90,7 +90,7 @@
   }
 
   /**
-   * 주택에 필지 값을 채운 새 주택(원본은 그대로). 이름이 비었거나 예시 그대로면 주소로 바꾸고,
+   * 주택에 필지 값을 채운 새 주택(원본은 그대로). 이름이 비었거나 예시·자동 주소 이름이면 새 주소로 바꾸고,
    * 예시 공시가격은 이 집의 값이 아니므로 비운다. 소재지·도시지역분은 판정된 경우에만 바꾼다.
    * @param {object} house 주택 입력
    * @param {object} found fromParcel 결과
@@ -99,11 +99,13 @@
   function applyParcel(house, found, example) {
     const ex = example || { name: '', price: 0 };
     const isExample = Boolean(ex.name) && house.name === ex.name;
+    // 이름이 예전 주소에서 자동으로 만든 것이면 새 주소를 따라간다(직접 쓴 이름은 그대로)
+    const wasAuto = Boolean(house.addr) && house.name === shortLabel(house.addr, house.sggName);
     const { region, urban, ...loc } = found;
     return {
       ...house,
       ...loc,
-      name: !house.name || isExample ? shortLabel(loc.addr, loc.sggName) : house.name,
+      name: !house.name || isExample || wasAuto ? shortLabel(loc.addr, loc.sggName) : house.name,
       price: isExample && house.price === ex.price ? 0 : house.price,
       region: region || house.region,
       urban: urban === null ? house.urban : urban,

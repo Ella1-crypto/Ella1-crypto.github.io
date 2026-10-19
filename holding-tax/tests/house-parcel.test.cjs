@@ -103,3 +103,13 @@ test('landValue: 대지 면적 × 개별공시지가', () => {
   assert.equal(P.landValue({ landArea: 512.3, landPrice: 72000000 }), 36885600000);
   assert.equal(P.landValue({}), 0);
 });
+
+test('applyParcel: 이름이 예전 주소에서 자동으로 만든 것이면 새 주소로 바뀌고, 직접 쓴 이름은 그대로', () => {
+  const first = P.applyParcel(house({}), P.fromParcel(GANGNAM, AT), EXAMPLE);
+  const other = { ...GANGNAM, addr: '서울특별시 용산구 용산동2가 34-7', pnu: '1117012500100340007', sggName: '서울특별시 용산구' };
+  const moved = P.applyParcel(first, P.fromParcel(other, AT), EXAMPLE);
+  assert.equal(moved.name, P.shortLabel(other.addr, other.sggName));
+  assert.notEqual(moved.name, first.name);
+  const typed = P.applyParcel({ ...first, name: '우리집' }, P.fromParcel(other, AT), EXAMPLE);
+  assert.equal(typed.name, '우리집');
+});
