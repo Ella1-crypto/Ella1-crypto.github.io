@@ -292,7 +292,8 @@
     $('#joint-wrap').hidden = !(state.ownerType === '개인' && state.houses.length === 1);
     $('#joint').checked = state.joint;
     $('#mbar-total').textContent = `${won(r.total)}원`;
-    $('#cf-table').innerHTML = window.HTMCFView.render(currentCF());
+    // cf-view.js가 일시적으로 못 오면(CDN 503 등) 현금흐름 표만 비우고 나머지 계산은 계속 그린다
+    $('#cf-table').innerHTML = window.HTMCFView ? window.HTMCFView.render(currentCF()) : '<p class="muted">월별 납부 표를 불러오지 못했습니다. 새로고침하세요.</p>';
     $('#cf-years').value = String(state.cfYears);
     $('#cf-install').checked = state.cfInstall;
     if (document.activeElement !== $('#cf-growth')) $('#cf-growth').value = state.cfGrowth;

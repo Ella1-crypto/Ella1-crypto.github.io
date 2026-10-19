@@ -89,7 +89,7 @@
     $('#schedule').innerHTML = V.schedule(result);
     $('#projection').innerHTML = V.projection(result, state.growth);
     $('#mbar-total').textContent = `${V.won(result.totals.total)}원`;
-    $('#cf-table').innerHTML = window.HTMCFView.render(currentCF());
+    $('#cf-table').innerHTML = window.HTMCFView ? window.HTMCFView.render(currentCF()) : '<p class="muted">월별 납부 표를 불러오지 못했습니다. 새로고침하세요.</p>'; // cf-view.js 일시 실패에도 계산은 계속
     return result;
   }
 
