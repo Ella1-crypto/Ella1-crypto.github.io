@@ -9,6 +9,7 @@
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const won = n => Math.round(Number(n) || 0).toLocaleString('ko-KR');
   const fmt = n => (Number(n) > 0 ? Number(n).toLocaleString('ko-KR', { maximumFractionDigits: 2 }) : '');
+  const fmtN = (n, digits) => (Number(n) > 0 ? Number(n).toLocaleString('ko-KR', { maximumFractionDigits: digits }) : '');
   const eok = n => {
     const v = Number(n) || 0;
     if (v >= 1e8) return `${(v / 1e8).toLocaleString('ko-KR', { maximumFractionDigits: 2 })}억원`;
@@ -29,8 +30,8 @@
   function field(label, inner, hint) {
     return `<label class="fld"><span class="fld-l">${label}</span>${inner}${hint ? `<span class="fld-h">${hint}</span>` : ''}</label>`;
   }
-  const numInput = (pid, f, value, unit, extra = '') =>
-    `<span class="num"><input type="text" inputmode="decimal" data-pid="${esc(pid)}" data-f="${f}" value="${esc(fmt(value))}" ${extra}><em>${unit}</em></span>`;
+  const numInput = (pid, f, value, unit, extra = '', digits = 2) =>
+    `<span class="num"><input type="text" inputmode="decimal" data-pid="${esc(pid)}" data-f="${f}" value="${esc(fmtN(value, digits))}" ${extra}><em>${unit}</em></span>`;
 
   function buildingRows(p) {
     const b = p.bld;
@@ -202,7 +203,7 @@
         <button type="button" class="icon-btn" data-act="del" data-pid="${esc(p.id)}" aria-label="${i + 1}번 필지 삭제">×</button>
       </header>
       <div class="grid4">
-        ${field('내 지분', numInput(p.id, 'share', p.share, '%'), '공유·공동명의면 내 지분')}
+        ${field('내 지분', numInput(p.id, 'share', p.share, '%', '', 4), '공유·공동명의면 내 지분 · 집합건물은 대지권 비율')}
         ${field('토지 면적', numInput(p.id, 'area', p.area, '㎡'), p.areaSource === 'polygon' ? `지적도 경계로 추정 — 토지대장 면적으로 고치세요 ${refreshBtn(p)}` : p.areaSource === 'register' ? '토지대장 면적(자동)' : '')}
         ${field('개별공시지가', numInput(p.id, 'price', p.price, '원/㎡'), priceHint(p))}
         ${field('용도지역', `<select data-pid="${esc(p.id)}" data-f="zone">${ZONES.map(z => opt(z, z || '선택 안 함', p.zone)).join('')}</select>`, p.zoneName ? esc(p.zoneName) : '')}
