@@ -155,6 +155,26 @@ async function housePrice(pnu, dong, ho, env) {
   return { kind: 'none' };
 }
 
+/**
+ * 임시 진단 — 대지권등록정보 API 이름을 몰라 후보를 한 번씩(재시도 없이) 불러 응답 모양만 돌려준다.
+ * 키 값은 응답에서 지운다. 어떤 후보가 맞는지 확인하면 이 경로는 지운다.
+ */
+const LAND_RIGHT_CANDIDATES = ['ldaregList', 'getLdaregList', 'ldaRegList', 'getLandRightAttr', 'getLdaregAttr', 'buldRlnmList'];
+async function probeLandRight(pnu, env) {
+  const out = {};
+  for (const op of LAND_RIGHT_CANDIDATES) {
+    const url = `${env.VWORLD_BASE || VWORLD}ned/data/${op}?${new URLSearchParams({ pnu, format: 'json', numOfRows: '3', pageNo: '1', key: env.VWORLD_KEY, domain: env.VWORLD_DOMAIN })}`;
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+      const body = (await res.text()).split(env.VWORLD_KEY).join('***').slice(0, 1500);
+      out[op] = { http: res.status, body };
+    } catch (err) {
+      out[op] = { error: String(err.message).slice(0, 200) };
+    }
+  }
+  return out;
+}
+
 /** 토지특성 — 올해 값이 없으면 전년도 */
 async function landCharacteristics(pnu, env) {
   const year = new Date().getUTCFullYear();
@@ -248,6 +268,11 @@ async function handle(request, env, ctx) {
     if (!env.BLD_KEY) return json({ error: '건축물대장 키가 아직 설정되지 않았습니다' }, 503, origin);
     maxAge = CACHE_BUILDING_SEC;
     produce = async () => ({ buildings: await buildings(pnu, env) });
+  } else if (url.pathname === '/probe-land-right') { // 임시 진단(대지권 API 확인 후 삭제)
+    const pnu = url.searchParams.get('pnu') || '';
+    if (!/^\d{19}$/.test(pnu)) return json({ error: 'PNU는 숫자 19자리입니다' }, 400, origin);
+    maxAge = 60;
+    produce = async () => probeLandRight(pnu, env);
   } else if (url.pathname === '/house-price') {
     const pnu = url.searchParams.get('pnu') || '';
     const dong = (url.searchParams.get('dong') || '').trim();
