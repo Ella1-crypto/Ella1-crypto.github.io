@@ -131,3 +131,44 @@ test('감면받은 토지: 종부세 공제할 재산세는 감면 후 금액 �
   assert.ok(base.totals.cmt > 0);
   assert.ok(cut.totals.cmt > base.totals.cmt);
 });
+
+test('용도지역별 적용배율(시행령 §101②): 세부 용도지역 이름 우선, 묶음만 있으면 근사', () => {
+  assert.equal(C.zoneMultiplier({ zoneName: '제1종전용주거지역' }).mult, 5);
+  assert.equal(C.zoneMultiplier({ zoneName: '준주거지역' }).mult, 3);
+  assert.equal(C.zoneMultiplier({ zoneName: '제2종일반주거지역' }).mult, 4);
+  assert.equal(C.zoneMultiplier({ zoneName: '일반상업지역' }).mult, 3);
+  assert.equal(C.zoneMultiplier({ zoneName: '준공업지역' }).mult, 4);
+  assert.equal(C.zoneMultiplier({ zoneName: '자연녹지지역' }).mult, 7);
+  assert.equal(C.zoneMultiplier({ zoneName: '계획관리지역' }).mult, 7);
+  assert.equal(C.zoneMultiplier({ zone: '상업지역' }).mult, 3);
+  const res = C.zoneMultiplier({ zone: '주거지역' });
+  assert.equal(res.mult, 4);
+  assert.equal(res.approx, true);
+  assert.equal(C.zoneMultiplier({ zone: '' }), null);
+});
+
+test('바닥면적 × 배율을 넘는 부속토지는 종합합산으로 나눈다', () => {
+  // 일반상업 3배: 바닥 200㎡ → 600㎡까지 별도합산, 1,000㎡ 중 400㎡ 종합합산
+  const parcel = {
+    id: 'z', price: 3000000, area: 1000, cls: 'sep', sgg: '11680', urban: true, zone: '상업지역', zoneName: '일반상업지역',
+    bld: { mode: 'direct', direct: 3e9, rate: 'general', fire: 1, footprint: 200 },
+  };
+  const r = C.compute({ ownerType: '법인', growth: 0, parcels: [parcel] });
+  const w = r.warnings.find(x => x.kind === 'multiplier');
+  assert.equal(w.limit, 600);
+  assert.equal(w.excess, 400);
+  const HT = require('../js/engine.js');
+  const want = HT.calcTaxpayer([
+    { price: 3000000, area: 600, share: 100, cls: 'sep', sgg: '11680', urban: true },
+    { price: 3000000, area: 400, share: 100, cls: 'jong', sgg: '11680', urban: true },
+  ]);
+  assert.equal(r.land.prop.notice.total, want.prop.notice.total);
+});
+
+test('배율 이내면 그대로 별도합산, 바닥면적이 없으면 나누지 않는다', () => {
+  const base = { id: 'y', price: 3000000, area: 500, cls: 'sep', sgg: '11680', urban: true, zoneName: '일반상업지역' };
+  const inside = C.compute({ ownerType: '법인', growth: 0, parcels: [{ ...base, bld: { mode: 'direct', direct: 3e9, rate: 'general', fire: 1, footprint: 200 } }] });
+  assert.equal(inside.warnings.filter(x => x.kind === 'multiplier').length, 0);
+  const none = C.compute({ ownerType: '법인', growth: 0, parcels: [{ ...base, area: 5000, bld: { mode: 'direct', direct: 3e9, rate: 'general', fire: 1, footprint: 0 } }] });
+  assert.equal(none.warnings.filter(x => x.kind === 'multiplier').length, 0);
+});

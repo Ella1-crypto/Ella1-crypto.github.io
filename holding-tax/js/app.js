@@ -276,12 +276,15 @@
     const picked = u.list.filter((x, j) => u.picked.has(j) && !x.skip).slice(0, S.MAX_DONGS);
     if (!picked.length) return;
     const dongs = picked.map(x => ({ name: x.name, structure: x.structure, builtYear: x.builtYear || 2010, floors: x.floors, fire: 'auto', rows: x.rows }));
+    const title = r.list[u.i];
     const share = r.list.length === 1 ? landShareEstimate(u, picked) : null; // 동이 여럿이면 다른 동 전유면적을 몰라 추정하지 않는다
     register.delete(pid);
     let applied = false;
     setState(mapParcel(pid, p => {
       applied = share != null && Number(p.share) === 100; // 사용자가 고친 지분은 덮지 않는다
-      return { ...p, ...(applied ? { share } : {}), bld: { ...(p.bld || S.newBuilding()), mode: 'estimate', dongs } };
+      const prev = p.bld || S.newBuilding();
+      const footprint = title && title.raw && title.raw.archArea > 0 ? title.raw.archArea : prev.footprint; // 건물 전체 바닥(필지 전체 기준 — 지분은 따로)
+      return { ...p, ...(applied ? { share } : {}), bld: { ...prev, mode: 'estimate', footprint, dongs } };
     }));
     toast(applied
       ? `${picked.length}개 호를 넣고, 토지 지분을 전유면적 비율 ${share}%로 추정해 넣었습니다. 등기부 대지권 비율로 확인하세요.`

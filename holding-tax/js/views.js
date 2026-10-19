@@ -142,7 +142,7 @@
         ${field('재산세율', `<select data-pid="${esc(p.id)}" data-f="bld.rate">${Object.entries(BT.RATES).map(([k, r]) => opt(k, r.label, b.rate)).join('')}</select>`)}
       </div>`}
       <div class="grid4">
-        ${field('건축면적(바닥면적)', numInput(p.id, 'bld.footprint', b.footprint, '㎡'), '별도합산 2%·5% 기준 판정용 (건축물대장)')}
+        ${field('건축면적(바닥면적)', numInput(p.id, 'bld.footprint', b.footprint, '㎡'), '건물 바닥 합계 — 별도합산 배율(§101②)·2% 기준 판정 (건축물대장)')}
         ${field('작년 건축물 재산세', numInput(p.id, 'bld.prevMain', b.prevMain, '원'), '선택 — 고지서 본세(내 몫), 150% 상한')}
         ${field('작년 소방분', numInput(p.id, 'bld.prevFire', b.prevFire, '원'), '선택 — 지역자원시설세(내 몫), 150% 상한')}
       </div>
@@ -231,9 +231,11 @@
   }
 
   function warnLines(result) {
-    return (result.warnings || []).map(w => `<p class="warn-line">건물 가액이 토지 가액의 ${(w.ratio * 100).toFixed(1)}%로 ${Math.round(w.ratioMin * 100)}% 미만 — ${w.split
+    return (result.warnings || []).map(w => (w.kind === 'multiplier'
+      ? `<p class="warn-line">바닥면적 ${fmt(w.footprint)}㎡ × ${esc(w.zoneLabel)} ${w.mult}배 = ${fmt(w.limit)}㎡까지만 별도합산 — 넘는 ${fmt(w.excess)}㎡는 종합합산으로 계산했습니다(시행령 §101②).${w.approx ? ' 세부 용도지역을 확인하세요.' : ''}</p>`
+      : `<p class="warn-line">건물 가액이 토지 가액의 ${(w.ratio * 100).toFixed(1)}%로 ${Math.round(w.ratioMin * 100)}% 미만 — ${w.split
       ? `바닥면적 ${w.footprint.toLocaleString('ko-KR')}㎡ 외 토지를 종합합산으로 계산했습니다.`
-      : '바닥면적 외 토지가 종합합산될 수 있습니다. 건물 칸에 건축면적을 넣으세요.'}</p>`).join('')
+      : '바닥면적 외 토지가 종합합산될 수 있습니다. 건물 칸에 건축면적을 넣으세요.'}</p>`)).join('')
       + (result.mode === '2027reform' ? '<p class="warn-line">정부 개편안(국회 심의 중)의 별도합산 5% 기준을 적용한 미리보기입니다.</p>' : '');
   }
 
@@ -315,7 +317,9 @@
     const heavy = result.buildings.filter(b => b.tax && !b.error && b.rate && b.rate !== 'general')
       .map(b => `<tr><th>${esc(nameOf(b.parcelId))}</th><td colspan="5">${esc(BT.RATES[b.rate].label)} — 건축물 재산세 중과·특례세율</td><td>${esc(BT.RATES[b.rate].law)}</td></tr>`).join('');
     const split = (result.warnings || []).filter(w => w.split)
-      .map(w => `<tr><th>${esc(nameOf(w.parcelId))}</th><td colspan="5">건물 가액이 토지의 ${(w.ratio * 100).toFixed(1)}% — 바닥면적 외 토지 종합합산</td><td>지방세법 시행령 제101조①1</td></tr>`).join('');
+      .map(w => (w.kind === 'multiplier'
+        ? `<tr><th>${esc(nameOf(w.parcelId))}</th><td colspan="5">바닥면적 × ${w.mult}배(${esc(w.zoneLabel)}) 초과 ${fmt(w.excess)}㎡ 종합합산</td><td>지방세법 시행령 제101조②</td></tr>`
+        : `<tr><th>${esc(nameOf(w.parcelId))}</th><td colspan="5">건물 가액이 토지의 ${(w.ratio * 100).toFixed(1)}% — 바닥면적 외 토지 종합합산</td><td>지방세법 시행령 제101조①2나</td></tr>`)).join('');
     if (!rows && !heavy && !split) return '';
     return `<h4>감면·중과 적용 내역</h4>
       <div class="tw"><table><thead><tr><th>필지</th><th>규정</th><th>감면율</th><th>토지분 감면</th><th>건축물분 감면</th><th>합계</th><th>근거</th></tr></thead>

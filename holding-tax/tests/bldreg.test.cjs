@@ -189,7 +189,7 @@ test('표제부 동 → 호 조회용 원래 동 이름과 원자료(구조·연
   const d = R.toDong({ name: '본관', dong: '', regKind: '집합건축물', structure: '철근콘크리트구조', purpose: '업무시설', builtYear: 2015, floorsAbove: 8, totalArea: 900, floors: [] });
   assert.equal(d.collective, true);
   assert.equal(d.rawDong, '');
-  assert.deepEqual(d.raw, { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 });
+  assert.deepEqual(d.raw, { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8, archArea: 0 });
   assert.equal(R.toUnit({ ho: '301', floor: 3, purpose: '사무소', excl: 10 }, d.raw).floors, 8);
 });
 

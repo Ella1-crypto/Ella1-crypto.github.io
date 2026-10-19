@@ -128,6 +128,26 @@
    * 토지 행 — 별도합산 필지에 건물이 있고 건물 가액이 토지 가액의 기준비율(2%/5%) 미만이면
    * 바닥면적(건축면적)만 별도합산, 나머지는 종합합산으로 나눈다. 건축면적이 없으면 나누지 않고 경고만 한다.
    */
+  /**
+   * 별도합산 부속토지 용도지역별 적용배율(지방세법 시행령 §101②) — 바닥면적 × 배율까지만 별도합산.
+   * 세부 용도지역 이름(zoneName)을 먼저 보고, 묶음(zone)만 있으면 근사(주거지역은 일반주거 4배로 본다).
+   */
+  function zoneMultiplier(p) {
+    const n = String(p.zoneName || '');
+    const g = String(p.zone || '');
+    const hit = (mult, label, approx = false) => ({ mult, label, approx });
+    if (/전용주거/.test(n)) return hit(5, '전용주거지역');
+    if (/준주거/.test(n)) return hit(3, '준주거지역');
+    if (/일반주거/.test(n)) return hit(4, '일반주거지역');
+    const any = n || g;
+    if (/상업/.test(any)) return hit(3, '상업지역');
+    if (/공업/.test(any)) return hit(4, '공업지역');
+    if (/녹지/.test(any)) return hit(7, '녹지지역');
+    if (/관리|농림|자연환경보전/.test(any)) return hit(7, '도시지역 외');
+    if (/주거/.test(any)) return hit(4, '주거지역(세부 미확인 — 일반주거 4배로 봄)', true);
+    return null;
+  }
+
   function landSplit(parcels, buildings, mode) {
     const ratioMin = modeOf(mode).attachRatio;
     const byId = new Map(buildings.map(b => [b.parcelId, b]));
@@ -140,12 +160,23 @@
       const ratio = b && !b.error && landValue > 0 ? b.value / landValue : null;
       if (p.cls === 'sep' && ratio != null && ratio < ratioMin) {
         const footprint = Math.min(p.area, Number(p.bld && p.bld.footprint) || 0);
-        warnings.push({ parcelId: p.id, ratio, ratioMin, footprint, split: footprint > 0 });
+        warnings.push({ kind: 'ratio', parcelId: p.id, ratio, ratioMin, footprint, split: footprint > 0 });
         if (footprint > 0) {
           rows.push({ ...base, id: p.id, area: footprint, cls: 'sep' });
           if (p.area - footprint > 0) rows.push({ ...base, id: p.id, area: p.area - footprint, cls: 'jong' });
           continue;
         }
+      }
+      // 바닥면적 × 용도지역별 배율을 넘는 부속토지는 종합합산(시행령 §101①2)
+      const foot = Math.min(p.area, Number(p.bld && p.bld.footprint) || 0);
+      const zm = p.cls === 'sep' && foot > 0 && !isHouse(p) ? zoneMultiplier(p) : null;
+      const limit = zm ? Math.round(foot * zm.mult * 100) / 100 : 0;
+      if (zm && p.area - limit > 0.005) {
+        const excess = Math.round((p.area - limit) * 100) / 100;
+        warnings.push({ kind: 'multiplier', parcelId: p.id, footprint: foot, mult: zm.mult, zoneLabel: zm.label, approx: zm.approx, limit, excess, split: true });
+        rows.push({ ...base, id: p.id, area: limit, cls: 'sep' });
+        rows.push({ ...base, id: p.id, area: excess, cls: 'jong' });
+        continue;
       }
       rows.push({ ...base, id: p.id, area: p.area, cls: p.cls });
     }
@@ -301,5 +332,5 @@
     }));
   }
 
-  return Object.freeze({ MODES, compute, series, buildingFor, landSplit, landTotals, landAlloc, PROJECTION_YEARS });
+  return Object.freeze({ MODES, compute, series, buildingFor, landSplit, zoneMultiplier, landTotals, landAlloc, PROJECTION_YEARS });
 }));
