@@ -71,6 +71,8 @@
   let activeId = null; // 지도에서 누른 필지를 채울 주택
   let mapReady = false;
   const geoms = new Map(); // 주택 id → 필지 경계(저장·공유하지 않음)
+  const lookups = new Map(); // 주택 id → 공시가격 조회 {status, dong, ho, kind, items, item, error, seq} — 화면에서만
+  let lookupSeq = 0;
   const drawn = new Map(); // 주택 id → 지도에 그린 경계
 
   function load() {
@@ -139,7 +141,30 @@
           <p class="law-line"><b>${esc(h.addr)}</b>${facts ? ` · ${facts}` : ''} <button type="button" class="link-btn" data-act="unlocate" data-hid="${esc(h.id)}">위치 지우기</button></p>
           ${land}
           ${reg ? `<p class="reg-line ${regCls}"><b>${regTag}</b> — ${esc(reg.note)}. 주택 재산세·종부세 세율과는 무관합니다(취득세·양도세 판단용).</p>` : ''}
+          ${priceLookup(h)}
         </div>`;
+  }
+
+  /** 공시가격 자동 조회 — 지번(PNU) + 동·호 */
+  function priceLookup(h) {
+    if (!h.pnu || !ns.vworld || !ns.vworld.registerEnabled || !ns.vworld.registerEnabled()) return '';
+    const L = lookups.get(h.id) || {};
+    const input = (k, ph, w) => `<input type="text" class="hp-in" maxlength="10" data-hp="${k}" data-hid="${esc(h.id)}" placeholder="${ph}" value="${esc(L[k] || '')}" aria-label="${ph}" style="width:${w}">`;
+    let body = '';
+    if (L.status === 'loading') body = '<p class="muted">공시가격을 조회하는 중…</p>';
+    else if (L.status === 'error') body = `<p class="warn-line">${esc(L.error)}</p>`;
+    else if (L.status === 'ok' && L.kind === 'none') body = '<p class="muted">이 지번의 공동주택·개별주택 공시가격을 찾지 못했습니다. 동·호를 비우고 다시 조회하거나 부동산공시가격알리미에서 확인하세요.</p>';
+    else if (L.status === 'ok' && L.kind === 'indvd') {
+      body = `<p class="need-line">개별주택가격 ${L.item.year}년 <b>${eok(L.item.price)}</b>${L.item.prevPrice ? ` (전년 ${eok(L.item.prevPrice)})` : ''} <button type="button" class="link-btn" data-act="hp-use" data-hid="${esc(h.id)}" data-i="-1">이 값 넣기</button></p>`;
+    } else if (L.status === 'ok' && L.kind === 'apart') {
+      const rows = L.items.map((it, i) => `<li><button type="button" class="link-btn" data-act="hp-use" data-hid="${esc(h.id)}" data-i="${i}">${esc([it.complex, it.dong && `${it.dong}${/동$/.test(it.dong) ? '' : '동'}`, it.ho && `${it.ho}${/호$/.test(it.ho) ? '' : '호'}`].filter(Boolean).join(' '))}</button> <span class="muted">전용 ${it.area}㎡ · ${it.year}년 ${eok(it.price)}${it.prevPrice ? ` · 전년 ${eok(it.prevPrice)}` : ''}</span></li>`).join('');
+      body = `<p class="need-line">공동주택가격 ${L.items.length}건${L.items.length >= 300 ? '(앞 300건)' : ''} — 내 호를 누르면 넣습니다.</p><ul class="hp-list">${rows}</ul>`;
+    }
+    return `<div class="hp">
+            <div class="hp-row">${input('dong', '동', '5.5em')}${input('ho', '호', '5.5em')}<button type="button" class="ghost sm" data-act="hp-load" data-hid="${esc(h.id)}">공시가격 불러오기</button></div>
+            <p class="fld-h">아파트·빌라는 동·호(동이 없으면 호만), 단독·다가구는 비워 두고 누르세요. 국토교통부 공시가격(VWorld)입니다.</p>
+            ${body}
+          </div>`;
   }
 
   function houseRelief(h, row) {
@@ -450,7 +475,43 @@
     $('#history').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  async function loadPrice(hid) {
+    const h = state.houses.find(x => x.id === hid);
+    if (!h || !h.pnu) return;
+    const val = k => { const el = document.querySelector(`[data-hp="${k}"][data-hid="${CSS.escape(hid)}"]`); return el ? el.value.trim().slice(0, 10) : ''; };
+    const dong = val('dong');
+    const ho = val('ho');
+    const seq = ++lookupSeq;
+    lookups.set(hid, { status: 'loading', dong, ho, seq });
+    render();
+    try {
+      const res = await ns.vworld.housePriceAt(h.pnu, dong, ho);
+      if (!lookups.get(hid) || lookups.get(hid).seq !== seq) return; // 그새 다시 조회했거나 주택을 지움
+      lookups.set(hid, { status: 'ok', dong, ho, seq, kind: res.kind, items: res.items || [], item: res.item || null });
+      if (res.kind === 'apart' && res.items.length === 1) { usePrice(hid, res.items[0]); return; }
+    } catch (err) {
+      if (!lookups.get(hid) || lookups.get(hid).seq !== seq) return;
+      lookups.set(hid, { status: 'error', dong, ho, seq, error: err.message || '공시가격을 조회하지 못했습니다.' });
+    }
+    render();
+  }
+
+  /** 조회한 공시가격 넣기 — 전년 값이 있으면 작년 공시가격(과세표준상한용)도 */
+  function usePrice(hid, it) {
+    if (!it || !(it.price > 0)) return;
+    const L = lookups.get(hid);
+    if (L) lookups.set(hid, { ...L, status: 'done' });
+    setState({ ...state, houses: state.houses.map(h => (h.id === hid ? { ...h, price: it.price, prevPrice: it.prevPrice > 0 ? it.prevPrice : h.prevPrice } : h)) });
+    toast(`${it.year}년 공시가격 ${eok(it.price)}을 넣었습니다${it.prevPrice > 0 ? `(전년 ${eok(it.prevPrice)}도)` : ''}.`);
+  }
+
   const actions = {
+    'hp-load': d => loadPrice(d.hid),
+    'hp-use': d => {
+      const L = lookups.get(d.hid);
+      if (!L || L.status !== 'ok') return;
+      usePrice(d.hid, Number(d.i) < 0 ? L.item : L.items[Number(d.i)]);
+    },
     add: () => {
       if (state.houses.length >= MAX_HOUSES) return;
       const h = newHouse();
@@ -459,7 +520,7 @@
       scrollToCard(h.id);
     },
     del: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.filter(h => h.id !== d.hid) }); },
-    unlocate: d => { geoms.delete(d.hid); setState({ ...state, houses: state.houses.map(h => (h.id === d.hid ? { ...h, ...HP.EMPTY_LOC, name: '' } : h)) }); },
+    unlocate: d => { geoms.delete(d.hid); lookups.delete(d.hid); setState({ ...state, houses: state.houses.map(h => (h.id === d.hid ? { ...h, ...HP.EMPTY_LOC, name: '' } : h)) }); },
     share: async () => {
       // 정확한 좌표·PNU는 링크에 넣지 않는다(주소 표시는 남김)
       const shared = { ...state, houses: state.houses.map(h => ({ ...h, lat: null, lng: null, pnu: '' })) };
@@ -480,6 +541,12 @@
   };
 
   function onHouseInput(e) {
+    const hp = e.target.closest('[data-hp]');
+    if (hp) { // 공시가격 조회용 동·호 — 계산 값이 아니라 다시 그려도 남게 기억만 한다
+      const L = lookups.get(hp.dataset.hid) || {};
+      lookups.set(hp.dataset.hid, { ...L, [hp.dataset.hp]: hp.value.trim().slice(0, 10) });
+      return;
+    }
     const el = e.target.closest('[data-f]');
     if (!el || !el.dataset.hid) return;
     const f = el.dataset.f;

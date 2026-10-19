@@ -196,8 +196,14 @@
     return viaApi('/units', dong ? { pnu, dong } : { pnu });
   }
 
+  /** 주택 공시가격(공동주택 동·호 / 개별주택) — VWorld 국가중점데이터, 중계 서버로만 */
+  async function housePriceAt(pnu, dong, ho) {
+    if (!apiBase()) throw new Error('공시가격 조회는 중계 서버가 설정돼야 쓸 수 있습니다.');
+    return viaApi('/house-price', { pnu, dong: dong || '', ho: ho || '' });
+  }
+
   ns.vworld = Object.freeze({
-    enabled, search, parcelAt, buildingsAt, unitsAt, splitJibun, polygonArea, sggName,
+    enabled, search, parcelAt, buildingsAt, unitsAt, housePriceAt, splitJibun, polygonArea, sggName,
     registerEnabled: () => Boolean(apiBase()), tileKey: () => cfg().key,
   });
 })(window.HTM = window.HTM || {});

@@ -399,3 +399,9 @@ tr:last-child > * { border-bottom: 0; }
 .pcard .loc .law-line { margin-top: 0; overflow-wrap: anywhere; }
 .pcard .loc .link-btn { font-size: 12.5px; margin-left: 4px; }
 @media print { .locate { display: none !important; } }
+
+/* 주택 공시가격 조회 */
+.hp { margin-top: 8px; display: grid; gap: 6px; }
+.hp-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.hp-in { font: inherit; font-size: 14px; padding: 6px 8px; border: 1px solid var(--line-2, var(--line)); border-radius: 8px; background: var(--card); color: var(--ink); }
+.hp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 260px; overflow-y: auto; overscroll-behavior: contain; font-size: 13.5px; }

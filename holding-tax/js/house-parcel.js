@@ -2,7 +2,7 @@
  * 브라우저: window.HouseParcel / Node: module.exports
  *
  * 필지에서 받는 것: 주소, 시·군·구(조정대상지역·수도권 판정), 대지 면적, 개별공시지가, 용도지역(도시지역분 추정).
- * 주택 공시가격(토지+건물)은 이 API에 없어 사용자가 부동산공시가격알리미에서 확인해 넣는다.
+ * 주택 공시가격은 화면의 "공시가격 불러오기"(중계 서버 /house-price, VWorld 공동·개별주택가격)로 따로 조회한다.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();

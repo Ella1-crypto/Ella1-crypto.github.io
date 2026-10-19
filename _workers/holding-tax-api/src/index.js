@@ -7,8 +7,10 @@
  *   GET /parcel?lat=37.5&lng=127.0  → 필지 1건 {pnu, addr, jibun, jimok, area, price, priceYear, zone, geom, …}
  *   GET /building?pnu=…(19자리)     → 건축물대장 표제부·층별개요 {buildings: […]} (공공데이터포털 키 BLD_KEY, src/building.js)
  *   GET /units?pnu=…&dong=…         → 집합건축물 호별 전유·공용면적 {units: […], truncated}
+ *   GET /house-price?pnu=…&dong=&ho= → 주택 공시가격 {kind:'apart', items} | {kind:'indvd', item} | {kind:'none'}
  */
 import { buildings, units } from './building.js';
+import { fieldsOf, apartItems, indvdItem } from './house-price.js';
 
 const VWORLD = 'http://api.vworld.kr/'; // Workers에서 https 연결 시 520(2026-10-15 실측)
 const ATTEMPTS = 3;            // VWorld가 정상 키에도 간헐적으로 INCORRECT_KEY를 돌려준다(2026-10-15 실측)
@@ -114,6 +116,45 @@ function sggName(addr) {
   return parts.slice(0, end < 0 ? parts.length : end).join(' ');
 }
 
+const PRICE_PAGE = 1000;
+const PRICE_PAGES = 5; // 한 지번 최대 5,000호
+
+/** 공동주택가격 한 해치 — 1,000행씩 최대 5쪽 */
+async function apartYear(pnu, y, env) {
+  const ok = d => fieldsOf(d) !== null;
+  let all = [];
+  for (let page = 1; page <= PRICE_PAGES; page += 1) {
+    const d = await vworld('ned/data/getApartHousingPriceAttr', { pnu, stdrYear: String(y), numOfRows: String(PRICE_PAGE), pageNo: String(page) }, env, ok);
+    const f = fieldsOf(d) || [];
+    all = all.concat(f);
+    if (f.length < PRICE_PAGE) break;
+  }
+  return all;
+}
+
+/** 주택 공시가격 — 공동주택(동·호) 먼저, 없으면 개별주택. 올해 값이 없으면 전년도, 작년 값도 붙인다(세부담·과표상한용) */
+async function housePrice(pnu, dong, ho, env) {
+  const year = new Date().getUTCFullYear();
+  for (const y of [year, year - 1]) {
+    const items = apartItems(await apartYear(pnu, y, env), dong, ho);
+    if (!items.length) continue;
+    const before = apartItems(await apartYear(pnu, y - 1, env), dong, ho);
+    const key = it => `${it.dong}|${it.ho}`;
+    const prev = new Map(before.map(it => [key(it), it.price]));
+    return { kind: 'apart', year: y, items: items.map(it => ({ ...it, prevPrice: prev.get(key(it)) || 0 })) };
+  }
+  const ok = d => fieldsOf(d) !== null;
+  for (const y of [year, year - 1]) {
+    const d = await vworld('ned/data/getIndvdHousingPriceAttr', { pnu, stdrYear: String(y), numOfRows: '10', pageNo: '1' }, env, ok);
+    const item = indvdItem(fieldsOf(d));
+    if (!item) continue;
+    const p = await vworld('ned/data/getIndvdHousingPriceAttr', { pnu, stdrYear: String(y - 1), numOfRows: '10', pageNo: '1' }, env, ok);
+    const prev = indvdItem(fieldsOf(p));
+    return { kind: 'indvd', year: y, item: { ...item, prevPrice: prev ? prev.price : 0 } };
+  }
+  return { kind: 'none' };
+}
+
 /** 토지특성 — 올해 값이 없으면 전년도 */
 async function landCharacteristics(pnu, env) {
   const year = new Date().getUTCFullYear();
@@ -207,6 +248,14 @@ async function handle(request, env, ctx) {
     if (!env.BLD_KEY) return json({ error: '건축물대장 키가 아직 설정되지 않았습니다' }, 503, origin);
     maxAge = CACHE_BUILDING_SEC;
     produce = async () => ({ buildings: await buildings(pnu, env) });
+  } else if (url.pathname === '/house-price') {
+    const pnu = url.searchParams.get('pnu') || '';
+    const dong = (url.searchParams.get('dong') || '').trim();
+    const ho = (url.searchParams.get('ho') || '').trim();
+    if (!/^\d{19}$/.test(pnu)) return json({ error: 'PNU는 숫자 19자리입니다' }, 400, origin);
+    if (dong.length > 20 || ho.length > 20) return json({ error: '동·호가 너무 깁니다' }, 400, origin);
+    maxAge = CACHE_SEARCH_SEC;
+    produce = async () => housePrice(pnu, dong, ho, env);
   } else if (url.pathname === '/units') {
     const pnu = url.searchParams.get('pnu') || '';
     const dong = (url.searchParams.get('dong') || '').trim();
