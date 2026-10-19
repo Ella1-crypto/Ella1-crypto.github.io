@@ -39,7 +39,7 @@
       <div class="brow">
         ${field('용도', `<select data-pid="${esc(p.id)}" data-f="row.use" data-i="${i}">${Object.entries(BV.USE).map(([k, u]) => opt(k, `${u.label} (${u.index.toFixed(2)})`, r.use)).join('')}</select>`)}
         ${field('면적', numInput(p.id, 'row.area', r.area, '㎡', `data-i="${i}"`))}
-        ${field('가감산율', numInput(p.id, 'row.adjust', r.adjust, '배', `data-i="${i}"`), r.memo ? `${esc(r.memo)} — 5층 미만 1.17, 5~10층 1.27` : '1층 상가 +0.17 등')}
+        ${field('가감산율', numInput(p.id, 'row.adjust', r.adjust, '배', `data-i="${i}"`), r.memo ? `${esc(r.memo)} (별표 8)` : '해당 없으면 1 · 1층 상가 등은 별표 8')}
         ${b.rows.length > 1 ? `<button type="button" class="icon-btn" data-act="row-del" data-pid="${esc(p.id)}" data-i="${i}" aria-label="${i + 1}번째 용도 삭제">×</button>` : ''}
       </div>`).join('');
   }
@@ -64,7 +64,7 @@
       <p class="reg-t">건축물대장 — 계산할 동을 고르세요 (여러 동 선택 가능)</p>
       <ul class="reg-list">${items}</ul>
       <div class="reg-act"><button type="button" class="ghost sm" data-act="reg-apply" data-pid="${esc(p.id)}"${r.picked.size ? '' : ' disabled'}>선택한 ${r.picked.size}개 동 넣기</button>${close}</div>
-      <p class="fld-h">구조·사용승인연도·지상층수·층별 용도 면적·건축면적을 채웁니다. 가감산율(1층 상가 등)은 직접 고치세요.</p>
+      <p class="fld-h">구조·사용승인연도·지상층수·층별 용도 면적·건축면적을 채웁니다. 층별 상가 가감산율(별표 8)도 자동으로 넣습니다. 인텔리전트 빌딩·층고 등 대장에 없는 항목은 직접 더하세요.</p>
     </div>`;
   }
 
@@ -100,7 +100,7 @@
         <button type="button" class="icon-btn" data-act="dong-del" data-pid="${esc(p.id)}" data-i="${i}" aria-label="${esc(d.name)} 빼기">×</button>
       </li>`;
     }).join('')}</ul>
-    <p class="fld-h">가운데 칸은 가감산율(배)입니다 — 1층 상가는 조정기준의 층별 가산율, 해당 없으면 1. 오른쪽은 소방분 배수.</p>
+    <p class="fld-h">가운데 칸은 가감산율(배)입니다 — 상가 층별 가감산은 별표 8로 자동, 대장에 없는 항목(인텔리전트 빌딩 등)은 더해서 고치세요. 오른쪽은 소방분 배수.</p>
     <button type="button" class="link-btn" data-act="dong-clear" data-pid="${esc(p.id)}">동 목록 지우고 한 동으로 직접 입력</button>`;
   }
 

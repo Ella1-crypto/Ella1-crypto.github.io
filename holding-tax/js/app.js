@@ -309,7 +309,7 @@
       return { ...p, bld: { ...base, dongs: picked.map(dong) } };
     }));
     const notes = picked.flatMap(d => d.notes);
-    toast(notes.length ? notes[0] : `건축물대장 ${picked.length}개 동을 넣었습니다. 가감산율은 직접 확인하세요.`);
+    toast(notes.length ? notes[0] : `건축물대장 ${picked.length}개 동을 넣었습니다. 상가 층별 가감산율은 별표 8로 넣었으니 그 밖의 항목만 확인하세요.`);
   }
 
   /* ---------- 필지 추가 ---------- */

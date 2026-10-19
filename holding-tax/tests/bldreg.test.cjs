@@ -132,7 +132,7 @@ test('저장·공유 링크: 여러 동이 유지되고, 이상한 동 값은 �
   assert.equal(many.parcels[0].bld.dongs.length, S.MAX_DONGS);
 });
 
-test('1층 상가는 따로 떼고 층수에 따라 가감산율(5층 미만 1.17, 5~10층 1.27)을 채운다', () => {
+test('1층 상가는 따로 떼고 층수에 따라 가감산율을 채운다(별표 8)', () => {
   const floors = [
     { under: false, no: 1, purpose: '소매점', purposeDetail: '제1종근린생활시설(소매점)', area: 300 },
     { under: false, no: 2, purpose: '소매점', purposeDetail: '제1종근린생활시설(소매점)', area: 300 },
@@ -140,19 +140,19 @@ test('1층 상가는 따로 떼고 층수에 따라 가감산율(5층 미만 1.1
     { under: false, no: 3, purpose: '사무소', purposeDetail: '업무시설', area: 900 },
   ];
   const seven = R.toDong({ purpose: '업무시설', floorsAbove: 7, totalArea: 1700, floors });
-  assert.deepEqual(seven.rows[0], { use: 'retail', area: 300, adjust: 1.27, memo: '1층 상가' });
-  assert.deepEqual(seven.rows.slice(1).map(r => [r.use, r.area, r.adjust]), [['office', 900, 1], ['retail', 500, 1]]);
+  assert.deepEqual(seven.rows.map(r => [r.use, r.area, r.adjust, r.memo || '']), [
+    ['retail', 300, 1.27, '1층 상가 +0.27'], ['retail', 200, 0.75, '지하1층 상가 −0.25'], ['office', 900, 1, ''], ['retail', 300, 1, ''],
+  ]);
   assert.equal(R.toDong({ purpose: '업무시설', floorsAbove: 3, totalArea: 1700, floors }).rows[0].adjust, 1.17);
   const tall = R.toDong({ purpose: '업무시설', floorsAbove: 15, totalArea: 1700, floors });
-  assert.equal(tall.rows[0].adjust, 1);
-  assert.match(tall.notes.join(), /11층 이상/);
+  assert.deepEqual(tall.rows.filter(r => r.memo).map(r => [r.adjust, r.memo]), [[1.32, '1층 상가 +0.32'], [1.04, '2층 상가 +0.04'], [0.8, '지하1층 상가 −0.20']]);
 });
 
 test('집합건축물 호: 전유+공용 면적, 1층 상가 가감산, 층수는 표제부(1동) 기준', () => {
   const title = { structure: '철근콘크리트구조', builtYear: 2015, floorsAbove: 8 };
   const shop = R.toUnit({ dong: '', ho: '101', under: false, floor: 1, purpose: '소매점', detail: '제1종근린생활시설', excl: 40.5, common: 20.25 }, title);
   assert.equal(shop.name, '101호');
-  assert.deepEqual(shop.rows, [{ use: 'retail', area: 60.75, adjust: 1.27, memo: '1층 상가' }]);
+  assert.deepEqual(shop.rows, [{ use: 'retail', area: 60.75, adjust: 1.27, memo: '1층 상가 +0.27' }]);
   assert.equal(shop.floors, 8);
   assert.equal(shop.structure, 'rc');
   const office = R.toUnit({ dong: 'A동', ho: '702호', under: false, floor: 7, purpose: '사무소', detail: '업무시설', excl: 100, common: 30 }, title);
@@ -198,4 +198,31 @@ test('집합건축물 판별: 대장구분 집합, 또는 종류명 표제부(�
   assert.equal(R.toDong({ regKind: '표제부', purpose: '업무시설', totalArea: 1 }).collective, true);
   assert.equal(R.toDong({ regKind: '일반건축물', purpose: '업무시설', totalArea: 1 }).collective, false);
   assert.equal(R.toDong({ regKind: '일반', purpose: '업무시설', totalArea: 1 }).collective, false);
+});
+
+test('별표 8 가감산율: 단층 제외, 층수 구간, 지하·5층 이상 감산, 고층·초고층 가산', () => {
+  const at = (n, no, under = false, use = 'retail') => R.floorAdjust(n, { no, under }, use).adjust;
+  assert.equal(at(1, 1), 1);          // 단층건물 1층 상가는 가산 제외
+  assert.equal(at(2, 1), 1.17);
+  assert.equal(at(4, 1), 1.17);
+  assert.equal(at(5, 1), 1.27);
+  assert.equal(at(10, 1), 1.27);
+  assert.equal(at(11, 1), 1.32);
+  assert.equal(at(20, 1), 1.32);
+  assert.equal(at(21, 1), 1.36);
+  assert.equal(at(29, 1), 1.36);
+  assert.equal(at(31, 1), 1.47);       // 30층 초과 +0.46, 고층(30층 이상) +0.01
+  assert.equal(at(10, 2), 1);          // 2층 가산은 11층 이상 건물만
+  assert.equal(at(25, 2), 1.05);
+  assert.equal(at(10, 1, true), 0.75); // 지하1층, 10층 이하 건물
+  assert.equal(at(11, 1, true), 0.8);
+  assert.equal(at(5, 2, true), 0.6);   // 지하2층 이하
+  assert.equal(at(8, 6), 0.88);        // 5~10층 건물의 5층 이상 상가 −0.12
+  assert.equal(at(15, 9), 0.95);
+  assert.equal(at(8, 6, false, 'office'), 1); // 상가가 아니면 층별 가감산 없음
+  assert.equal(at(30, 3, false, 'office'), 1.01); // 고층 건물 가산은 용도 무관
+  assert.equal(at(55, 3, false, 'office'), 1.06);
+  assert.equal(at(70, 3, false, 'office'), 1.07);
+  assert.equal(at(85, 3, false, 'office'), 1.08);
+  assert.equal(R.floorAdjust(31, { no: 1 }, 'retail').memo, '1층 상가 +0.46, 고층 +0.01');
 });
