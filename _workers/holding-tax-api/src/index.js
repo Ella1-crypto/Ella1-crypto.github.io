@@ -8,9 +8,11 @@
  *   GET /building?pnu=…(19자리)     → 건축물대장 표제부·층별개요 {buildings: […]} (공공데이터포털 키 BLD_KEY, src/building.js)
  *   GET /units?pnu=…&dong=…         → 집합건축물 호별 전유·공용면적 {units: […], truncated}
  *   GET /house-price?pnu=…&dong=&ho= → 주택 공시가격 {kind:'apart', items} | {kind:'indvd', item} | {kind:'none'}
+ *   GET /land-right?pnu=…&units=동|호,… → 집합건물 호별 대지권 비율 {items: [{dong, ho, right: {rate, share} | null}]}
  */
 import { buildings, units } from './building.js';
 import { fieldsOf, apartItems, indvdItem } from './house-price.js';
+import { rowsOf, landRights, findRight } from './land-right.js';
 
 const VWORLD = 'http://api.vworld.kr/'; // Workers에서 https 연결 시 520(2026-10-15 실측)
 const ATTEMPTS = 3;            // VWorld가 정상 키에도 간헐적으로 INCORRECT_KEY를 돌려준다(2026-10-15 실측)
@@ -155,24 +157,31 @@ async function housePrice(pnu, dong, ho, env) {
   return { kind: 'none' };
 }
 
-/**
- * 임시 진단 — 대지권등록정보 API 이름을 몰라 후보를 한 번씩(재시도 없이) 불러 응답 모양만 돌려준다.
- * 키 값은 응답에서 지운다. 어떤 후보가 맞는지 확인하면 이 경로는 지운다.
- */
-const LAND_RIGHT_CANDIDATES = ['ldaregList', 'getLdaregList', 'ldaRegList', 'getLandRightAttr', 'getLdaregAttr', 'buldRlnmList'];
-async function probeLandRight(pnu, env) {
-  const out = {};
-  for (const op of LAND_RIGHT_CANDIDATES) {
-    const url = `${env.VWORLD_BASE || VWORLD}ned/data/${op}?${new URLSearchParams({ pnu, format: 'json', numOfRows: '3', pageNo: '1', key: env.VWORLD_KEY, domain: env.VWORLD_DOMAIN })}`;
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
-      const body = (await res.text()).split(env.VWORLD_KEY).join('***').slice(0, 1500);
-      out[op] = { http: res.status, body };
-    } catch (err) {
-      out[op] = { error: String(err.message).slice(0, 200) };
+const RIGHT_PAGE = 1000;
+const RIGHT_PAGES = 3;
+const MAX_RIGHT_UNITS = 30;
+
+/** 대지권등록목록 — 지번 전체를 먼저 받고, 못 찾은 호는 호 번호로 한 번 더 묻는다 */
+async function landRight(pnu, wanted, env) {
+  const ok = d => rowsOf(d) !== null || (d && d.response && d.response.resultCode === 'INFO-000');
+  const fetchRows = async extra => {
+    let all = [];
+    for (let page = 1; page <= RIGHT_PAGES; page += 1) {
+      const d = await vworld('ned/data/ldaregList', { pnu, numOfRows: String(RIGHT_PAGE), pageNo: String(page), ...extra }, env, ok);
+      const rows = rowsOf(d) || [];
+      all = all.concat(rows);
+      if (rows.length < RIGHT_PAGE) break;
     }
+    return landRights(all);
+  };
+  const list = await fetchRows({});
+  const items = [];
+  for (const w of wanted.slice(0, MAX_RIGHT_UNITS)) {
+    let hit = findRight(list, w.dong, w.ho);
+    if (!hit) hit = findRight(await fetchRows({ buldHoNm: w.ho }), w.dong, w.ho);
+    items.push({ dong: w.dong, ho: w.ho, right: hit });
   }
-  return out;
+  return { items };
 }
 
 /** 토지특성 — 올해 값이 없으면 전년도 */
@@ -268,11 +277,15 @@ async function handle(request, env, ctx) {
     if (!env.BLD_KEY) return json({ error: '건축물대장 키가 아직 설정되지 않았습니다' }, 503, origin);
     maxAge = CACHE_BUILDING_SEC;
     produce = async () => ({ buildings: await buildings(pnu, env) });
-  } else if (url.pathname === '/probe-land-right') { // 임시 진단(대지권 API 확인 후 삭제)
+  } else if (url.pathname === '/land-right') {
+    // units=동|호,동|호 … (동 없으면 비움) — 집합건물 호별 대지권 비율
     const pnu = url.searchParams.get('pnu') || '';
+    const raw = (url.searchParams.get('units') || '').split(',').filter(Boolean).slice(0, 30);
+    const wanted = raw.map(x => { const [dong = '', ho = ''] = x.split('|'); return { dong: dong.trim().slice(0, 20), ho: ho.trim().slice(0, 20) }; }).filter(w => w.ho);
     if (!/^\d{19}$/.test(pnu)) return json({ error: 'PNU는 숫자 19자리입니다' }, 400, origin);
-    maxAge = 60;
-    produce = async () => probeLandRight(pnu, env);
+    if (!wanted.length) return json({ error: '호를 1~30개 주세요' }, 400, origin);
+    maxAge = CACHE_SEARCH_SEC;
+    produce = async () => landRight(pnu, wanted, env);
   } else if (url.pathname === '/house-price') {
     const pnu = url.searchParams.get('pnu') || '';
     const dong = (url.searchParams.get('dong') || '').trim();
@@ -302,7 +315,9 @@ async function handle(request, env, ctx) {
   } catch (err) {
     console.error('upstream', url.pathname, err.message); // 서버 로그(주소 원문은 남기지 않음)
     const source = ['/building', '/units'].includes(url.pathname) ? '건축물대장' : 'VWorld';
-    return json({ error: `${source} 조회에 실패했습니다. 잠시 후 다시 시도하세요.` }, 502, origin);
+    // 우리가 만든 오류 문구(응답 코드·HTTP 상태)만 붙인다 — 키·URL은 들어 있지 않다
+    const detail = /^건축물대장 (응답|HTTP)/.test(err.message) ? ` (${err.message.replace(/^건축물대장 /, '')})` : '';
+    return json({ error: `${source} 조회에 실패했습니다${detail}. 잠시 후 다시 시도하세요.` }, 502, origin);
   }
 }
 

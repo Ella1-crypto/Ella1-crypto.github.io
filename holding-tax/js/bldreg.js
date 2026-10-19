@@ -196,6 +196,8 @@
       purpose: [...new Set([u.purpose, u.detail].filter(Boolean))].join(' · '),
       excl: Number(u.excl) || 0,
       common: Number(u.common) || 0,
+      rawDong: String(u.dong || ''), // 대지권 조회용 원래 동·호
+      rawHo: String(u.ho || ''),
       skip,
     };
   }

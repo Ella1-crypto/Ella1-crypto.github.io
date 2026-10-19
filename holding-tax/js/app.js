@@ -268,6 +268,32 @@
     return Math.max(0.01, Math.round((mine / total) * 1e6) / 1e4);
   }
 
+  /**
+   * 대지권등록부(VWorld ldaregList)의 실제 대지권 비율로 토지 지분을 바꾼다.
+   * 그사이 사용자가 지분을 고쳤으면(추정값·100%가 아니면) 덮지 않는다.
+   */
+  async function refineLandShare(pid, picked, placed) {
+    const p = state.parcels.find(x => x.id === pid);
+    if (!p || !p.pnu || !ns.vworld.landRightAt) return;
+    try {
+      const res = await ns.vworld.landRightAt(p.pnu, picked.map(x => ({ dong: x.rawDong, ho: x.rawHo })));
+      const items = res.items || [];
+      const found = items.filter(it => it.right);
+      if (!found.length) { toast('대지권등록부에서 이 호들의 대지권 비율을 찾지 못했습니다. 등기부로 확인해 고치세요.'); return; }
+      const cur = state.parcels.find(x => x.id === pid);
+      if (!cur || !(Math.abs(cur.share - placed) < 1e-9 || cur.share === 100)) return;
+      const share = Math.max(0.0001, Math.round(found.reduce((t, it) => t + it.right.share, 0) * 1e4) / 1e4);
+      setState(mapParcel(pid, x => ({ ...x, share })));
+      const missing = items.length - found.length;
+      const rates = found.slice(0, 3).map(it => `${it.ho}호 ${it.right.rate}`).join(', ');
+      toast(missing
+        ? `대지권 비율 ${share}%(${rates}${found.length > 3 ? ' …' : ''}) — ${missing}개 호는 못 찾아 빠졌으니 더하세요.`
+        : `토지 지분을 대지권등록부 비율 ${share}%로 바꿨습니다(${rates}${found.length > 3 ? ' …' : ''}).`);
+    } catch (err) {
+      // 조회 실패면 전유면적 추정값을 그대로 둔다
+    }
+  }
+
   /** 고른 호를 각각 한 '동' 입력으로 — 호마다 따로 계산 */
   function applyUnits(pid) {
     const r = register.get(pid);
@@ -289,6 +315,7 @@
     toast(applied
       ? `${picked.length}개 호를 넣고, 토지 지분을 전유면적 비율 ${share}%로 추정해 넣었습니다. 등기부 대지권 비율로 확인하세요.`
       : `${picked.length}개 호를 넣었습니다. 토지 '내 지분'은 대지권 비율로 고치세요.`);
+    refineLandShare(pid, picked, applied ? share : 100);
   }
 
   /** 고른 동을 건물 입력에 넣는다 — 한 동이면 기존 입력칸에, 여러 동이면 동 목록으로 */

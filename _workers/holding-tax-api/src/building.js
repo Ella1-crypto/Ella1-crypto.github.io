@@ -80,13 +80,30 @@ export function normalize(titles, floors) {
   });
 }
 
+const RETRY_MS = 600;
+
+/** 공공데이터포털 호출 — 일시 오류(시간 초과·5xx·형식 오류)는 한 번 더 시도한다 */
 async function call(op, parts, rows, env, page = 1) {
+  try {
+    return await callOnce(op, parts, rows, env, page);
+  } catch (err) {
+    if (/응답 오류\((2[0-9]|3[0-9])\)/.test(err.message)) throw err; // 키·한도 오류는 다시 해도 같다
+    await new Promise(r => setTimeout(r, RETRY_MS));
+    return callOnce(op, parts, rows, env, page);
+  }
+}
+
+async function callOnce(op, parts, rows, env, page) {
   const params = new URLSearchParams({ ...parts, serviceKey: env.BLD_KEY, numOfRows: String(rows), pageNo: String(page), _type: 'json' });
   const res = await fetch(`${env.BLD_BASE || BLD}${op}?${params}`, { signal: AbortSignal.timeout(TIMEOUT_MS) });
   if (!res.ok) throw new Error(`건축물대장 HTTP ${res.status}`);
   const body = await res.text();
   let data;
-  try { data = JSON.parse(body); } catch (_) { throw new Error('건축물대장 응답이 JSON이 아님(키 미등록 등)'); }
+  try { data = JSON.parse(body); } catch (_) {
+    // 키 미등록·한도 초과 등은 XML로 온다 — 코드(returnReasonCode)만 꺼낸다
+    const code = (body.match(/<returnReasonCode>(\d+)<\/returnReasonCode>/) || body.match(/<resultCode>(\w+)<\/resultCode>/) || [])[1];
+    throw new Error(`건축물대장 응답 오류(${code || 'XML'})`);
+  }
   const items = itemsOf(data);
   items.total = Number(data.response.body && data.response.body.totalCount) || items.length;
   return items;

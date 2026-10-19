@@ -202,8 +202,15 @@
     return viaApi('/house-price', { pnu, dong: dong || '', ho: ho || '' });
   }
 
+  /** 집합건물 호별 대지권 비율 — units: [{dong, ho}] (최대 30) */
+  async function landRightAt(pnu, units) {
+    if (!apiBase()) throw new Error('대지권 조회는 중계 서버가 설정돼야 쓸 수 있습니다.');
+    const list = units.slice(0, 30).map(u => `${String(u.dong || '').replace(/[|,]/g, '')}|${String(u.ho || '').replace(/[|,]/g, '')}`).join(',');
+    return viaApi('/land-right', { pnu, units: list });
+  }
+
   ns.vworld = Object.freeze({
-    enabled, search, parcelAt, buildingsAt, unitsAt, housePriceAt, splitJibun, polygonArea, sggName,
+    enabled, search, parcelAt, buildingsAt, unitsAt, housePriceAt, landRightAt, splitJibun, polygonArea, sggName,
     registerEnabled: () => Boolean(apiBase()), tileKey: () => cfg().key,
   });
 })(window.HTM = window.HTM || {});
