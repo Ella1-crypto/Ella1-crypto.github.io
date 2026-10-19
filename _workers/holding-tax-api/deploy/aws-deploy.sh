@@ -10,6 +10,14 @@ ROLE=holding-tax-relay-role
 ORIGIN=https://ella1-crypto.github.io
 cd "$(dirname "$0")/.."
 
+# 먼저 GitHub 최신 코드로 맞추고 그 스크립트로 다시 실행한다 — 옛 코드를 배포하는 실수 방지
+if [ -z "${HTM_UPDATED:-}" ] && git -C . rev-parse --git-dir >/dev/null 2>&1; then
+  echo "0/5 최신 코드 받기"
+  git fetch -q --depth 1 origin main && git reset -q --hard origin/main
+  echo "   $(git log -1 --format='%h %s')"
+  HTM_UPDATED=1 exec bash deploy/aws-deploy.sh "$@"
+fi
+
 # 이미 배포된 함수가 있으면 저장된 키를 그대로 쓴다(Enter만 누르면 유지)
 current_env() {
   aws lambda get-function-configuration --function-name "$FN" --region "$REGION"     --query "Environment.Variables.$1" --output text 2>/dev/null | grep -v '^None$' || true
