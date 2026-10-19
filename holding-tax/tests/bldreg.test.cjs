@@ -226,3 +226,25 @@ test('별표 8 가감산율: 단층 제외, 층수 구간, 지하·5층 이상 �
   assert.equal(at(85, 3, false, 'office'), 1.08);
   assert.equal(R.floorAdjust(31, { no: 1 }, 'retail').memo, '1층 상가 +0.46, 고층 +0.01');
 });
+
+test('용도지수(별표 5): 괄호 안 세부 용도가 근린생활보다 먼저, 빠졌던 용도 추가', () => {
+  const V = require('../js/valuation.js');
+  const idx = (p, d) => V.USE[R.useKey(p, d)].index;
+  assert.equal(idx('', '제2종근린생활시설(체육도장)'), 1.04);
+  assert.equal(idx('운동시설', '골프연습장'), 1.13);
+  assert.equal(idx('', '제2종근린생활시설(학원)'), 1.13);
+  assert.equal(idx('', '제2종근린생활시설(단란주점)'), 1.21);
+  assert.equal(idx('위락시설', '유흥주점'), 1.24);
+  assert.equal(idx('의료시설', '종합병원'), 1.24);
+  assert.equal(idx('의료시설', '치과병원'), 1.20);
+  assert.equal(idx('', '제1종근린생활시설(치과의원)'), 1.12);
+  assert.equal(idx('장례시설', '장례식장'), 1.20);
+  assert.equal(idx('노유자시설', '노인복지시설'), 1.03);
+  assert.equal(idx('문화및집회시설', '예식장'), 1.12);
+  assert.equal(idx('기타일반업무시설', '발전기실'), 1.12); // 부속실은 발전시설이 아니다
+  assert.equal(idx('', '변전소'), 1.10);
+  assert.equal(idx('동물및식물관련시설', '축사'), 0.37);
+  // 신축가격기준액 묶음: 농수산용 64만원, 공공용 85만원
+  assert.equal(V.estimate({ structure: 'steel', use: 'farmShed', builtYear: 2020, area: 100, landPrice: 50000 }).newPrice, 640000);
+  assert.equal(V.estimate({ structure: 'rc', use: 'power', builtYear: 2020, area: 100, landPrice: 50000 }).newPrice, 850000);
+});

@@ -4,6 +4,8 @@
  *  · 지방세법 §4②, 시행령 §4①1의2 — 신축가격기준액 × 구조·용도·위치지수 × 경과연수별 잔가율 × 면적 × 가감산율
  *  · 「2026년 건물신축가격기준액 고시」 행정안전부고시 제2025-82호(2025.12.29., 시행 2026.6.1.)
  *  · 행정안전부 「2026년 지방세 시가표준액 조사·산정 업무요령」 제3장 — 구조지수·용도지수·위치지수·잔가율표
+ *  · 「지방세 시가표준액 조사·산정 기준」(행정안전부 훈령 제417호, 제19조 2026.6.1. 시행) 별표 4~8과 대조(2026-10-19):
+ *    구조지수·위치지수·잔가율 일치, 용도지수는 아래 표의 값 일치(상업용 부동산에 쓰는 세부용도만 담음)
  *  · ㎡당 금액은 1,000원 미만 버림(1,000원 미만이면 1,000원) — 조사·산정 기준 §19
  * 오피스텔은 표준가격기준액 방식이라 이 산식을 쓰지 않는다(시행령 §4①1).
  */
@@ -14,7 +16,7 @@
   'use strict';
 
   const BASE_YEAR = 2026;
-  const VERSION = '2026 업무요령 · 2026-10-15 확인';
+  const VERSION = '2026 업무요령·조사산정기준 별표 · 2026-10-19 확인';
 
   // 건물신축가격기준액(원/㎡) — 2025년 값은 비교 표시용
   const NEW_PRICE = Object.freeze({
@@ -59,10 +61,17 @@
     hotel3: { label: '관광호텔(3성급 이하)·콘도', group: 'commercial', index: 1.29 },
     hotel: { label: '호텔(숙박업)·생활숙박시설', group: 'commercial', index: 1.24 },
     motel: { label: '여관·모텔', group: 'commercial', index: 1.20 },
+    generalHospital: { label: '종합병원', group: 'commercial', index: 1.24 },
     hospital: { label: '일반병원·요양병원', group: 'commercial', index: 1.20 },
     clinic: { label: '의원·치과의원·한의원', group: 'commercial', index: 1.12 },
+    bar: { label: '유흥주점', group: 'commercial', index: 1.24 },
+    danran: { label: '단란주점', group: 'commercial', index: 1.21 },
+    bathLarge: { label: '일반목욕장(연면적 3,000㎡ 이상)', group: 'commercial', index: 1.29 },
+    bathMid: { label: '일반목욕장(연면적 1,000~3,000㎡)', group: 'commercial', index: 1.20 },
+    bathSmall: { label: '일반목욕장(연면적 1,000㎡ 미만)', group: 'commercial', index: 1.12 },
     parking: { label: '주차장', group: 'commercial', index: 0.71 },
     parkingBldg: { label: '주차전용빌딩', group: 'commercial', index: 0.62 },
+    autoService: { label: '세차장·정비공장·폐차장·차고', group: 'commercial', index: 0.71 },
     factory: { label: '공장·공장사무실', group: 'industrial', index: 0.80 },
     kic: { label: '지식산업센터 내 공장', group: 'industrial', index: 1.00 },
     smallFactory: { label: '제조업소(바닥면적 500㎡ 미만)', group: 'industrial', index: 0.95 },
@@ -70,10 +79,20 @@
     logistics: { label: '물류터미널·집배송시설·대형창고', group: 'industrial', index: 0.85 },
     warehouse: { label: '창고(일반)', group: 'industrial', index: 0.80 },
     gasStation: { label: '주유소·위험물 저장시설', group: 'industrial', index: 1.26 },
+    recycle: { label: '정수장·하수처리·고물상·폐기물 시설', group: 'industrial', index: 0.80 },
     school: { label: '학교·연구소·교육원', group: 'culture', index: 1.03 },
     academy: { label: '학원·교습소', group: 'culture', index: 1.13 },
     religion: { label: '교회·성당·사찰 등 종교집회장', group: 'culture', index: 1.04 },
-    sports: { label: '골프장·옥내수영장 등 운동시설', group: 'culture', index: 1.13 },
+    sports: { label: '골프장·스키장·옥내수영장·빙상장 등', group: 'culture', index: 1.13 },
+    sportsOther: { label: '그 밖의 운동시설(체육도장·헬스장 등)', group: 'culture', index: 1.04 },
+    assembly: { label: '예식장·공연장·집회장·전시장', group: 'culture', index: 1.12 },
+    welfare: { label: '노유자시설(아동·노인·사회복지)', group: 'culture', index: 1.03 },
+    funeral: { label: '장례식장', group: 'culture', index: 1.20 },
+    broadcast: { label: '방송국·전신전화국·통신용시설', group: 'public', index: 1.14 },
+    power: { label: '발전시설·변전소', group: 'public', index: 1.10 },
+    transport: { label: '여객터미널·철도·공항·항만시설', group: 'public', index: 0.91 },
+    farmShed: { label: '축사·작물재배사·온실', group: 'agricultural', index: 0.37 },
+    farmCold: { label: '농수산용 냉동·냉장창고', group: 'agricultural', index: 1.17 },
   });
 
   // 위치지수 — 건물 부속토지 개별공시지가(천원/㎡) 구간 상한과 지수
