@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개인정보처리방침 | 보유세맵</title>
+<meta name="description" content="보유세맵은 회원가입 없이 쓰는 무료 부동산 세금 계산기로, 입력값을 서버에 저장하지 않습니다. 지도·공시가격 조회 시 외부로 전달되는 정보와 광고·쿠키 사용을 안내합니다.">
+<link rel="canonical" href="https://ella1-crypto.github.io/holding-tax/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="개인정보처리방침 | 보유세맵">
+<meta property="og:url" content="https://ella1-crypto.github.io/holding-tax/privacy.html">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://ella1-crypto.github.io/holding-tax/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .policy { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; line-height: 1.75; }
+  .policy h1 { font-size: clamp(26px, 4vw, 34px); margin: 0 0 6px; }
+  .policy h2 { font-size: 19px; margin: 34px 0 8px; }
+  .policy p, .policy li { font-size: 15.5px; color: var(--ink-2); }
+  .policy ul { padding-left: 20px; }
+  .policy .meta { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  .policy table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 8px 0; }
+  .policy th, .policy td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  .policy th { background: var(--paper-2); }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
+  <nav aria-label="계산기 종류" class="kind">
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html">양도세</a><a href="lifecycle.html">한 번에</a>
+  </nav>
+</header>
+
+<main class="policy">
+  <h1>개인정보처리방침</h1>
+  <p class="meta">시행일 2026년 10월 19일</p>
+
+  <p>보유세맵(이하 "사이트")은 회원가입·로그인 없이 쓰는 무료 부동산 세금 계산기입니다. 사이트는 이용자의 이름·연락처 같은 개인정보를 받거나 서버에 저장하지 않습니다. 아래는 계산기를 쓰는 동안 정보가 어디에 저장되고 어디로 전달되는지에 대한 안내입니다.</p>
+
+  <h2>1. 수집하는 개인정보</h2>
+  <p>사이트는 개인정보를 수집하지 않습니다. 계산에 넣는 공시가격·면적·지분·주소 같은 값은 이용자의 브라우저 안에서만 계산됩니다.</p>
+
+  <h2>2. 이용자 기기에 저장되는 정보</h2>
+  <ul>
+    <li><b>입력값 자동 저장:</b> 다시 방문했을 때 이어서 계산할 수 있도록 입력값을 이용자 브라우저의 로컬 저장소(localStorage)에 저장합니다. 이 정보는 이용자 기기에만 있고 사이트 운영자에게 전송되지 않습니다. 브라우저의 사이트 데이터 삭제로 언제든 지울 수 있습니다.</li>
+    <li><b>계산 기록 저장:</b> "계산 기록 저장"을 누른 경우에만 같은 로컬 저장소에 보관합니다.</li>
+    <li><b>공유 링크:</b> "링크 복사"를 누르면 입력값이 링크 주소(# 뒤)에 담깁니다. 이 링크를 받은 사람은 같은 값을 볼 수 있으니 공유할 때 유의하세요. 주택 계산기의 공유 링크에는 정확한 좌표와 지번 고유번호(PNU)를 넣지 않습니다.</li>
+  </ul>
+
+  <h2>3. 외부로 전달되는 정보</h2>
+  <p>지도·주소 검색과 공시지가·건축물대장·공시가격 조회 기능을 쓸 때 다음 정보가 외부 기관에 전달됩니다.</p>
+  <table>
+    <thead><tr><th>기능</th><th>전달되는 정보</th><th>받는 곳</th></tr></thead>
+    <tbody>
+      <tr><td>주소 검색·필지 조회·공시지가</td><td>검색어, 누른 위치의 좌표, 지번 고유번호(PNU)</td><td>중계 서버(AWS 서울 리전)를 거쳐 국토교통부 VWorld</td></tr>
+      <tr><td>건축물대장·호 목록</td><td>지번 고유번호, 동 이름</td><td>중계 서버를 거쳐 국토교통부 건축HUB(공공데이터포털)</td></tr>
+      <tr><td>주택 공시가격·대지권 비율</td><td>지번 고유번호, 동·호</td><td>중계 서버를 거쳐 국토교통부 VWorld</td></tr>
+      <tr><td>지도 그림(타일)</td><td>보고 있는 지도 위치</td><td>VWorld 지도 서버(브라우저가 직접 요청)</td></tr>
+      <tr><td>글꼴·지도 라이브러리</td><td>일반적인 웹 요청 정보(IP 주소 등)</td><td>Google Fonts, jsDelivr, cdnjs</td></tr>
+    </tbody>
+  </table>
+  <p>중계 서버는 조회 결과를 돌려주는 데만 쓰입니다. 과도한 요청을 막기 위해 접속 IP 주소별 요청 횟수를 실행 중인 서버 메모리에서만 잠시 세며 파일·데이터베이스에 저장하지 않고, 오류 기록에 주소나 검색어 원문을 남기지 않습니다. 위 기관들이 받은 정보는 각 기관의 개인정보처리방침에 따라 처리됩니다.</p>
+
+  <h2>4. 광고와 쿠키</h2>
+  <p>사이트는 운영비 충당을 위해 Google 애드센스 광고를 게재할 수 있습니다. 광고를 게재하는 경우 Google 등 제3자 광고 사업자는 쿠키를 사용해 이용자의 이 사이트 및 다른 사이트 방문 기록을 바탕으로 광고를 보여 줄 수 있습니다.</p>
+  <ul>
+    <li>맞춤 광고는 <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google 광고 설정</a>에서 끌 수 있습니다.</li>
+    <li>Google의 데이터 사용 방식은 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google 파트너 사이트 정책</a>에서 확인할 수 있습니다.</li>
+    <li>브라우저 설정에서 쿠키 저장을 거부할 수 있습니다. 이 경우에도 계산기는 그대로 쓸 수 있습니다.</li>
+  </ul>
+
+  <h2>5. 이용자의 권리</h2>
+  <p>사이트는 개인정보를 보관하지 않으므로 열람·정정·삭제를 요청할 대상 정보가 없습니다. 이용자 기기에 저장된 입력값은 브라우저에서 직접 지울 수 있습니다.</p>
+
+  <h2>6. 문의</h2>
+  <p>이 방침이나 사이트에 관한 문의는 <a href="https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues" target="_blank" rel="noopener">GitHub 이슈</a>로 남겨 주세요.</p>
+
+  <h2>7. 변경</h2>
+  <p>이 방침을 바꾸면 이 페이지에 시행일과 함께 알립니다.</p>
+</main>
+
+<footer class="foot">
+  <p><a href="./">상업용 보유세</a> · <a href="house.html">주택 보유세</a> · <a href="acquisition.html">취득세</a> · <a href="transfer.html">양도세</a> · <a href="lifecycle.html">한 번에</a></p>
+</footer>
+</body>
+</html>

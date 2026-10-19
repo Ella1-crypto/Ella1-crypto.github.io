@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ella1-crypto.github.io/sitemap.xml
