@@ -39,16 +39,22 @@
       <p class="fine">간편 추정치입니다. 투자 권유나 세무 자문이 아닙니다.</p>`;
   }
 
+  // 들어오는 돈 +, 나가는 돈 − (Lifecycle.signedRows). 시세·공시가격은 참고(현금 아님)
+  const INFO = ['value', 'official'];
   const COLS = [
-    ['label', '연도'], ['value', '시세(연말)'], ['official', '공시가격(6.1.)'], ['deposit', '보증금 수수'], ['rent', '임대수입'], ['opex', '운영비'], ['interest', '이자'],
-    ['prop', '재산세 등'], ['cmt', '종부세'], ['acqTax', '취득세'], ['transferTax', '양도세'], ['fee', '중개수수료'], ['saleNet', '매각−대출상환'], ['flow', '순현금흐름'],
+    ['label', '연도'], ['value', '시세(참고)'], ['official', '공시가격(참고)'], ['trade', '매입·매각'], ['loan', '대출'], ['deposit', '보증금'],
+    ['rent', '임대수입'], ['opex', '운영비'], ['interest', '이자'], ['prop', '재산세 등'], ['cmt', '종부세'], ['acqTax', '취득세'],
+    ['transferTax', '양도세'], ['fee', '중개수수료'], ['flow', '순현금흐름'],
   ];
 
   function cfTable(r) {
-    const sum = k => r.rows.reduce((s, x) => s + (Number(x[k]) || 0), 0);
+    const rows = Life.signedRows(r);
+    const sum = k => rows.reduce((s, x) => s + (Number(x[k]) || 0), 0);
+    const cell = (x, k) => `<td class="${INFO.includes(k) ? 'info' : x[k] < 0 ? 'neg' : ''}">${x[k] ? won(x[k]) : '—'}</td>`;
     return `<div class="tw"><table class="cf-year"><thead><tr>${COLS.map(([, h]) => `<th>${h}</th>`).join('')}</tr></thead><tbody>
-      ${r.rows.map(x => `<tr>${COLS.map(([k]) => (k === 'label' ? `<th>${esc(x.label)}</th>` : `<td${k === 'flow' && x.flow < 0 ? ' class="neg"' : ''}>${x[k] ? won(x[k]) : '—'}</td>`)).join('')}</tr>`).join('')}
-    </tbody><tfoot><tr><th>합계</th>${COLS.slice(1).map(([k]) => `<td>${['value', 'official'].includes(k) ? '' : won(sum(k))}</td>`).join('')}</tr></tfoot></table></div>`;
+      ${rows.map(x => `<tr>${COLS.map(([k]) => (k === 'label' ? `<th>${esc(x.label)}</th>` : cell(x, k))).join('')}</tr>`).join('')}
+    </tbody><tfoot><tr><th>합계</th>${COLS.slice(1).map(([k]) => `<td class="${sum(k) < 0 ? 'neg' : ''}">${INFO.includes(k) ? '' : won(sum(k))}</td>`).join('')}</tr></tfoot></table></div>
+    <p class="fine">들어오는 돈은 +, 나가는 돈은 −입니다. 각 행의 금액을 더하면 순현금흐름입니다(시세·공시가격은 참고).</p>`;
   }
 
   function gridTable(x) {
@@ -112,7 +118,7 @@
       fileName: `세금생애주기_${r.input.years}년.xlsx`,
       title: '보유세맵 취득→보유→양도 현금흐름',
       sheets: [
-        { name: '연도별 CF', cols: COLS.map(([k, h]) => ({ h, w: k === 'label' ? 34 : 16, money: k !== 'label' })), rows: r.rows.map(row => COLS.map(([k]) => (k === 'label' ? row.label : row[k] || 0))) },
+        { name: '연도별 CF', cols: COLS.map(([k, h]) => ({ h, w: k === 'label' ? 34 : 16, money: k !== 'label' })), rows: Life.signedRows(r).map(row => COLS.map(([k]) => (k === 'label' ? row.label : row[k] || 0))) },
         { name: '요약', cols: [{ h: '항목', w: 24 }, { h: '값', w: 20, money: true }], rows: [
           ['자기자본(0년차 지출)', r.invested], ['순이익(세후)', r.profit], ['취득세', r.taxes.acq], ['재산세 등', r.taxes.prop], ['종부세·농특세', r.taxes.cmt], ['양도세', r.taxes.transfer], ['세금 합계', r.taxes.total],
           ['세후 IRR(%)', r.irr == null ? null : Math.round(r.irr * 10000) / 100], ['세전 IRR(%)', r.preTaxIrr == null ? null : Math.round(r.preTaxIrr * 10000) / 100],

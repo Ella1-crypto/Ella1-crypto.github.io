@@ -100,9 +100,9 @@
 </section>
 
 <section class="band cf-band" id="cf">
-  <div class="h-row"><h2>연도별 현금흐름(CF)</h2></div>
+  <div class="h-row"><h2>현금흐름(CF) — 연차별 합계 · 월별</h2></div>
   <div id="cf-table"></div>
-  <p class="fine">흐름 = 임대수입(공실 반영) − 운영비 − 이자 − 보유세 · 0년차: −(매입가 − 대출 − 보증금) − 취득세 − 중개수수료 · 마지막 해: + 매각대금 − 대출상환 − 보증금 반환 − 중개수수료 − 양도세</p>
+  <p class="fine">들어오는 돈 +, 나가는 돈 −. 월세·이자·운영비는 매월, 건축물분 재산세 7월·토지분 재산세 9월·종부세 12월에 넣고, 매입 월에는 −매입가 + 대출 + 보증금 − 취득세 − 중개수수료, 매각 월에는 + 매각가 − 대출상환 − 보증금 반환 − 중개수수료 − 양도세를 넣습니다. 세후 IRR은 월별 흐름의 월 IRR을 연으로 환산한 값입니다.</p>
 </section>
 
 <section class="band" id="scenario">
@@ -138,6 +138,7 @@
 <script src="js/transfer-engine.js"></script>
 <script src="js/lifecycle-engine.js"></script>
 <script src="js/rental-metrics.js"></script>
+<script src="js/rental-monthly.js"></script>
 <script src="js/xlsx-export.js"></script>
 <script src="js/rental-app.js"></script>
 </body>

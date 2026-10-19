@@ -59,3 +59,40 @@ test('대출이 없으면 이자보상배율은 없음, 전세(월세 0)는 표�
   assert.equal(m.dscr, null);
   assert.equal(m.grossYield, 0);
 });
+
+const RM = require('../js/rental-monthly.js');
+
+test('부호 붙인 연 CF: 들어오는 돈 +, 나가는 돈 −, 칸을 더하면 순현금흐름', () => {
+  const r = Life.calc({ ...base, ...lease });
+  const rows = Life.signedRows(r);
+  rows.forEach(w => assert.equal(Life.SIGNED_KEYS.reduce((t, k) => t + w[k], 0), w.flow));
+  assert.equal(rows[0].trade, -2e9);
+  assert.equal(rows[0].loan, 1e9);
+  assert.ok(rows[1].interest < 0 && rows[1].opex < 0 && rows[1].rent > 0);
+  assert.equal(rows.at(-1).loan, -1e9);
+});
+
+test('월별 CF: 월세·이자·운영비는 매월, 보유세는 7·9·12월, 합계는 연 단위와 같다', () => {
+  const r = Life.calc({ ...base, ...lease });
+  const mm = RM.monthly(r);
+  assert.equal(mm.months.length, 7 * 12 + 1);
+  assert.equal(mm.months[0].ym, '2026-03');
+  assert.equal(mm.months.reduce((s, m) => s + m.flow, 0), r.rows.reduce((s, w) => s + w.flow, 0));
+  mm.months.forEach(m => assert.equal(RM.KEYS.reduce((t, k) => t + m[k], 0), m.flow));
+  const july = mm.months.find(m => m.ym === '2026-07');
+  const sept = mm.months.find(m => m.ym === '2026-09');
+  assert.equal(-july.prop, r.rows[1].propBld);
+  assert.equal(-sept.prop, r.rows[1].propLand);
+  assert.equal(mm.months.find(m => m.ym === '2026-05').prop, 0);
+  assert.equal(mm.months[1].rent, Math.floor(r.rows[1].rent / 12));
+  // 월세를 매달 받으니 같은 조건의 연 단위 IRR보다 조금 높다
+  assert.ok(mm.irr > r.irr);
+  assert.ok(Math.abs((1 + mm.monthlyIrr) ** 12 - 1 - mm.irr) < 1e-12);
+});
+
+test('연 금액을 12달로 나누면 끝수는 마지막 달에 — 합은 그대로', () => {
+  const parts = RM.spread(1000003);
+  assert.equal(parts.reduce((a, b) => a + b, 0), 1000003);
+  assert.equal(parts[0], 83333);
+  assert.equal(parts[11], 1000003 - 83333 * 11);
+});

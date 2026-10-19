@@ -81,9 +81,11 @@
     const land = L.calcTaxpayer([{ sgg: 'A', cls: 'sep', price: landOfficial, area: 1, share: 100, urban: true }]);
     const bldValue = x.bldStd || floor(x.price * (1 - x.landShare) * 0.5);
     const bld = bldValue > 0 ? B.calc({ units: [{ name: '건물', use: '근린생활시설', amount: bldValue, rate: 'general', fire: 1 }], bldUrban: 'on' }, { urban: true }) : { total: 0 };
-    const prop = Math.round(land.prop.total) + (bld.total || 0);
+    const landProp = Math.round(land.prop.total);
+    const bldProp = bld.total || 0;
+    const prop = landProp + bldProp;
     const cmt = Math.round(land.cmt.total);
-    return { prop, cmt, total: prop + cmt, bldValue };
+    return { prop, cmt, total: prop + cmt, bldValue, landProp, bldProp }; // 토지분 9월·건축물분 7월에 낸다
   }
 
   /** 세후 IRR(연) — 이분법 */
@@ -142,7 +144,9 @@
       const opex = floor(x.opex);
       const interest = floor(x.loan * x.loanRate);
       holding = { prop: holding.prop + h.prop, cmt: holding.cmt + h.cmt };
-      rows.push({ year: i, label: `${i}년차 (${calYear}년 보유세)`, value, official, deposit: 0, rent, opex, interest, prop: h.prop, cmt: h.cmt, acqTax: 0, fee: 0, saleNet: 0, transferTax: 0, flow: rent - opex - interest - h.prop - h.cmt });
+      // 납부 월 배분용: 상가는 건축물분(7월)·토지분(9월), 주택은 7·9월 절반씩
+      const propBld = isHouse ? Math.floor(h.prop / 2) : (h.bldProp || 0);
+      rows.push({ year: i, calYear, label: `${i}년차 (${calYear}년 보유세)`, value, official, deposit: 0, rent, opex, interest, prop: h.prop, propBld, propLand: h.prop - propBld, cmt: h.cmt, acqTax: 0, fee: 0, saleNet: 0, transferTax: 0, flow: rent - opex - interest - h.prop - h.cmt });
     }
 
     // N년차 말 — 양도
@@ -190,5 +194,28 @@
     }));
   }
 
-  return Object.freeze({ DEFAULTS, MAX_YEARS, calc, grid, irr, addYears });
+  /**
+   * 화면·엑셀용 부호 붙인 CF — 들어오는 돈 +, 나가는 돈 −. 각 행에서 금액 칸을 더하면 순현금흐름(flow)과 같다.
+   *  0년차: −매입가 + 대출 + 보증금 − 취득세 − 중개수수료
+   *  1~N년차: + 임대수입 − 운영비 − 이자 − 재산세 등 − 종부세
+   *  N년차 말: + 매각가 − 대출상환 − 보증금 반환 − 중개수수료 − 양도세
+   */
+  const SIGNED_KEYS = Object.freeze(['trade', 'loan', 'deposit', 'rent', 'opex', 'interest', 'prop', 'cmt', 'acqTax', 'transferTax', 'fee']);
+  function signedRows(r) {
+    const x = r.input;
+    const n = r.rows.length - 1;
+    return r.rows.map((row, i) => {
+      const trade = (i === 0 ? -x.price : 0) + (i === n ? row.value : 0);
+      const loan = (i === 0 ? x.loan : 0) - (i === n ? x.loan : 0);
+      return {
+        year: row.year, label: row.label, value: row.value, official: row.official,
+        trade, loan, deposit: row.deposit || 0, rent: row.rent || 0,
+        opex: -(row.opex || 0), interest: -(row.interest || 0), prop: -(row.prop || 0), cmt: -(row.cmt || 0),
+        acqTax: -(row.acqTax || 0), transferTax: -(row.transferTax || 0), fee: -(row.fee || 0),
+        flow: row.flow,
+      };
+    });
+  }
+
+  return Object.freeze({ DEFAULTS, MAX_YEARS, SIGNED_KEYS, calc, grid, irr, addYears, signedRows });
 }));
