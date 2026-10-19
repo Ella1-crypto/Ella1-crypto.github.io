@@ -163,7 +163,8 @@ const MAX_RIGHT_UNITS = 30;
 
 /** 대지권등록목록 — 지번 전체를 먼저 받고, 못 찾은 호는 호 번호로 한 번 더 묻는다 */
 async function landRight(pnu, wanted, env) {
-  const ok = d => rowsOf(d) !== null || (d && d.response && d.response.resultCode === 'INFO-000');
+  // 대지권이 없는 지번(일반건축물 등)은 ldaregVOList 대신 response 오류 모양으로 온다 — 빈 목록으로 본다
+  const ok = d => rowsOf(d) !== null || Boolean(d && d.response);
   const fetchRows = async extra => {
     let all = [];
     for (let page = 1; page <= RIGHT_PAGES; page += 1) {
