@@ -90,12 +90,16 @@
     return `<ul class="dong-list">${p.bld.dongs.map((d, i) => {
       const area = d.rows.reduce((s, r) => s + (Number(r.area) || 0), 0);
       const r = dres[i];
+      const adj = d.rows.length ? d.rows[0].adjust : 1;
+      const shop = d.rows.some(x => x.memo);
       return `<li>
         <div><b>${esc(d.name)}</b> <span class="muted">${esc(BV.STRUCTURE[d.structure].label)} · ${esc(d.builtYear)}년 · 지상 ${esc(d.floors)}층 · ${fmt(area)}㎡${r ? ` · 시가표준액 ${eok(r.value)}` : ''}</span></div>
+        <span class="num dong-adj" title="가감산율${shop ? ' — 1층 상가' : ''}"><input type="text" inputmode="decimal" data-pid="${esc(p.id)}" data-f="dong.adjust" data-i="${i}" value="${esc(fmt(adj))}" aria-label="${esc(d.name)} 가감산율"><em>배</em></span>
         <select data-pid="${esc(p.id)}" data-f="dong.fire" data-i="${i}" aria-label="${esc(d.name)} 소방분 배수">${opt('auto', `자동${r ? ` (×${r.fire.fire})` : ''}`, d.fire)}${opt(1, '×1', d.fire)}${opt(2, '×2', d.fire)}${opt(3, '×3', d.fire)}</select>
         <button type="button" class="icon-btn" data-act="dong-del" data-pid="${esc(p.id)}" data-i="${i}" aria-label="${esc(d.name)} 빼기">×</button>
       </li>`;
     }).join('')}</ul>
+    <p class="fld-h">가운데 칸은 가감산율(배)입니다 — 1층 상가는 조정기준의 층별 가산율, 해당 없으면 1. 오른쪽은 소방분 배수.</p>
     <button type="button" class="link-btn" data-act="dong-clear" data-pid="${esc(p.id)}">동 목록 지우고 한 동으로 직접 입력</button>`;
   }
 

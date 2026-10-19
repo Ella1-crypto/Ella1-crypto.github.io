@@ -160,9 +160,11 @@ button, input, select { font: inherit; color: inherit; }
 .units { margin: 6px 0 8px 26px; padding: 10px 12px; border-left: 3px solid var(--line-2, var(--line)); display: grid; gap: 8px; }
 .unit-list { max-height: 320px; overflow-y: auto; overscroll-behavior: contain; }
 .reg-list > li > .link-btn { margin-left: 26px; font-size: 13px; }
-.dong-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto 30px; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13.5px; }
+.dong-list li { display: grid; grid-template-columns: minmax(0, 1fr) 92px auto 30px; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13.5px; }
 .dong-list .muted { font-size: 12.5px; }
 .dong-list select { font-size: 13px; padding: 4px 6px; }
+.dong-adj input { font-size: 13px; padding: 4px 22px 4px 6px; }
+@media (max-width: 560px) { .dong-list li { grid-template-columns: minmax(0, 1fr) 84px 30px; } .dong-list li > div { grid-column: 1 / -1; } }
 .warn-line { margin: 0; color: var(--warn); font-size: 13px; }
 
 /* ---------- 요약 ---------- */

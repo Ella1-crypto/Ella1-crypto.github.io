@@ -65,6 +65,10 @@
       const v = blankShare ? 100 : blankFireBase ? null : numeric.includes(k) ? parseNum(raw) : (k === 'fire' && raw !== 'auto' ? Number(raw) : raw);
       return { ...p, bld: { ...p.bld, [k]: v } };
     }
+    if (f === 'dong.adjust') { // 호·동의 가감산율 — 그 동의 모든 용도 행에 같이 적용, 비우면 1
+      const v = String(raw).trim() === '' ? 1 : Math.min(3, parseNum(raw)) || 1;
+      return { ...p, bld: { ...p.bld, dongs: p.bld.dongs.map((d, j) => (j === i ? { ...d, rows: d.rows.map(r => ({ ...r, adjust: v })) } : d)) } };
+    }
     if (f === 'dong.fire') {
       const v = raw === 'auto' ? 'auto' : Number(raw);
       return { ...p, bld: { ...p.bld, dongs: p.bld.dongs.map((d, j) => (j === i ? { ...d, fire: v } : d)) } };
@@ -255,6 +259,15 @@
     render();
   }
 
+  /** 대지권 비율 추정 — 내 호 전유면적 ÷ 전체 호 전유면적(%). 대지권은 보통 전유면적 비율로 정해진다. 목록이 잘렸으면 추정하지 않는다 */
+  function landShareEstimate(u, picked) {
+    if (u.truncated) return null;
+    const total = u.list.reduce((t, x) => t + (x.excl || 0), 0);
+    const mine = picked.reduce((t, x) => t + (x.excl || 0), 0);
+    if (!(total > 0 && mine > 0)) return null;
+    return Math.max(0.01, Math.round((mine / total) * 1e6) / 1e4);
+  }
+
   /** 고른 호를 각각 한 '동' 입력으로 — 호마다 따로 계산 */
   function applyUnits(pid) {
     const r = register.get(pid);
@@ -263,9 +276,16 @@
     const picked = u.list.filter((x, j) => u.picked.has(j) && !x.skip).slice(0, S.MAX_DONGS);
     if (!picked.length) return;
     const dongs = picked.map(x => ({ name: x.name, structure: x.structure, builtYear: x.builtYear || 2010, floors: x.floors, fire: 'auto', rows: x.rows }));
+    const share = r.list.length === 1 ? landShareEstimate(u, picked) : null; // 동이 여럿이면 다른 동 전유면적을 몰라 추정하지 않는다
     register.delete(pid);
-    setState(mapParcel(pid, p => ({ ...p, bld: { ...(p.bld || S.newBuilding()), mode: 'estimate', dongs } })));
-    toast(`${picked.length}개 호를 넣었습니다. 토지 '내 지분'은 대지권 비율로 고치세요.`);
+    let applied = false;
+    setState(mapParcel(pid, p => {
+      applied = share != null && Number(p.share) === 100; // 사용자가 고친 지분은 덮지 않는다
+      return { ...p, ...(applied ? { share } : {}), bld: { ...(p.bld || S.newBuilding()), mode: 'estimate', dongs } };
+    }));
+    toast(applied
+      ? `${picked.length}개 호를 넣고, 토지 지분을 전유면적 비율 ${share}%로 추정해 넣었습니다. 등기부 대지권 비율로 확인하세요.`
+      : `${picked.length}개 호를 넣었습니다. 토지 '내 지분'은 대지권 비율로 고치세요.`);
   }
 
   /** 고른 동을 건물 입력에 넣는다 — 한 동이면 기존 입력칸에, 여러 동이면 동 목록으로 */
