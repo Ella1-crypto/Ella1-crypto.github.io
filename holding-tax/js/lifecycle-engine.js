@@ -2,7 +2,8 @@
  * 브라우저: window.Lifecycle / Node: module.exports (다른 엔진을 인자로 받는다)
  *
  *  · 0년차: 매입가 + 취득세(AcqTax) + 중개수수료
- *  · 1~N년차: 임대수입 − 대출이자 − 보유세(주택: HouseTax / 상업용: HoldingTax 토지 + BuildingTax 건물)
+ *  · 0년차에 임대보증금을 받고(자기자본이 줄어든다) N년차 말 매각 때 돌려준다.
+ *  · 1~N년차: 임대수입(월세 × 12 × (1 − 공실률), 또는 연 순임대수입) − 운영비 − 대출이자 − 보유세(주택: HouseTax / 상업용: HoldingTax 토지 + BuildingTax 건물)
  *  · N년차 말: 매각가 − 중개수수료 − 양도세(TransferTax, 개인 양도소득세 / 법인 처분 법인세)
  *  보유세는 해당 연도 6월 1일 보유분을 낸다(매입 연도는 6.1. 이전 잔금이면 포함, 매각 연도는 6.1. 이후 잔금이면 포함).
  *  공시가격은 시세 × 현실화율로 보고 시세 상승률만큼 해마다 오른다. 건물 시가표준액은 고정으로 본다.
@@ -20,6 +21,7 @@
     officialRatio: 69, landShare: 60, landRatio: 65, bldStd: 0,
     houseCount: 1, adjusted: false, oneHouse: true, live: true, age: 0, otherValue: 0, relief: 'none', over85: false,
     rent: 0, rentGrowth: 2, loan: 0, loanRate: 4.5, fee: 0.5, heavyExcluded: false,
+    deposit: 0, monthlyRent: 0, vacancy: 0, opex: 0,
   });
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, Number(v) || 0));
   const floor = n => Math.floor(n + 1e-6);
@@ -50,6 +52,10 @@
       otherValue: clamp(x.otherValue, 0, 1e13),
       rent: clamp(x.rent, 0, 1e12),
       rentGrowth: clamp(x.rentGrowth, -20, 30) / 100,
+      deposit: clamp(x.deposit, 0, 1e13),
+      monthlyRent: clamp(x.monthlyRent, 0, 1e11),
+      vacancy: clamp(x.vacancy, 0, 100) / 100,
+      opex: clamp(x.opex, 0, 1e12),
       loan: clamp(x.loan, 0, 1e13),
       loanRate: clamp(x.loanRate, 0, 30) / 100,
       fee: clamp(x.fee, 0, 10) / 100,
@@ -104,9 +110,9 @@
       adjusted: x.adjusted, over85: x.over85, relief: isHouse ? x.relief : 'none', heavyExcluded: x.heavyExcluded,
     });
     const buyFee = floor(x.price * x.fee);
-    const equity0 = x.price - x.loan;
+    const equity0 = x.price - x.loan - x.deposit; // 임대보증금은 매입 때 받아 자기자본을 줄인다
     const rows = [{
-      year: 0, label: `${x.buyDate} 매입`, value: x.price, official: 0, rent: 0, interest: 0, prop: 0, cmt: 0,
+      year: 0, label: `${x.buyDate} 매입`, value: x.price, official: 0, deposit: x.deposit, rent: 0, opex: 0, interest: 0, prop: 0, cmt: 0,
       acqTax: acq.total, fee: buyFee, saleNet: 0, transferTax: 0, flow: -(equity0 + acq.total + buyFee),
     }];
 
@@ -130,10 +136,13 @@
           h = commercialHolding(x, official);
         }
       }
-      const rent = floor(x.rent * (1 + x.rentGrowth) ** (i - 1));
+      // 월세를 넣으면 월세 × 12 × (1 − 공실률), 아니면 연 순임대수입(이미 공실 반영된 값)
+      const grown = (1 + x.rentGrowth) ** (i - 1);
+      const rent = x.monthlyRent > 0 ? floor(x.monthlyRent * 12 * grown * (1 - x.vacancy)) : floor(x.rent * grown);
+      const opex = floor(x.opex);
       const interest = floor(x.loan * x.loanRate);
       holding = { prop: holding.prop + h.prop, cmt: holding.cmt + h.cmt };
-      rows.push({ year: i, label: `${i}년차 (${calYear}년 보유세)`, value, official, rent, interest, prop: h.prop, cmt: h.cmt, acqTax: 0, fee: 0, saleNet: 0, transferTax: 0, flow: rent - interest - h.prop - h.cmt });
+      rows.push({ year: i, label: `${i}년차 (${calYear}년 보유세)`, value, official, deposit: 0, rent, opex, interest, prop: h.prop, cmt: h.cmt, acqTax: 0, fee: 0, saleNet: 0, transferTax: 0, flow: rent - opex - interest - h.prop - h.cmt });
     }
 
     // N년차 말 — 양도
@@ -148,7 +157,8 @@
     last.fee = sellFee;
     last.transferTax = tr.total;
     last.saleNet = salePrice - sellFee - x.loan;
-    last.flow += last.saleNet - tr.total;
+    last.deposit = -x.deposit; // 매각 때 보증금 반환(매수인 승계도 현금효과는 같다)
+    last.flow += last.saleNet - x.deposit - tr.total;
     last.label += ` · ${sellDate} 매각`;
 
     const flows = rows.map(r => r.flow);
@@ -157,7 +167,9 @@
     const taxes = { acq: acq.total, prop: holding.prop, cmt: holding.cmt, transfer: tr.total };
     taxes.total = taxes.acq + taxes.prop + taxes.cmt + taxes.transfer;
     const preTaxFlows = rows.map((r, i) => r.flow + (i === 0 ? r.acqTax : 0) + r.prop + r.cmt + r.transferTax);
-    if (x.rent > 0) notes.push('임대소득에 대한 종합소득세(법인은 법인세)는 넣지 않았습니다.');
+    if (x.rent > 0 || x.monthlyRent > 0) notes.push('임대소득에 대한 종합소득세(법인은 법인세)와 부가가치세는 넣지 않았습니다.');
+    if (x.deposit > 0) notes.push('보증금은 매입 때 받아 매각 때 돌려주는 것으로 봤습니다(보증금 운용수익·간주임대료는 넣지 않음).');
+    if (x.monthlyRent > 0 && x.rent > 0) notes.push('월세를 넣어 연 순임대수입 칸은 쓰지 않았습니다.');
     if (isHouse && x.otherValue > 0) notes.push('보유세는 다른 주택과 합산한 종부세에서 이 주택 때문에 늘어나는 몫만 넣었습니다.');
     if (!isHouse && !x.bldStd) notes.push('건물 시가표준액을 넣지 않아 건물가(매입가 × 건물 비중)의 50%로 추정했습니다.');
     if (x.owner === '법인') notes.push('법인 양도는 장부가액을 매입가로 보고(감가상각 없음) 처분이익만 따로 계산했습니다.');

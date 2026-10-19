@@ -1,4 +1,5 @@
 /* 엑셀(.xlsx) 내보내기 — 요약 · 월별 CF · 연도별 CF · 계산 근거.
+ * downloadSheets: 행 값에 { formula, result }를 넣으면 수식으로, row.fmt = { 열번호: 서식 }이면 그 칸 서식을 바꾼다.
  * ExcelJS는 버튼을 누를 때만 불러온다(무결성 해시 검증). 연도별 시트의 합계는 월별 CF를 SUMIFS로 다시 더하는 수식이라
  * 사용자가 월별 금액을 고치면 연도 합계도 따라 바뀐다.
  */
@@ -171,6 +172,7 @@
       s.rows.forEach(row => {
         const r = ws.addRow(row);
         s.cols.forEach((c, i) => { if (c.money) r.getCell(i + 1).numFmt = WON; });
+        if (row.fmt) Object.entries(row.fmt).forEach(([i, f]) => { r.getCell(Number(i) + 1).numFmt = f; }); // 열별 서식 덮어쓰기(예: IRR %)
         if (row.bold) r.font = { ...FONT, bold: true };
       });
       styleBody(ws);

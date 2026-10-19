@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상가·건물 임대수익률 계산기 — 보증금·월세·공실로 세후 IRR | 보유세맵</title>
+<meta name="description" content="상가·사무실·건물을 사서 임대할 때 매입가·대출·보증금·월세·공실률·운영비를 넣으면 표면수익률, 순수익률(Cap Rate), 실투자 수익률, 취득세·보유세·양도세를 반영한 세후 IRR과 연도별 현금흐름을 계산합니다. 엑셀(IRR 수식 포함) 다운로드.">
+<meta name="keywords" content="임대수익률 계산기, 상가 수익률 계산, 수익형 부동산 IRR, 캡레이트, 실투자 수익률, 보증금 월세 수익률, 건물 투자 현금흐름">
+<link rel="canonical" href="https://ella1-crypto.github.io/holding-tax/rental.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="보유세맵 — 상가·건물 임대수익률·세후 IRR">
+<meta property="og:description" content="보증금·월세·공실·운영비와 세금까지 넣은 수익형 부동산 수익률.">
+<meta property="og:url" content="https://ella1-crypto.github.io/holding-tax/rental.html">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://ella1-crypto.github.io/holding-tax/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="보유세맵 — 고지서가 오기 전에, 내 부동산 세금을 먼저 계산하세요">
+<meta property="og:site_name" content="보유세맵">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ella1-crypto.github.io/holding-tax/og.png">
+<meta name="theme-color" content="#1f3a5f">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"보유세맵 상가·건물 임대수익률 계산기","url":"https://ella1-crypto.github.io/holding-tax/rental.html","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","description":"보증금·월세·공실률·운영비·대출과 취득세·보유세·양도세를 반영한 임대수익률과 세후 IRR.","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#calc">계산기로 바로 가기</a>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
+  <nav aria-label="계산기 종류" class="kind">
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html">양도세</a><a href="rental.html" aria-current="page">임대수익률</a><a href="lifecycle.html">한 번에</a>
+  </nav>
+  <span class="stamp" title="보유세율을 현행 법령으로 확인한 날짜(취득세·양도세 엔진은 2026.10.15 확인)">법령 확인 2026.10.19</span>
+</header>
+
+<main>
+<section class="hero">
+  <p class="kicker">상가·사무실·건물 임대</p>
+  <h1>월세 받는 건물,<br><em>세금 내고 몇 % 남을까</em>.</h1>
+  <p class="lead">매입가·대출·보증금·월세·공실률·운영비를 넣으면 <b>표면수익률, 순수익률(Cap Rate), 실투자 수익률</b>과 취득세·재산세·종부세·양도세까지 반영한 <b>세후 IRR</b>을 계산합니다. 연도별 현금흐름은 IRR 수식이 들어간 엑셀로 받을 수 있습니다.</p>
+  <ul class="chips"><li>보증금·월세·공실</li><li>Cap Rate · 실투자 수익률</li><li>세후 IRR</li><li>엑셀(IRR 수식)</li></ul>
+</section>
+
+<section class="tool" id="calc" aria-label="임대수익률 계산기">
+  <form class="tool-main" id="form" onsubmit="return false">
+    <input type="hidden" data-f="kind" value="commercial">
+    <div class="controls">
+      <div class="seg owner" role="radiogroup" aria-label="소유자">
+        <button type="button" role="radio" data-owner="개인" aria-checked="true">개인</button>
+        <button type="button" role="radio" data-owner="법인" aria-checked="false">법인</button>
+      </div>
+      <input type="hidden" data-f="owner" value="개인">
+    </div>
+
+    <div class="opts">
+      <h3 class="sub-h">매입</h3>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">매입가</span><span class="num"><input type="text" inputmode="numeric" data-f="price" data-t="money" value="2,000,000,000"><em>원</em></span></label>
+        <label class="fld"><span class="fld-l">매입(잔금)일</span><input type="date" data-f="buyDate" data-t="date" value="2026-03-02"></label>
+        <label class="fld"><span class="fld-l">토지 비중</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="landShare" value="60"><em>%</em></span><span class="fld-h">매입가 중 땅값</span></label>
+        <label class="fld"><span class="fld-l">건물 시가표준액</span><span class="num"><input type="text" inputmode="numeric" data-f="bldStd" data-t="money"><em>원</em></span><span class="fld-h">모르면 비움 — 건물가의 50%로 추정</span></label>
+      </div>
+      <h3 class="sub-h">임대</h3>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">임대보증금</span><span class="num"><input type="text" inputmode="numeric" data-f="deposit" data-t="money" value="200,000,000"><em>원</em></span><span class="fld-h">매각 때 반환</span></label>
+        <label class="fld"><span class="fld-l">월세</span><span class="num"><input type="text" inputmode="numeric" data-f="monthlyRent" data-t="money" value="8,000,000"><em>원/월</em></span><span class="fld-h">부가세 제외</span></label>
+        <label class="fld"><span class="fld-l">공실률</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="vacancy" value="5"><em>%</em></span><span class="fld-h">월세에서 뺌</span></label>
+        <label class="fld"><span class="fld-l">운영비(연)</span><span class="num"><input type="text" inputmode="numeric" data-f="opex" data-t="money" value="6,000,000"><em>원</em></span><span class="fld-h">관리·수선·보험 등 소유자 부담</span></label>
+      </div>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">임대료 상승률(연)</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="rentGrowth" value="2"><em>%</em></span></label>
+        <label class="fld"><span class="fld-l">대출(이자만)</span><span class="num"><input type="text" inputmode="numeric" data-f="loan" data-t="money" value="1,000,000,000"><em>원</em></span></label>
+        <label class="fld"><span class="fld-l">대출 금리</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="loanRate" value="4.5"><em>%</em></span></label>
+        <label class="fld"><span class="fld-l">중개수수료(매입·매각 각)</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="fee" value="0.5"><em>%</em></span></label>
+      </div>
+      <h3 class="sub-h">매각</h3>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">보유기간</span><span class="num"><input type="text" inputmode="numeric" maxlength="2" data-f="years" data-t="int" value="7"><em>년</em></span></label>
+        <label class="fld"><span class="fld-l">시세 상승률(연)</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="growth" value="2"><em>%</em></span><span class="fld-h">매각가 = 매입가 × (1+상승률)^보유기간</span></label>
+        <label class="fld"><span class="fld-l">공시지가 ÷ 땅 시세</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="landRatio" value="65"><em>%</em></span><span class="fld-h">2026 토지 현실화율 65.5% — 보유세 추정용</span></label>
+      </div>
+    </div>
+  </form>
+
+  <aside class="tool-side" aria-label="수익률 요약">
+    <div class="sticky">
+      <div id="summary" class="summary"></div>
+      <div class="ad-slot" hidden></div>
+    </div>
+  </aside>
+</section>
+
+<section class="band cf-band" id="cf">
+  <div class="h-row"><h2>연도별 현금흐름(CF)</h2></div>
+  <div id="cf-table"></div>
+  <p class="fine">흐름 = 임대수입(공실 반영) − 운영비 − 이자 − 보유세 · 0년차: −(매입가 − 대출 − 보증금) − 취득세 − 중개수수료 · 마지막 해: + 매각대금 − 대출상환 − 보증금 반환 − 중개수수료 − 양도세</p>
+</section>
+
+<section class="band" id="scenario">
+  <div class="h-row"><h2>보유기간 × 시세 상승률 → 세후 IRR</h2></div>
+  <div id="grid"></div>
+</section>
+
+<section class="prose" id="limits">
+  <h2>이 계산기가 가정하는 것</h2>
+  <ul class="limits">
+    <li><b>수익률 정의</b> — 표면수익률 = 월세×12 ÷ 매입가, 순수익률(Cap) = 1년차 순영업소득(임대수입 − 운영비 − 보유세) ÷ 매입가, 실투자 수익률 = (순영업소득 − 이자) ÷ 실투자금(매입가 − 대출 − 보증금 + 취득세 + 중개수수료).</li>
+    <li><b>세금</b> — 취득세(4.6%)·재산세·종부세·양도세(개인 양도소득세 / 법인 처분이익 법인세)는 다른 계산기와 같은 엔진으로 넣습니다. 임대소득세(법인은 법인세)·부가가치세·보증금 간주임대료는 넣지 않았습니다.</li>
+    <li><b>보유세</b> — 공시지가는 땅 시세 × 현실화율, 건물 시가표준액은 고정으로 봅니다. 정확한 값은 <a href="./">상업용 보유세 계산기</a>에서 필지를 찍어 확인하세요.</li>
+    <li><b>빠진 것</b> — 대출 원금 상환, 감가상각, 리모델링, 임차인 교체 비용.</li>
+  </ul>
+</section>
+</main>
+
+<footer class="foot">
+  <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 투자 권유나 세무 자문이 아닙니다.</p>
+  <p><a href="./">상업용 보유세</a> · <a href="house.html">주택 보유세</a> · <a href="acquisition.html">취득세</a> · <a href="transfer.html">양도세</a> · <a href="lifecycle.html">한 번에</a> · <a href="../">← Ella&#39;s Side Ledger</a> · <a href="privacy.html">개인정보처리방침</a></p>
+</footer>
+
+<div class="mbar" aria-hidden="true"><span>세후 IRR</span><b id="mbar-total">—</b><a href="#summary" tabindex="-1">결과 보기</a></div>
+
+<script src="js/config.js"></script>
+<script src="js/kit.js"></script>
+<script src="js/relief.js"></script>
+<script src="js/acquisition-engine.js"></script>
+<script src="js/house-engine.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/building-engine.js"></script>
+<script src="js/transfer-engine.js"></script>
+<script src="js/lifecycle-engine.js"></script>
+<script src="js/rental-metrics.js"></script>
+<script src="js/xlsx-export.js"></script>
+<script src="js/rental-app.js"></script>
+</body>
+</html>

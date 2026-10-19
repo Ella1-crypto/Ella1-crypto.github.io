@@ -37,7 +37,7 @@
 <header class="top">
   <a class="brand" href="./" aria-label="보유세맵 상업용 계산기로"><span class="logo" aria-hidden="true"></span>보유세맵</a>
   <nav aria-label="계산기 종류" class="kind">
-    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html">양도세</a><a href="lifecycle.html" aria-current="page">한 번에</a>
+    <a href="./">상업용 보유세</a><a href="house.html">주택 보유세</a><a href="acquisition.html">취득세</a><a href="transfer.html">양도세</a><a href="rental.html">임대수익률</a><a href="lifecycle.html" aria-current="page">한 번에</a>
   </nav>
   <span class="stamp" title="세율·공제를 현행 법령으로 확인한 날짜">법령 확인 2026.10.16</span>
 </header>
@@ -71,10 +71,16 @@
         <label class="fld"><span class="fld-l">시세 상승률(연)</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="growth" value="3"><em>%</em></span></label>
       </div>
       <div class="grid4">
-        <label class="fld"><span class="fld-l">임대수입(연, 순)</span><span class="num"><input type="text" inputmode="numeric" data-f="rent" data-t="money"><em>원</em></span><span class="fld-h">관리비·공실 뺀 금액, 실거주면 0</span></label>
+        <label class="fld"><span class="fld-l">임대수입(연, 순)</span><span class="num"><input type="text" inputmode="numeric" data-f="rent" data-t="money"><em>원</em></span><span class="fld-h">월세를 아래에 넣으면 이 칸은 쓰지 않음 · 실거주면 0</span></label>
         <label class="fld"><span class="fld-l">임대료 상승률(연)</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="rentGrowth" value="2"><em>%</em></span></label>
         <label class="fld"><span class="fld-l">대출(이자만 상환)</span><span class="num"><input type="text" inputmode="numeric" data-f="loan" data-t="money"><em>원</em></span></label>
         <label class="fld"><span class="fld-l">대출 금리</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="loanRate" value="4.5"><em>%</em></span></label>
+      </div>
+      <div class="grid4">
+        <label class="fld"><span class="fld-l">임대보증금</span><span class="num"><input type="text" inputmode="numeric" data-f="deposit" data-t="money"><em>원</em></span><span class="fld-h">전세면 보증금만 · 매각 때 반환</span></label>
+        <label class="fld"><span class="fld-l">월세</span><span class="num"><input type="text" inputmode="numeric" data-f="monthlyRent" data-t="money"><em>원/월</em></span><span class="fld-h">부가세 제외 · 해마다 임대료 상승률만큼 오름</span></label>
+        <label class="fld"><span class="fld-l">공실률</span><span class="num"><input type="text" inputmode="decimal" maxlength="5" data-f="vacancy" value="0"><em>%</em></span><span class="fld-h">월세에만 적용</span></label>
+        <label class="fld"><span class="fld-l">운영비(연)</span><span class="num"><input type="text" inputmode="numeric" data-f="opex" data-t="money"><em>원</em></span><span class="fld-h">관리·수선·보험 등 소유자 부담</span></label>
       </div>
 
       <div id="house-opts" class="grid4">
@@ -113,7 +119,7 @@
 <section class="band cf-band" id="cf">
   <div class="h-row"><h2>연도별 현금흐름(CF)</h2></div>
   <div id="cf-table"></div>
-  <p class="fine">흐름 = 임대수입 − 이자 − 보유세 (0년차: −자기자본 − 취득세 − 중개수수료, 마지막 해: + 매각대금 − 대출상환 − 중개수수료 − 양도세)</p>
+  <p class="fine">흐름 = 임대수입 − 운영비 − 이자 − 보유세 (0년차: −자기자본(매입가 − 대출 − 보증금) − 취득세 − 중개수수료, 마지막 해: + 매각대금 − 대출상환 − 보증금 반환 − 중개수수료 − 양도세)</p>
 </section>
 
 <section class="band" id="pro">
@@ -138,7 +144,7 @@
 
 <footer class="foot">
   <p><b>보유세맵</b>은 입력값과 공개된 기준에 따른 추정치를 보여 줍니다. 투자 권유나 세무 자문이 아닙니다.</p>
-  <p><a href="./">상업용 보유세</a> · <a href="house.html">주택 보유세</a> · <a href="acquisition.html">취득세</a> · <a href="transfer.html">양도세</a> · <a href="../">← Ella's Side Ledger</a> · <a href="privacy.html">개인정보처리방침</a></p>
+  <p><a href="./">상업용 보유세</a> · <a href="house.html">주택 보유세</a> · <a href="acquisition.html">취득세</a> · <a href="transfer.html">양도세</a> ·  <a href="rental.html">임대수익률</a> · <a href="../">← Ella's Side Ledger</a> · <a href="privacy.html">개인정보처리방침</a></p>
 </footer>
 
 <div class="mbar" aria-hidden="true"><span>세후 IRR</span><b id="mbar-total">—</b><a href="#summary" tabindex="-1">결과 보기</a></div>

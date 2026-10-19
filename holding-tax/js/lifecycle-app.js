@@ -40,7 +40,7 @@
   }
 
   const COLS = [
-    ['label', '연도'], ['value', '시세(연말)'], ['official', '공시가격(6.1.)'], ['rent', '임대수입'], ['interest', '이자'],
+    ['label', '연도'], ['value', '시세(연말)'], ['official', '공시가격(6.1.)'], ['deposit', '보증금 수수'], ['rent', '임대수입'], ['opex', '운영비'], ['interest', '이자'],
     ['prop', '재산세 등'], ['cmt', '종부세'], ['acqTax', '취득세'], ['transferTax', '양도세'], ['fee', '중개수수료'], ['saleNet', '매각−대출상환'], ['flow', '순현금흐름'],
   ];
 
@@ -96,6 +96,15 @@
     render();
   }
 
+  /** '연도별 CF' 시트의 순현금흐름 열로 엑셀이 직접 계산하는 IRR — 사용자가 CF를 고치면 따라 바뀐다 */
+  function irrFormulaRow(r) {
+    const col = String.fromCharCode(64 + COLS.findIndex(([k]) => k === 'flow') + 1); // 열 26개 이하
+    const row = ['세후 IRR (엑셀 수식 — 연도별 CF를 고치면 다시 계산)', { formula: `IRR('연도별 CF'!${col}2:${col}${r.rows.length + 1})`, result: r.irr == null ? 0 : r.irr }];
+    row.fmt = { 1: '0.00%' };
+    row.bold = true;
+    return row;
+  }
+
   function xlsx() {
     const { x, r } = last;
     const g = Life.grid(x, HOLDS, GROWTHS);
@@ -107,6 +116,7 @@
         { name: '요약', cols: [{ h: '항목', w: 24 }, { h: '값', w: 20, money: true }], rows: [
           ['자기자본(0년차 지출)', r.invested], ['순이익(세후)', r.profit], ['취득세', r.taxes.acq], ['재산세 등', r.taxes.prop], ['종부세·농특세', r.taxes.cmt], ['양도세', r.taxes.transfer], ['세금 합계', r.taxes.total],
           ['세후 IRR(%)', r.irr == null ? null : Math.round(r.irr * 10000) / 100], ['세전 IRR(%)', r.preTaxIrr == null ? null : Math.round(r.preTaxIrr * 10000) / 100],
+          irrFormulaRow(r),
         ] },
         { name: '시나리오 IRR', cols: [{ h: '보유기간', w: 12 }, ...GROWTHS.map(v => ({ h: `상승률 ${v}%`, w: 14 }))], rows: g.map(row => [`${row[0].years}년`, ...row.map(c => (c.irr == null ? '' : `${(c.irr * 100).toFixed(1)}%`))]) },
         { name: '가정', cols: [{ h: '내용', w: 110 }], rows: r.notes.map(n => [n]) },
