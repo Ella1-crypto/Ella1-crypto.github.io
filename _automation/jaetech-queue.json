@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "jt-20261019",
+    "publish_at": "2026-10-19T12:10+09:00",
+    "text": "연말정산 카드 공제, 아직 하나도 안 따져봤지?\n신용카드·체크카드 쓴 돈이 총급여의 25%를 넘어야 그다음부터 공제가 시작된대.\n넘은 부분은 신용카드 15%, 체크카드·현금영수증 30%라 공제율이 두 배 차이 나더라.\n올해 두 달 남았는데, 너는 카드 사용액 한번 확인해 봤어?",
+    "status": "예약",
+    "source": "KBthink",
+    "sources": [
+      "https://kbthink.com/main/living-finance/consumption-life/card-consumption/creditcard-year-end-tax-adjustment.html",
+      "https://biz.sbs.co.kr/amp/article/20000279853"
+    ]
+  }
+]
