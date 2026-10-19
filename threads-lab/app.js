@@ -2,7 +2,7 @@
 import {
   BATCH_SIZE as MAX_ITEMS, DISCLOSURE, buildBlogPrompt, buildQueueFile, queueEntry, SHORTS_SLOT, SLOTS, buildDraftPrompt, checkBatch, checkPost, dayNumber, findConflicts,
   kstDateString, parseDrafts, parseItems, parseTimes, phaseFor, splitBatch, splitLines,
-} from './lab-core.js?v=20261015a';
+} from './lab-core.js?v=20261019a';
 import { requestAnalysis } from './llm.js?v=20261015a';
 
 const LEVEL_LABEL = { pass: '통과', warn: '확인', fail: '수정' };
