@@ -1,10 +1,16 @@
 # 재테크 한 줄 자동 게시: _automation/jaetech-queue.json 에서 시각이 된 글을 Threads에 올린다.
 # 필요한 Secrets: THREADS_ACCESS_TOKEN, THREADS_USER_ID (Settings → Secrets and variables → Actions)
+# 주 경로: 큐 파일이 push되면 바로 실행 → 가장 이른 예약 시각까지(최대 130분) 기다렸다가 올린다.
+# 보조 경로: cron. GitHub cron은 이 저장소에서 몇 시간씩 밀리거나 건너뛰어서 믿을 수 없다.
+# 봇이 상태를 커밋해도 GITHUB_TOKEN push는 워크플로를 다시 깨우지 않고, actor 조건으로 한 번 더 막는다.
 name: threads-jaetech
 
 on:
+  push:
+    branches: [main]
+    paths: ["_automation/jaetech-queue.json"]
   schedule:
-    - cron: "3-58/5 3-8 * * *"   # 매일 12:03~17:58 KST, 5분마다 (GitHub 지연 대비 넓게, 올릴 글이 없으면 바로 끝남)
+    - cron: "3-58/5 3-8 * * *"   # 매일 12:03~17:58 KST, 5분마다 (보조, 올릴 글이 없으면 바로 끝남)
     - cron: "0 0 * * 1"       # 매주 월요일 09:00 KST, 토큰 점검 + 자동 갱신
   workflow_dispatch:
     inputs:
@@ -23,8 +29,9 @@ concurrency:
 
 jobs:
   run:
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 150   # push 실행은 예약 시각까지 최대 130분 기다린다
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -48,8 +55,14 @@ jobs:
         run: |
           pip install --quiet pynacl==1.5.0
           python _automation/refresh_token.py
+      - name: Wait for scheduled time and publish
+        if: github.event_name == 'push'
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+        run: python _automation/jaetech_publish.py --wait
       - name: Publish due post
-        if: github.event.schedule != '0 0 * * 1' && inputs.mode != 'check' && inputs.mode != 'refresh'
+        if: github.event_name != 'push' && github.event.schedule != '0 0 * * 1' && inputs.mode != 'check' && inputs.mode != 'refresh'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}

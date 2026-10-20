@@ -108,6 +108,70 @@ class RunOnceTest(unittest.TestCase):
         self.run_once(FakeHttp(fail_publish=1))
         self.assertEqual(self.statuses(), {"a": "올림"})
 
+    def wait_then_run(self, now, pull_ok=True):
+        self.slept, self.pulls, self.ran = [], [], []
+        def clock():
+            return now + jp.timedelta(seconds=sum(self.slept))
+
+        def pull():
+            self.pulls.append(1)
+            return pull_ok
+
+        def run(at):
+            self.ran.append(at)
+            return "ran"
+        return jp.wait_then_run("tok", "u1", clock=clock, sleep=self.slept.append,
+                                pull=pull, run=run, path=self.path)
+
+    def test_wait_sleeps_until_publish_time_then_pulls_and_runs(self):
+        self.write([item("a", "2026-10-19T12:10+09:00")])
+        result = self.wait_then_run(datetime(2026, 10, 19, 11, 42, tzinfo=jp.KST))
+        self.assertEqual(result, "ran")
+        self.assertEqual(self.slept, [28 * 60])
+        self.assertEqual(self.pulls, [1])
+        self.assertEqual(self.ran, [datetime(2026, 10, 19, 12, 10, tzinfo=jp.KST)])
+
+    def test_wait_runs_immediately_when_post_is_already_due(self):
+        self.write([item("a", "2026-10-19T12:10+09:00")])
+        self.assertEqual(self.wait_then_run(NOW), "ran")
+        self.assertEqual((self.slept, self.pulls), ([], []))
+
+    def test_wait_uses_earliest_ready_post(self):
+        self.write([item("b", "2026-10-19T13:10+09:00"), item("a", "2026-10-19T12:10+09:00"),
+                    item("x", "2026-10-19T11:50+09:00", status="올림")])
+        self.wait_then_run(datetime(2026, 10, 19, 11, 40, tzinfo=jp.KST))
+        self.assertEqual(self.slept, [30 * 60])
+
+    def test_wait_skips_when_next_post_is_beyond_max_wait(self):
+        self.write([item("a", "2026-10-19T14:00+09:00")])
+        result = self.wait_then_run(datetime(2026, 10, 19, 11, 40, tzinfo=jp.KST))
+        self.assertIn("올릴 글 없음", result)
+        self.assertEqual((self.slept, self.ran), ([], []))
+
+    def test_wait_skips_when_queue_has_no_ready_post(self):
+        self.write([item("a", "2026-10-19T12:10+09:00", status="올림")])
+        self.assertIn("올릴 글 없음", self.wait_then_run(NOW))
+        self.assertEqual(self.ran, [])
+
+    def test_wait_does_not_publish_when_pull_fails_after_sleeping(self):
+        self.write([item("a", "2026-10-19T12:10+09:00")])
+        with self.assertRaises(SystemExit):
+            self.wait_then_run(datetime(2026, 10, 19, 11, 42, tzinfo=jp.KST), pull_ok=False)
+        self.assertEqual(self.ran, [])
+
+    def test_wait_end_to_end_publishes_with_fresh_queue(self):
+        self.write([item("a", "2026-10-19T12:10+09:00")])
+        start = datetime(2026, 10, 19, 11, 45, tzinfo=jp.KST)
+        slept = []
+        result = jp.wait_then_run(
+            "tok", "u1", clock=lambda: start + jp.timedelta(seconds=sum(slept)), sleep=slept.append,
+            pull=lambda: True,
+            run=lambda at: jp.run_once(at, "tok", "u1", FakeHttp(), lambda m: True,
+                                       sleep=lambda s: None, path=self.path),
+            path=self.path)
+        self.assertIn("p1", result)
+        self.assertEqual(self.statuses(), {"a": "올림"})
+
     def test_check_token_rejects_other_account(self):
         http = lambda m, u, p: {"username": "someone"}
         with self.assertRaises(jp.ThreadsError):

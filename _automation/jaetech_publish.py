@@ -1,6 +1,8 @@
 """재테크 한 줄 예약 목록(_automation/jaetech-queue.json)에서 시각이 된 글을 Threads에 올린다.
 
-GitHub Actions(.github/workflows/threads-jaetech.yml)가 5분마다 실행한다. 표준 라이브러리만 쓴다.
+GitHub Actions(.github/workflows/threads-jaetech.yml)가 실행한다. 표준 라이브러리만 쓴다.
+- 큐 파일이 push되면 바로 실행되어(--wait) 가장 이른 예약 시각까지 최대 MAX_WAIT 기다린 뒤 올린다.
+- 예약(cron) 실행은 보조다. GitHub cron은 몇 시간씩 밀리거나 건너뛰기도 한다.
 안전장치:
 - 실행 한 번에 글은 최대 1개만 올린다.
 - 올리기 전에 상태를 '올리는 중'으로 바꿔 커밋·푸시한다. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
@@ -27,6 +29,7 @@ KST = timezone(timedelta(hours=9))
 BASE = "https://graph.threads.net/v1.0"
 QUEUE_PATH = Path(__file__).resolve().parent / "jaetech-queue.json"
 LATE_LIMIT = timedelta(hours=4)  # GitHub 예약 실행은 몇 시간씩 밀릴 수 있다(2026-10-16 실측 약 3시간)
+MAX_WAIT = timedelta(minutes=130)  # push 직후 실행이 기다리는 최대 시간. 11:40 push → 13:40 슬롯까지 덮는다(워크플로 timeout보다 짧게)
 TEXT_LIMIT = 500
 EXPECTED_USERNAME = "heeya.dailyfit"
 PUBLISH_RETRY_WAIT_SECONDS = 15
@@ -135,6 +138,47 @@ def pick_due(items: list[dict], now: datetime) -> tuple[dict | None, list[dict]]
     return due, updated
 
 
+def seconds_until_next(items: list[dict], now: datetime) -> float | None:
+    """가장 이른 '예약' 글까지 남은 초. 이미 지났으면 0, 올릴 글이 없거나 MAX_WAIT보다 멀면 None."""
+    times = []
+    for item in items:
+        if item.get("status") != READY:
+            continue
+        try:
+            at = datetime.fromisoformat(item["publish_at"])
+        except (KeyError, ValueError):
+            return 0  # 시각이 잘못된 글은 run_once가 바로 '실패'로 정리한다
+        times.append(at if at.tzinfo else at.replace(tzinfo=KST))
+    if not times:
+        return None
+    wait = (min(times) - now).total_seconds()
+    if wait > MAX_WAIT.total_seconds():
+        return None
+    return max(wait, 0.0)
+
+
+def git_pull(path: Path = QUEUE_PATH) -> bool:
+    root = path.parent.parent
+    return subprocess.run(["git", "pull", "--rebase"], cwd=root, capture_output=True, text=True).returncode == 0
+
+
+def wait_then_run(token: str, user_id: str, clock: Callable[[], datetime] = lambda: datetime.now(KST),
+                  sleep=time.sleep, pull: Callable[[], bool] = git_pull, run=None,
+                  path: Path = QUEUE_PATH) -> str:
+    """큐 push 직후 실행: 가장 이른 예약 시각까지(최대 MAX_WAIT) 기다렸다가 최신 큐로 run_once."""
+    run = run or (lambda now: run_once(now, token, user_id, path=path))
+    wait = seconds_until_next(load_queue(path), clock())
+    if wait is None:
+        return f"올릴 글 없음 ({int(MAX_WAIT.total_seconds() // 60)}분 안에 예약된 글 없음)"
+    if wait > 0:
+        print(f"{int(wait // 60)}분 {int(wait % 60)}초 기다린 뒤 올립니다.", flush=True)
+        sleep(wait)
+        # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정). 최신본을 못 받으면 올리지 않는다.
+        if not pull():
+            raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
+    return run(clock())
+
+
 def git_commit_push(message: str, path: Path = QUEUE_PATH) -> bool:
     root = path.parent.parent
     run = lambda *args: subprocess.run(["git", *args], cwd=root, capture_output=True, text=True)
@@ -187,6 +231,9 @@ def main() -> int:
         return 1
     if "--check" in sys.argv:
         print(f"토큰 정상: {check_token(token)}")
+        return 0
+    if "--wait" in sys.argv:
+        print(wait_then_run(token, user_id))
         return 0
     print(run_once(datetime.now(KST), token, user_id))
     return 0
