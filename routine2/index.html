@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="무료 사이트 5곳과 유료 사이트의 무료 강의를 AI·부업·재테크·마케팅·일잘러 분야별로 골라 듣는 강의 루틴">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>무료 강의 루틴</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: routine 1's passbook, now a course ledger — category tabs on top, a ruled list of real courses, a weekly stamp strip beside it */
+:root {
+  --paper: #EEF4F3;
+  --sheet: #FFFFFF;
+  --ink: #14233A;
+  --muted: #5A6A7C;
+  --rule: #D5E2E1;
+  --accent: #1F5F8B;
+  --accent-soft: #E3EEF6;
+  --seal: #C8382E;
+  --gain: #2E7D5B;
+  --heat-0: #E4ECEB;
+  --font-display: "Nanum Myeongjo", "Batang", serif;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E161E; --sheet: #15202B; --ink: #E5ECF2; --muted: #8C9DB0; --rule: #263441;
+    --accent: #72B3E2; --accent-soft: #1B2E3E; --seal: #F0695C; --gain: #5CC28E; --heat-0: #1C2935;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E161E; --sheet: #15202B; --ink: #E5ECF2; --muted: #8C9DB0; --rule: #263441;
+  --accent: #72B3E2; --accent-soft: #1B2E3E; --seal: #F0695C; --gain: #5CC28E; --heat-0: #1C2935;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 22px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.7rem); line-height: 1.15; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.05rem; }
+.eyebrow { font-size: 0.74rem; letter-spacing: 0.14em; color: var(--accent); font-weight: 600; }
+.muted { color: var(--muted); }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+a { color: var(--accent); }
+
+header.top { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; justify-content: space-between; }
+header.top .intro { min-width: 0; max-width: 62ch; display: grid; gap: 6px; }
+header.top p { margin: 0; }
+.tally { display: flex; gap: 14px; align-items: center; }
+.seal-big { width: 86px; height: 86px; border-radius: 50%; border: 3px solid var(--seal); color: var(--seal); display: grid; place-items: center; text-align: center; transform: rotate(-8deg); font-family: var(--font-display); line-height: 1.05; }
+.seal-big b { font-size: 1.9rem; display: block; }
+.seal-big span { font-size: 0.72rem; font-weight: 700; }
+.mini { display: grid; gap: 2px; font-size: 0.8rem; color: var(--muted); }
+.mini b { font-family: var(--font-num); color: var(--ink); font-size: 1.05rem; margin-right: 4px; }
+
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 22px clamp(16px, 3vw, 28px); display: grid; gap: 16px; min-width: 0; }
+.sheet-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+
+/* Category tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { font: 600 0.9rem var(--font-body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); cursor: pointer; display: inline-flex; gap: 6px; align-items: baseline; }
+.tab small { font-family: var(--font-num); color: var(--muted); font-size: 0.75rem; }
+.tab:hover { border-color: var(--accent); }
+.tab:focus-visible, .btn-line:focus-visible, select:focus-visible, .stamp-day:focus-visible, .status:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.tab[aria-selected="true"] small { color: inherit; opacity: 0.7; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; font-size: 0.85rem; color: var(--muted); }
+.filters label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+select { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 10px; min-width: 0; }
+
+.grid-main { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 860px) { .grid-main { grid-template-columns: 1fr; } }
+
+/* Starter path */
+.path { background: var(--accent-soft); border-radius: 4px; padding: 14px 16px; display: grid; gap: 8px; }
+.path p { margin: 0; font-size: 0.88rem; }
+.path ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 4px; font-size: 0.9rem; }
+.path li::marker { font-family: var(--font-num); color: var(--accent); }
+
+/* Course ledger */
+.ledger { list-style: none; margin: 0; padding: 0; display: grid; }
+.course { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 14px; padding-block: 14px; border-top: 1px dashed var(--rule); align-items: center; }
+.course:first-child { border-top: 0; }
+.course .body { min-width: 0; display: grid; gap: 4px; }
+.course .title { font-weight: 600; overflow-wrap: anywhere; }
+.course .title a { color: var(--ink); text-decoration: none; }
+.course .title a:hover, .course .title a:focus-visible { color: var(--accent); text-decoration: underline; }
+.course .why { font-size: 0.86rem; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { font-size: 0.7rem; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; white-space: nowrap; }
+.chip.free { background: color-mix(in srgb, var(--gain) 15%, transparent); color: var(--gain); }
+.chip.meta { background: transparent; border: 1px solid var(--rule); color: var(--muted); font-weight: 500; }
+.chip.soon { background: color-mix(in srgb, var(--seal) 13%, transparent); color: var(--seal); }
+.chip.closed { background: var(--heat-0); color: var(--muted); text-decoration: line-through; }
+
+.status { font: 600 0.78rem var(--font-body); min-width: 74px; padding: 7px 10px; border-radius: 999px; border: 1.5px dashed var(--rule); background: transparent; color: var(--muted); cursor: pointer; }
+.status:hover { border-color: var(--accent); color: var(--accent); }
+.status[data-s="want"] { border-style: solid; border-color: var(--accent); color: var(--accent); }
+.status[data-s="doing"] { border-style: solid; border-color: var(--accent); background: var(--accent); color: var(--sheet); }
+.status[data-s="done"] { border: 2px solid var(--seal); color: var(--seal); font-family: var(--font-display); transform: rotate(-6deg); }
+.empty { padding: 18px; border: 1px dashed var(--rule); border-radius: 4px; color: var(--muted); font-size: 0.9rem; }
+
+/* Week stamps */
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.stamp-day { aspect-ratio: 1; max-width: 100%; border-radius: 50%; border: 1.5px dashed var(--rule); background: transparent; color: var(--muted); font: 600 0.78rem var(--font-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.stamp-day[data-today="true"] { border-color: var(--accent); color: var(--accent); }
+.stamp-day[aria-pressed="true"] { border: 2px solid var(--seal); color: var(--seal); font-family: var(--font-display); font-size: 1rem; transform: rotate(-10deg); }
+.stamp-day:disabled { cursor: default; opacity: 0.5; }
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-day.just, .status.just { animation: thunk 260ms ease-out; }
+  @keyframes thunk { 0% { transform: scale(1.4) rotate(-2deg); opacity: 0.3; } 100% { transform: scale(1) rotate(-8deg); opacity: 1; } }
+}
+.mylist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 0.86rem; }
+.mylist li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.mylist li span:last-child { overflow-wrap: anywhere; }
+.btn-line { font: 600 0.8rem var(--font-body); background: none; border: 1px solid var(--rule); border-radius: 4px; padding: 6px 12px; color: var(--muted); cursor: pointer; justify-self: start; }
+.btn-line:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Sites */
+.sites { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0 28px; }
+.site { display: grid; gap: 4px; padding-block: 14px; border-top: 1px solid var(--rule); }
+.site .name { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-weight: 600; }
+.site .name a { font-size: 0.8rem; font-weight: 500; text-decoration: none; }
+.site .name a:hover { text-decoration: underline; }
+.site p { margin: 0; font-size: 0.86rem; color: var(--muted); }
+.disclaimer { font-size: 0.78rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 12px; margin: 0; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="intro">
+      <span class="eyebrow">재테크 루틴 2 · 무료 사이트 5곳 + 유료 사이트의 무료 강의</span>
+      <h1>무료 강의 루틴</h1>
+      <p class="muted">강의에 돈 쓰기 전에 무료 강의부터. 공공·대학·포털 무료 사이트 5곳과, 인프런·유데미 같은 유료 사이트에 숨어 있는 무료 강의를 분야별로 골라 두었습니다. 들을 강의를 담고, 공부한 날엔 도장을 찍으세요.</p>
+    </div>
+    <div class="tally" aria-live="polite">
+      <div class="seal-big" aria-label="이번 주 공부한 날"><div><b id="weekNum" class="num">0</b><span>이번 주</span></div></div>
+      <div class="mini">
+        <span><b id="cntWant">0</b>담음</span>
+        <span><b id="cntDoing">0</b>듣는 중</span>
+        <span><b id="cntDone">0</b>다 들음</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="강의 분야"></nav>
+
+  <div class="grid-main">
+    <section class="sheet" aria-labelledby="listH">
+      <div class="sheet-head">
+        <h2 id="listH">추천 강의</h2>
+        <div class="filters">
+          <label for="siteSel">사이트 <select id="siteSel"></select></label>
+          <label for="mineOnly"><input type="checkbox" id="mineOnly"> 내가 담은 것만</label>
+        </div>
+      </div>
+      <div class="path" id="path"></div>
+      <ul class="ledger" id="ledger"></ul>
+      <p class="muted" style="margin:0;font-size:0.82rem">오른쪽 버튼을 누를 때마다 담기 → 듣는 중 → 다 들음 → 빼기 순으로 바뀝니다.</p>
+    </section>
+
+    <aside class="sheet" aria-labelledby="weekH">
+      <div class="sheet-head"><h2 id="weekH">이번 주 공부 도장</h2><span class="muted num" id="weekLabel"></span></div>
+      <div class="week" id="week"></div>
+      <p class="muted" style="margin:0;font-size:0.82rem">하루 한 차시면 충분합니다. 오늘 칸만 누를 수 있어요.</p>
+      <h3>지금 듣는 강의</h3>
+      <ul class="mylist" id="mylist"></ul>
+      <button type="button" class="btn-line" id="showMine">담은 강의 전체 보기</button>
+    </aside>
+  </div>
+
+  <section class="sheet" aria-labelledby="sitesH">
+    <div class="sheet-head"><h2 id="sitesH">10개 사이트 한눈에</h2><span class="muted" style="font-size:0.82rem">무엇이 강한지, 들으려면 무엇이 필요한지</span></div>
+    <div id="sites" style="display:grid;gap:8px"></div>
+    <p class="disclaimer">강의 목록과 신청 기간은 2026년 10월 27일에 각 사이트에서 확인한 내용입니다. 강의는 예고 없이 닫히거나 바뀔 수 있으니 신청 전에 사이트에서 다시 확인하세요. 재테크·금융 강의는 공부용이며, 이 페이지는 특정 상품이나 종목의 매수·매도를 권하지 않습니다.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const TODAY_ISO = new Date().toLocaleDateString("sv-SE");
+  const LOCAL_KEY = "jaetech-routine2-v1";
+  const SOON_DAYS = 14;
+  const ALL_GO = (q) => "https://www.all.go.kr/search/viewSearchTotal.do?searchKeyword=" + encodeURIComponent(q);
+  const SNUON_HOME = "https://etl.snu.ac.kr/snuon/";
+
+  const SITES = {
+    ebr: { name: "EBS 비즈니스 리뷰", short: "EBR", url: "https://ebr.ebs.co.kr/", strong: "명사들의 경영·마케팅·경제 강연 시리즈. 한 주제를 여러 회차로 나눠 들려줍니다.", need: "회원가입 없이도 영상 페이지가 열립니다. 찜하기 등은 EBS 로그인." },
+    snuon: { name: "SNUON (서울대 온라인)", short: "SNUON", url: SNUON_HOME, strong: "서울대 교수진의 공개 강좌. 경제학원론, 인공지능 기초처럼 기본기를 제대로 쌓기 좋습니다.", need: "강좌 주소가 따로 없어 SNUON 홈에서 강좌명을 눌러 들어갑니다. 신청은 로그인 필요, 상당수는 이수증 미제공." },
+    all: { name: "늘배움 → 온국민평생배움터", short: "평생배움터", url: "https://www.all.go.kr/", strong: "공공기관·K-MOOC 강좌를 한곳에서 검색. 금융투자 기초, AI 활용, 창업 입문 강좌가 상시로 열려 있습니다.", need: "늘배움 옛 주소가 지금 열리지 않아, 같은 평생교육 포털인 온국민평생배움터로 연결했습니다. 링크는 강좌명 검색 결과로 열립니다." },
+    naver: { name: "네이버 비즈니스 스쿨", short: "네이버", url: "https://bizschool.naver.com/", strong: "스마트스토어·상세페이지·숏클립·쇼핑라이브 등 네이버에서 파는 법을 짧은 강의로.", need: "네이버 아이디로 수강. 부업으로 스마트스토어를 생각한다면 여기부터." },
+    gseek: { name: "GSEEK (지식)", short: "GSEEK", url: "https://www.gseek.kr/", strong: "경기도 평생학습 포털. 엑셀·노션·ChatGPT처럼 바로 쓰는 실무 강의와 이모티콘·캡컷 같은 부업 강의가 많습니다.", need: "회원가입 후 수강, 과정별 수료 기준(예: 60% 이상 이수)을 채우면 수료증." },
+    inflearn: { group: "mixed", name: "인프런", short: "인프런", url: "https://www.inflearn.com/courses?charge=FREE", strong: "유료 강의가 중심이지만 무료 강의도 많습니다. AI·엑셀·노션·마케팅 무료 강의의 수강생 수가 특히 많아요.", need: "검색할 때 가격 필터를 '무료'로 두면 무료 강의만 보입니다. '수익화·부업' 강의 중에는 무료처럼 보이지만 유료인 것이 있으니 가격을 꼭 확인하세요." },
+    udemy: { group: "mixed", name: "유데미 (Udemy)", short: "유데미", url: "https://www.udemy.com/courses/search/?q=AI&price=price-free&lang=ko", strong: "가격 필터를 '무료', 언어를 '한국어'로 두면 짧은 무료 강의가 나옵니다. AI 도구와 마케팅 강의가 많아요.", need: "무료 강의는 영상만 볼 수 있고, 수료증과 Q&A는 유료 강의에만 있습니다." },
+    coursera: { group: "mixed", name: "코세라 (Coursera)", short: "코세라", url: "https://www.coursera.org/search?query=AI&language=Korean", strong: "해외 대학·기업 강의를 한국어로 들을 수 있습니다. AI 입문 강의가 탄탄해요.", need: "무료로 가입할 수 있지만, 강의 영상을 어디까지 무료로 볼 수 있는지는 강좌마다 다릅니다. 수료증은 유료예요." },
+    eduwill: { group: "mixed", name: "에듀윌", short: "에듀윌", url: "https://land.eduwill.net/sites/freelec", strong: "공인중개사 시험 과목별 무료 특강을 한곳에 모아 둔 페이지가 있습니다. 부동산 공부를 체계적으로 시작하기 좋아요.", need: "무료강의는 회원가입 후 수강. 정규 강의와 교재는 유료입니다." },
+    hackers: { group: "mixed", name: "해커스금융", short: "해커스", url: "https://mfn.hackers.com/lectures/free/frame", strong: "AFPK·투자자산운용사·펀드투자권유대행인·전산회계 같은 금융·회계 자격증 이론 강의를 무료로 풀어 둡니다.", need: "과목을 고르면 무료 이론 강의가 나옵니다. 회원가입 필요, 기수별 마감일이 있으니 페이지에서 확인하세요." }
+  };
+  const GROUPS = { free: "무료 사이트 5곳", mixed: "유료 사이트의 무료 강의" };
+  const groupOf = (siteKey) => SITES[siteKey].group || "free";
+
+  const CATS = [
+    { id: "ai", label: "AI 활용", intro: "ChatGPT를 처음 쓰는 단계부터 업무 자동화까지.", path: ["g-chatgpt-work", "g-genai-manual", "a-nocode"] },
+    { id: "side", label: "부업·창업", intro: "돈 들이지 않고 시작해 볼 수 있는 부업 기술과 창업 기초.", path: ["g-emoticon", "n-store", "n-detail"] },
+    { id: "money", label: "재테크·경제", intro: "투자 판단 전에 금융·경제의 기본기를 쌓는 강의.", path: ["a-hidden-money", "a-howto", "s-micro"] },
+    { id: "mkt", label: "마케팅·SNS", intro: "콘텐츠로 팔리는 구조를 배우는 강의. Threads·블로그 운영에도 바로 씁니다.", path: ["e-content-mkt", "n-shortclip", "e-fandom"] },
+    { id: "work", label: "일잘러 스킬", intro: "엑셀·노션·글쓰기처럼 본업과 부업 모두에 쓰이는 기술.", path: ["g-excel", "g-notion", "e-writing"] }
+  ];
+
+  const C = (id, cat, site, title, url, why, meta, until) => ({ id, cat, site, title, url, why, meta: meta || [], until: until || null });
+  const COURSES = [
+    // AI
+    C("g-chatgpt-work", "ai", "gseek", "일잘러의 노하우, ChatGPT를 활용한 업무효율UP!", "https://www.gseek.kr/user/course/online/view?ref=digital_51907", "ChatGPT를 업무에 처음 붙여 보는 입문 강의.", ["입문"]),
+    C("g-genai-manual", "ai", "gseek", "업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼", "https://www.gseek.kr/user/course/online/view?ref=digital_57949", "일의 종류별로 어떤 AI 도구를 쓸지 정리해 줍니다.", ["실전"]),
+    C("g-best-ai", "ai", "gseek", "요즘 일잘러가 쓰는 BEST 생성형 AI", "https://www.gseek.kr/user/course/online/view?ref=digital_51905", "ChatGPT 말고 어떤 도구가 있는지 훑어보기 좋습니다."),
+    C("g-vibe", "ai", "gseek", "대화로 시작하는 생성형 AI 코딩, 바이브코딩 입문", "https://www.gseek.kr/user/course/online/view?ref=it-skills_57048", "코딩을 몰라도 AI와 대화하며 작은 도구를 만들어 보는 강의."),
+    C("a-nocode", "ai", "all", "2025 AI 노코드 자동화 (설계, 날씨, 유튜브, 설문수집, 일정비서, 이메일, 가계부)", ALL_GO("AI 노코드 자동화"), "가계부·일정 비서처럼 생활 자동화를 코딩 없이 만들어 봅니다.", ["한국지능정보사회진흥원", "상시"]),
+    C("a-genai-use", "ai", "all", "생성형 AI 활용하기(심화)", ALL_GO("생성형 AI 활용하기"), "기초를 뗀 다음 단계. 이해하기·탐색하기 편과 묶여 있습니다.", ["한국지능정보사회진흥원", "상시"]),
+    C("a-genai-intro", "ai", "all", "생성형 인공지능 입문", ALL_GO("생성형 인공지능 입문"), "생성형 AI가 어떻게 작동하는지 원리부터.", ["K-MOOC"], "2026-12-14"),
+    C("s-ai-basic", "ai", "snuon", "K-MOOC 묶음강좌_인공지능의 기초", SNUON_HOME, "서울대 묶음 강좌로 AI 개념을 체계적으로.", ["대학 강의"], "2027-02-28"),
+    C("s-chatgpt", "ai", "snuon", "ChatGPT 특강", SNUON_HOME, "SNUON 인기 강좌. 짧게 핵심만 듣는 특강."),
+    C("n-ai-question", "ai", "naver", "AI에게 '완벽한' 답을 얻는 5가지 비밀 질문법", "https://bizschool.naver.com/online/course/65285/lecture/1462256", "질문(프롬프트)을 바꾸면 답이 어떻게 달라지는지."),
+    C("e-after-gpt", "ai", "ebr", "홍기훈의 챗GPT 이후의 인류", "https://ebr.ebs.co.kr/ebr/series?prodId=445024&stepId=60053018&lectId=60387816", "도구 사용법이 아니라 AI가 일과 돈의 흐름을 어떻게 바꾸는지."),
+    C("e-ai-nobel", "ai", "ebr", "조태호의 AI와 노벨상: AI가 모든 노벨상을 휩쓸 날이 올까?", "https://ebr.ebs.co.kr/ebr/series?prodId=448793&stepId=60055416&lectId=60555051", "2024 노벨상으로 보는 AI 혁신, 4부작."),
+    C("i-wecan", "ai", "inflearn", "[연재형] WE CAN ChatGPT! - 챗gpt 우리도 할 수 있습니다.", "https://www.inflearn.com/course/we-can-chatgpt", "ChatGPT 기능을 연재처럼 하나씩 따라 해 보는 입문 강의.", ["수강생 2,300+"]),
+    C("i-andong", "ai", "inflearn", "업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스", "https://www.inflearn.com/course/%EC%97%85%EB%AC%B4%EC%97%90-%EB%B0%94%EB%A1%9C%EC%A0%81%EC%9A%A9-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%83%9D%EC%84%B1ai-%ED%99%9C%EC%9A%A9%EB%B2%95", "문서·요약·메일 같은 글 업무에 생성 AI를 쓰는 법.", ["국립안동대 SW융합교육원"]),
+    C("i-claude-first", "ai", "inflearn", "AI 처음으로 일 시키기 — Claude Code 에이전틱 자동화", "https://www.inflearn.com/course/giving-ai-its-first", "프로그래밍 경험 없이 AI에게 파일 정리 같은 일 5가지를 시켜 봅니다."),
+    C("i-vibe", "ai", "inflearn", "[무료 바이브 코딩 강의 / 입문편] 혼자 공부하는 바이브 코딩 with 클로드 코드", "https://www.inflearn.com/course/%EB%B0%94%EC%9D%B4%EB%B8%8C-%EC%BD%94%EB%94%A9-%EC%9E%85%EB%AC%B8-%EA%B0%95%EC%9D%98-%ED%98%BC%EC%9E%90-%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94", "책 『혼자 공부하는 바이브 코딩』과 함께 가는 입문 강의.", ["한빛미디어", "수강생 13,800+"]),
+    C("u-chatgpt", "ai", "udemy", "ChatGPT 마스터 클래스", "https://www.udemy.com/course/chatgpt-masterclass-hicrhodus/", "ChatGPT 입문을 순서대로 정리한 강의."),
+    C("u-midjourney", "ai", "udemy", "미드저니의 정석 - 입문편 | Midjourney Beginners Tutorial", "https://www.udemy.com/course/midjourney-guide-w/", "AI 이미지 만들기 입문. 썸네일·SNS 이미지에 바로 씁니다."),
+    C("u-andrew", "ai", "udemy", "스탠포드대학 앤드류 응(Andrew Ng)교수의 인공지능(AI)입문 무크(MOOC) 한글번역 설명", "https://www.udemy.com/course/ai-andrew-ng-mooc/", "유명한 AI 입문 강의를 한국어로 풀어 설명합니다."),
+    C("c-ai-everyone", "ai", "coursera", "모두를 위한 AI", "https://www.coursera.org/learn/ai-for-everyone", "앤드류 응 교수의 비전공자용 AI 입문.", ["무료 범위 확인"]),
+    C("c-prompt", "ai", "coursera", "제너레이티브 AI: 프롬프트 엔지니어링 기초", "https://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone", "좋은 질문을 쓰는 법을 기초부터.", ["무료 범위 확인"]),
+
+    // 부업·창업
+    C("g-emoticon", "side", "gseek", "취미로 돈 버는 이모티콘 만들기", "https://www.gseek.kr/user/course/online/view?ref=it-skills_3559", "그림 초보도 따라 하는 이모티콘 제작과 판매까지.", ["15차시 · 7시간 30분", "만족도 96%"]),
+    C("g-capcut", "side", "gseek", "무료 앱으로 배우는 초간단 영상 편집, 캡컷", "https://www.gseek.kr/user/course/online/view?ref=it-skills_7622", "릴스·숏폼 편집을 무료 앱 하나로."),
+    C("n-store", "side", "naver", "스마트스토어 기능 살펴보기", "https://bizschool.naver.com/online/course/64981", "스마트스토어를 열기 전에 어떤 기능이 있는지 한 번에."),
+    C("n-detail", "side", "naver", "상세페이지 작성하기", "https://bizschool.naver.com/online/course/65648/lecture/1463072", "팔리는 상품 소개 페이지의 구성."),
+    C("n-live", "side", "naver", "매출을 높이는 쇼핑라이브 멘트 공식", "https://bizschool.naver.com/online/course/65962", "라이브 판매를 할 때 쓸 수 있는 말하기 틀."),
+    C("a-mall", "side", "all", "10. 온라인 쇼핑몰 창업(생활)", ALL_GO("온라인 쇼핑몰 창업"), "온라인 판매 창업의 흐름을 생활 눈높이로.", ["한국지능정보사회진흥원", "상시"]),
+    C("a-startup", "side", "all", "창업했다고 이건 알고해야지! START-UP", ALL_GO("START-UP"), "창업 직후 놓치기 쉬운 지식재산·기본기.", ["한국발명진흥회"], "2026-12-31"),
+    C("a-idea", "side", "all", "창업아이디어 탐색 및 실습", ALL_GO("창업아이디어 탐색 및 실습"), "아이디어를 사업으로 다듬는 실습형 강좌.", ["K-MOOC"], "2026-11-30"),
+    C("e-creator", "side", "ebr", "안정기의 기업은 왜 크리에이터를 잡아야 하나", "https://ebr.ebs.co.kr/ebr/series?prodId=441857&stepId=60049873&lectId=60375757", "크리에이터 수익 구조를 기업 쪽에서 보는 시선."),
+    C("e-area", "side", "ebr", "심영규의 상권분석", "https://ebr.ebs.co.kr/ebr/ebrplus?prodId=413067&stepId=60025048&lectId=60140049", "오프라인 창업이나 상가 공부를 할 때 기초가 되는 상권 보는 법."),
+    C("i-appmoney", "side", "inflearn", "[머니업 라이브] 350개 앱을 만들며 정리한 실전 앱 수익화 노하우!", "https://www.inflearn.com/course/%EB%A8%B8%EB%8B%88%EC%97%85%EB%9D%BC%EC%9D%B4%EB%B8%8C-app", "앱으로 수익을 내 본 사람의 경험을 정리한 라이브 다시보기."),
+    C("i-startup", "side", "inflearn", "스타트업 A to Z", "https://www.inflearn.com/course/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85", "사업자 등록부터 지분·채용·대출 한도까지 창업 현실 이야기."),
+    C("u-ecommerce", "side", "udemy", "이커머스 마케팅 실무 : 매출 · 광고 · CRM을 이익으로 연결하기", "https://www.udemy.com/course/e-commerce-marketing-funnels-crm-profitable-growth/", "온라인 판매에서 매출과 광고비, 재구매를 이익으로 연결하는 법."),
+
+    // 재테크·경제
+    C("a-hidden-money", "money", "all", "잠자고 있는 숨은 돈 찾기(생활)", ALL_GO("잠자고 있는 숨은 돈 찾기"), "휴면예금·보험금 등 내 돈부터 찾는 생활 금융.", ["한국지능정보사회진흥원", "상시"]),
+    C("a-howto", "money", "all", "금융투자 HOWTO", ALL_GO("금융투자 HOWTO"), "주식·펀드·채권이 무엇인지 기초 용어부터.", ["전국투자자교육협의회", "상시"]),
+    C("a-mz", "money", "all", "MZ 머니 헌터스", ALL_GO("MZ 머니 헌터스"), "사회초년생 눈높이의 돈 관리 강좌.", ["전국투자자교육협의회", "상시"]),
+    C("a-jaetech", "money", "all", "재테크 설계", ALL_GO("재테크 설계"), "내 상황에 맞는 재테크 계획을 세우는 법.", ["K-MOOC"], "2026-11-30"),
+    C("g-auction", "money", "gseek", "누구나 쉽게 배우는 경매 첫걸음", "https://www.gseek.kr/user/course/online/view?ref=life-tips_7629", "부동산 경매가 어떻게 돌아가는지 입문."),
+    C("s-micro", "money", "snuon", "K-MOOC 경제학원론: 미시경제학", SNUON_HOME, "이준구 명예교수. 가격·수요·공급을 제대로.", ["15주", "이수증 없음"], "2027-02-28"),
+    C("s-macro", "money", "snuon", "K-MOOC 경제학원론: 거시경제학", SNUON_HOME, "금리·물가·환율 뉴스가 읽히기 시작하는 과목.", ["대학 강의"], "2027-02-28"),
+    C("e-finance", "money", "ebr", "김종승의 아는 만큼 보이는 금융의 세계", "https://ebr.ebs.co.kr/ebr/series?prodId=446132&stepId=60053575&lectId=60442883", "금융 산업이 어떻게 돌아가는지 큰 그림."),
+    C("e-fin-history", "money", "ebr", "차현진이 들려주는 금융의 역사", "https://ebr.ebs.co.kr/ebr/ebrplus?prodId=425201&stepId=60035139&lectId=60176516", "돈과 은행의 역사로 지금의 금융을 이해하기."),
+    C("e-trump", "money", "ebr", "박종훈의 트럼프 2.0 시대 새로운 위기와 기회", "https://ebr.ebs.co.kr/ebr/series?prodId=448717&stepId=60055391&lectId=60548124", "AI·에너지·데이터센터로 보는 세계 경제 흐름."),
+    C("ew-realtor", "money", "eduwill", "공인중개사 무료강의 모음", "https://land.eduwill.net/sites/freelec", "부동산 공부를 시험 과목(민법·공법·세법 등)별로 체계적으로. 단원별 무료 특강 모음입니다.", ["모음 페이지"]),
+    C("hk-finance", "money", "hackers", "해커스금융 100% 무료강의", "https://mfn.hackers.com/lectures/free/frame", "AFPK·투자자산운용사·펀드투자권유대행인 등 금융 자격증 이론을 무료로.", ["모음 페이지"]),
+    C("u-salary", "money", "udemy", "【북클립:Book-clip】 나의 월급 독립 프로젝트", "https://www.udemy.com/course/book-clip-my-salary-independent-project/", "책 한 권을 짧은 영상으로 요약한 북클립. 월급 관리 생각을 정리할 때."),
+    C("c-fin-markets", "money", "coursera", "Financial Markets (예일대 로버트 실러)", "https://www.coursera.org/learn/financial-markets-global", "노벨경제학상 수상자의 금융시장 입문. 한국어 자막은 강좌 화면에서 확인하세요.", ["예일대", "무료 범위 확인"]),
+
+    // 마케팅·SNS
+    C("e-content-mkt", "mkt", "ebr", "주성균의 브랜드를 관통하는 콘텐츠 마케팅", "https://ebr.ebs.co.kr/ebr/series?prodId=446176&stepId=60053592&lectId=60448082", "콘텐츠로 브랜드를 쌓는 방법. SNS 운영자에게 바로 연결됩니다."),
+    C("e-fandom", "mkt", "ebr", "윤진호의 팬덤을 만드는 브랜딩의 비결", "https://ebr.ebs.co.kr/ebr/series?prodId=446153&stepId=60053586&lectId=60445995", "팔로워를 팬으로 바꾸는 브랜딩."),
+    C("e-big-marketer", "mkt", "ebr", "설명남의 큰 마케터는 무엇이 다른가", "https://ebr.ebs.co.kr/ebr/series?prodId=448882&stepId=60055442&lectId=60560218", "마케터의 관점과 일하는 방식."),
+    C("e-consumer", "mkt", "ebr", "박지혜의 마케팅은 소비자로부터 시작된다", "https://ebr.ebs.co.kr/ebr/series?prodId=448016&stepId=60055010&lectId=60508155", "소비자를 먼저 이해하는 마케팅 기초."),
+    C("n-shortclip", "mkt", "naver", "숏클립 제작 노하우", "https://bizschool.naver.com/online/course/64991/lecture/1461281", "짧은 영상을 어떻게 찍고 올릴지."),
+    C("n-clip-editor", "mkt", "naver", "클립 에디터로 쉽고 빠르게 만드는 숏폼 영상", "https://bizschool.naver.com/online/course/65629", "네이버 클립 편집기로 숏폼을 빠르게."),
+    C("n-ranking", "mkt", "naver", "쇼핑검색랭킹 이해하기", "https://bizschool.naver.com/online/course/65269", "네이버 쇼핑에서 상품이 위로 뜨는 원리."),
+    C("a-aid-mkt", "mkt", "all", "AID+ 마케팅 핵심 : '생성형 AI'와 업무 함께하기", ALL_GO("AID+ 마케팅 핵심"), "마케팅 실무에 생성형 AI를 붙이는 법.", ["K-MOOC"], "2026-11-25"),
+    C("g-cs", "mkt", "gseek", "브랜드의 찐팬을 만드는 실전 CS 전략", "https://www.gseek.kr/user/course/online/view?ref=competency_8311", "댓글·문의 응대를 팬 만들기로 연결하는 법."),
+    C("i-seunghee", "mkt", "inflearn", "마케터 이승희 님과 함께 인사이트 찾으러 가기", "https://www.inflearn.com/course/%EB%A7%88%EC%BC%80%ED%8C%85-%EB%B0%8B%EC%97%85-%EC%9D%B4%EC%8A%B9%ED%9D%AC", "『영감노트』 저자와 일상에서 콘텐츠 영감을 찾는 법."),
+    C("i-datamkt", "mkt", "inflearn", "데이터 드리븐 마케팅 101 (Data Marketing)", "https://www.inflearn.com/course/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%93%9C%EB%A6%AC%EB%B8%90-%EB%A7%88%EC%BC%80%ED%8C%85-101", "조회수·저장 수 같은 숫자로 마케팅을 판단하는 기초.", ["아이지에이웍스"]),
+    C("i-metaads", "mkt", "inflearn", "데이터를 활용한 페이스북, 인스타그램 광고 - 기본편", "https://www.inflearn.com/course/%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%99%9C%EC%9A%A9-%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%B6%81-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EA%B8%B0%EB%B3%B8%ED%8E%B8", "메타(인스타그램·페이스북) 광고가 어떻게 돌아가는지 기본편."),
+    C("u-claude-mkt", "mkt", "udemy", "우리 브랜드를 기억하는 클로드 AI 마케터 만들기: 마케팅 스킬 5종, 카피부터 AI 검색까지", "https://www.udemy.com/course/maso-ai-claude-onc153/", "AI에게 브랜드 말투를 기억시켜 카피를 쓰게 하는 법."),
+    C("u-mkt-plan", "mkt", "udemy", "AI시대, 마케팅 기획이 빨라지는 판단의 기술", "https://www.udemy.com/course/ai-lbuwf/", "AI를 쓰면서도 기획 판단은 사람이 하는 법."),
+    C("u-whenbuy", "mkt", "udemy", "【북클립:Book-clip】 지금 팔리는 것들의 비밀(When They Buy)", "https://www.udemy.com/course/book-clip-when-they-buy/", "사람들이 언제 사는지를 다룬 책을 짧게 요약한 영상."),
+
+    // 일잘러 스킬
+    C("g-excel", "work", "gseek", "회사에서 자주 쓰는 실무 엑셀 배우기", "https://www.gseek.kr/user/course/online/view?ref=it-skills_7614", "GSEEK 인기 2위. 실무에서 쓰는 기능만 추렸습니다.", ["조회 72.6만"]),
+    C("g-notion", "work", "gseek", "일 잘하는 사람의 비밀, 노션(notion) 활용법", "https://www.gseek.kr/user/course/online/view?ref=competency_4450", "노션으로 할 일·가계부·기록을 한곳에."),
+    C("g-report", "work", "gseek", "핵심만 콕! 비즈니스 글쓰기와 보고서 작성 노하우", "https://www.gseek.kr/user/course/online/view?ref=competency_7759", "보고서와 글을 짧고 분명하게."),
+    C("g-ai-ppt", "work", "gseek", "기획, 디자인, 발표까지 다 되는 AI 활용 프레젠테이션", "https://www.gseek.kr/user/course/online/view?ref=digital_57938", "발표 자료를 AI로 빠르게 만드는 법."),
+    C("g-account", "work", "gseek", "독공 전산회계1급(이론)", "https://www.gseek.kr/user/course/online/view?ref=certificate_58730", "회계 기초를 자격증 과정으로 정리하고 싶을 때.", ["자격증"]),
+    C("e-writing", "work", "ebr", "백승권의 직장인 문해력 & 글쓰기", "https://ebr.ebs.co.kr/ebr/series?prodId=445200&stepId=60053132&lectId=60398609", "읽고 쓰는 힘을 직장 글쓰기에 맞춰."),
+    C("e-literacy", "work", "ebr", "송숙희의 당신을 구원할 일머리 문해력", "https://ebr.ebs.co.kr/ebr/series?prodId=446478&stepId=60053751&lectId=60463116", "일 잘하는 사람이 정보를 읽는 방식."),
+    C("s-dict", "work", "snuon", "사전과 함께하는 글쓰기", SNUON_HOME, "단어를 정확히 고르는 글쓰기 습관.", [], "2027-02-28"),
+    C("i-excel-short", "work", "inflearn", "엑셀 기초에서 실무까지 짤막한 강좌(한정희)", "https://www.inflearn.com/course/%EC%97%91%EC%85%80", "기능 하나당 짧은 영상이라 출근길에 하나씩 보기 좋습니다.", ["수강생 19,700+"]),
+    C("i-excel2016", "work", "inflearn", "회사에서 바로 통하는 엑셀 2016", "https://www.inflearn.com/course/excel-%EC%97%91%EC%85%80-2016", "VLOOKUP·피벗 테이블처럼 데이터 정리에 꼭 필요한 기능만.", ["한빛미디어"]),
+    C("i-notion", "work", "inflearn", "노션(notion) 완벽 활용법", "https://www.inflearn.com/course/%EB%85%B8%EC%85%98-notion-%ED%99%9C%EC%9A%A9", "노션을 처음부터 실습으로. 수강생이 가장 많은 무료 노션 강의 중 하나.", ["수강생 41,900+"]),
+    C("i-excel-auto", "work", "inflearn", "[신규 개정판] 이것이 진짜 엑셀자동화다 - 기본편", "https://www.inflearn.com/course/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%97%85%EB%AC%B4-%EC%9E%90%EB%8F%99%ED%99%94-%EA%B8%B0%EB%B3%B8%ED%8E%B8", "반복되는 엑셀 작업을 파이썬으로 자동화하는 첫걸음.")
+  ];
+  const BY_ID = Object.fromEntries(COURSES.map((c) => [c.id, c]));
+  const STATUS_NEXT = { "": "want", want: "doing", doing: "done", done: "" };
+  const STATUS_LABEL = { "": "담기", want: "담음", doing: "듣는 중", done: "完 다 들음" };
+
+  const $ = (id) => document.getElementById(id);
+  let state = readLocal();
+  let view = { cat: hashCat(), site: "", mine: false };
+
+  /* ---------- persistence (this browser only) ---------- */
+  function readLocal() {
+    const base = { v: 1, status: {}, days: [] };
+    try {
+      const raw = JSON.parse(localStorage.getItem(LOCAL_KEY) || "null");
+      if (!raw || typeof raw !== "object") return base;
+      const status = {};
+      Object.entries(raw.status || {}).forEach(([k, v]) => { if (BY_ID[k] && STATUS_NEXT[v] !== undefined && v) status[k] = v; });
+      const days = Array.isArray(raw.days) ? raw.days.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).slice(-400) : [];
+      return { v: 1, status, days };
+    } catch (e) { return base; }
+  }
+  function save() {
+    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: keep for this visit */ }
+  }
+
+  function hashCat() {
+    const h = (location.hash || "").slice(1);
+    return CATS.some((c) => c.id === h) ? h : CATS[0].id;
+  }
+
+  /* ---------- dates ---------- */
+  function daysUntil(iso) { return Math.round((new Date(iso + "T00:00:00") - new Date(TODAY_ISO + "T00:00:00")) / 86400000); }
+  function shortDate(iso) { const [, m, d] = iso.split("-"); return Number(m) + "/" + Number(d); }
+
+  /* ---------- tabs ---------- */
+  function renderTabs() {
+    const nav = $("tabs");
+    nav.textContent = "";
+    CATS.forEach((c) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tab"; b.id = "tab-" + c.id; b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", String(c.id === view.cat && !view.mine));
+      const n = COURSES.filter((x) => x.cat === c.id).length;
+      b.append(document.createTextNode(c.label));
+      const s = document.createElement("small"); s.textContent = n; b.append(s);
+      b.addEventListener("click", () => { view = { ...view, cat: c.id, mine: false }; $("mineOnly").checked = false; setHash(c.id); renderAll(); });
+      nav.append(b);
+    });
+  }
+  function setHash(id) { try { history.replaceState(null, "", "#" + id); } catch (e) { /* hash is optional */ } }
+
+  function setupFilters() {
+    const sel = $("siteSel");
+    const all = document.createElement("option"); all.value = ""; all.textContent = "전체 " + Object.keys(SITES).length + "곳"; sel.append(all);
+    Object.entries(GROUPS).forEach(([g, label]) => {
+      const og = document.createElement("optgroup"); og.label = label;
+      const go = document.createElement("option"); go.value = "g:" + g; go.textContent = label + " 전부"; og.append(go);
+      Object.entries(SITES).filter(([k]) => groupOf(k) === g).forEach(([k, s]) => { const o = document.createElement("option"); o.value = k; o.textContent = s.short; og.append(o); });
+      sel.append(og);
+    });
+    sel.addEventListener("change", () => { view = { ...view, site: sel.value }; renderAll(); });
+    $("mineOnly").addEventListener("change", (e) => { view = { ...view, mine: e.target.checked }; renderAll(); });
+    $("showMine").addEventListener("click", () => { view = { ...view, mine: true, site: "" }; $("mineOnly").checked = true; $("siteSel").value = ""; renderAll(); $("listH").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  }
+
+  /* ---------- course list ---------- */
+  function visibleCourses() {
+    return COURSES.filter((c) => (view.mine ? state.status[c.id] : c.cat === view.cat) && matchesSite(c));
+  }
+  function matchesSite(c) {
+    if (!view.site) return true;
+    if (view.site.startsWith("g:")) return groupOf(c.site) === view.site.slice(2);
+    return c.site === view.site;
+  }
+
+  function renderPath() {
+    const box = $("path");
+    box.textContent = "";
+    box.hidden = view.mine;
+    if (view.mine) return;
+    const cat = CATS.find((c) => c.id === view.cat);
+    const p = document.createElement("p");
+    const b = document.createElement("b"); b.textContent = cat.label + " · ";
+    p.append(b, document.createTextNode(cat.intro + " 처음이라면 이 순서로 들어 보세요."));
+    const ol = document.createElement("ol");
+    cat.path.forEach((id) => { const li = document.createElement("li"); li.textContent = BY_ID[id].title + " (" + SITES[BY_ID[id].site].short + ")"; ol.append(li); });
+    box.append(p, ol);
+  }
+
+  function courseRow(c) {
+    const li = document.createElement("li"); li.className = "course";
+    const body = document.createElement("div"); body.className = "body";
+
+    const tags = document.createElement("div"); tags.className = "tags";
+    const site = document.createElement("span"); site.className = "chip"; site.textContent = SITES[c.site].short; tags.append(site);
+    if (groupOf(c.site) === "mixed") { const f = document.createElement("span"); f.className = "chip free"; f.textContent = "유료 사이트 · 무료"; tags.append(f); }
+    if (view.mine) { const cat = document.createElement("span"); cat.className = "chip meta"; cat.textContent = CATS.find((x) => x.id === c.cat).label; tags.append(cat); }
+    c.meta.forEach((m) => { const s = document.createElement("span"); s.className = "chip meta"; s.textContent = m; tags.append(s); });
+    if (c.until) {
+      const left = daysUntil(c.until);
+      const s = document.createElement("span"); s.className = "chip " + (left < 0 ? "closed" : left <= SOON_DAYS ? "soon" : "meta");
+      s.textContent = left < 0 ? "신청 마감" : "신청 ~" + shortDate(c.until) + (left <= SOON_DAYS ? " · D-" + left : "");
+      tags.append(s);
+    }
+
+    const title = document.createElement("div"); title.className = "title";
+    const a = document.createElement("a"); a.href = c.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = c.title + " ↗";
+    title.append(a);
+    const why = document.createElement("div"); why.className = "why";
+    why.textContent = c.why + (c.site === "snuon" ? " (SNUON 홈에서 강좌명을 눌러 들어가세요)" : "");
+    body.append(tags, title, why);
+
+    const st = state.status[c.id] || "";
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "status"; btn.id = "st-" + c.id; btn.dataset.s = st;
+    btn.textContent = STATUS_LABEL[st];
+    btn.setAttribute("aria-label", c.title + " 상태: " + (st ? STATUS_LABEL[st] : "담지 않음") + ", 눌러서 바꾸기");
+    btn.addEventListener("click", () => cycleStatus(c.id));
+    li.append(body, btn);
+    return li;
+  }
+
+  function renderLedger() {
+    const ul = $("ledger");
+    ul.textContent = "";
+    const list = visibleCourses();
+    $("listH").textContent = view.mine ? "내가 담은 강의" : CATS.find((c) => c.id === view.cat).label + " 추천 강의";
+    if (!list.length) {
+      const e = document.createElement("li"); e.className = "empty";
+      e.textContent = view.mine ? "아직 담은 강의가 없습니다. 분야 탭에서 마음에 드는 강의의 '담기'를 눌러 보세요." : "이 사이트에는 이 분야 추천 강의가 없습니다. 사이트 필터를 '전체'로 바꿔 보세요.";
+      ul.append(e); return;
+    }
+    list.forEach((c) => ul.append(courseRow(c)));
+  }
+
+  function cycleStatus(id) {
+    const next = STATUS_NEXT[state.status[id] || ""];
+    const status = { ...state.status };
+    if (next) status[id] = next; else delete status[id];
+    state = { ...state, status };
+    save(); renderAll();
+    const b = $("st-" + id);
+    if (b) { if (next === "done") b.classList.add("just"); b.focus(); }
+  }
+
+  /* ---------- week stamps ---------- */
+  function weekDates() {
+    const t = new Date(TODAY_ISO + "T00:00:00");
+    const mon = new Date(t); mon.setDate(t.getDate() - ((t.getDay() + 6) % 7));
+    return Array.from({ length: 7 }, (_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); return d.toLocaleDateString("sv-SE"); });
+  }
+
+  function renderWeek() {
+    const wrap = $("week");
+    wrap.textContent = "";
+    const dates = weekDates();
+    const names = ["월", "화", "수", "목", "금", "토", "일"];
+    let n = 0;
+    dates.forEach((iso, i) => {
+      const done = state.days.includes(iso);
+      if (done) n++;
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "stamp-day"; b.id = "day-" + i;
+      b.dataset.today = String(iso === TODAY_ISO);
+      b.setAttribute("aria-pressed", String(done));
+      b.setAttribute("aria-label", names[i] + "요일 " + (done ? "공부함" : "공부 안 함"));
+      b.textContent = done ? "完" : names[i];
+      b.disabled = iso !== TODAY_ISO;
+      b.addEventListener("click", toggleToday);
+      wrap.append(b);
+    });
+    $("weekNum").textContent = n;
+    $("weekLabel").textContent = shortDate(dates[0]) + " – " + shortDate(dates[6]);
+  }
+
+  function toggleToday() {
+    const has = state.days.includes(TODAY_ISO);
+    state = { ...state, days: has ? state.days.filter((d) => d !== TODAY_ISO) : [...state.days, TODAY_ISO] };
+    save(); renderAll();
+    const b = $("day-" + weekDates().indexOf(TODAY_ISO));
+    if (b) { if (!has) b.classList.add("just"); b.focus(); }
+  }
+
+  /* ---------- my list & counts ---------- */
+  function renderMine() {
+    const counts = { want: 0, doing: 0, done: 0 };
+    Object.values(state.status).forEach((s) => { counts[s]++; });
+    $("cntWant").textContent = counts.want; $("cntDoing").textContent = counts.doing; $("cntDone").textContent = counts.done;
+    const ul = $("mylist");
+    ul.textContent = "";
+    const doing = COURSES.filter((c) => state.status[c.id] === "doing");
+    if (!doing.length) {
+      const li = document.createElement("li"); li.className = "muted";
+      li.textContent = "듣는 중인 강의가 여기에 모입니다. 담은 강의 버튼을 한 번 더 누르면 '듣는 중'이 됩니다.";
+      ul.append(li); return;
+    }
+    doing.forEach((c) => {
+      const li = document.createElement("li");
+      const tag = document.createElement("span"); tag.className = "chip"; tag.textContent = SITES[c.site].short;
+      const a = document.createElement("a"); a.href = c.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = c.title;
+      const t = document.createElement("span"); t.append(a);
+      li.append(tag, t); ul.append(li);
+    });
+  }
+
+  /* ---------- sites ---------- */
+  function renderSites() {
+    const box = $("sites");
+    Object.entries(GROUPS).forEach(([g, label]) => {
+      const h = document.createElement("h3"); h.textContent = label;
+      const ul = document.createElement("ul"); ul.className = "sites";
+      box.append(h, ul);
+      Object.entries(SITES).filter(([k]) => groupOf(k) === g).forEach(([k, s]) => renderSite(ul, k, s));
+    });
+  }
+  function renderSite(ul, k, s) {
+    {
+      const li = document.createElement("li"); li.className = "site";
+      const name = document.createElement("div"); name.className = "name";
+      const n = document.createElement("span"); n.textContent = s.name;
+      const a = document.createElement("a"); a.href = s.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "바로가기 ↗";
+      const cnt = document.createElement("span"); cnt.className = "chip meta"; cnt.textContent = "추천 " + COURSES.filter((c) => c.site === k).length + "개";
+      name.append(n, a, cnt);
+      const p1 = document.createElement("p"); p1.textContent = s.strong;
+      const p2 = document.createElement("p"); p2.textContent = s.need;
+      li.append(name, p1, p2); ul.append(li);
+    }
+  }
+
+  function renderAll() { renderTabs(); renderPath(); renderLedger(); renderWeek(); renderMine(); }
+
+  window.addEventListener("hashchange", () => { view = { ...view, cat: hashCat(), mine: false }; $("mineOnly").checked = false; renderAll(); });
+  setupFilters();
+  renderSites();
+  renderAll();
+})();
+</script>
+
+</body>
+</html>
