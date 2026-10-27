@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 안전장치 (재테크 자동 게시와 같은 방식 + 쇼핑 글 규칙):
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 토큰 계정이 pick.haru__1이 아니면 올리지 않는다.
-- 하루(KST) 최대 DAILY_CAP개. 본문 500자, 본문 주소 금지, 본문 첫 줄 광고 표시, 댓글에 쿠팡 파트너스 고지 문구와 쿠팡 링크.
+- 하루(KST) 최대 DAILY_CAP개. 본문 500자, 본문 주소 금지, 본문 마지막 줄 광고 표시(#광고 쿠팡파트너스), 댓글에 쿠팡 파트너스 고지 문구와 쿠팡 링크.
 - 본문은 올라갔는데 댓글만 실패하면 본문은 그대로 '올림'으로 두고 reply_error에 남긴다(본문 재게시 금지).
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
@@ -32,7 +32,6 @@ SECRET_NAME = "PICKHARU_THREADS_ACCESS_TOKEN"
 DAILY_CAP = 5
 MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처리하는 최대 시간(워크플로 timeout 350분보다 짧게)
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
-AD_MARK_RE = re.compile(r"광고|쿠팡\s?파트너스")
 LINK_RE = re.compile(r"https://(link\.coupang\.com|(www\.)?coupang\.com)/\S+")
 ANY_URL_RE = re.compile(r"https?://\S+")
 BARE_DOMAIN_RE = re.compile(r"\b[\w-]+\.(com|net|kr|ng|co|me|ly|io)/", re.IGNORECASE)  # Threads가 자동 링크로 바꾸는 주소
@@ -45,7 +44,7 @@ VIDEO_RE = re.compile(r"assets/pickharu/[\w.-]+\.mp4")
 VIDEO_MAX_BYTES = 100 * 1024 * 1024
 VIDEO_POLL_SECONDS = 15
 VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
-AI_MARK_RE = re.compile(r"AI")
+AD_TAG = "#광고 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
 
 
@@ -60,8 +59,6 @@ def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
         return f"영상 파일이 저장소에 없음: {video}"
     if path.stat().st_size > VIDEO_MAX_BYTES:
         return "영상이 100MB 초과"
-    if not AI_MARK_RE.search(item.get("text", "")):
-        return "AI 영상인데 본문에 AI 표시가 없음"
     return ""
 
 
@@ -79,8 +76,8 @@ def problem_of(item: dict) -> str:
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
     if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문만
         return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else ""
-    if not AD_MARK_RE.search(text.strip().splitlines()[0]):
-        return "본문 첫 줄에 광고 표시(광고/쿠팡 파트너스)가 없음"
+    if AD_TAG not in text.strip().splitlines()[-1]:
+        return f"본문 마지막 줄에 광고 표시({AD_TAG})가 없음"
     if DISCLOSURE not in reply:
         return "댓글에 쿠팡 파트너스 고지 문구가 없음"
     urls = ANY_URL_RE.findall(reply)

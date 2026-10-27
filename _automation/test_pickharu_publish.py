@@ -11,7 +11,7 @@ from test_refresh_token import FakeGitHub  # noqa: E402
 
 NOW = datetime(2026, 10, 28, 9, 2, tzinfo=pp.KST)
 LINK = "https://link.coupang.com/a/abc123"
-TEXT = "[광고] 출근 가방 정리 이걸로 끝냈어\n스치니들 파우치 몇 개 들고 다녀?"
+TEXT = "출근 가방 정리 이걸로 끝냈어\n파우치 몇 개 들고 다녀?\n#광고 쿠팡파트너스"
 REPLY = f"제품 보러 가기 👉 {LINK}\n\n{pp.DISCLOSURE}"
 
 
@@ -45,10 +45,10 @@ class ProblemTest(unittest.TestCase):
         self.assertEqual(pp.problem_of(item("a")), "")
 
     def test_rejects_link_in_body(self):
-        self.assertIn("주소", pp.problem_of(item("a", text=f"[광고] 이거 좋아 {LINK}")))
+        self.assertIn("주소", pp.problem_of(item("a", text=f"이거 좋아 {LINK}\n#광고 쿠팡파트너스")))
 
-    def test_requires_ad_mark_on_first_line(self):
-        self.assertIn("광고 표시", pp.problem_of(item("a", text="출근 가방 정리\n[광고]")))
+    def test_requires_ad_tag_on_last_line(self):
+        self.assertIn("광고 표시", pp.problem_of(item("a", text="[광고] 출근 가방 정리\n파우치 몇 개 들고 다녀?")))
 
     def test_requires_disclosure_in_reply(self):
         self.assertIn("고지", pp.problem_of(item("a", reply=f"보러 가기 {LINK}")))
@@ -62,7 +62,7 @@ class ProblemTest(unittest.TestCase):
         self.assertIn("링크", pp.problem_of(item("a", reply=reply)))
 
     def test_rejects_bare_domain_in_body(self):
-        self.assertIn("주소", pp.problem_of(item("a", text="[광고] 여기서 봐 link.coupang.com/a/x")))
+        self.assertIn("주소", pp.problem_of(item("a", text="여기서 봐 link.coupang.com/a/x\n#광고 쿠팡파트너스")))
 
 
 class VideoTest(unittest.TestCase):
@@ -76,9 +76,8 @@ class VideoTest(unittest.TestCase):
         self.dir.cleanup()
 
     def test_video_rules(self):
-        ok = {**item("a", text="[광고] 이거 봐\nAI로 만든 상황 영상"), "video": "assets/pickharu/v1.mp4"}
+        ok = {**item("a", text="이거 봐\n#광고 쿠팡파트너스"), "video": "assets/pickharu/v1.mp4"}
         self.assertEqual(pp.video_problem(ok, self.root), "")
-        self.assertIn("AI", pp.video_problem({**ok, "text": "[광고] 이거 봐"}, self.root))
         self.assertIn("없음", pp.video_problem({**ok, "video": "assets/pickharu/none.mp4"}, self.root))
         self.assertIn("경로", pp.video_problem({**ok, "video": "../secret.mp4"}, self.root))
 
