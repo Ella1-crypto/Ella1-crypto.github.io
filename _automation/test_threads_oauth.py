@@ -36,6 +36,16 @@ class CleanCodeTest(unittest.TestCase):
         self.assertEqual(oa.clean_code("https://ella1-crypto.github.io/?code=abc123#_"), "abc123")
 
 
+class SecretShapeTest(unittest.TestCase):
+    def test_accepts_32_hex_secret(self):
+        self.assertEqual(oa.secret_shape_problem("0123456789abcdef0123456789abcdef"), "")
+
+    def test_reports_length_only_for_wrong_secret(self):
+        problem = oa.secret_shape_problem("ehgo-autofill")
+        self.assertIn("13자", problem)
+        self.assertNotIn("ehgo", problem)
+
+
 class OAuthRunTest(unittest.TestCase):
     def test_exchanges_code_and_stores_long_token_in_account_secret(self):
         gh, masked, http = FakeGitHub(), [], oauth_http()

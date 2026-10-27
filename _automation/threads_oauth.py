@@ -64,12 +64,23 @@ def run(account: str, code: str, app_id: str, app_secret: str, repo: str, gh: Gi
     return f"{account} 토큰을 {secret_name}에 저장했습니다(60일 유효)."
 
 
+def secret_shape_problem(secret: str) -> str:
+    """값은 보이지 않고 모양만 검사한다. Threads 앱 시크릿은 영문 소문자·숫자 32자다."""
+    if re.fullmatch(r"[0-9a-f]{32}", secret):
+        return ""
+    return f"앱 시크릿 모양이 다릅니다({len(secret)}자). Threads 앱 시크릿 코드(32자 영문·숫자)를 다시 넣어 주세요."
+
+
 def main() -> int:
     env = {k: os.environ.get(k, "").strip() for k in
            ("ACCOUNT", "OAUTH_CODE", "THREADS_APP_ID", "THREADS_APP_SECRET", "GH_SECRETS_PAT", "GITHUB_REPOSITORY")}
     missing = [k for k, v in env.items() if not v]
     if missing:
         print(f"값이 없습니다: {', '.join(missing)}", file=sys.stderr)
+        return 1
+    problem = secret_shape_problem(env["THREADS_APP_SECRET"])
+    if problem:  # 잘못된 시크릿으로 code를 쓰기 전에 멈춘다
+        print(f"실패: {problem}", file=sys.stderr)
         return 1
     try:
         print(run(env["ACCOUNT"], env["OAUTH_CODE"], env["THREADS_APP_ID"], env["THREADS_APP_SECRET"],
