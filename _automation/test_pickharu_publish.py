@@ -65,6 +65,46 @@ class ProblemTest(unittest.TestCase):
         self.assertIn("주소", pp.problem_of(item("a", text="[광고] 여기서 봐 link.coupang.com/a/x")))
 
 
+class VideoTest(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        (self.root / "assets" / "pickharu").mkdir(parents=True)
+        (self.root / "assets" / "pickharu" / "v1.mp4").write_bytes(b"0" * 10)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def test_video_rules(self):
+        ok = {**item("a", text="[광고] 이거 봐\nAI로 만든 상황 영상"), "video": "assets/pickharu/v1.mp4"}
+        self.assertEqual(pp.video_problem(ok, self.root), "")
+        self.assertIn("AI", pp.video_problem({**ok, "text": "[광고] 이거 봐"}, self.root))
+        self.assertIn("없음", pp.video_problem({**ok, "video": "assets/pickharu/none.mp4"}, self.root))
+        self.assertIn("경로", pp.video_problem({**ok, "video": "../secret.mp4"}, self.root))
+
+    def test_publishes_video_after_processing_finishes(self):
+        calls, states = [], iter(["IN_PROGRESS", "FINISHED"])
+
+        def http(method, url, params):
+            calls.append((method, url.rsplit("/", 1)[-1], dict(params)))
+            if url.endswith("/threads"):
+                return {"id": "c1"}
+            if url.endswith("/threads_publish"):
+                return {"id": "p1"}
+            return {"status": next(states)}
+        post = pp.publish("[광고] AI", "tok", http, lambda s: None, video="assets/pickharu/v1.mp4")
+        self.assertEqual(post, "p1")
+        self.assertEqual(calls[0][2]["media_type"], "VIDEO")
+        self.assertEqual(calls[0][2]["video_url"], "https://ella1-crypto.github.io/assets/pickharu/v1.mp4")
+        self.assertEqual([c[1] for c in calls], ["threads", "c1", "c1", "threads_publish"])
+
+    def test_video_processing_error_raises(self):
+        def http(method, url, params):
+            return {"id": "c1"} if url.endswith("/threads") else {"status": "ERROR", "error_message": "bad"}
+        with self.assertRaises(pp.ThreadsError):
+            pp.publish("[광고] AI", "tok", http, lambda s: None, video="assets/pickharu/v1.mp4")
+
+
 class RunOnceTest(unittest.TestCase):
     def setUp(self):
         self.dir = tempfile.TemporaryDirectory()

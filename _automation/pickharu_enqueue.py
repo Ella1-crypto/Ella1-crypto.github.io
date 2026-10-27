@@ -17,7 +17,7 @@ from pathlib import Path
 from jaetech_publish import KST, READY, load_queue, save_queue
 from pickharu_publish import DAILY_CAP, MAX_SESSION, QUEUE_PATH, problem_of
 
-QUEUE_FIELDS = ("id", "publish_at", "text", "reply", "keyword", "product")
+QUEUE_FIELDS = ("id", "publish_at", "text", "reply", "keyword", "product", "video")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 
@@ -89,7 +89,7 @@ def main() -> int:
         print("(dry-run: 저장하지 않음)")
         return 0
     save_queue(queue, QUEUE_PATH)
-    git("add", "--", str(QUEUE_PATH))
+    git("add", "--", str(QUEUE_PATH), *[it["video"] for it in added if it.get("video")])  # 영상도 같이 올려야 Pages 주소가 생긴다
     msg = f"chore: pick.haru 예약 {len(added)}개 ({added[0]['publish_at'][:10]})"
     if git("commit", "-m", msg).returncode != 0 or git("push").returncode != 0:
         print("커밋·푸시에 실패했습니다. 예약 목록 파일을 확인하세요.", file=sys.stderr)

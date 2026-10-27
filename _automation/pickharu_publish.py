@@ -38,6 +38,30 @@ ANY_URL_RE = re.compile(r"https?://\S+")
 BARE_DOMAIN_RE = re.compile(r"\b[\w-]+\.(com|net|kr|ng|co|me|ly|io)/", re.IGNORECASE)  # Threads가 자동 링크로 바꾸는 주소
 # 응답이 끊기거나 이상해도 기록이 남게 넓게 잡는다(http_json은 HTTP·연결 오류만 ThreadsError로 바꾼다)
 PUBLISH_ERRORS = (ThreadsError, KeyError, OSError, ValueError)
+# 영상은 사이트 저장소 assets/pickharu/ 아래 mp4로 두고 GitHub Pages 주소로 Threads에 넘긴다(Threads가 직접 내려받음).
+SITE_ROOT = QUEUE_PATH.parent.parent
+SITE_URL = "https://ella1-crypto.github.io/"
+VIDEO_RE = re.compile(r"assets/pickharu/[\w.-]+\.mp4")
+VIDEO_MAX_BYTES = 100 * 1024 * 1024
+VIDEO_POLL_SECONDS = 15
+VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
+AI_MARK_RE = re.compile(r"AI")
+
+
+def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
+    video = item.get("video")
+    if not video:
+        return ""
+    if not VIDEO_RE.fullmatch(video):
+        return "영상 경로는 assets/pickharu/이름.mp4 여야 함"
+    path = root / video
+    if not path.is_file():
+        return f"영상 파일이 저장소에 없음: {video}"
+    if path.stat().st_size > VIDEO_MAX_BYTES:
+        return "영상이 100MB 초과"
+    if not AI_MARK_RE.search(item.get("text", "")):
+        return "AI 영상인데 본문에 AI 표시가 없음"
+    return ""
 
 
 def problem_of(item: dict) -> str:
@@ -55,7 +79,7 @@ def problem_of(item: dict) -> str:
     urls = ANY_URL_RE.findall(reply)
     if len(urls) != 1 or not LINK_RE.fullmatch(urls[0]):
         return "댓글에 쿠팡 링크가 정확히 1개 있어야 함"
-    return ""
+    return video_problem(item)
 
 
 def posted_today(items: list[dict], now: datetime) -> int:
@@ -78,12 +102,29 @@ def posted_today(items: list[dict], now: datetime) -> int:
     return count
 
 
-def publish(text: str, token: str, http: Http, sleep, reply_to: str = "") -> str:
+def wait_until_ready(container: str, token: str, http: Http, sleep) -> None:
+    """영상 컨테이너는 Threads가 영상을 처리할 때까지 기다려야 게시할 수 있다."""
+    for _ in range(VIDEO_POLL_TRIES):
+        sleep(VIDEO_POLL_SECONDS)
+        state = http("GET", f"{BASE}/{container}", {"fields": "status,error_message", "access_token": token})
+        if state.get("status") == "FINISHED":
+            return
+        if state.get("status") in ("ERROR", "EXPIRED"):
+            raise ThreadsError(f"영상 처리 실패: {state.get('error_message') or state.get('status')}")
+    raise ThreadsError("영상 처리가 10분 안에 끝나지 않음")
+
+
+def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video: str = "") -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
+    if video:
+        params.update(media_type="VIDEO", video_url=SITE_URL + video)
     if reply_to:
         params["reply_to_id"] = reply_to
     container = http("POST", f"{BASE}/me/threads", params)["id"]
-    sleep(CONTAINER_WAIT_SECONDS)
+    if video:
+        wait_until_ready(container, token, http, sleep)
+    else:
+        sleep(CONTAINER_WAIT_SECONDS)
     return http("POST", f"{BASE}/me/threads_publish", {"creation_id": container, "access_token": token})["id"]
 
 
@@ -116,7 +157,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         # 로컬 파일은 이미 '올리는 중'이라 계속 돌면 이 글이 조용히 빠진다. 멈춰서 실패가 보이게 한다.
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     try:
-        post_id = publish(due["text"], token, http, sleep)
+        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""))
     except PUBLISH_ERRORS as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
