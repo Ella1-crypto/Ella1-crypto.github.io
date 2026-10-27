@@ -6,7 +6,8 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 안전장치 (재테크 자동 게시와 같은 방식 + 쇼핑 글 규칙):
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 토큰 계정이 pick.haru__1이 아니면 올리지 않는다.
-- 하루(KST) 최대 DAILY_CAP개. 본문 500자, 본문 주소 금지, 본문 마지막 줄 광고 표시([광고] 쿠팡파트너스), 댓글에 쿠팡 파트너스 고지 문구와 쿠팡 링크.
+- 쇼핑 글은 쿠팡(기본)과 카카오 선물하기(kind "카카오") 두 종류. 종류마다 하루(KST) 상한, 본문 마지막 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS).
+- 본문 500자, 본문 주소 금지.
 - 본문은 올라갔는데 댓글만 실패하면 본문은 그대로 '올림'으로 두고 reply_error에 남긴다(본문 재게시 금지).
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
@@ -29,7 +30,7 @@ from jaetech_publish import (
 QUEUE_PATH = Path(__file__).resolve().parent / "pickharu-queue.json"
 EXPECTED_USERNAME = "pick.haru__1"
 SECRET_NAME = "PICKHARU_THREADS_ACCESS_TOKEN"
-DAILY_CAP = 5
+DAILY_CAP = 5  # 쿠팡 글
 MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처리하는 최대 시간(워크플로 timeout 350분보다 짧게)
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
 LINK_RE = re.compile(r"https://(link\.coupang\.com|(www\.)?coupang\.com)/\S+")
@@ -46,6 +47,14 @@ VIDEO_POLL_SECONDS = 15
 VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
+COUPANG, KAKAO = "쿠팡", "카카오"
+KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다."
+KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
+# 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
+SHOPS = {
+    COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
+    KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 2},
+}
 
 
 def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
@@ -66,6 +75,10 @@ def is_general(item: dict) -> bool:
     return item.get("kind") == GENERAL
 
 
+def shop_of(item: dict) -> str:
+    return item.get("kind") or COUPANG  # 종류가 없으면 쿠팡 글(기존 큐 호환)
+
+
 def problem_of(item: dict) -> str:
     text, reply = item.get("text", ""), item.get("reply", "")
     if not text.strip():
@@ -76,23 +89,27 @@ def problem_of(item: dict) -> str:
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
     if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문만
         return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else ""
-    if AD_TAG not in text.strip().splitlines()[-1]:
-        return f"본문 마지막 줄에 광고 표시({AD_TAG})가 없음"
-    if DISCLOSURE not in reply:
-        return "댓글에 쿠팡 파트너스 고지 문구가 없음"
+    kind = shop_of(item)
+    if kind not in SHOPS:
+        return f"알 수 없는 글 종류: {kind}"
+    rule = SHOPS[kind]
+    if rule["tag"] not in text.strip().splitlines()[-1]:
+        return f"본문 마지막 줄에 광고 표시({rule['tag']})가 없음"
+    if rule["disclosure"] not in reply:
+        return f"댓글에 {kind} 고지 문구가 없음"
     urls = ANY_URL_RE.findall(reply)
-    if len(urls) != 1 or not LINK_RE.fullmatch(urls[0]):
-        return "댓글에 쿠팡 링크가 정확히 1개 있어야 함"
+    if len(urls) != 1 or not rule["link"].fullmatch(urls[0]):
+        return f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
     return video_problem(item)
 
 
-def posted_today(items: list[dict], now: datetime) -> int:
-    """오늘(KST) 올렸거나 올라갔을 수 있는 글 수. 게시 실패도 실제로는 올라갔을 수 있어 센다."""
+def posted_today(items: list[dict], now: datetime, kind: str = COUPANG) -> int:
+    """오늘(KST) 올렸거나 올라갔을 수 있는 kind 글 수. 게시 실패도 실제로는 올라갔을 수 있어 센다."""
     today = now.astimezone(KST).date()
     count = 0
     for it in items:
         maybe_posted = it.get("status") == FAILED and str(it.get("note", "")).startswith("게시 실패")
-        if is_general(it) or (it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted):
+        if shop_of(it) != kind or (it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted):
             continue
         stamp = it.get("published_at") or it.get("publish_at")
         if not stamp:
@@ -149,8 +166,10 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due)
-    if not problem and not is_general(due) and posted_today(items, now) >= DAILY_CAP:
-        problem = f"오늘 이미 {DAILY_CAP}개를 올려 하루 상한 초과"
+    if not problem and not is_general(due):
+        kind = shop_of(due)
+        if posted_today(items, now, kind) >= SHOPS[kind]["cap"]:
+            problem = f"오늘 {kind} 글을 이미 {SHOPS[kind]['cap']}개 올려 하루 상한 초과"
     if problem:
         save_queue(with_status(items, due["id"], status=FAILED, note=problem), path)
         commit("chore: pick.haru 예약 글 검사 실패")

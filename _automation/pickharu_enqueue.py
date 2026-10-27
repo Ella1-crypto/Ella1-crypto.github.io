@@ -1,8 +1,9 @@
 """사용자가 고른 pick.haru 초안만 예약 목록(pickharu-queue.json)에 넣고 커밋·푸시한다.
 
 사용: python pickharu_enqueue.py <drafts/날짜.json> --ids 1,3,5 [--start 2026-10-28T17:10] [--dry-run]
+- 카카오 초안 파일(drafts/kakao-날짜.json, kind "카카오")도 같은 방법. 카카오 글은 :40분에 넣어 쿠팡(:10분)과 겹치지 않게 한다.
 - id는 초안 id의 끝 번호(ph-20261028-3 → 3) 또는 전체 id.
-- 시각: --start부터(없으면 지금+20분 뒤 첫 :10분) 1시간 간격. push 실행이 기다리는 320분 안에 모두 들어가야 한다.
+- 시각: --start부터(없으면 지금+20분 뒤 첫 :10분, 카카오는 :40분) 1시간 간격. push 실행이 기다리는 320분 안에 모두 들어가야 한다.
 - 검사(pickharu_publish.problem_of)를 하나라도 통과 못 하면 아무것도 넣지 않는다.
 """
 from __future__ import annotations
@@ -15,17 +16,17 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from jaetech_publish import KST, READY, load_queue, save_queue
-from pickharu_publish import DAILY_CAP, MAX_SESSION, QUEUE_PATH, problem_of
+from pickharu_publish import KAKAO, MAX_SESSION, QUEUE_PATH, SHOPS, problem_of, shop_of
 
-QUEUE_FIELDS = ("id", "publish_at", "text", "reply", "keyword", "product", "video")
+QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 
 
-def first_slot(now: datetime) -> datetime:
-    """지금+20분 이후 첫 :10분."""
+def first_slot(now: datetime, minute: int = 10) -> datetime:
+    """지금+20분 이후 첫 :minute분."""
     at = (now + LEAD).replace(second=0, microsecond=0)
-    at = at.replace(minute=10) if at.minute <= 10 else (at + timedelta(hours=1)).replace(minute=10)
+    at = at.replace(minute=minute) if at.minute <= minute else (at + timedelta(hours=1)).replace(minute=minute)
     return at
 
 
@@ -41,8 +42,9 @@ def pick(drafts: list[dict], ids: list[str]) -> list[dict]:
 
 def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime) -> list[dict]:
     chosen = pick(drafts, ids)
-    if len(chosen) > DAILY_CAP:
-        raise ValueError(f"하루 최대 {DAILY_CAP}개입니다")
+    for kind in {shop_of(d) for d in chosen} & SHOPS.keys():
+        if sum(shop_of(d) == kind for d in chosen) > SHOPS[kind]["cap"]:
+            raise ValueError(f"{kind} 글은 하루 최대 {SHOPS[kind]['cap']}개입니다")
     existing = {it.get("id") for it in queue}
     problems = []
     for d in chosen:
@@ -76,9 +78,11 @@ def main() -> int:
         print("최신 저장소를 받지 못했습니다(git pull 실패).", file=sys.stderr)
         return 1
     drafts = json.loads(Path(args.drafts).read_text(encoding="utf-8"))
-    start = datetime.fromisoformat(args.start).replace(tzinfo=KST) if args.start else first_slot(datetime.now(KST))
+    ids = [s.strip() for s in args.ids.split(",") if s.strip()]
     try:
-        queue = build(drafts, [s.strip() for s in args.ids.split(",") if s.strip()], load_queue(QUEUE_PATH), start)
+        minute = 40 if all(shop_of(d) == KAKAO for d in pick(drafts, ids)) else 10
+        start = datetime.fromisoformat(args.start).replace(tzinfo=KST) if args.start else first_slot(datetime.now(KST), minute)
+        queue = build(drafts, ids, load_queue(QUEUE_PATH), start)
     except ValueError as error:
         print(error, file=sys.stderr)
         return 1

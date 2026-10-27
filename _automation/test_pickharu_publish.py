@@ -19,6 +19,29 @@ def item(i, at="2026-10-28T09:00+09:00", text=TEXT, reply=REPLY, status="예약"
     return {"id": i, "publish_at": at, "text": text, "reply": reply, "status": status}
 
 
+KAKAO_LINK = "https://gift-link.kakao.com/c/LtojEzBd"
+KAKAO_TEXT = "생일 선물 고민될 때 이거 어때?\n받는 사람이 고를 수 있는 구성이야\n[광고] 카카오 선물하기"
+KAKAO_REPLY = f"선물하러 가기 👉 {KAKAO_LINK}\n\n{pp.KAKAO_DISCLOSURE}"
+
+
+def kakao(i, at="2026-10-28T09:00+09:00", status="예약", **kw):
+    return {**item(i, at, KAKAO_TEXT, KAKAO_REPLY, status), "kind": "카카오", **kw}
+
+
+class KakaoRuleTest(unittest.TestCase):
+    def test_valid_kakao_passes(self):
+        self.assertEqual(pp.problem_of(kakao("k")), "")
+
+    def test_kakao_needs_its_own_tag_disclosure_and_link(self):
+        self.assertIn("광고 표시", pp.problem_of(kakao("k", text=TEXT)))
+        self.assertIn("고지", pp.problem_of(kakao("k", reply=f"{KAKAO_LINK}\n{pp.DISCLOSURE}")))
+        self.assertIn("링크", pp.problem_of(kakao("k", reply=f"{LINK}\n{pp.KAKAO_DISCLOSURE}")))
+        self.assertIn("링크", pp.problem_of(kakao("k", reply=f"https://gift.kakao.com/x\n{pp.KAKAO_DISCLOSURE}")))
+
+    def test_unknown_kind_rejected(self):
+        self.assertIn("종류", pp.problem_of({**item("a"), "kind": "네이버"}))
+
+
 class FakeHttp:
     def __init__(self, username="pick.haru__1", fail_reply=False, fail_body=False):
         self.calls, self.username = [], username
@@ -146,6 +169,15 @@ class RunOnceTest(unittest.TestCase):
         self.assertIn("p1", self.run_once(http))
         self.assertFalse([p for n, p in http.calls if "reply_to_id" in p])
         self.assertEqual(self.saved()["g"]["status"], "올림")
+
+    def test_kakao_post_has_own_cap_separate_from_coupang(self):
+        done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 6)]
+        self.write(done + [kakao("k")])
+        http = FakeHttp()
+        self.assertIn("p1", self.run_once(http))
+        self.assertIn(KAKAO_LINK, [p for n, p in http.calls if "reply_to_id" in p][0]["text"])
+        self.write([kakao(f"k{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2)] + [kakao("k")])
+        self.assertIn("하루 상한", self.run_once(FakeHttp()))
 
     def test_general_post_still_blocks_links(self):
         self.assertIn("주소", pp.problem_of({"kind": "일반", "text": "여기 봐 link.coupang.com/a/x"}))

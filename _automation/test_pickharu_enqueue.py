@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pickharu_enqueue as pe  # noqa: E402
-from test_pickharu_publish import REPLY, TEXT  # noqa: E402
+from test_pickharu_publish import KAKAO_REPLY, KAKAO_TEXT, REPLY, TEXT  # noqa: E402
 
 START = datetime(2026, 10, 28, 17, 10, tzinfo=pe.KST)
 
@@ -20,6 +20,19 @@ class FirstSlotTest(unittest.TestCase):
         self.assertEqual(pe.first_slot(datetime(2026, 10, 28, 16, 45, tzinfo=pe.KST)).strftime("%H:%M"), "17:10")
         self.assertEqual(pe.first_slot(datetime(2026, 10, 28, 16, 55, tzinfo=pe.KST)).strftime("%H:%M"), "18:10")
         self.assertEqual(pe.first_slot(datetime(2026, 10, 28, 16, 40, tzinfo=pe.KST)).strftime("%H:%M"), "17:10")
+
+
+class KakaoEnqueueTest(unittest.TestCase):
+    def test_kakao_slot_is_forty_past_and_kind_kept(self):
+        self.assertEqual(pe.first_slot(datetime(2026, 10, 28, 16, 15, tzinfo=pe.KST), 40).strftime("%H:%M"), "16:40")
+        k = {**draft(1, KAKAO_TEXT, KAKAO_REPLY), "id": "kk-20261028-1", "kind": "카카오"}
+        queue = pe.build([k], ["1"], [], START)
+        self.assertEqual(queue[0]["kind"], "카카오")
+
+    def test_kakao_cap_is_two(self):
+        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261028-{n}", "kind": "카카오"} for n in (1, 2, 3)]
+        with self.assertRaises(ValueError):
+            pe.build(ks, ["1", "2", "3"], [], START)
 
 
 class BuildTest(unittest.TestCase):
