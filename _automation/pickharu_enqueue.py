@@ -18,7 +18,7 @@ from pathlib import Path
 from jaetech_publish import KST, READY, load_queue, save_queue
 from pickharu_publish import KAKAO, MAX_SESSION, NAVER, QUEUE_PATH, SHOPS, problem_of, shop_of
 
-QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video")
+QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video", "images")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 SLOT_MINUTE = {KAKAO: 40, NAVER: 25}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
@@ -95,7 +95,8 @@ def main() -> int:
         print("(dry-run: 저장하지 않음)")
         return 0
     save_queue(queue, QUEUE_PATH)
-    git("add", "--", str(QUEUE_PATH), *[it["video"] for it in added if it.get("video")])  # 영상도 같이 올려야 Pages 주소가 생긴다
+    media = [it["video"] for it in added if it.get("video")] + [m for it in added for m in it.get("images") or []]
+    git("add", "--", str(QUEUE_PATH), *media)  # 영상·사진도 같이 올려야 Pages 주소가 생긴다
     msg = f"chore: pick.haru 예약 {len(added)}개 ({added[0]['publish_at'][:10]})"
     if git("commit", "-m", msg).returncode != 0 or git("push").returncode != 0:
         print("커밋·푸시에 실패했습니다. 예약 목록 파일을 확인하세요.", file=sys.stderr)

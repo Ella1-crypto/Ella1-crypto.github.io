@@ -45,6 +45,10 @@ VIDEO_RE = re.compile(r"assets/pickharu/[\w.-]+\.mp4")
 VIDEO_MAX_BYTES = 100 * 1024 * 1024
 VIDEO_POLL_SECONDS = 15
 VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
+# 사진도 같은 assets/pickharu/ 아래 두고 Pages 주소로 넘긴다. 1장은 IMAGE, 2장 이상은 CAROUSEL(Threads 한도 20장).
+IMAGE_RE = re.compile(r"assets/pickharu/[\w.-]+\.(jpg|jpeg|png)")
+IMAGE_MAX_BYTES = 8 * 1024 * 1024
+IMAGES_MAX = 20
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
 COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
@@ -74,6 +78,29 @@ def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
     return ""
 
 
+def images_problem(item: dict, root: Path = SITE_ROOT) -> str:
+    images = item.get("images") or []
+    if not images:
+        return ""
+    if item.get("video"):
+        return "영상과 사진은 함께 올릴 수 없음"
+    if not isinstance(images, list) or len(images) > IMAGES_MAX:
+        return f"사진은 목록으로 최대 {IMAGES_MAX}장"
+    for image in images:
+        if not isinstance(image, str) or not IMAGE_RE.fullmatch(image):
+            return "사진 경로는 assets/pickharu/이름.jpg(.jpeg/.png) 여야 함"
+        path = root / image
+        if not path.is_file():
+            return f"사진 파일이 저장소에 없음: {image}"
+        if path.stat().st_size > IMAGE_MAX_BYTES:
+            return f"사진이 8MB 초과: {image}"
+    return ""
+
+
+def media_problem(item: dict) -> str:
+    return video_problem(item) or images_problem(item)
+
+
 def is_general(item: dict) -> bool:
     return item.get("kind") == GENERAL
 
@@ -90,8 +117,8 @@ def problem_of(item: dict) -> str:
         return "본문이나 댓글이 500자 초과"
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
-    if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문만
-        return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else ""
+    if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문(+사진)만
+        return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else images_problem(item)
     kind = shop_of(item)
     if kind not in SHOPS:
         return f"알 수 없는 글 종류: {kind}"
@@ -103,7 +130,7 @@ def problem_of(item: dict) -> str:
     urls = ANY_URL_RE.findall(reply)
     if len(urls) != 1 or not rule["link"].fullmatch(urls[0]):
         return f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
-    return video_problem(item)
+    return media_problem(item)
 
 
 def posted_today(items: list[dict], now: datetime, kind: str = COUPANG) -> int:
@@ -138,14 +165,28 @@ def wait_until_ready(container: str, token: str, http: Http, sleep) -> None:
     raise ThreadsError("영상 처리가 10분 안에 끝나지 않음")
 
 
-def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video: str = "") -> str:
+def carousel_children(images: list[str], token: str, http: Http, sleep) -> str:
+    """사진마다 캐러셀 항목 컨테이너를 만들고 쉼표로 이은 id를 돌려준다."""
+    children = [http("POST", f"{BASE}/me/threads", {"media_type": "IMAGE", "image_url": SITE_URL + image,
+                                                     "is_carousel_item": "true", "access_token": token})["id"]
+                for image in images]
+    sleep(CONTAINER_WAIT_SECONDS)
+    return ",".join(children)
+
+
+def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video: str = "",
+            images: list[str] | None = None) -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
     if video:
         params.update(media_type="VIDEO", video_url=SITE_URL + video)
+    elif images and len(images) == 1:
+        params.update(media_type="IMAGE", image_url=SITE_URL + images[0])
+    elif images:
+        params.update(media_type="CAROUSEL", children=carousel_children(images, token, http, sleep))
     if reply_to:
         params["reply_to_id"] = reply_to
     container = http("POST", f"{BASE}/me/threads", params)["id"]
-    if video:
+    if video or images:  # 사진도 Threads가 내려받아 처리할 때까지 기다린다
         wait_until_ready(container, token, http, sleep)
     else:
         sleep(CONTAINER_WAIT_SECONDS)
@@ -183,7 +224,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         # 로컬 파일은 이미 '올리는 중'이라 계속 돌면 이 글이 조용히 빠진다. 멈춰서 실패가 보이게 한다.
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     try:
-        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""))
+        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"))
     except PUBLISH_ERRORS as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)

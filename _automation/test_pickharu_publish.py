@@ -127,6 +127,41 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(calls[0][2]["video_url"], "https://ella1-crypto.github.io/assets/pickharu/v1.mp4")
         self.assertEqual([c[1] for c in calls], ["threads", "c1", "c1", "threads_publish"])
 
+    def test_image_rules(self):
+        (self.root / "assets" / "pickharu" / "a.jpg").write_bytes(b"0")
+        ok = {"kind": "일반", "text": "곰돌이 귀엽지", "images": ["assets/pickharu/a.jpg"]}
+        self.assertEqual(pp.images_problem(ok, self.root), "")
+        self.assertIn("없음", pp.images_problem({**ok, "images": ["assets/pickharu/none.jpg"]}, self.root))
+        self.assertIn("경로", pp.images_problem({**ok, "images": ["../secret.jpg"]}, self.root))
+        self.assertIn("함께", pp.images_problem({**ok, "video": "assets/pickharu/v1.mp4"}, self.root))
+        self.assertIn("최대", pp.images_problem({**ok, "images": ["assets/pickharu/a.jpg"] * 21}, self.root))
+
+    def test_publishes_single_image(self):
+        calls = []
+
+        def http(method, url, params):
+            calls.append(params)
+            return {"id": "c1"} if url.endswith("/threads") else {"status": "FINISHED", "id": "p1"}
+        pp.publish("곰", "tok", http, lambda s: None, images=["assets/pickharu/a.jpg"])
+        self.assertEqual(calls[0]["media_type"], "IMAGE")
+        self.assertEqual(calls[0]["image_url"], "https://ella1-crypto.github.io/assets/pickharu/a.jpg")
+
+    def test_publishes_carousel_with_children(self):
+        calls, n = [], [0]
+
+        def http(method, url, params):
+            calls.append(params)
+            if url.endswith("/threads"):
+                n[0] += 1
+                return {"id": f"c{n[0]}"}
+            return {"status": "FINISHED", "id": "p9"}
+        post = pp.publish("곰", "tok", http, lambda s: None, images=["assets/pickharu/a.jpg", "assets/pickharu/b.png"])
+        self.assertEqual(post, "p9")
+        self.assertTrue(all(c.get("is_carousel_item") == "true" for c in calls[:2]))
+        self.assertEqual(calls[2]["media_type"], "CAROUSEL")
+        self.assertEqual(calls[2]["children"], "c1,c2")
+        self.assertEqual(calls[2]["text"], "곰")
+
     def test_video_processing_error_raises(self):
         def http(method, url, params):
             return {"id": "c1"} if url.endswith("/threads") else {"status": "ERROR", "error_message": "bad"}
