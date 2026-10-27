@@ -138,6 +138,20 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(self.saved()["a"]["status"], "올림")
         self.assertEqual(self.saved()["a"]["reply_id"], "p2")
 
+    def test_general_post_has_no_reply_and_skips_cap(self):
+        done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 6)]
+        general = {"id": "g", "kind": "일반", "publish_at": "2026-10-28T09:00+09:00",
+                   "text": "다들 주방 정리 뭐부터 해?", "status": "예약"}
+        self.write(done + [general])
+        http = FakeHttp()
+        self.assertIn("p1", self.run_once(http))
+        self.assertFalse([p for n, p in http.calls if "reply_to_id" in p])
+        self.assertEqual(self.saved()["g"]["status"], "올림")
+
+    def test_general_post_still_blocks_links(self):
+        self.assertIn("주소", pp.problem_of({"kind": "일반", "text": "여기 봐 link.coupang.com/a/x"}))
+        self.assertIn("댓글", pp.problem_of({"kind": "일반", "text": "안녕", "reply": "x"}))
+
     def test_reply_failure_keeps_body_published(self):
         self.write([item("a")])
         result = self.run_once(FakeHttp(fail_reply=True))

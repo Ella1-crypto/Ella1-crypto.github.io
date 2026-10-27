@@ -46,6 +46,7 @@ VIDEO_MAX_BYTES = 100 * 1024 * 1024
 VIDEO_POLL_SECONDS = 15
 VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
 AI_MARK_RE = re.compile(r"AI")
+GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
 
 
 def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
@@ -64,6 +65,10 @@ def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
     return ""
 
 
+def is_general(item: dict) -> bool:
+    return item.get("kind") == GENERAL
+
+
 def problem_of(item: dict) -> str:
     text, reply = item.get("text", ""), item.get("reply", "")
     if not text.strip():
@@ -72,6 +77,8 @@ def problem_of(item: dict) -> str:
         return "본문이나 댓글이 500자 초과"
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
+    if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문만
+        return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else ""
     if not AD_MARK_RE.search(text.strip().splitlines()[0]):
         return "본문 첫 줄에 광고 표시(광고/쿠팡 파트너스)가 없음"
     if DISCLOSURE not in reply:
@@ -88,7 +95,7 @@ def posted_today(items: list[dict], now: datetime) -> int:
     count = 0
     for it in items:
         maybe_posted = it.get("status") == FAILED and str(it.get("note", "")).startswith("게시 실패")
-        if it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted:
+        if is_general(it) or (it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted):
             continue
         stamp = it.get("published_at") or it.get("publish_at")
         if not stamp:
@@ -145,7 +152,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due)
-    if not problem and posted_today(items, now) >= DAILY_CAP:
+    if not problem and not is_general(due) and posted_today(items, now) >= DAILY_CAP:
         problem = f"오늘 이미 {DAILY_CAP}개를 올려 하루 상한 초과"
     if problem:
         save_queue(with_status(items, due["id"], status=FAILED, note=problem), path)
@@ -164,10 +171,11 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 글 게시 실패 기록")
         raise SystemExit(note)
     done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
-    try:
-        done["reply_id"] = publish(due["reply"], token, http, sleep, reply_to=post_id)
-    except PUBLISH_ERRORS as error:
-        done["reply_error"] = f"링크 댓글 실패: {error} — 본문은 올라감, 댓글만 직접 달기"
+    if not is_general(due):
+        try:
+            done["reply_id"] = publish(due["reply"], token, http, sleep, reply_to=post_id)
+        except PUBLISH_ERRORS as error:
+            done["reply_error"] = f"링크 댓글 실패: {error} — 본문은 올라감, 댓글만 직접 달기"
     save_queue(with_status(load_queue(path), due["id"], **done), path)
     commit(f"chore: pick.haru 글 게시 완료 ({due['id']})")
     return f"올림: {due['id']} → {post_id}" + (" (댓글 실패)" if "reply_error" in done else "")
