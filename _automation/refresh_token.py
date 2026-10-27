@@ -58,9 +58,10 @@ def sealed_box_encrypt(public_key_b64: str, value: str) -> str:
     return base64.b64encode(public.SealedBox(key).encrypt(value.encode())).decode()
 
 
-def update_secret(repo: str, value: str, gh: GitHubCall, encrypt: Encrypt = sealed_box_encrypt) -> None:
+def update_secret(repo: str, value: str, gh: GitHubCall, encrypt: Encrypt = sealed_box_encrypt,
+                  name: str = SECRET_NAME) -> None:
     key = gh("GET", f"/repos/{repo}/actions/secrets/public-key", None)
-    gh("PUT", f"/repos/{repo}/actions/secrets/{SECRET_NAME}",
+    gh("PUT", f"/repos/{repo}/actions/secrets/{name}",
        {"encrypted_value": encrypt(key["key"], value), "key_id": key["key_id"]})
 
 

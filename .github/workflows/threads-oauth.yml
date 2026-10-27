@@ -1,0 +1,39 @@
+# 승인 링크로 받은 code를 Threads 60일 토큰으로 바꿔 Secret에 저장한다(토큰 생성기 버튼이 막힐 때).
+# 필요한 Secrets: THREADS_APP_SECRET, GH_SECRETS_PAT (Settings → Secrets and variables → Actions)
+# 사용: Actions → threads-oauth → Run workflow → 계정 고르고 code 붙여 넣기. code는 1회용, 1시간 안에 실행.
+name: threads-oauth
+
+on:
+  workflow_dispatch:
+    inputs:
+      account:
+        description: "승인한 Threads 계정"
+        type: choice
+        options: [pick.haru__1]
+      code:
+        description: "승인 후 주소창의 code 값(주소 전체를 붙여 넣어도 됨)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Exchange code and store token
+        env:
+          ACCOUNT: ${{ inputs.account }}
+          OAUTH_CODE: ${{ inputs.code }}
+          THREADS_APP_ID: "29149490781404483"   # heeya-daily-post 앱 ID(공개값, 승인 링크에도 들어감)
+          THREADS_APP_SECRET: ${{ secrets.THREADS_APP_SECRET }}
+          GH_SECRETS_PAT: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          echo "::add-mask::$OAUTH_CODE"
+          pip install --quiet pynacl==1.5.0
+          python _automation/threads_oauth.py
