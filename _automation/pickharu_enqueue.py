@@ -1,7 +1,7 @@
 """사용자가 고른 pick.haru 초안만 예약 목록(pickharu-queue.json)에 넣고 커밋·푸시한다.
 
 사용: python pickharu_enqueue.py <drafts/날짜.json> --ids 1,3,5 [--start 2026-10-28T17:10] [--dry-run]
-- 카카오 초안 파일(drafts/kakao-날짜.json, kind "카카오")도 같은 방법. 카카오 글은 :40분에 넣어 쿠팡(:10분)과 겹치지 않게 한다.
+- 카카오 초안 파일(drafts/kakao-날짜.json, kind "카카오")도 같은 방법. 카카오 글은 :40분, 네이버 글(drafts/naver-날짜.json)은 :25분에 넣어 쿠팡(:10분)과 겹치지 않게 한다.
 - id는 초안 id의 끝 번호(ph-20261028-3 → 3) 또는 전체 id.
 - 시각: --start부터(없으면 지금+20분 뒤 첫 :10분, 카카오는 :40분) 1시간 간격. push 실행이 기다리는 320분 안에 모두 들어가야 한다.
 - 검사(pickharu_publish.problem_of)를 하나라도 통과 못 하면 아무것도 넣지 않는다.
@@ -16,11 +16,12 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from jaetech_publish import KST, READY, load_queue, save_queue
-from pickharu_publish import KAKAO, MAX_SESSION, QUEUE_PATH, SHOPS, problem_of, shop_of
+from pickharu_publish import KAKAO, MAX_SESSION, NAVER, QUEUE_PATH, SHOPS, problem_of, shop_of
 
 QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
+SLOT_MINUTE = {KAKAO: 40, NAVER: 25}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
 
 
 def first_slot(now: datetime, minute: int = 10) -> datetime:
@@ -80,7 +81,8 @@ def main() -> int:
     drafts = json.loads(Path(args.drafts).read_text(encoding="utf-8"))
     ids = [s.strip() for s in args.ids.split(",") if s.strip()]
     try:
-        minute = 40 if all(shop_of(d) == KAKAO for d in pick(drafts, ids)) else 10
+        kinds = {shop_of(d) for d in pick(drafts, ids)}
+        minute = SLOT_MINUTE.get(kinds.pop(), 10) if len(kinds) == 1 else 10
         start = datetime.fromisoformat(args.start).replace(tzinfo=KST) if args.start else first_slot(datetime.now(KST), minute)
         queue = build(drafts, ids, load_queue(QUEUE_PATH), start)
     except ValueError as error:

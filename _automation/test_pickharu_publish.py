@@ -38,8 +38,15 @@ class KakaoRuleTest(unittest.TestCase):
         self.assertIn("링크", pp.problem_of(kakao("k", reply=f"{LINK}\n{pp.KAKAO_DISCLOSURE}")))
         self.assertIn("링크", pp.problem_of(kakao("k", reply=f"https://gift.kakao.com/x\n{pp.KAKAO_DISCLOSURE}")))
 
+    def test_naver_rules(self):
+        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트",
+                        reply=f"보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
+        self.assertEqual(pp.problem_of(naver), "")
+        self.assertIn("광고 표시", pp.problem_of({**naver, "text": KAKAO_TEXT}))
+        self.assertIn("링크", pp.problem_of({**naver, "reply": f"{KAKAO_LINK}\n{pp.NAVER_DISCLOSURE}"}))
+
     def test_unknown_kind_rejected(self):
-        self.assertIn("종류", pp.problem_of({**item("a"), "kind": "네이버"}))
+        self.assertIn("종류", pp.problem_of({**item("a"), "kind": "번개장터"}))
 
 
 class FakeHttp:

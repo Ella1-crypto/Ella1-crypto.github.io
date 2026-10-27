@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 안전장치 (재테크 자동 게시와 같은 방식 + 쇼핑 글 규칙):
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 토큰 계정이 pick.haru__1이 아니면 올리지 않는다.
-- 쇼핑 글은 쿠팡(기본)과 카카오 선물하기(kind "카카오") 두 종류. 종류마다 하루(KST) 상한, 본문 마지막 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS).
+- 쇼핑 글은 쿠팡(기본), 카카오 선물하기(kind "카카오"), 네이버 브랜드 커넥트(kind "네이버") 세 종류. 종류마다 하루(KST) 상한, 본문 마지막 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS).
 - 본문 500자, 본문 주소 금지.
 - 본문은 올라갔는데 댓글만 실패하면 본문은 그대로 '올림'으로 두고 reply_error에 남긴다(본문 재게시 금지).
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -47,13 +47,16 @@ VIDEO_POLL_SECONDS = 15
 VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
-COUPANG, KAKAO = "쿠팡", "카카오"
+COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
 KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다."
 KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
+NAVER_DISCLOSURE = "이 포스팅은 네이버 브랜드 커넥트 활동의 일환으로, 판매 발생 시 일정액의 수수료를 제공받습니다."
+NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커넥트 링크는 naver.me 단축 주소(2026-10-27 사용자 예시)
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 2},
+    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 2},
 }
 
 
