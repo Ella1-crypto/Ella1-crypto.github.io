@@ -1,10 +1,10 @@
 {
  "title": "오늘의 소재 후보",
- "checked_on": "2026-10-27",
+ "checked_on": "2026-10-28",
  "seeds": [
-  "주방정리",
-  "주방용품",
-  "밀폐용기"
+  "욕실용품",
+  "청소용품",
+  "세탁용품"
  ],
  "found": 1200,
  "notes": [
@@ -19,223 +19,223 @@
  "rows": [
   {
    "rank": 1,
-   "keyword": "스탠리텀블러",
+   "keyword": "주방세제",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "109900",
+   "volume": "28220",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 109900 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 28220 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 2,
-   "keyword": "락앤락텀블러",
+   "keyword": "수세미",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "22290",
+   "volume": "26230",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 22290 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 26230 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 3,
-   "keyword": "일회용앞치마",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "12990",
+   "keyword": "중성세제",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "24080",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12990 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 24080 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 4,
-   "keyword": "주방선반",
+   "keyword": "매직캔휴지통",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "12280",
+   "volume": "18310",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12280 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 18310 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 5,
-   "keyword": "밀폐용기",
+   "keyword": "세제",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "10440",
+   "volume": "17280",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10440 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 17280 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 6,
-   "keyword": "주방용품",
+   "keyword": "욕실선반",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "8460",
+   "volume": "17080",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 8460 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 17080 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 7,
-   "keyword": "주방가위",
+   "keyword": "휴지통",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "6810",
+   "volume": "15730",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 6810 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 15730 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 8,
-   "keyword": "헬스가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "5600",
+   "keyword": "욕실수납장",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "14540",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5600 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 14540 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 9,
-   "keyword": "주방저울",
+   "keyword": "욕실화",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "5060",
+   "volume": "9940",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5060 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9940 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 10,
-   "keyword": "주방세제디스펜서",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4620",
+   "keyword": "로션",
+   "category": "뷰티",
+   "commission": "3% 안팎",
+   "volume": "9350",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4620 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9350 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 11,
-   "keyword": "스텐밀폐용기",
+   "keyword": "수납함",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "3900",
+   "volume": "8640",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3900 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 8640 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 12,
-   "keyword": "수납",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "3800",
-   "competition": "낮음",
+   "keyword": "욕실슬리퍼",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "6350",
+   "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3800 ≥ 300, 생활 2% 안팎, 경쟁 낮음"
+   "reason": "월간 검색 6350 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 13,
-   "keyword": "글라스락밀폐용기",
+   "keyword": "자동센서휴지통",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "3170",
+   "volume": "6170",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3170 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 6170 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 14,
-   "keyword": "주방정리",
+   "keyword": "화장실수납장",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "2710",
+   "volume": "5190",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2710 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 5190 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 15,
-   "keyword": "락앤락밀폐용기",
+   "keyword": "액체세제",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "2040",
+   "volume": "4750",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2040 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4750 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 16,
-   "keyword": "씽크대선반",
+   "keyword": "무타공욕실선반",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "1670",
+   "volume": "4680",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1670 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4680 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 17,
-   "keyword": "주방수납",
+   "keyword": "미니수납장",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "1470",
+   "volume": "4680",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1470 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4680 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 18,
-   "keyword": "일회용비닐장갑",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "1460",
+   "keyword": "센서휴지통",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "3910",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1460 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3910 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 19,
-   "keyword": "주방수납함",
+   "keyword": "대나무칫솔",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "1100",
+   "volume": "3720",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1100 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3720 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 20,
-   "keyword": "양념통선반",
+   "keyword": "청소용품",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "990",
+   "volume": "3680",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 990 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3680 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   }
  ]
 }
