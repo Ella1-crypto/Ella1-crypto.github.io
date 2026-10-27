@@ -11,7 +11,6 @@
   const MAX_HOUSES = 20;
   const MAX_HISTORY = 12;
   const MAX_OUTLINES = 5; // 새로고침 뒤 다시 그릴 필지 경계 수(중계 서버 호출 수)
-  const EXAMPLE = Object.freeze({ name: '예시 아파트', price: 1.5e9 });
 
   const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const won = n => Math.round(Number(n) || 0).toLocaleString('ko-KR');
@@ -75,11 +74,13 @@
   let lookupSeq = 0;
   const drawn = new Map(); // 주택 id → 지도에 그린 경계
 
+  // 작업 중 상태는 탭 안에서만(새로고침 유지) — 새로 들어오면 빈 칸에서 시작한다. 남기려면 '이 기기에 저장'(HISTORY)
   function load() {
-    try { const r = localStorage.getItem(STORE); return r ? clean(JSON.parse(r)) : null; } catch (_) { return null; }
+    try { localStorage.removeItem(STORE); } catch (_) { /* 예전 버전이 남긴 주소 지움 */ }
+    try { const r = sessionStorage.getItem(STORE); return r ? clean(JSON.parse(r)) : null; } catch (_) { return null; }
   }
   function save() {
-    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (_) { /* 저장 불가 환경 */ }
+    try { sessionStorage.setItem(STORE, JSON.stringify(state)); } catch (_) { /* 저장 불가 환경 */ }
   }
   const b64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   const unb64 = t => new TextDecoder().decode(Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
@@ -360,7 +361,7 @@
       const target = state.houses.find(h => h.id === activeId) || state.houses[0];
       const dup = state.houses.find(h => h.id !== target.id && h.pnu && h.pnu === found.pnu);
       if (dup) { selectHouse(dup.id); toast('이미 넣은 주택입니다.'); return; }
-      const next = HP.applyParcel(target, HP.fromParcel(found, latlng), EXAMPLE);
+      const next = HP.applyParcel(target, HP.fromParcel(found, latlng));
       activeId = next.id;
       if (found.geom) geoms.set(next.id, found.geom); else geoms.delete(next.id);
       setState({ ...state, houses: state.houses.map(h => (h.id === next.id ? next : h)) });
@@ -575,7 +576,7 @@
       try { shared = clean(JSON.parse(unb64(m[1]))); } catch (_) { shared = null; }
       history.replaceState(null, '', location.pathname);
     }
-    state = shared || load() || clean({ houses: [{ ...newHouse(), ...EXAMPLE }] });
+    state = shared || load() || clean({ houses: [newHouse()] });
     if (m) toast(shared ? '공유된 계산을 불러왔습니다.' : '공유 링크를 읽지 못했습니다.');
     $('#houses').addEventListener('input', onHouseInput);
     $('#houses').addEventListener('change', onHouseInput);
