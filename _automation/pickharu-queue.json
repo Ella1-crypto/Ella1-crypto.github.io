@@ -91,5 +91,18 @@
   "video": "assets/pickharu/ph-20261027-5.mp4",
   "publish_at": "2026-10-27T20:10+09:00",
   "status": "예약"
+ },
+ {
+  "id": "ph-20261027-sb",
+  "kind": "일반",
+  "text": "10/30 스벅에 취미 부자 곰들 이사 온대🧸\n\n뜨개질하는 곰\n필라테스하는 곰\n빵 굽는 곰\n욕실에서 오이팩 하는 곰까지…\n\n10마리가 한 집에 사는데 다들 나보다 갓생임 ㅠㅠ\n너넨 몇 호 곰 데려갈 거야?",
+  "images": [
+   "assets/pickharu/sb-hobbyclub-1.jpg",
+   "assets/pickharu/sb-hobbyclub-2.jpg",
+   "assets/pickharu/sb-hobbyclub-6.jpg",
+   "assets/pickharu/sb-hobbyclub-11.jpg"
+  ],
+  "publish_at": "2026-10-27T19:45+09:00",
+  "status": "예약"
  }
 ]
