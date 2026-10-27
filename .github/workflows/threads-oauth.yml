@@ -30,7 +30,7 @@ jobs:
         env:
           ACCOUNT: ${{ inputs.account }}
           OAUTH_CODE: ${{ inputs.code }}
-          THREADS_APP_ID: "29149490781404483"   # heeya-daily-post 앱 ID(공개값, 승인 링크에도 들어감)
+          THREADS_APP_ID: "1787173958851200"   # heeya-daily-post의 Threads 앱 ID(공개값, 승인 링크에도 들어감)
           THREADS_APP_SECRET: ${{ secrets.THREADS_APP_SECRET }}
           GH_SECRETS_PAT: ${{ secrets.GH_SECRETS_PAT }}
         run: |
