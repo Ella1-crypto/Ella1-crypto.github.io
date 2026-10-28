@@ -218,7 +218,7 @@ class RunOnceTest(unittest.TestCase):
         http = FakeHttp()
         self.assertIn("p1", self.run_once(http))
         self.assertIn(KAKAO_LINK, [p for n, p in http.calls if "reply_to_id" in p][0]["text"])
-        self.write([kakao(f"k{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2)] + [kakao("k")])
+        self.write([kakao(f"k{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2, 3)] + [kakao("k")])
         self.assertIn("하루 상한", self.run_once(FakeHttp()))
 
     def test_general_post_still_blocks_links(self):

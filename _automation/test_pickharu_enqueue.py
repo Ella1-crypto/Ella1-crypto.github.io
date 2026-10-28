@@ -29,10 +29,11 @@ class KakaoEnqueueTest(unittest.TestCase):
         queue = pe.build([k], ["1"], [], START)
         self.assertEqual(queue[0]["kind"], "카카오")
 
-    def test_kakao_cap_is_two(self):
-        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261028-{n}", "kind": "카카오"} for n in (1, 2, 3)]
+    def test_kakao_cap_is_three(self):
+        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261028-{n}", "kind": "카카오"} for n in (1, 2, 3, 4)]
+        self.assertEqual(len(pe.build(ks, ["1", "2", "3"], [], START)), 3)
         with self.assertRaises(ValueError):
-            pe.build(ks, ["1", "2", "3"], [], START)
+            pe.build(ks, ["1", "2", "3", "4"], [], START)
 
 
 class BuildTest(unittest.TestCase):
