@@ -59,7 +59,7 @@ NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커�
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
-    KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},
+    KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 1},
     NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 2},
 }
 
