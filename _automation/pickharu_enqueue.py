@@ -18,7 +18,7 @@ from pathlib import Path
 from jaetech_publish import KST, READY, load_queue, save_queue
 from pickharu_publish import KAKAO, MAX_SESSION, NAVER, QUEUE_PATH, SHOPS, problem_of, shop_of
 
-QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video", "images")
+QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video", "images", "gif")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 SLOT_MINUTE = {KAKAO: 40, NAVER: 25}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)

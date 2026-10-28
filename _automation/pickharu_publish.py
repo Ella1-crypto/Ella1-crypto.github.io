@@ -13,6 +13,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 """
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -49,6 +50,8 @@ VIDEO_POLL_TRIES = 40  # 최대 10분 처리 대기
 IMAGE_RE = re.compile(r"assets/pickharu/[\w.-]+\.(jpg|jpeg|png)")
 IMAGE_MAX_BYTES = 8 * 1024 * 1024
 IMAGES_MAX = 20
+# GIF는 GIPHY id로 붙인다(Threads 공식 문서: gif_attachment, 글자만 있는 글에서만, 제공처는 GIPHY만).
+GIF_ID_RE = re.compile(r"[A-Za-z0-9]{10,40}")
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
 COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
@@ -97,8 +100,19 @@ def images_problem(item: dict, root: Path = SITE_ROOT) -> str:
     return ""
 
 
+def gif_problem(item: dict) -> str:
+    gif = item.get("gif")
+    if not gif:
+        return ""
+    if item.get("video") or item.get("images"):
+        return "GIF는 영상·사진 없는 글에만 붙일 수 있음"
+    if not isinstance(gif, str) or not GIF_ID_RE.fullmatch(gif):
+        return "GIF는 GIPHY id(영문·숫자)여야 함"
+    return ""
+
+
 def media_problem(item: dict) -> str:
-    return video_problem(item) or images_problem(item)
+    return video_problem(item) or images_problem(item) or gif_problem(item)
 
 
 def is_general(item: dict) -> bool:
@@ -118,7 +132,9 @@ def problem_of(item: dict) -> str:
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
     if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문(+사진)만
-        return "일반 글에는 댓글·영상을 넣지 않음" if reply or item.get("video") else images_problem(item)
+        if reply or item.get("video"):
+            return "일반 글에는 댓글·영상을 넣지 않음"
+        return images_problem(item) or gif_problem(item)
     kind = shop_of(item)
     if kind not in SHOPS:
         return f"알 수 없는 글 종류: {kind}"
@@ -175,7 +191,7 @@ def carousel_children(images: list[str], token: str, http: Http, sleep) -> str:
 
 
 def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video: str = "",
-            images: list[str] | None = None) -> str:
+            images: list[str] | None = None, gif: str = "") -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
     if video:
         params.update(media_type="VIDEO", video_url=SITE_URL + video)
@@ -183,6 +199,8 @@ def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video:
         params.update(media_type="IMAGE", image_url=SITE_URL + images[0])
     elif images:
         params.update(media_type="CAROUSEL", children=carousel_children(images, token, http, sleep))
+    elif gif:
+        params["gif_attachment"] = json.dumps({"gif_id": gif, "provider": "GIPHY"})
     if reply_to:
         params["reply_to_id"] = reply_to
     container = http("POST", f"{BASE}/me/threads", params)["id"]
@@ -224,7 +242,8 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         # 로컬 파일은 이미 '올리는 중'이라 계속 돌면 이 글이 조용히 빠진다. 멈춰서 실패가 보이게 한다.
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     try:
-        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"))
+        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"),
+                          gif=due.get("gif", ""))
     except PUBLISH_ERRORS as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)

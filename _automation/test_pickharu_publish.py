@@ -146,6 +146,24 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(calls[0]["media_type"], "IMAGE")
         self.assertEqual(calls[0]["image_url"], "https://ella1-crypto.github.io/assets/pickharu/a.jpg")
 
+    def test_gif_rules(self):
+        ok = {**item("g1"), "gif": "E5wQYTyFuuJYtPW8wC"}
+        self.assertEqual(pp.problem_of(ok), "")
+        self.assertEqual(pp.problem_of({"kind": "일반", "text": "꽥", "gif": "E5wQYTyFuuJYtPW8wC"}), "")
+        self.assertIn("GIPHY", pp.problem_of({**ok, "gif": "https://giphy.com/x"}))
+        self.assertIn("영상·사진", pp.gif_problem({**ok, "images": ["assets/pickharu/a.jpg"]}))
+
+    def test_publishes_text_with_gif_attachment(self):
+        calls = []
+
+        def http(method, url, params):
+            calls.append(params)
+            return {"id": "c1"}
+        pp.publish("꽥", "tok", http, lambda s: None, gif="E5wQYTyFuuJYtPW8wC")
+        self.assertEqual(calls[0]["media_type"], "TEXT")
+        self.assertEqual(json.loads(calls[0]["gif_attachment"]), {"gif_id": "E5wQYTyFuuJYtPW8wC", "provider": "GIPHY"})
+        self.assertNotIn("gif_attachment", calls[1])
+
     def test_publishes_carousel_with_children(self):
         calls, n = [], [0]
 
