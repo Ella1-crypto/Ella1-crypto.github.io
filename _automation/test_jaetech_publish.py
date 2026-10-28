@@ -180,3 +180,84 @@ class RunOnceTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReplyTest(RunOnceTest):
+    def test_reply_is_posted_as_first_comment(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["reply"] = "무료 목록 https://example.org/x"
+        self.write([it])
+        http = FakeHttp()
+        self.run_once(http)
+        saved = jp.load_queue(self.path)[0]
+        self.assertEqual(saved["status"], "올림")
+        self.assertEqual(saved["reply_id"], "p1")
+        self.assertEqual(http.calls.count("threads"), 2)
+
+    def test_reply_failure_keeps_post_published(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["reply"] = "링크 https://example.org/x"
+        self.write([it])
+        http = FakeHttp()
+        original = http.__call__
+
+        def flaky(method, url, params):
+            if "reply_to_id" in params:
+                raise jp.ThreadsError("HTTP 400: reply fail")
+            return original(method, url, params)
+        result = jp.run_once(NOW, "tok", "u1", flaky, lambda m: True, sleep=lambda s: None, path=self.path)
+        saved = jp.load_queue(self.path)[0]
+        self.assertIn("댓글 실패", result)
+        self.assertEqual(saved["status"], "올림")
+        self.assertIn("reply_error", saved)
+
+    def test_placeholder_in_reply_blocks_post(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["reply"] = "템플릿은 [크몽]"
+        self.write([it])
+        http = FakeHttp()
+        self.assertIn("올리지 않음", self.run_once(http))
+        self.assertEqual(http.calls, [])
+
+
+class WatchTest(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.path = Path(self.dir.name) / "q.json"
+        self.t = datetime(2026, 10, 29, 2, 0, tzinfo=jp.KST)
+        self.ran = []
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def go(self, items):
+        self.path.write_text(json.dumps(items, ensure_ascii=False), encoding="utf-8")
+
+        def sleep(sec):
+            self.t = self.t + jp.timedelta(seconds=sec)
+
+        def run(now):
+            self.ran.append(now)
+            q = jp.load_queue(self.path)
+            q = [{**i, "status": "올림"} if i["status"] == "예약" and datetime.fromisoformat(i["publish_at"]) <= now else i
+                 for i in q]
+            self.path.write_text(json.dumps(q, ensure_ascii=False), encoding="utf-8")
+            return "ran"
+        return jp.watch("tok", "u1", clock=lambda: self.t, sleep=sleep, pull=lambda: True, run=run, path=self.path)
+
+    def test_publishes_at_time_within_limit_then_stops(self):
+        relay = self.go([item("a", "2026-10-29T07:30+09:00")])
+        self.assertEqual(len(self.ran), 1)
+        self.assertEqual(self.ran[0], datetime(2026, 10, 29, 7, 30, tzinfo=jp.KST))
+        self.assertFalse(relay)
+
+    def test_relays_when_next_post_is_beyond_limit(self):
+        relay = self.go([item("a", "2026-10-29T13:00+09:00")])
+        self.assertEqual(self.ran, [])
+        self.assertTrue(relay)
+
+    def test_handles_two_posts_in_one_watch(self):
+        relay = self.go([item("a", "2026-10-29T03:00+09:00"), item("b", "2026-10-29T07:30+09:00"),
+                         item("c", "2026-10-30T07:30+09:00")])
+        self.assertEqual(len(self.ran), 2)
+        self.assertTrue(relay)

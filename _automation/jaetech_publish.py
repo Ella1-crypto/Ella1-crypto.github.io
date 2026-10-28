@@ -35,6 +35,9 @@ EXPECTED_USERNAME = "heeya.dailyfit"
 PUBLISH_RETRY_WAIT_SECONDS = 15
 CONTAINER_WAIT_SECONDS = 3
 BLOCK_RE = re.compile(r"https?://|www\.|example\.com|\[확인 필요\]|\[\s*_{2,}", re.IGNORECASE)
+REPLY_BLOCK_RE = re.compile(r"example\.com|\[확인 필요\]|\[\s*_{2,}|\[크몽\]|\[링크\]", re.IGNORECASE)
+WATCH_LIMIT = timedelta(minutes=330)  # --watch 한 번이 큐를 지켜보는 시간(워크플로 timeout 350분보다 짧게)
+WATCH_STEP = timedelta(minutes=10)    # 지켜보는 동안 최신 큐를 다시 받는 간격
 
 READY, IN_PROGRESS, DONE, FAILED = "예약", "올리는 중", "올림", "실패"
 
@@ -66,9 +69,12 @@ def http_json(method: str, url: str, params: dict) -> dict:
         raise ThreadsError(f"연결 실패: {error.reason}") from None
 
 
-def publish_text(text: str, token: str, user_id: str, http: Http = http_json, sleep=time.sleep) -> str:
-    container = http("POST", f"{BASE}/{user_id}/threads",
-                     {"media_type": "TEXT", "text": text, "access_token": token})["id"]
+def publish_text(text: str, token: str, user_id: str, http: Http = http_json, sleep=time.sleep,
+                 reply_to: str = "") -> str:
+    params = {"media_type": "TEXT", "text": text, "access_token": token}
+    if reply_to:
+        params["reply_to_id"] = reply_to
+    container = http("POST", f"{BASE}/{user_id}/threads", params)["id"]
     sleep(CONTAINER_WAIT_SECONDS)
     params = {"creation_id": container, "access_token": token}
     try:
@@ -110,7 +116,12 @@ def problem_of(item: dict) -> str:
     if len(text) > TEXT_LIMIT:
         return f"{len(text)}자 (500자 초과)"
     if BLOCK_RE.search(text):
-        return "본문에 주소나 미완성 표시가 있음"
+        return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
+    reply = item.get("reply", "")
+    if len(reply) > TEXT_LIMIT:
+        return f"댓글 {len(reply)}자 (500자 초과)"
+    if REPLY_BLOCK_RE.search(reply):
+        return "댓글에 미완성 표시가 있음"
     return ""
 
 
@@ -218,9 +229,56 @@ def run_once(now: datetime, token: str, user_id: str, http: Http = http_json,
         commit("chore: 재테크 글 게시 실패 기록")
         raise SystemExit(note)
     published = datetime.now(KST).isoformat(timespec="minutes")
-    save_queue(with_status(load_queue(path), due["id"], status=DONE, post_id=post_id, published_at=published), path)
+    done = {"status": DONE, "post_id": post_id, "published_at": published}
+    if due.get("reply"):
+        # 링크는 첫 댓글로. 댓글만 실패하면 본문은 '올림'으로 두고 다시 올리지 않는다.
+        try:
+            sleep(CONTAINER_WAIT_SECONDS)
+            done["reply_id"] = publish_text(due["reply"], token, user_id, http, sleep, reply_to=post_id)
+        except (ThreadsError, KeyError) as error:
+            done["reply_error"] = f"댓글 실패: {error} — 본문은 올라감, 댓글만 직접 달기"
+    save_queue(with_status(load_queue(path), due["id"], **done), path)
     commit(f"chore: 재테크 글 게시 완료 ({due['id']})")
-    return f"올림: {due['id']} → {post_id}"
+    return f"올림: {due['id']} → {post_id}" + (" (댓글 실패)" if "reply_error" in done else "")
+
+
+def next_ready_at(items: list[dict]) -> datetime | None:
+    times = []
+    for item in items:
+        if item.get("status") != READY:
+            continue
+        try:
+            at = datetime.fromisoformat(item["publish_at"])
+        except (KeyError, ValueError):
+            return datetime.min.replace(tzinfo=KST)  # run_once가 바로 '실패'로 정리한다
+        times.append(at if at.tzinfo else at.replace(tzinfo=KST))
+    return min(times) if times else None
+
+
+def watch(token: str, user_id: str, clock: Callable[[], datetime] = lambda: datetime.now(KST),
+          sleep=time.sleep, pull: Callable[[], bool] = git_pull, run=None,
+          path: Path = QUEUE_PATH) -> bool:
+    """WATCH_LIMIT 동안 큐를 지켜보며 시각이 된 글을 하나씩 올린다.
+    WATCH_STEP마다 최신 큐를 다시 받아, 지켜보는 중에 새로 들어온 예약도 놓치지 않는다.
+    끝났을 때 아직 '예약' 글이 남아 있으면 True(워크플로가 자기 자신을 다시 실행해 이어 지킨다)."""
+    run = run or (lambda now: run_once(now, token, user_id, path=path))
+    start = clock()
+    while True:
+        now = clock()
+        nxt = next_ready_at(load_queue(path))
+        if nxt is None:
+            print("남은 예약 글 없음", flush=True)
+            return False
+        if nxt <= now:
+            print(run(now), flush=True)
+            continue
+        left = start + WATCH_LIMIT - now
+        if left <= timedelta(0):
+            return True
+        nap = min(nxt - now, WATCH_STEP, left)
+        sleep(nap.total_seconds())
+        if not pull():
+            raise SystemExit("최신 예약 목록을 받지 못해 멈춤")
 
 
 def main() -> int:
@@ -234,6 +292,13 @@ def main() -> int:
         return 0
     if "--wait" in sys.argv:
         print(wait_then_run(token, user_id))
+        return 0
+    if "--watch" in sys.argv:
+        relay = watch(token, user_id)
+        out = os.environ.get("GITHUB_OUTPUT")
+        if out:
+            with open(out, "a", encoding="utf-8") as f:
+                f.write(f"relay={'true' if relay else 'false'}\n")
         return 0
     print(run_once(datetime.now(KST), token, user_id))
     return 0

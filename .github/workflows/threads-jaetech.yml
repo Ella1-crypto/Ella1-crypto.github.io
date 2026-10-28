@@ -1,6 +1,8 @@
 # 재테크 한 줄 자동 게시: _automation/jaetech-queue.json 에서 시각이 된 글을 Threads에 올린다.
 # 필요한 Secrets: THREADS_ACCESS_TOKEN, THREADS_USER_ID (Settings → Secrets and variables → Actions)
-# 주 경로: 큐 파일이 push되면 바로 실행 → 가장 이른 예약 시각까지(최대 130분) 기다렸다가 올린다.
+# 주 경로: 큐 파일이 push되면 바로 실행(--watch) → 330분 동안 큐를 지켜보며 시각이 된 글을 하나씩 올린다(첫 댓글 포함).
+#          끝날 때 '예약' 글이 남아 있으면 workflow_dispatch(mode=relay)로 자기 자신을 다시 실행해 이어 지킨다.
+#          (GITHUB_TOKEN으로 만든 workflow_dispatch는 새 실행을 만든다. 07:30 같은 이른 시각도 놓치지 않으려고)
 # 보조 경로: cron. GitHub cron은 이 저장소에서 몇 시간씩 밀리거나 건너뛰어서 믿을 수 없다.
 # 봇이 상태를 커밋해도 GITHUB_TOKEN push는 워크플로를 다시 깨우지 않고, actor 조건으로 한 번 더 막는다.
 name: threads-jaetech
@@ -15,13 +17,14 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "publish = 예약 글 올리기, check = 토큰만 점검, refresh = 토큰 점검 후 갱신"
+        description: "publish = 예약 글 올리기, relay = 큐 지켜보기(이어 실행), check = 토큰만 점검, refresh = 토큰 점검 후 갱신"
         default: publish
         type: choice
-        options: [publish, check, refresh]
+        options: [publish, relay, check, refresh]
 
 permissions:
   contents: write
+  actions: write   # relay: 자기 자신을 workflow_dispatch로 다시 실행
 
 concurrency:
   group: threads-jaetech
@@ -31,7 +34,7 @@ jobs:
   run:
     if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 150   # push 실행은 예약 시각까지 최대 130분 기다린다
+    timeout-minutes: 350   # --watch는 330분 동안 큐를 지켜본다
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -55,14 +58,20 @@ jobs:
         run: |
           pip install --quiet pynacl==1.5.0
           python _automation/refresh_token.py
-      - name: Wait for scheduled time and publish
-        if: github.event_name == 'push'
+      - name: Watch queue and publish
+        id: watch
+        if: github.event_name == 'push' || inputs.mode == 'relay'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
-        run: python _automation/jaetech_publish.py --wait
+        run: python _automation/jaetech_publish.py --watch
+      - name: Relay (keep watching)
+        if: steps.watch.outputs.relay == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run threads-jaetech.yml --ref main -f mode=relay
       - name: Publish due post
-        if: github.event_name != 'push' && github.event.schedule != '0 0 * * 1' && inputs.mode != 'check' && inputs.mode != 'refresh'
+        if: github.event_name != 'push' && github.event.schedule != '0 0 * * 1' && inputs.mode != 'check' && inputs.mode != 'refresh' && inputs.mode != 'relay'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
