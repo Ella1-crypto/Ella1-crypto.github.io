@@ -8,6 +8,7 @@ GitHub Actions(.github/workflows/threads-jaetech.yml)가 실행한다. 표준 �
 - 올리기 전에 상태를 '올리는 중'으로 바꿔 커밋·푸시한다. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 예약 시각을 LATE_LIMIT 넘게 지난 글은 올리지 않고 '실패'로 남긴다.
 - 500자 초과, 본문 주소, 미완성 표시가 있으면 올리지 않는다.
+- image_url(공개 https 주소 1개)이 있으면 사진 1장 글로 올리고, 사진 준비(FINISHED)를 기다린 뒤 게시한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
 from __future__ import annotations
@@ -34,6 +35,8 @@ TEXT_LIMIT = 500
 EXPECTED_USERNAME = "heeya.dailyfit"
 PUBLISH_RETRY_WAIT_SECONDS = 15
 CONTAINER_WAIT_SECONDS = 3
+IMAGE_STATUS_WAIT_SECONDS = 5
+IMAGE_STATUS_TRIES = 24
 BLOCK_RE = re.compile(r"https?://|www\.|example\.com|\[확인 필요\]|\[\s*_{2,}", re.IGNORECASE)
 REPLY_BLOCK_RE = re.compile(r"example\.com|\[확인 필요\]|\[\s*_{2,}|\[크몽\]|\[링크\]", re.IGNORECASE)
 WATCH_LIMIT = timedelta(minutes=330)  # --watch 한 번이 큐를 지켜보는 시간(워크플로 timeout 350분보다 짧게)
@@ -69,13 +72,30 @@ def http_json(method: str, url: str, params: dict) -> dict:
         raise ThreadsError(f"연결 실패: {error.reason}") from None
 
 
+def wait_until_ready(container: str, token: str, http: Http = http_json, sleep=time.sleep) -> None:
+    """사진 컨테이너는 Threads가 사진을 받아 갈 때까지 FINISHED가 아니다. 그 전에 게시하면 실패한다."""
+    for _ in range(IMAGE_STATUS_TRIES):
+        status = http("GET", f"{BASE}/{container}", {"fields": "status", "access_token": token}).get("status")
+        if status == "FINISHED":
+            return
+        if status in ("ERROR", "EXPIRED"):
+            raise ThreadsError(f"사진 준비 실패: {status}")
+        sleep(IMAGE_STATUS_WAIT_SECONDS)
+    raise ThreadsError("사진 준비가 끝나지 않음")
+
+
 def publish_text(text: str, token: str, user_id: str, http: Http = http_json, sleep=time.sleep,
-                 reply_to: str = "") -> str:
+                 reply_to: str = "", image_url: str = "") -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
+    if image_url:
+        params.update(media_type="IMAGE", image_url=image_url)
     if reply_to:
         params["reply_to_id"] = reply_to
     container = http("POST", f"{BASE}/{user_id}/threads", params)["id"]
-    sleep(CONTAINER_WAIT_SECONDS)
+    if image_url:
+        wait_until_ready(container, token, http, sleep)
+    else:
+        sleep(CONTAINER_WAIT_SECONDS)
     params = {"creation_id": container, "access_token": token}
     try:
         return http("POST", f"{BASE}/{user_id}/threads_publish", params)["id"]
@@ -117,6 +137,9 @@ def problem_of(item: dict) -> str:
         return f"{len(text)}자 (500자 초과)"
     if BLOCK_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
+    image_url = item.get("image_url", "")
+    if image_url and not image_url.startswith("https://"):
+        return "사진 주소가 공개 https 주소가 아님"
     reply = item.get("reply", "")
     if len(reply) > TEXT_LIMIT:
         return f"댓글 {len(reply)}자 (500자 초과)"
@@ -222,7 +245,7 @@ def run_once(now: datetime, token: str, user_id: str, http: Http = http_json,
     if not commit(f"chore: 재테크 글 올리는 중 ({due['id']})"):
         return "올리는 중 표시를 저장하지 못해 올리지 않음"
     try:
-        post_id = publish_text(due["text"], token, user_id, http, sleep)
+        post_id = publish_text(due["text"], token, user_id, http, sleep, image_url=due.get("image_url", ""))
     except (ThreadsError, KeyError) as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)

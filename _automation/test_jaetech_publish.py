@@ -211,6 +211,45 @@ class ReplyTest(RunOnceTest):
         self.assertEqual(saved["status"], "올림")
         self.assertIn("reply_error", saved)
 
+    def test_image_post_waits_for_finished_then_publishes(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["image_url"] = "https://ella1-crypto.github.io/threads-media/x.png"
+        self.write([it])
+        sent, statuses = [], ["IN_PROGRESS", "FINISHED"]
+
+        def http(method, url, params):
+            sent.append(params)
+            if method == "GET" and params.get("fields") == "status":
+                return {"status": statuses.pop(0)}
+            return FakeHttp()(method, url, params)
+        result = jp.run_once(NOW, "tok", "u1", http, lambda m: True, sleep=lambda s: None, path=self.path)
+        self.assertIn("p1", result)
+        self.assertEqual(sent[0]["media_type"], "IMAGE")
+        self.assertEqual(sent[0]["image_url"], it["image_url"])
+        self.assertEqual(statuses, [])
+
+    def test_image_error_fails_without_publishing(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["image_url"] = "https://ella1-crypto.github.io/threads-media/x.png"
+        self.write([it])
+        calls = []
+
+        def http(method, url, params):
+            calls.append(url.rsplit("/", 1)[-1])
+            if method == "GET" and params.get("fields") == "status":
+                return {"status": "ERROR"}
+            return FakeHttp()(method, url, params)
+        with self.assertRaises(SystemExit):
+            jp.run_once(NOW, "tok", "u1", http, lambda m: True, sleep=lambda s: None, path=self.path)
+        self.assertNotIn("threads_publish", calls)
+        self.assertEqual(self.statuses(), {"a": "실패"})
+
+    def test_non_https_image_blocks_post(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["image_url"] = r"C:\Users\x.png"
+        self.write([it])
+        self.assertIn("올리지 않음", self.run_once(FakeHttp()))
+
     def test_placeholder_in_reply_blocks_post(self):
         it = item("a", "2026-10-19T12:10+09:00")
         it["reply"] = "템플릿은 [크몽]"
