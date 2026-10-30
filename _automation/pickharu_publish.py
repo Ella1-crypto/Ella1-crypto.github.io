@@ -63,7 +63,7 @@ NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커�
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
-    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 2},
+    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
 }
 
 
