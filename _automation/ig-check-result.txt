@@ -1,4 +1,4 @@
-# 2026-10-30 18:16 KST
+# 2026-10-30 18:17 KST
 [권한] instagram_basic: 대상 전체
 [권한] instagram_manage_comments: 대상 전체
 [권한] instagram_content_publish: 대상 전체
