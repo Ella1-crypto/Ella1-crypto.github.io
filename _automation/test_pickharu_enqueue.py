@@ -61,3 +61,38 @@ class BuildTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SlotPlanTest(unittest.TestCase):
+    """2026-10-30 운영안: 쿠팡 12:10·15:10, 카카오·네이버는 그 사이 13시·16시·19시를 나눠 씀, 일반 글 08:30·20:30."""
+    NOW = datetime(2026, 10, 31, 7, 0, tzinfo=pe.KST)
+
+    def hhmm(self, times):
+        return [t.strftime("%m-%d %H:%M") for t in times]
+
+    def test_coupang_two_slots_then_next_day(self):
+        self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 3, [], self.NOW)),
+                         ["10-31 12:10", "10-31 15:10", "11-01 12:10"])
+
+    def test_kakao_and_naver_share_hours_between_coupang(self):
+        queue = [{"id": "kk-1", "kind": "카카오", "publish_at": "2026-10-31T13:40+09:00", "status": "예약"}]
+        self.assertEqual(self.hhmm(pe.plan_times("네이버", 2, queue, self.NOW)), ["10-31 16:25", "10-31 19:25"])
+
+    def test_held_or_failed_items_do_not_take_a_slot(self):
+        queue = [{"id": "ph-1", "publish_at": "2026-10-31T12:10+09:00", "status": "보류"}]
+        self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 1, queue, self.NOW)), ["10-31 12:10"])
+
+    def test_skips_slots_too_soon(self):
+        now = datetime(2026, 10, 31, 11, 55, tzinfo=pe.KST)
+        self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 1, [], now)), ["10-31 15:10"])
+
+    def test_general_posts_morning_and_evening(self):
+        self.assertEqual(self.hhmm(pe.plan_times("일반", 2, [], self.NOW)), ["10-31 08:30", "10-31 20:30"])
+
+    def test_build_without_start_uses_slots(self):
+        queue = pe.build([draft(1), draft(2)], ["1", "2"], [], now=self.NOW)
+        self.assertEqual([q["publish_at"] for q in queue], ["2026-10-31T12:10+09:00", "2026-10-31T15:10+09:00"])
+
+    def test_coupang_cap_is_two(self):
+        with self.assertRaises(ValueError):
+            pe.build([draft(i) for i in (1, 2, 3)], ["1", "2", "3"], [], now=self.NOW)

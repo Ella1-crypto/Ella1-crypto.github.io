@@ -239,6 +239,19 @@ class RunOnceTest(unittest.TestCase):
         self.write([kakao(f"k{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2, 3)] + [kakao("k")])
         self.assertIn("하루 상한", self.run_once(FakeHttp()))
 
+    def test_coupang_cap_is_two(self):
+        # 2026-10-30 운영안: 쿠팡 하루 1~2개
+        self.write([item("d1", at="2026-10-28T01:00+09:00", status="올림"), item("a")])
+        self.assertIn("p1", self.run_once(FakeHttp()))
+        self.write([item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2)] + [item("a")])
+        self.assertIn("하루 상한", self.run_once(FakeHttp()))
+
+    def test_general_post_cap_is_two(self):
+        def general(gid, at="2026-10-28T09:00+09:00", status="예약"):
+            return {"id": gid, "kind": "일반", "publish_at": at, "text": "다들 점심 뭐 먹어?", "status": status}
+        self.write([general(f"g{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in (1, 2)] + [general("g")])
+        self.assertIn("하루 상한", self.run_once(FakeHttp()))
+
     def test_general_post_still_blocks_links(self):
         self.assertIn("주소", pp.problem_of({"kind": "일반", "text": "여기 봐 link.coupang.com/a/x"}))
         self.assertIn("댓글", pp.problem_of({"kind": "일반", "text": "안녕", "reply": "x"}))

@@ -31,7 +31,8 @@ from jaetech_publish import (
 QUEUE_PATH = Path(__file__).resolve().parent / "pickharu-queue.json"
 EXPECTED_USERNAME = "pick.haru__1"
 SECRET_NAME = "PICKHARU_THREADS_ACCESS_TOKEN"
-DAILY_CAP = 5  # 쿠팡 글
+DAILY_CAP = 2  # 쿠팡 글 (2026-10-30 사용자 운영안: 하루 1~2개, 전엔 5개)
+GENERAL_CAP = 2  # 일반(비광고) 글 (2026-10-30 사용자 운영안: 하루 1~2개)
 MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처리하는 최대 시간(워크플로 timeout 350분보다 짧게)
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
 LINK_RE = re.compile(r"https://(link\.coupang\.com|(www\.)?coupang\.com)/\S+")
@@ -53,7 +54,7 @@ IMAGES_MAX = 20
 # GIF는 GIPHY id로 붙인다(Threads 공식 문서: gif_attachment, 글자만 있는 글에서만, 제공처는 GIPHY만).
 GIF_ID_RE = re.compile(r"[A-Za-z0-9]{10,40}")
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
-GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 하루 상한(광고 글)에는 세지 않는다.
+GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 광고 글 상한과 따로 GENERAL_CAP으로 센다.
 COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
 KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다."
 KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
@@ -228,10 +229,11 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due)
-    if not problem and not is_general(due):
+    if not problem:
         kind = shop_of(due)
-        if posted_today(items, now, kind) >= SHOPS[kind]["cap"]:
-            problem = f"오늘 {kind} 글을 이미 {SHOPS[kind]['cap']}개 올려 하루 상한 초과"
+        cap = GENERAL_CAP if is_general(due) else SHOPS[kind]["cap"]
+        if posted_today(items, now, kind) >= cap:
+            problem = f"오늘 {kind} 글을 이미 {cap}개 올려 하루 상한 초과"
     if problem:
         save_queue(with_status(items, due["id"], status=FAILED, note=problem), path)
         commit("chore: pick.haru 예약 글 검사 실패")
