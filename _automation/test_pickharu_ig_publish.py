@@ -176,6 +176,14 @@ class RunOnceTest(unittest.TestCase):
         self.assertIn("comment_error", items[0])
         self.assertEqual(items[0]["story_id"], "story7")
 
+    def test_story_uses_vertical_story_image_when_given(self):
+        http = fake_http()
+        images = make_site(self.root)
+        (self.root / "assets/pickharu/ig/ig-20261031-ganadi/story.jpg").write_bytes(b"jpg")
+        self.run_once([item(images, story_image="assets/pickharu/ig/ig-20261031-ganadi/story.jpg")], http)
+        story = [c for c in http.calls if c[2].get("media_type") == "STORIES"]
+        self.assertTrue(story[0][2]["image_url"].endswith("/story.jpg"))
+
     def test_story_can_be_turned_off(self):
         http = fake_http()
         _, items = self.run_once([item(make_site(self.root), story=False)], http)

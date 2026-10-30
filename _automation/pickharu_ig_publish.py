@@ -74,7 +74,8 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return "사진이 없음"
     if len(images) > IMAGES_MAX:
         return f"사진은 {IMAGES_MAX}장까지(지금 {len(images)}장)"
-    for image in images:
+    # story_image: 스토리용 9:16(1080x1920) 판. 없으면 첫 장을 그대로 스토리에(2026-10-30 사용자: 사이즈가 안 맞음)
+    for image in images + ([item["story_image"]] if item.get("story_image") else []):
         if not isinstance(image, str) or not IMAGE_RE.fullmatch(image):
             return f"사진 경로는 assets/pickharu/ig/<글 id>/이름.jpg 여야 함: {image}"
         path = root / image
@@ -178,7 +179,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(strip(with_status(items, due["id"], status=FAILED, note=problem)), path)
         commit("chore: pick.haru 인스타 예약 글 검사 실패")
         return f"올리지 않음: {problem}"
-    if ready and not all(ready(rel) for rel in due["images"]):
+    if ready and not all(ready(rel) for rel in due["images"] + ([due["story_image"]] if due.get("story_image") else [])):
         return f"사진 반영 대기: {due['id']} (GitHub Pages 배포 전 — 예약 그대로, 다음 확인 때 올림)"
     try:
         ig_user = find_ig_user(token, http, configured_user)
@@ -203,7 +204,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         done["comment_error"] = f"블로그 댓글 실패: {error} — 게시물은 올라감, 댓글만 직접 달기"
     if due.get("story", True):
         try:
-            done["story_id"] = publish_story(due["images"][0], ig_user, token, http, sleep)
+            done["story_id"] = publish_story(due.get("story_image") or due["images"][0], ig_user, token, http, sleep)
         except PUBLISH_ERRORS as error:
             done["story_error"] = f"스토리 실패: {error} — 게시물은 올라감, 스토리만 직접 올리기"
     save_queue(with_status(load_queue(path), due["id"], **done), path)

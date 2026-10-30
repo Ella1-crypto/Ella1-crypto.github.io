@@ -30,9 +30,33 @@ def to_jpeg(src: Path, dst: Path) -> None:
         raise RuntimeError(f"JPEG 변환 실패: {src.name} — {result.stderr[-200:]}")
 
 
+STORY_W, STORY_H = 1080, 1920
+STORY_CARD_W = 940  # 위아래 글자 가림 영역(약 250px)을 피해 가운데에 카드를 놓는다
+
+
+def to_story(first_card: Path, dst: Path) -> None:
+    """첫 장을 9:16 스토리 판으로: 카드 가장자리 색 바탕 + 가운데 카드(그림자)."""
+    from PIL import Image, ImageFilter  # 저장소 CI엔 없어도 되게 여기서만 씀
+
+    card = Image.open(first_card).convert("RGB")
+    bg_color = card.getpixel((6, card.height // 2))
+    canvas = Image.new("RGB", (STORY_W, STORY_H), bg_color)
+    w = STORY_CARD_W
+    h = round(card.height * w / card.width)
+    card = card.resize((w, h), Image.LANCZOS)
+    x, y = (STORY_W - w) // 2, (STORY_H - h) // 2
+    shadow = Image.new("L", (STORY_W, STORY_H), 0)
+    shadow.paste(90, (x + 10, y + 18, x + w + 10, y + h + 18))
+    canvas.paste((0, 0, 0), mask=shadow.filter(ImageFilter.GaussianBlur(22)))
+    canvas.paste(card, (x, y))
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(dst, "JPEG", quality=92)
+
+
 def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root: Path = SITE_ROOT,
           ad: bool = False, now: datetime | None = None,
-          convert: Callable[[Path, Path], None] = to_jpeg, comment: str = "") -> list[dict]:
+          convert: Callable[[Path, Path], None] = to_jpeg, comment: str = "",
+          story: Callable[[Path, Path], None] = to_story) -> list[dict]:
     item_id = f"ig-{cards.name}"
     if any(it.get("id") == item_id for it in queue):
         raise ValueError(f"{item_id}: 이미 예약 목록에 있음")
@@ -50,6 +74,9 @@ def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root:
             "images": images, "status": READY}
     if ad:
         item["ad"] = True
+    story_rel = f"assets/pickharu/ig/{item_id}/story.jpg"
+    story(pngs[0], site_root / story_rel)
+    item["story_image"] = story_rel
     if comment.strip():  # 없으면 블로그 홈 주소 댓글
         item["comment"] = comment.strip()
     problem = problem_of(item, site_root)
@@ -88,7 +115,7 @@ def main() -> int:
         print("(dry-run: 저장하지 않음 — 변환한 사진은 assets에 남음)")
         return 0
     save_queue(queue, QUEUE_PATH)
-    git("add", "--", str(QUEUE_PATH), *new["images"])
+    git("add", "--", str(QUEUE_PATH), *new["images"], new["story_image"])
     if git("commit", "-m", f"chore: pick.haru 인스타 예약 ({new['id']})").returncode != 0 or (
             git("push").returncode != 0 and not (git("pull", "--rebase").returncode == 0
                                                  and git("push").returncode == 0)):

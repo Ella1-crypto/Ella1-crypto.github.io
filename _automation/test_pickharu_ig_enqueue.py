@@ -32,7 +32,20 @@ class BuildTest(unittest.TestCase):
 
     def build(self, queue=(), **kw):
         return eq.build(self.cards, "가나디 정리 🍒\n#가나디", self.at, list(queue), self.site,
-                        convert=fake_convert, **kw)
+                        convert=fake_convert, story=fake_convert, **kw)
+
+    def test_makes_vertical_story_image_from_first_card(self):
+        new = self.build()[-1]
+        self.assertEqual(new["story_image"], "assets/pickharu/ig/ig-20261030-ganadi/story.jpg")
+        self.assertTrue((self.site / new["story_image"]).is_file())
+
+    def test_real_story_image_is_1080x1920(self):
+        from PIL import Image
+        src = Path(self.tmp.name) / "card.png"
+        Image.new("RGB", (1080, 1350), (240, 240, 240)).save(src)
+        dst = Path(self.tmp.name) / "story.jpg"
+        eq.to_story(src, dst)
+        self.assertEqual(Image.open(dst).size, (1080, 1920))
 
     def test_converts_numbered_cards_to_jpeg_and_adds_ready_item(self):
         queue = self.build()
