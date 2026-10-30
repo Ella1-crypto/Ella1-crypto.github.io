@@ -1,0 +1,37 @@
+# 로그인 URL로 받은 code를 인스타그램(@pick.haru.daily) 게시용 토큰으로 바꿔 Secret에 저장한다.
+# 필요한 Secrets: PICKHARU_IG_APP_SECRET(Meta 앱 "pick.haru__1 publisher"의 앱 시크릿 코드), GH_SECRETS_PAT
+# 사용: Actions → ig-oauth → Run workflow → 앱 ID와 code 붙여 넣기. code는 1회용, 받은 뒤 바로 실행.
+name: ig-oauth
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_id:
+        description: "Meta 앱 ID (앱 설정 → 기본 설정, 숫자)"
+        required: true
+      code:
+        description: "로그인 후 주소창의 code 값(주소 전체를 붙여 넣어도 됨)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Exchange code and store token
+        env:
+          OAUTH_CODE: ${{ inputs.code }}
+          IG_APP_ID: ${{ inputs.app_id }}
+          IG_APP_SECRET: ${{ secrets.PICKHARU_IG_APP_SECRET }}
+          GH_SECRETS_PAT: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          echo "::add-mask::$OAUTH_CODE"
+          pip install --quiet pynacl==1.5.0
+          python _automation/ig_oauth.py
