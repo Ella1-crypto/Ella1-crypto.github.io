@@ -1,0 +1,68 @@
+# pick.haru 인스타(@pick.haru.daily) 카드뉴스 자동 게시: _automation/pickharu-ig-queue.json 에서 시각이 된 글을 올린다.
+# 필요한 Secrets: PICKHARU_IG_ACCESS_TOKEN (pickharu-bot 시스템 사용자 토큰, 만료 없음)
+# 선택 Variable: PICKHARU_IG_USER_ID (인스타 계정 숫자 ID. 없으면 페이스북 페이지 연결 계정을 찾아 씀)
+# 주 경로: 큐 파일이 push되면 바로 실행 → 320분 안의 예약 글을 시각마다 기다렸다가 올린다. 보조: 30분 cron.
+name: ig-pickharu
+
+on:
+  push:
+    branches: [main]
+    paths: ["_automation/pickharu-ig-queue.json"]
+  schedule:
+    - cron: "7,37 * * * *"   # 30분마다 (보조, 올릴 글이 없으면 바로 끝남)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check = 계정만 확인, publish = 예약 글 올리기"
+        default: check
+        type: choice
+        options: [check, publish]
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    if: inputs.mode == 'check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PICKHARU_IG_ACCESS_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
+      PICKHARU_IG_USER_ID: ${{ vars.PICKHARU_IG_USER_ID }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check account
+        run: python _automation/pickharu_ig_publish.py --check
+
+  publish:
+    if: >-
+      (github.event_name == 'push' && github.actor != 'github-actions[bot]')
+      || github.event_name == 'schedule' || inputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350   # push 실행은 최대 320분 동안 예약 글을 기다린다
+    concurrency:
+      group: ig-pickharu
+      cancel-in-progress: false
+    env:
+      PICKHARU_IG_ACCESS_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
+      PICKHARU_IG_USER_ID: ${{ vars.PICKHARU_IG_USER_ID }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main   # 앞 실행을 기다리는 사이 바뀐 큐를 받도록 최신 main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Configure git
+        run: |
+          git config user.name "ig-pickharu-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Wait for scheduled times and publish
+        if: github.event_name == 'push'
+        run: python _automation/pickharu_ig_publish.py --wait
+      - name: Publish due post
+        if: github.event_name != 'push'
+        run: python _automation/pickharu_ig_publish.py
