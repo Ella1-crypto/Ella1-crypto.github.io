@@ -93,6 +93,10 @@ button, input, select { font: inherit; color: inherit; }
 .ghost { border: 1px dashed var(--line-2); background: transparent; border-radius: var(--r-sm); padding: 8px 14px; cursor: pointer; color: var(--ink-2); }
 .ghost:hover { border-style: solid; color: var(--ink); background: var(--card); }
 .ghost.sm { font-size: 13px; padding: 6px 10px; }
+.presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.presets-l { font-size: 13px; color: var(--ink-2); margin-right: 2px; }
+.presets .ghost { border-style: solid; }
+.presets .ghost em { font-style: normal; color: var(--ink-3, var(--ink-2)); margin-left: 4px; font-size: 12px; }
 .link-btn { border: 0; background: none; padding: 0; color: var(--navy); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .icon-btn { width: 30px; height: 30px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--paper-2); cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
 .icon-btn:hover { color: var(--ink); border-color: var(--line-2); }

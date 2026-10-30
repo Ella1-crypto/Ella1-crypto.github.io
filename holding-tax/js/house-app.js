@@ -64,6 +64,14 @@
       houses: houses.length ? houses : [newHouse()],
     };
   }
+  // 예시로 시작하기 — 누르면 칸이 채워지고, 사용자는 몇 칸만 고친다(주소 없음, 공시가격은 가정치)
+  const PRESETS = Object.freeze([
+    { oneHouse: true, age: 62, holdYears: 10, houseCount: 1, houses: [{ name: '서울 아파트 (1주택)', price: 15e8 }] },
+    { oneHouse: false, houseCount: 2, houses: [{ name: '서울 아파트', price: 10e8 }, { name: '경기 아파트', price: 6e8 }] },
+    { oneHouse: true, houseCount: 1, houses: [{ name: '지방 빌라 (1주택)', price: 2e8, region: 'local' }] },
+  ]);
+  const fromPreset = p => clean({ ...p, houses: p.houses.map(h => ({ ...newHouse(), ...h })) });
+
   let state = clean({});
   let pointerDown = false;
   let pendingRender = false;
@@ -513,6 +521,15 @@
       const L = lookups.get(d.hid);
       if (!L || L.status !== 'ok') return;
       usePrice(d.hid, Number(d.i) < 0 ? L.item : L.items[Number(d.i)]);
+    },
+    preset: d => {
+      const p = PRESETS[Number(d.i)];
+      geoms.clear();
+      lookups.clear();
+      const next = p ? fromPreset(p) : clean({});
+      activeId = next.houses[0].id;
+      setState(next);
+      toast(p ? '예시를 채웠습니다. 공시가격·나이 등 몇 칸만 내 상황에 맞게 고치세요.' : '빈 칸으로 비웠습니다.');
     },
     add: () => {
       if (state.houses.length >= MAX_HOUSES) return;

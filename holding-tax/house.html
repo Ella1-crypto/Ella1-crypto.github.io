@@ -59,6 +59,13 @@
 
 <section class="tool" id="calc" aria-label="주택 보유세 계산기">
   <div class="tool-main">
+    <div class="presets" role="group" aria-label="예시로 시작하기">
+      <span class="presets-l">처음이면 예시로 시작 →</span>
+      <button type="button" class="ghost sm" data-act="preset" data-i="0">서울 아파트 1채 <em>공시 15억</em></button>
+      <button type="button" class="ghost sm" data-act="preset" data-i="1">아파트 2채 <em>10억 + 6억</em></button>
+      <button type="button" class="ghost sm" data-act="preset" data-i="2">지방 빌라 1채 <em>공시 2억</em></button>
+      <button type="button" class="ghost sm" data-act="preset" data-i="-1">비우기</button>
+    </div>
     <div class="controls">
       <div class="seg owner" role="radiogroup" aria-label="소유자">
         <button type="button" role="radio" data-owner="개인" aria-checked="true">개인</button>
