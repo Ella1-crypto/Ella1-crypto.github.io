@@ -1,10 +1,14 @@
-# 2026-10-30 18:26 KST
+# 2026-10-30 18:27 KST
 [권한] instagram_basic: 대상 전체
 [권한] instagram_manage_comments: 대상 전체
 [권한] instagram_content_publish: 대상 전체
 [권한] instagram_manage_messages: 대상 전체
 [토큰] 종류 SYSTEM_USER, 유효 True, 만료 0
 [실패] 인스타 ID 직접: HTTP 400: (#10) Application does not have permission for this action
+[실패] 인스타 ID 직접(id만): HTTP 400: (#10) Application does not have permission for this action
+[실패] 게시 한도: HTTP 400: (#100) Tried accessing nonexisting field (content_publishing_limit)
+[성공] 시스템 사용자 할당 자산: {'data': []}
+[실패] 포트폴리오 클라이언트 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
 [실패] 포트폴리오 소유 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
 [실패] 포트폴리오 인스타(구): HTTP 403: (#200) Requires business_management permission to manage the object
 [성공] 토큰 주인: {'id': '122095235919538763', 'name': 'pickharu-bot'}
