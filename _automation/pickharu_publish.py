@@ -37,6 +37,8 @@ MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처�
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
 LINK_RE = re.compile(r"https://(link\.coupang\.com|(www\.)?coupang\.com)/\S+")
 ANY_URL_RE = re.compile(r"https?://\S+")
+# 2026-10-30 사용자 지정: 독자를 '너/넌/너네'로 부르지 않고 '스치니들'로 부른다('너무' 같은 낱말은 제외)
+NEO_RE = re.compile(r"(?<![가-힣])(너(는|도|네|희|한테|랑|가)?|넌|니가)(?![가-힣])")
 BARE_DOMAIN_RE = re.compile(r"\b[\w-]+\.(com|net|kr|ng|co|me|ly|io)/", re.IGNORECASE)  # Threads가 자동 링크로 바꾸는 주소
 # 응답이 끊기거나 이상해도 기록이 남게 넓게 잡는다(http_json은 HTTP·연결 오류만 ThreadsError로 바꾼다)
 PUBLISH_ERRORS = (ThreadsError, KeyError, OSError, ValueError)
@@ -132,6 +134,8 @@ def problem_of(item: dict) -> str:
         return "본문이나 댓글이 500자 초과"
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
+    if NEO_RE.search(text):
+        return "본문에 '너' 호칭이 있음 — 독자는 '스치니들'로 부름"
     if is_general(item):  # 링크·광고 없는 일반 글: 댓글·영상 없이 본문(+사진)만
         if reply or item.get("video"):
             return "일반 글에는 댓글·영상을 넣지 않음"

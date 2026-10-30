@@ -91,6 +91,12 @@ class ProblemTest(unittest.TestCase):
         reply = f"https://evil.example/?r={LINK}\n{pp.DISCLOSURE}"
         self.assertIn("링크", pp.problem_of(item("a", reply=reply)))
 
+    def test_rejects_calling_reader_neo(self):
+        for line in ("너는 팥붕파야 슈붕파야?", "넌 어디부터 무너져?", "너네 회사도 그래?"):
+            self.assertIn("스치니들", pp.problem_of(item("a", text=f"{line}\n[광고] 쿠팡파트너스")))
+        ok = "스치니들은 팥붕파야? 너무 귀엽지\n[광고] 쿠팡파트너스"  # '너무'는 호칭이 아님
+        self.assertEqual(pp.problem_of(item("a", text=ok)), "")
+
     def test_rejects_bare_domain_in_body(self):
         self.assertIn("주소", pp.problem_of(item("a", text="여기서 봐 link.coupang.com/a/x\n[광고] 쿠팡파트너스")))
 
