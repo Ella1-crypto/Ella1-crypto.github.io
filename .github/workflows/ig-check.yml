@@ -1,12 +1,20 @@
-# 저장된 인스타 토큰이 @pick.haru.daily에 쓸 수 있는지 확인만 한다(게시·저장 없음).
-# 사용: Actions → ig-check → Run workflow. 결과는 "Check token" 단계 로그 맨 아래 "결론" 줄.
+# 저장된 인스타 토큰이 @pick.haru.daily에 쓸 수 있는지 확인만 한다(게시 없음).
+# 결과는 _automation/ig-check-result.txt로 커밋한다(토큰은 안 들어감 — 계정 ID·권한 이름·오류 문구만).
+# 실행: Actions → ig-check → Run workflow, 또는 ig_check.py를 고쳐 push하면 자동 실행.
 name: ig-check
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [_automation/ig_check.py]
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: ig-check
+  cancel-in-progress: false
 
 jobs:
   check:
@@ -22,4 +30,14 @@ jobs:
           IG_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
           IG_APP_ID: "28496456940049985"   # Meta 앱 "pick.haru__1 publisher" ID(공개값)
           IG_APP_SECRET: ${{ secrets.PICKHARU_IG_APP_SECRET }}
-        run: python _automation/ig_check.py
+        run: |
+          { echo "# $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M') KST"; python _automation/ig_check.py; } | tee _automation/ig-check-result.txt
+          cat _automation/ig-check-result.txt >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _automation/ig-check-result.txt
+          git commit -m "chore: 인스타 토큰 점검 결과" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push -q && exit 0; sleep 5; done
+          exit 1

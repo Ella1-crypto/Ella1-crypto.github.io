@@ -1,7 +1,7 @@
 """저장된 인스타 토큰(PICKHARU_IG_ACCESS_TOKEN)이 어떤 계정에 쓸 수 있는지 여러 길로 물어보고 결과만 적는다.
 
 ig_oauth.py가 계정을 못 찾았을 때 쓴다. 게시나 저장은 하지 않는다. 토큰은 기록에 남기지 않는다.
-GitHub Actions(.github/workflows/ig-check.yml)가 실행한다.
+GitHub Actions(.github/workflows/ig-check.yml)가 실행하고, 결과는 ig-check-result.txt로 남긴다.
 """
 from __future__ import annotations
 
