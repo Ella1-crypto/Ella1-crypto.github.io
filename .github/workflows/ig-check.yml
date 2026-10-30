@@ -1,0 +1,23 @@
+# 저장된 인스타 토큰이 @pick.haru.daily에 쓸 수 있는지 확인만 한다(게시·저장 없음).
+# 사용: Actions → ig-check → Run workflow. 결과는 "Check token" 단계 로그 맨 아래 "결론" 줄.
+name: ig-check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check token
+        env:
+          IG_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
+        run: python _automation/ig_check.py
