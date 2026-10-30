@@ -19,6 +19,7 @@ import os
 import re
 import sys
 import time
+import urllib.request
 from datetime import datetime
 from pathlib import Path
 from typing import Callable
@@ -144,10 +145,25 @@ def publish_story(image: str, ig_user: str, token: str, http: Http, sleep) -> st
     return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
 
 
+def image_ready(rel: str, site_root: Path = SITE_ROOT) -> bool:
+    """GitHub Pages에 사진이 실제로 반영됐는지(크기까지 같은지) 본다.
+
+    2026-10-30: push 3분 뒤 올렸다가 Pages 배포 전이라 인스타가 404를 받아 실패함
+    ("Only photo or video can be accepted"). 반영 전이면 예약 상태로 두고 다음 확인 때 올린다.
+    """
+    request = urllib.request.Request(SITE_URL + rel, method="HEAD")
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            same_size = int(response.headers.get("Content-Length", -1)) == (site_root / rel).stat().st_size
+            return response.status == 200 and "image" in response.headers.get("Content-Type", "") and same_size
+    except (OSError, ValueError):
+        return False
+
+
 def run_once(now: datetime, token: str, http: Http = http_json,
              commit: Callable[[str], bool] = lambda m: git_commit_push(m, QUEUE_PATH),
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
-             configured_user: str = "") -> str:
+             configured_user: str = "", ready: Callable[[str], bool] | None = None) -> str:
     items = [{**it, "kind": KIND} for it in load_queue(path)]  # posted_today가 인스타 글만 세도록
     due, items = pick_due(items, now)
     strip = lambda its: [{k: v for k, v in it.items() if k != "kind"} for it in its]
@@ -162,6 +178,8 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(strip(with_status(items, due["id"], status=FAILED, note=problem)), path)
         commit("chore: pick.haru 인스타 예약 글 검사 실패")
         return f"올리지 않음: {problem}"
+    if ready and not all(ready(rel) for rel in due["images"]):
+        return f"사진 반영 대기: {due['id']} (GitHub Pages 배포 전 — 예약 그대로, 다음 확인 때 올림)"
     try:
         ig_user = find_ig_user(token, http, configured_user)
     except PUBLISH_ERRORS as error:
@@ -203,7 +221,7 @@ def main() -> int:
     if "--check" in sys.argv:
         print(f"인스타 계정 확인: {EXPECTED_USERNAME} (ID {find_ig_user(token, configured=configured)})")
         return 0
-    run = lambda now: run_once(now, token, configured_user=configured)
+    run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready)
     if "--wait" in sys.argv:
         for line in session(token, run=run, path=QUEUE_PATH, pull=lambda: git_pull(QUEUE_PATH)):
             print(line)

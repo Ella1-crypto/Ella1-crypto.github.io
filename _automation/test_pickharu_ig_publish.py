@@ -182,6 +182,16 @@ class RunOnceTest(unittest.TestCase):
         self.assertNotIn("story_id", items[0])
         self.assertFalse([c for c in http.calls if c[2].get("media_type") == "STORIES"])
 
+    def test_waits_while_pages_has_not_deployed_images(self):
+        http = fake_http()
+        self.queue.write_text(json.dumps([item(make_site(self.root))], ensure_ascii=False), encoding="utf-8")
+        result = ig.run_once(NOW, "tok", http, commit=lambda m: self.commits.append(m) or True,
+                             sleep=lambda s: None, path=self.queue, site_root=self.root, ready=lambda rel: False)
+        items = json.loads(self.queue.read_text(encoding="utf-8"))
+        self.assertIn("반영 대기", result)
+        self.assertEqual(items[0]["status"], READY)
+        self.assertEqual(http.calls, [])
+
     def test_bad_item_is_failed_without_calling_api(self):
         http = fake_http()
         result, items = self.run_once([item(["assets/pickharu/ig/x/01.png"])], http)
