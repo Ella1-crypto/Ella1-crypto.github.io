@@ -32,7 +32,7 @@ def to_jpeg(src: Path, dst: Path) -> None:
 
 def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root: Path = SITE_ROOT,
           ad: bool = False, now: datetime | None = None,
-          convert: Callable[[Path, Path], None] = to_jpeg) -> list[dict]:
+          convert: Callable[[Path, Path], None] = to_jpeg, comment: str = "") -> list[dict]:
     item_id = f"ig-{cards.name}"
     if any(it.get("id") == item_id for it in queue):
         raise ValueError(f"{item_id}: 이미 예약 목록에 있음")
@@ -50,6 +50,8 @@ def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root:
             "images": images, "status": READY}
     if ad:
         item["ad"] = True
+    if comment.strip():  # 없으면 블로그 홈 주소 댓글
+        item["comment"] = comment.strip()
     problem = problem_of(item, site_root)
     if problem:
         raise ValueError(f"넣지 않았습니다 — {problem}")
@@ -66,6 +68,7 @@ def main() -> int:
     parser.add_argument("--caption", required=True)
     parser.add_argument("--at", required=True)
     parser.add_argument("--ad", action="store_true")
+    parser.add_argument("--comment", help="첫 댓글 텍스트 파일(블로그 글·스레드 글 링크 + 출처)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     if git("pull", "--rebase").returncode != 0:
@@ -75,7 +78,7 @@ def main() -> int:
     at = datetime.fromisoformat(args.at).replace(tzinfo=KST)
     try:
         queue = build(Path(args.cards), caption, at, load_queue(QUEUE_PATH) if QUEUE_PATH.exists() else [],
-                      ad=args.ad)
+                      ad=args.ad, comment=Path(args.comment).read_text(encoding="utf-8") if args.comment else "")
     except (ValueError, RuntimeError) as error:
         print(error, file=sys.stderr)
         return 1

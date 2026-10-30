@@ -46,6 +46,8 @@ HASHTAG_LIMIT = 30
 AD_TAG = "[광고]"
 BLOG = "blog.naver.com/goghibli"  # 2026-10-30 사용자 지정: 인스타 게시물엔 네이버 블로그 주소를 첫 댓글로 남긴다
 BLOG_COMMENT = f"더 많은 정리는 네이버 블로그에 있어요 👉 {BLOG}"
+# 2026-10-30 사용자 지정: 첫 댓글은 같은 주제의 블로그 글이나 스레드 글로 연결(출처도 댓글·캡션에)
+LINK_RE = re.compile(r"blog\.naver\.com/goghibli|threads\.(?:com|net)/@(?:pick\.haru__1|heeya\.dailyfit)/post/")
 STATUS_POLL_SECONDS = 5
 STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 
@@ -62,8 +64,8 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return f"캡션이 {CAPTION_LIMIT}자를 넘음({len(caption)}자)"
     if len(re.findall(r"#\S+", caption)) > HASHTAG_LIMIT:
         return f"해시태그가 {HASHTAG_LIMIT}개를 넘음"
-    if BLOG not in comment_of(item):
-        return f"첫 댓글에 네이버 블로그 주소({BLOG})가 없음"
+    if not LINK_RE.search(comment_of(item)):
+        return f"첫 댓글에 네이버 블로그({BLOG})나 스레드 글 링크가 없음"
     if item.get("ad") and AD_TAG not in caption.strip().splitlines()[0]:
         return f"광고 글인데 캡션 첫 줄에 {AD_TAG} 표시가 없음"
     images = item.get("images") or []

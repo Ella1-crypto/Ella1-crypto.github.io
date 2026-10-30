@@ -43,6 +43,14 @@ class BuildTest(unittest.TestCase):
         self.assertEqual(new["images"], [f"assets/pickharu/ig/ig-20261030-ganadi/0{n}.jpg" for n in (1, 2, 3)])
         self.assertTrue((self.site / new["images"][0]).is_file())
 
+    def test_comment_file_text_becomes_first_comment(self):
+        new = self.build(comment="블로그 정리 👉 blog.naver.com/goghibli/224457905236\n출처: 포스터\n")[-1]
+        self.assertEqual(new["comment"], "블로그 정리 👉 blog.naver.com/goghibli/224457905236\n출처: 포스터")
+
+    def test_refuses_comment_without_our_link(self):
+        with self.assertRaises(ValueError):
+            self.build(comment="출처: 포스터")
+
     def test_refuses_duplicate_id(self):
         with self.assertRaises(ValueError):
             self.build(queue=[{"id": "ig-20261030-ganadi"}])

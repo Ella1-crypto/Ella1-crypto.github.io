@@ -82,7 +82,14 @@ class ProblemTest(unittest.TestCase):
     def test_custom_comment_must_keep_blog_address(self):
         images = make_site(self.root)
         self.assertIn("블로그", ig.problem_of(item(images, comment="저장해 두세요 🍒"), self.root))
-        self.assertEqual(ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}"), self.root), "")
+        self.assertEqual(ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}/224457905236"), self.root), "")
+
+    def test_comment_may_link_our_threads_post_instead(self):
+        images = make_site(self.root)
+        ok = "스레드 정리 👉 threads.com/@heeya.dailyfit/post/DQabc123"
+        self.assertEqual(ig.problem_of(item(images, comment=ok), self.root), "")
+        other = "threads.com/@someone.else/post/DQabc123"
+        self.assertIn("스레드", ig.problem_of(item(images, comment=other), self.root))
 
     def test_too_many_hashtags_is_rejected(self):
         caption = "정리 blog.naver.com/goghibli " + " ".join(f"#태그{n}" for n in range(31))
