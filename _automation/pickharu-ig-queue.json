@@ -111,8 +111,10 @@
  {
   "id": "st-20261030-ganadi",
   "publish_at": "2026-10-30T23:40+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "story_only": true,
-  "story_image": "assets/pickharu/ig/st-20261030-ganadi/story.jpg"
+  "story_image": "assets/pickharu/ig/st-20261030-ganadi/story.jpg",
+  "story_id": "18083189384357123",
+  "published_at": "2026-10-30T23:40+09:00"
  }
 ]
