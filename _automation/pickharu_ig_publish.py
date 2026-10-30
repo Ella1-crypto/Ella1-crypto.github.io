@@ -8,7 +8,7 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 - 사진은 assets/pickharu/ig/<글 id>/NN.jpg (인스타 API는 JPEG만 받음), 1~10장. 2장 이상이면 캐러셀.
 - 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 첫 줄에 [광고].
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
-- 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 토큰으로 페이스북 페이지에 연결된 계정을 찾아 쓴다.
+- 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
 from __future__ import annotations
@@ -32,6 +32,8 @@ SITE_ROOT = QUEUE_PATH.parent.parent
 SITE_URL = "https://ella1-crypto.github.io/"
 GRAPH = "https://graph.facebook.com/v21.0"
 EXPECTED_USERNAME = "pick.haru.daily"
+# 비즈니스 설정 Instagram 계정 화면의 게시용 ID(2026-10-30 확인, ig-check로 토큰 접근·게시 한도 확인). 공개값.
+DEFAULT_IG_USER = "17841426433649539"
 DAILY_CAP = 2  # 2026-10-30 시작: 카드뉴스 주 3회 시험 운영이라 넉넉히 하루 2개까지
 KIND = "인스타"  # posted_today가 종류별로 셀 때 쓰는 값
 IMAGE_RE = re.compile(r"assets/pickharu/ig/[\w.-]+/[\w.-]+\.jpe?g")
@@ -163,7 +165,7 @@ def main() -> int:
     if not token:
         print("PICKHARU_IG_ACCESS_TOKEN Secret이 없습니다.", file=sys.stderr)
         return 1
-    configured = os.environ.get("PICKHARU_IG_USER_ID", "").strip()
+    configured = os.environ.get("PICKHARU_IG_USER_ID", "").strip() or DEFAULT_IG_USER
     if "--check" in sys.argv:
         print(f"인스타 계정 확인: {EXPECTED_USERNAME} (ID {find_ig_user(token, configured=configured)})")
         return 0
