@@ -1,13 +1,13 @@
 # 저장된 인스타 토큰이 @pick.haru.daily에 쓸 수 있는지 확인만 한다(게시 없음).
 # 결과는 _automation/ig-check-result.txt로 커밋한다(토큰은 안 들어감 — 계정 ID·권한 이름·오류 문구만).
-# 실행: Actions → ig-check → Run workflow, 또는 ig_check.py를 고쳐 push하면 자동 실행.
+# 실행: Actions → ig-check → Run workflow, 또는 ig_check.py나 이 파일을 고쳐 push하면 자동 실행.
 name: ig-check
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [_automation/ig_check.py]
+    paths: [_automation/ig_check.py, .github/workflows/ig-check.yml]
 
 permissions:
   contents: write
