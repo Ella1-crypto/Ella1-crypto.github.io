@@ -1,12 +1,12 @@
-# 2026-10-30 18:27 KST
+# 2026-10-30 18:51 KST
 [권한] instagram_basic: 대상 전체
 [권한] instagram_manage_comments: 대상 전체
 [권한] instagram_content_publish: 대상 전체
 [권한] instagram_manage_messages: 대상 전체
 [토큰] 종류 SYSTEM_USER, 유효 True, 만료 0
-[실패] 인스타 ID 직접: HTTP 400: (#10) Application does not have permission for this action
-[실패] 인스타 ID 직접(id만): HTTP 400: (#10) Application does not have permission for this action
-[실패] 게시 한도: HTTP 400: (#100) Tried accessing nonexisting field (content_publishing_limit)
+[성공] 인스타 ID 직접: {'id': '17841426433649539', 'username': 'pick.haru.daily'}
+[성공] 인스타 ID 직접(id만): {'id': '17841426433649539'}
+[성공] 게시 한도: {'data': [{'quota_usage': 0, 'config': {'quota_total': 100, 'quota_duration': 86400}}]}
 [성공] 시스템 사용자 할당 자산: {'data': []}
 [실패] 포트폴리오 클라이언트 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
 [실패] 포트폴리오 소유 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
@@ -14,4 +14,4 @@
 [성공] 토큰 주인: {'id': '122095235919538763', 'name': 'pickharu-bot'}
 [성공] 페이지 연결 인스타: {'data': []}
 [실패] 인스타 호스트: HTTP 400: Invalid OAuth access token - Cannot parse access token (토큰 만료 — 새 토큰을 Secrets에 넣어 주세요)
-결론: pick.haru.daily 안 보임
+결론: pick.haru.daily 보임
