@@ -225,7 +225,7 @@ class RunOnceTest(unittest.TestCase):
 
     def test_daily_cap_blocks_post_over_cap(self):
         images = make_site(self.root)
-        done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, 6)]
+        done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]
         result, items = self.run_once(done + [item(images)])
         self.assertEqual(items[-1]["status"], FAILED)
         self.assertIn("상한", items[-1]["note"])
