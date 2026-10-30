@@ -79,17 +79,14 @@ class ProblemTest(unittest.TestCase):
         ok = item(images, ad=True, caption="[광고] 쿠팡파트너스 · 겨울 담요 3개 🍒\n본문")
         self.assertEqual(ig.problem_of(ok, self.root), "")
 
-    def test_custom_comment_must_keep_blog_address(self):
+    def test_source_comment_without_blog_passes(self):
         images = make_site(self.root)
-        self.assertIn("블로그", ig.problem_of(item(images, comment="저장해 두세요 🍒"), self.root))
-        self.assertEqual(ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}/224457905236"), self.root), "")
+        self.assertEqual(ig.problem_of(item(images, comment="출처: 금강일보 2026.10.12"), self.root), "")
+        self.assertEqual(ig.problem_of(item(images), self.root), "")
 
-    def test_comment_may_link_our_threads_post_instead(self):
+    def test_blog_address_comment_is_rejected(self):
         images = make_site(self.root)
-        ok = "스레드 정리 👉 threads.com/@heeya.dailyfit/post/DQabc123"
-        self.assertEqual(ig.problem_of(item(images, comment=ok), self.root), "")
-        other = "threads.com/@someone.else/post/DQabc123"
-        self.assertIn("스레드", ig.problem_of(item(images, comment=other), self.root))
+        self.assertIn("블로그", ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}/224457905236"), self.root))
 
     def test_too_many_hashtags_is_rejected(self):
         caption = "정리 blog.naver.com/goghibli " + " ".join(f"#태그{n}" for n in range(31))
@@ -160,18 +157,24 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(items[0]["post_id"], "post9")
         self.assertTrue(any("올리는 중" in m for m in self.commits))
 
-    def test_blog_comment_and_story_follow_the_post(self):
+    def test_no_comment_when_item_has_none(self):
         http = fake_http()
         _, items = self.run_once([item(make_site(self.root))], http)
+        self.assertFalse([c for c in http.calls if c[1].endswith("/comments")])
+        self.assertNotIn("comment_id", items[0])
+
+    def test_source_comment_and_story_follow_the_post(self):
+        http = fake_http()
+        _, items = self.run_once([item(make_site(self.root), comment="출처: 투썸플레이스")], http)
         comment = [c for c in http.calls if c[1].endswith("/post9/comments")]
-        self.assertIn(ig.BLOG, comment[0][2]["message"])
+        self.assertEqual(comment[0][2]["message"], "출처: 투썸플레이스")
         self.assertEqual(items[0]["comment_id"], "cm5")
         story = [c for c in http.calls if c[2].get("media_type") == "STORIES"]
         self.assertTrue(story[0][2]["image_url"].endswith("/01.jpg"))
         self.assertEqual(items[0]["story_id"], "story7")
 
     def test_comment_failure_keeps_post_done(self):
-        result, items = self.run_once([item(make_site(self.root))], fake_http(fail_comment=True))
+        result, items = self.run_once([item(make_site(self.root), comment="출처: 기사")], fake_http(fail_comment=True))
         self.assertEqual(items[0]["status"], DONE)
         self.assertIn("comment_error", items[0])
         self.assertEqual(items[0]["story_id"], "story7")
@@ -183,6 +186,20 @@ class RunOnceTest(unittest.TestCase):
         self.run_once([item(images, story_image="assets/pickharu/ig/ig-20261031-ganadi/story.jpg")], http)
         story = [c for c in http.calls if c[2].get("media_type") == "STORIES"]
         self.assertTrue(story[0][2]["image_url"].endswith("/story.jpg"))
+
+    def test_story_only_item_posts_just_the_story_and_skips_cap(self):
+        http = fake_http()
+        images = make_site(self.root)
+        (self.root / "assets/pickharu/ig/ig-20261031-ganadi/story.jpg").write_bytes(b"jpg")
+        done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, 6)]
+        story = {"id": "st-1", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "story_only": True,
+                 "story_image": "assets/pickharu/ig/ig-20261031-ganadi/story.jpg"}
+        result, items = self.run_once(done + [story], http)
+        self.assertIn("스토리 올림", result)
+        self.assertEqual(items[-1]["status"], DONE)
+        self.assertEqual(items[-1]["story_id"], "story7")
+        self.assertFalse([c for c in http.calls if c[2].get("media_type") == "CAROUSEL"])
+        self.assertFalse([c for c in http.calls if c[1].endswith("/comments")])
 
     def test_story_can_be_turned_off(self):
         http = fake_http()

@@ -7,7 +7,7 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 인스타 규칙:
 - 사진은 assets/pickharu/ig/<글 id>/NN.jpg (인스타 API는 JPEG만 받음), 1~10장. 2장 이상이면 캐러셀.
 - 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 첫 줄에 [광고].
-- 게시 뒤 첫 댓글로 네이버 블로그 주소를 달고(comment, 없으면 BLOG_COMMENT), 첫 장으로 스토리도 올린다(2026-10-30 사용자 지정).
+- 게시 뒤 comment(출처 등)가 있으면 첫 댓글로 달고(블로그 주소는 넣지 않음), 스토리도 올린다(2026-10-30 사용자 지정).
   댓글·스토리가 실패해도 본 게시물은 '올림'으로 두고 comment_error·story_error에 남긴다(재게시 금지).
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
 - 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
@@ -45,19 +45,26 @@ IMAGES_MAX = 10
 CAPTION_LIMIT = 2200
 HASHTAG_LIMIT = 30
 AD_TAG = "[광고]"
-BLOG = "blog.naver.com/goghibli"  # 2026-10-30 사용자 지정: 인스타 게시물엔 네이버 블로그 주소를 첫 댓글로 남긴다
-BLOG_COMMENT = f"더 많은 정리는 네이버 블로그에 있어요 👉 {BLOG}"
-# 2026-10-30 사용자 지정: 첫 댓글은 같은 주제의 블로그 글이나 스레드 글로 연결(출처도 댓글·캡션에)
-LINK_RE = re.compile(r"blog\.naver\.com/goghibli|threads\.(?:com|net)/@(?:pick\.haru__1|heeya\.dailyfit)/post/")
+BLOG = "blog.naver.com/goghibli"  # 첫 댓글에 넣지 않는다(2026-10-30 밤 사용자 지정: 블로그 주소 댓글 빼기)
 STATUS_POLL_SECONDS = 5
 STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 
 
 def comment_of(item: dict) -> str:
-    return item.get("comment") or BLOG_COMMENT
+    """첫 댓글. 2026-10-30 밤 사용자 지정: 블로그 주소 댓글은 빼고 item.comment(출처 등)만, 없으면 댓글 없음."""
+    return (item.get("comment") or "").strip()
+
+
+def story_problem(item: dict, root: Path) -> str:
+    rel = item.get("story_image", "")
+    if not IMAGE_RE.fullmatch(rel or ""):
+        return f"스토리만 올리는 글엔 story_image(assets/pickharu/ig/<id>/이름.jpg)가 필요함: {rel}"
+    return "" if (root / rel).is_file() else f"스토리 사진 파일이 저장소에 없음: {rel}"
 
 
 def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
+    if item.get("story_only"):  # 스토리만 다시 올리기(2026-10-30: 찌그러진 스토리 교체)
+        return story_problem(item, root)
     caption = item.get("caption", "")
     if not caption.strip():
         return "캡션이 비어 있음"
@@ -65,8 +72,8 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return f"캡션이 {CAPTION_LIMIT}자를 넘음({len(caption)}자)"
     if len(re.findall(r"#\S+", caption)) > HASHTAG_LIMIT:
         return f"해시태그가 {HASHTAG_LIMIT}개를 넘음"
-    if not LINK_RE.search(comment_of(item)):
-        return f"첫 댓글에 네이버 블로그({BLOG})나 스레드 글 링크가 없음"
+    if BLOG in comment_of(item):
+        return "첫 댓글에 블로그 주소가 있음 — 블로그 주소 댓글은 빼기로 함(2026-10-30)"
     if item.get("ad") and AD_TAG not in caption.strip().splitlines()[0]:
         return f"광고 글인데 캡션 첫 줄에 {AD_TAG} 표시가 없음"
     images = item.get("images") or []
@@ -161,11 +168,27 @@ def image_ready(rel: str, site_root: Path = SITE_ROOT) -> bool:
         return False
 
 
+def publish_story_only(due: dict, ig_user: str, token: str, http: Http, sleep,
+                       commit: Callable[[str], bool], path: Path) -> str:
+    try:
+        story_id = publish_story(due["story_image"], ig_user, token, http, sleep)
+    except PUBLISH_ERRORS as error:
+        note = f"스토리 실패: {error} — 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
+        save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
+        commit("chore: pick.haru 인스타 스토리 실패 기록")
+        raise SystemExit(note)
+    done = {"status": DONE, "story_id": story_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
+    save_queue(with_status(load_queue(path), due["id"], **done), path)
+    commit(f"chore: pick.haru 인스타 스토리 완료 ({due['id']})")
+    return f"스토리 올림: {due['id']} → {story_id}"
+
+
 def run_once(now: datetime, token: str, http: Http = http_json,
              commit: Callable[[str], bool] = lambda m: git_commit_push(m, QUEUE_PATH),
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
              configured_user: str = "", ready: Callable[[str], bool] | None = None) -> str:
-    items = [{**it, "kind": KIND} for it in load_queue(path)]  # posted_today가 인스타 글만 세도록
+    # posted_today가 인스타 게시물만 세도록(스토리만 올리는 글은 하루 상한에 안 셈)
+    items = [{**it, "kind": "스토리" if it.get("story_only") else KIND} for it in load_queue(path)]
     due, items = pick_due(items, now)
     strip = lambda its: [{k: v for k, v in it.items() if k != "kind"} for it in its]
     if due is None:
@@ -173,13 +196,14 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 인스타 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due, site_root)
-    if not problem and posted_today(items, now, KIND) >= DAILY_CAP:
+    if not problem and not due.get("story_only") and posted_today(items, now, KIND) >= DAILY_CAP:
         problem = f"오늘 인스타 글을 이미 {DAILY_CAP}개 올려 하루 상한 초과"
     if problem:
         save_queue(strip(with_status(items, due["id"], status=FAILED, note=problem)), path)
         commit("chore: pick.haru 인스타 예약 글 검사 실패")
         return f"올리지 않음: {problem}"
-    if ready and not all(ready(rel) for rel in due["images"] + ([due["story_image"]] if due.get("story_image") else [])):
+    needed = ([] if due.get("story_only") else due["images"]) + ([due["story_image"]] if due.get("story_image") else [])
+    if ready and not all(ready(rel) for rel in needed):
         return f"사진 반영 대기: {due['id']} (GitHub Pages 배포 전 — 예약 그대로, 다음 확인 때 올림)"
     try:
         ig_user = find_ig_user(token, http, configured_user)
@@ -190,6 +214,8 @@ def run_once(now: datetime, token: str, http: Http = http_json,
     save_queue(strip(with_status(items, due["id"], status=IN_PROGRESS)), path)
     if not commit(f"chore: pick.haru 인스타 올리는 중 ({due['id']})"):
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
+    if due.get("story_only"):
+        return publish_story_only(due, ig_user, token, http, sleep, commit, path)
     try:
         post_id = publish(due, ig_user, token, http, sleep)
     except PUBLISH_ERRORS as error:
@@ -198,10 +224,11 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 인스타 게시 실패 기록")
         raise SystemExit(note)
     done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
-    try:
-        done["comment_id"] = post_comment(post_id, comment_of(due), token, http)
-    except PUBLISH_ERRORS as error:
-        done["comment_error"] = f"블로그 댓글 실패: {error} — 게시물은 올라감, 댓글만 직접 달기"
+    if comment_of(due):
+        try:
+            done["comment_id"] = post_comment(post_id, comment_of(due), token, http)
+        except PUBLISH_ERRORS as error:
+            done["comment_error"] = f"첫 댓글 실패: {error} — 게시물은 올라감, 댓글만 직접 달기"
     if due.get("story", True):
         try:
             done["story_id"] = publish_story(due.get("story_image") or due["images"][0], ig_user, token, http, sleep)
