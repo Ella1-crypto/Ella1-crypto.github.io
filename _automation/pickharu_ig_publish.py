@@ -7,6 +7,8 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 인스타 규칙:
 - 사진은 assets/pickharu/ig/<글 id>/NN.jpg (인스타 API는 JPEG만 받음), 1~10장. 2장 이상이면 캐러셀.
 - 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 첫 줄에 [광고].
+- 게시 뒤 첫 댓글로 네이버 블로그 주소를 달고(comment, 없으면 BLOG_COMMENT), 첫 장으로 스토리도 올린다(2026-10-30 사용자 지정).
+  댓글·스토리가 실패해도 본 게시물은 '올림'으로 두고 comment_error·story_error에 남긴다(재게시 금지).
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
 - 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -42,8 +44,14 @@ IMAGES_MAX = 10
 CAPTION_LIMIT = 2200
 HASHTAG_LIMIT = 30
 AD_TAG = "[광고]"
+BLOG = "blog.naver.com/goghibli"  # 2026-10-30 사용자 지정: 인스타 게시물엔 네이버 블로그 주소를 첫 댓글로 남긴다
+BLOG_COMMENT = f"더 많은 정리는 네이버 블로그에 있어요 👉 {BLOG}"
 STATUS_POLL_SECONDS = 5
 STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
+
+
+def comment_of(item: dict) -> str:
+    return item.get("comment") or BLOG_COMMENT
 
 
 def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
@@ -54,6 +62,8 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return f"캡션이 {CAPTION_LIMIT}자를 넘음({len(caption)}자)"
     if len(re.findall(r"#\S+", caption)) > HASHTAG_LIMIT:
         return f"해시태그가 {HASHTAG_LIMIT}개를 넘음"
+    if BLOG not in comment_of(item):
+        return f"첫 댓글에 네이버 블로그 주소({BLOG})가 없음"
     if item.get("ad") and AD_TAG not in caption.strip().splitlines()[0]:
         return f"광고 글인데 캡션 첫 줄에 {AD_TAG} 표시가 없음"
     images = item.get("images") or []
@@ -120,6 +130,18 @@ def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
     return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
 
 
+def post_comment(media_id: str, message: str, token: str, http: Http) -> str:
+    return http("POST", f"{GRAPH}/{media_id}/comments", {"message": message, "access_token": token})["id"]
+
+
+def publish_story(image: str, ig_user: str, token: str, http: Http, sleep) -> str:
+    """카드 첫 장을 스토리로 올린다(4:5 사진은 인스타가 9:16 화면 가운데에 놓는다)."""
+    container = http("POST", f"{GRAPH}/{ig_user}/media", {"media_type": "STORIES", "image_url": SITE_URL + image,
+                                                         "access_token": token})["id"]
+    wait_until_ready(container, token, http, sleep)
+    return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
+
+
 def run_once(now: datetime, token: str, http: Http = http_json,
              commit: Callable[[str], bool] = lambda m: git_commit_push(m, QUEUE_PATH),
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
@@ -154,10 +176,20 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
         commit("chore: pick.haru 인스타 게시 실패 기록")
         raise SystemExit(note)
-    save_queue(with_status(load_queue(path), due["id"], status=DONE, post_id=post_id,
-                           published_at=datetime.now(KST).isoformat(timespec="minutes")), path)
+    done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
+    try:
+        done["comment_id"] = post_comment(post_id, comment_of(due), token, http)
+    except PUBLISH_ERRORS as error:
+        done["comment_error"] = f"블로그 댓글 실패: {error} — 게시물은 올라감, 댓글만 직접 달기"
+    if due.get("story", True):
+        try:
+            done["story_id"] = publish_story(due["images"][0], ig_user, token, http, sleep)
+        except PUBLISH_ERRORS as error:
+            done["story_error"] = f"스토리 실패: {error} — 게시물은 올라감, 스토리만 직접 올리기"
+    save_queue(with_status(load_queue(path), due["id"], **done), path)
     commit(f"chore: pick.haru 인스타 게시 완료 ({due['id']})")
-    return f"올림: {due['id']} → {post_id}"
+    misses = [k for k in ("comment_error", "story_error") if k in done]
+    return f"올림: {due['id']} → {post_id}" + (f" ({', '.join(misses)})" if misses else "")
 
 
 def main() -> int:

@@ -27,8 +27,8 @@ def item(images, **extra):
             "caption": "투썸 가나디 케이크 정리 🍒\n\n#가나디 #투썸", "images": images, **extra}
 
 
-def fake_http(username="pick.haru.daily", pages=True, status="FINISHED"):
-    calls = []
+def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_comment=False):
+    calls, kinds = [], {}
 
     def http(method, url, params):
         calls.append((method, url, dict(params)))
@@ -38,9 +38,14 @@ def fake_http(username="pick.haru.daily", pages=True, status="FINISHED"):
         if url.endswith("/1784") and method == "GET":
             return {"id": "1784", "username": username}
         if url.endswith("/1784/media"):
+            kinds[f"c{len(calls)}"] = params.get("media_type")
             return {"id": f"c{len(calls)}"}
         if url.endswith("/1784/media_publish"):
-            return {"id": "post9"}
+            return {"id": "story7" if kinds.get(params["creation_id"]) == "STORIES" else "post9"}
+        if url.endswith("/comments"):
+            if fail_comment:
+                raise ThreadsError("HTTP 400: comment")
+            return {"id": "cm5"}
         if method == "GET":
             return {"status_code": status}
         return {}
@@ -74,8 +79,13 @@ class ProblemTest(unittest.TestCase):
         ok = item(images, ad=True, caption="[광고] 쿠팡파트너스 · 겨울 담요 3개 🍒\n본문")
         self.assertEqual(ig.problem_of(ok, self.root), "")
 
+    def test_custom_comment_must_keep_blog_address(self):
+        images = make_site(self.root)
+        self.assertIn("블로그", ig.problem_of(item(images, comment="저장해 두세요 🍒"), self.root))
+        self.assertEqual(ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}"), self.root), "")
+
     def test_too_many_hashtags_is_rejected(self):
-        caption = "정리 " + " ".join(f"#태그{n}" for n in range(31))
+        caption = "정리 blog.naver.com/goghibli " + " ".join(f"#태그{n}" for n in range(31))
         self.assertIn("해시태그", ig.problem_of(item(make_site(self.root), caption=caption), self.root))
 
 
@@ -142,6 +152,28 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(items[0]["status"], DONE)
         self.assertEqual(items[0]["post_id"], "post9")
         self.assertTrue(any("올리는 중" in m for m in self.commits))
+
+    def test_blog_comment_and_story_follow_the_post(self):
+        http = fake_http()
+        _, items = self.run_once([item(make_site(self.root))], http)
+        comment = [c for c in http.calls if c[1].endswith("/post9/comments")]
+        self.assertIn(ig.BLOG, comment[0][2]["message"])
+        self.assertEqual(items[0]["comment_id"], "cm5")
+        story = [c for c in http.calls if c[2].get("media_type") == "STORIES"]
+        self.assertTrue(story[0][2]["image_url"].endswith("/01.jpg"))
+        self.assertEqual(items[0]["story_id"], "story7")
+
+    def test_comment_failure_keeps_post_done(self):
+        result, items = self.run_once([item(make_site(self.root))], fake_http(fail_comment=True))
+        self.assertEqual(items[0]["status"], DONE)
+        self.assertIn("comment_error", items[0])
+        self.assertEqual(items[0]["story_id"], "story7")
+
+    def test_story_can_be_turned_off(self):
+        http = fake_http()
+        _, items = self.run_once([item(make_site(self.root), story=False)], http)
+        self.assertNotIn("story_id", items[0])
+        self.assertFalse([c for c in http.calls if c[2].get("media_type") == "STORIES"])
 
     def test_bad_item_is_failed_without_calling_api(self):
         http = fake_http()
