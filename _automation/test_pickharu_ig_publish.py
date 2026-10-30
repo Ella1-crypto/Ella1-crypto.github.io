@@ -191,7 +191,7 @@ class RunOnceTest(unittest.TestCase):
         http = fake_http()
         images = make_site(self.root)
         (self.root / "assets/pickharu/ig/ig-20261031-ganadi/story.jpg").write_bytes(b"jpg")
-        done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, 6)]
+        done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]
         story = {"id": "st-1", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "story_only": True,
                  "story_image": "assets/pickharu/ig/ig-20261031-ganadi/story.jpg"}
         result, items = self.run_once(done + [story], http)
@@ -223,7 +223,7 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(items[0]["status"], FAILED)
         self.assertEqual(http.calls, [])
 
-    def test_daily_cap_blocks_sixth_post(self):
+    def test_daily_cap_blocks_post_over_cap(self):
         images = make_site(self.root)
         done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, 6)]
         result, items = self.run_once(done + [item(images)])
