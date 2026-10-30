@@ -102,9 +102,11 @@
  {
   "id": "st-20261030-sale",
   "publish_at": "2026-10-30T23:38+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "story_only": true,
-  "story_image": "assets/pickharu/ig/st-20261030-sale/story.jpg"
+  "story_image": "assets/pickharu/ig/st-20261030-sale/story.jpg",
+  "story_id": "18098838308424568",
+  "published_at": "2026-10-30T23:38+09:00"
  },
  {
   "id": "st-20261030-ganadi",
