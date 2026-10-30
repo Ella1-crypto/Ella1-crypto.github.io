@@ -12,7 +12,7 @@ from ig_oauth import ACCOUNT, GRAPH, IG_GRAPH
 from jaetech_publish import ThreadsError, http_json
 from refresh_token import Http
 
-IG_ASSET_ID = "1421223791077339"  # 로그인 화면 '이 포트폴리오'에 보인 pick.haru.daily ID (2026-10-30)
+IG_ASSET_ID = "17841426433649539"  # 비즈니스 설정 Instagram 계정 화면에 보인 pick.haru.daily 게시용 ID (2026-10-30; 로그인 화면의 1421…은 게시용이 아니었음)
 BUSINESS_ID = "1098425316399267"  # pick.haru 비즈니스 포트폴리오
 
 
@@ -20,7 +20,7 @@ def probes() -> list[tuple[str, str, dict]]:
     return [
         ("인스타 ID 직접", f"{GRAPH}/{IG_ASSET_ID}", {"fields": "id,username"}),
         ("인스타 ID 직접(id만)", f"{GRAPH}/{IG_ASSET_ID}", {"fields": "id"}),
-        ("게시 한도", f"{GRAPH}/{IG_ASSET_ID}/content_publishing_limit", {}),
+        ("게시 한도", f"{GRAPH}/{IG_ASSET_ID}/content_publishing_limit", {"fields": "quota_usage,config"}),
         ("시스템 사용자 할당 자산", f"{GRAPH}/me/assigned_business_asset_groups", {}),
         ("포트폴리오 클라이언트 인스타", f"{GRAPH}/{BUSINESS_ID}/client_instagram_accounts", {"fields": "id,username"}),
         ("포트폴리오 소유 인스타", f"{GRAPH}/{BUSINESS_ID}/owned_instagram_accounts", {"fields": "id,username"}),
