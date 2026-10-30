@@ -20,4 +20,6 @@ jobs:
       - name: Check token
         env:
           IG_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
+          IG_APP_ID: "28496456940049985"   # Meta 앱 "pick.haru__1 publisher" ID(공개값)
+          IG_APP_SECRET: ${{ secrets.PICKHARU_IG_APP_SECRET }}
         run: python _automation/ig_check.py

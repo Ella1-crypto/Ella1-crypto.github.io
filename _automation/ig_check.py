@@ -27,8 +27,33 @@ def probes() -> list[tuple[str, str, dict]]:
     ]
 
 
-def check(token: str, http: Http = http_json) -> list[str]:
+def granted_targets(token: str, app_id: str, app_secret: str, http: Http = http_json) -> tuple[list[str], set[str]]:
+    """debug_token으로 권한별 대상 계정 ID를 본다. 게시용 인스타 계정 ID는 여기 target_ids에 나온다."""
+    data = http("GET", f"{GRAPH}/debug_token",
+                {"input_token": token, "access_token": f"{app_id}|{app_secret}"}).get("data", {})
+    lines, targets = [], set()
+    for scope in data.get("granular_scopes", []):
+        ids = scope.get("target_ids", [])
+        targets.update(ids)
+        lines.append(f"[권한] {scope.get('scope')}: {', '.join(ids) or '대상 전체'}")
+    lines.append(f"[토큰] 종류 {data.get('type')}, 유효 {data.get('is_valid')}, 만료 {data.get('expires_at')}")
+    return lines, targets
+
+
+def check(token: str, http: Http = http_json, app_id: str = "", app_secret: str = "") -> list[str]:
     lines = []
+    if app_id and app_secret:
+        try:
+            scope_lines, targets = granted_targets(token, app_id, app_secret, http)
+            lines += scope_lines
+            for target in sorted(targets):
+                try:
+                    body = http("GET", f"{GRAPH}/{target}", {"fields": "id,username", "access_token": token})
+                    lines.append(f"[성공] 대상 {target}: {body}")
+                except ThreadsError as error:
+                    lines.append(f"[실패] 대상 {target}: {error}")
+        except ThreadsError as error:
+            lines.append(f"[실패] 토큰 검사: {error}")
     for label, url, params in probes():
         try:
             body = http("GET", url, {**params, "access_token": token})
@@ -46,7 +71,8 @@ def main() -> int:
     if not token:
         print("값이 없습니다: PICKHARU_IG_ACCESS_TOKEN", file=sys.stderr)
         return 1
-    print("\n".join(check(token)))
+    print("\n".join(check(token, app_id=os.environ.get("IG_APP_ID", "").strip(),
+                          app_secret=os.environ.get("IG_APP_SECRET", "").strip())))
     return 0
 
 
