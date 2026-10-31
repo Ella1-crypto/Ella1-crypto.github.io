@@ -31,6 +31,7 @@ class BuildTest(unittest.TestCase):
         self.tmp.cleanup()
 
     def build(self, queue=(), **kw):
+        kw.setdefault("now", datetime(2026, 10, 31, 18, 0, tzinfo=KST))  # 실제 시계와 무관하게
         return eq.build(self.cards, "가나디 정리 🍒\n#가나디", self.at, list(queue), self.site,
                         convert=fake_convert, story=fake_convert, **kw)
 

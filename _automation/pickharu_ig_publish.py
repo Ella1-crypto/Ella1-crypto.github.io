@@ -41,7 +41,7 @@ EXPECTED_USERNAME = "pick.haru.daily"
 # 비즈니스 설정 Instagram 계정 화면의 게시용 ID(2026-10-30 확인, ig-check로 토큰 접근·게시 한도 확인). 공개값.
 DEFAULT_IG_USER = "17841426433649539"
 DAILY_CAP = 8  # 2026-10-31 사용자 지정 "한도를 늘리자": 하루 8개까지(10-30엔 5개, 처음엔 2개)
-REELS_CAP = 8  # 2026-10-31 사용자 "릴스 올려줘 피드 순서대로": 올라간 카드뉴스 7개를 릴스로 — 피드 상한과 따로 셈
+REELS_CAP = 12  # 2026-10-31 사용자: 피드+릴스 세트로 하면서 8→12(오늘 카드뉴스 7개 릴스 + 예약 피드 세트), 피드 상한과 따로 셈
 KIND = "인스타"  # posted_today가 종류별로 셀 때 쓰는 값
 REEL_KIND = "릴스"
 IMAGE_RE = re.compile(r"assets/pickharu/ig/[\w.-]+/[\w.-]+\.jpe?g")
