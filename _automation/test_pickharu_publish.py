@@ -226,6 +226,27 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(self.saved()["a"]["status"], "올림")
         self.assertEqual(self.saved()["a"]["reply_id"], "p2")
 
+    def test_followup_posts_blog_link_under_existing_post(self):
+        done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 3)]
+        follow = {"id": "bl-1", "kind": "덧글", "reply_to_post": "18156012862490251",
+                  "publish_at": "2026-10-28T09:00+09:00", "status": "예약",
+                  "text": "블로그에 자세히 정리해 뒀어 👉\nhttps://blog.naver.com/goghibli/224459047883"}
+        self.write(done + [follow])
+        http = FakeHttp()
+        self.assertIn("p1", self.run_once(http))  # 쿠팡 하루 상한(2)과 상관없이 올라간다
+        posts = [p for name, p in http.calls if name == "threads"]
+        self.assertEqual(len(posts), 1)
+        self.assertEqual(posts[0]["reply_to_id"], "18156012862490251")
+        self.assertEqual(self.saved()["bl-1"]["status"], "올림")
+
+    def test_followup_rules(self):
+        ok = {"id": "bl", "kind": "덧글", "reply_to_post": "123", "status": "예약",
+              "text": "블로그에 정리했어 👉 https://blog.naver.com/goghibli/224459047883"}
+        self.assertEqual(pp.problem_of(ok), "")
+        self.assertIn("글 번호", pp.problem_of({**ok, "reply_to_post": ""}))
+        self.assertIn("블로그", pp.problem_of({**ok, "text": "보러 가기 https://link.coupang.com/a/x"}))
+        self.assertIn("블로그", pp.problem_of({**ok, "text": ok["text"] + " https://blog.naver.com/goghibli/1"}))
+
     def test_general_post_has_no_reply_and_skips_cap(self):
         done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 6)]
         general = {"id": "g", "kind": "일반", "publish_at": "2026-10-28T09:00+09:00",

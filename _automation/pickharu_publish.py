@@ -57,6 +57,9 @@ IMAGES_MAX = 20
 GIF_ID_RE = re.compile(r"[A-Za-z0-9]{10,40}")
 AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 광고 글 상한과 따로 GENERAL_CAP으로 센다.
+# 이미 올라간 글에 블로그 주소를 덧붙이는 댓글(2026-10-31 사용자 "연결도 자동으로 해줘"). 광고 댓글은 링크 1개 규칙이라 따로 단다.
+FOLLOWUP = "덧글"
+BLOG_LINK_RE = re.compile(r"https://blog\.naver\.com/goghibli/\d+")
 COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
 KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다."
 KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
@@ -132,6 +135,13 @@ def problem_of(item: dict) -> str:
         return "본문이 비어 있음"
     if len(text) > TEXT_LIMIT or len(reply) > TEXT_LIMIT:
         return "본문이나 댓글이 500자 초과"
+    if item.get("kind") == FOLLOWUP:
+        if not str(item.get("reply_to_post", "")).isdigit():
+            return "덧글을 달 글 번호(reply_to_post)가 없음"
+        urls = ANY_URL_RE.findall(text)
+        if len(urls) != 1 or not BLOG_LINK_RE.fullmatch(urls[0]):
+            return "덧글에는 goghibli 블로그 주소가 정확히 1개 있어야 함"
+        return ""
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
     if NEO_RE.search(text):
@@ -233,7 +243,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due)
-    if not problem:
+    if not problem and due.get("kind") != FOLLOWUP:
         kind = shop_of(due)
         cap = GENERAL_CAP if is_general(due) else SHOPS[kind]["cap"]
         if posted_today(items, now, kind) >= cap:
@@ -249,14 +259,14 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     try:
         post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"),
-                          gif=due.get("gif", ""))
+                          gif=due.get("gif", ""), reply_to=str(due.get("reply_to_post", "")))
     except PUBLISH_ERRORS as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
         commit("chore: pick.haru 글 게시 실패 기록")
         raise SystemExit(note)
     done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
-    if not is_general(due):
+    if not is_general(due) and due.get("kind") != FOLLOWUP:
         try:
             done["reply_id"] = publish(due["reply"], token, http, sleep, reply_to=post_id)
         except PUBLISH_ERRORS as error:
