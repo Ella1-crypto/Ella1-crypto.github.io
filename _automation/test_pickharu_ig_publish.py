@@ -137,6 +137,14 @@ class PublishTest(unittest.TestCase):
         self.assertFalse([c for c in http.calls if c[1].endswith("media_publish")])
 
 
+class RecheckTest(unittest.TestCase):
+    def test_long_wait_is_cut_so_new_earlier_items_are_seen(self):
+        slept = []
+        ig.capped_sleep(3600, slept.append)
+        ig.capped_sleep(30, slept.append)
+        self.assertEqual(slept, [ig.RECHECK_SECONDS, 30])
+
+
 class AccountTest(unittest.TestCase):
     def test_finds_account_through_page(self):
         self.assertEqual(ig.find_ig_user("tok", fake_http()), "1784")

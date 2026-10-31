@@ -56,6 +56,8 @@ BLOG = "blog.naver.com/goghibli"  # 첫 댓글에 넣지 않는다(2026-10-30 �
 STATUS_POLL_SECONDS = 5
 STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 VIDEO_POLL_TRIES = 120  # 영상은 최대 10분
+# 기다리는 중에도 5분마다 큐를 다시 받는다. 2026-10-31: 21:00 글까지 한 번에 잠들어 그 사이 추가한 20:05 릴스를 못 봄.
+RECHECK_SECONDS = 300
 
 
 def comment_of(item: dict) -> str:
@@ -179,6 +181,10 @@ def publish_story(image: str, ig_user: str, token: str, http: Http, sleep) -> st
     return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
 
 
+def capped_sleep(seconds: float, sleep=time.sleep) -> None:
+    sleep(min(seconds, RECHECK_SECONDS))
+
+
 def kind_of(item: dict) -> str:
     return "스토리" if item.get("story_only") else REEL_KIND if "video" in item else KIND
 
@@ -285,7 +291,7 @@ def main() -> int:
         return 0
     run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready)
     if "--wait" in sys.argv:
-        for line in session(token, run=run, path=QUEUE_PATH, pull=lambda: git_pull(QUEUE_PATH)):
+        for line in session(token, run=run, path=QUEUE_PATH, pull=lambda: git_pull(QUEUE_PATH), sleep=capped_sleep):
             print(line)
         return 0
     print(run(datetime.now(KST)))
