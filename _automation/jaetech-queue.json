@@ -229,7 +229,7 @@
   "publish_at": "2026-10-31T09:30+09:00",
   "text": "AI가 써 준 글, 말투가 내 거랑 너무 다를 때 있죠.\n\nIBM이 코세라에 올린 프롬프트 기초 강의에 '퓨샷(few-shot)'이 나와요.\n원하는 결과의 예시를 몇 개 먼저 보여 주고 시키는 방법이에요.\n\n이렇게 써 보세요.\n\"아래는 내가 전에 쓴 공지 2개야. 이 말투랑 길이로 다음 주 회식 공지 써 줘.\"\n(그 아래 예전 공지 2개 붙여 넣기)\n\n설명 대신 예시를 주면 원하는 형식에 더 가깝게 받을 수 있어요.\n\nAI 강의만 21개, 무료 목록은 첫 댓글에.",
   "reply": "📌 출처: IBM · 코세라 「Generative AI: Prompt Engineering Basics」 (zero-shot·few-shot 프롬프팅)\nhttps://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone\n\n🎁 무료 강의 75개 분야별 목록 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/75-4077a9e6f20281739baee8e1185e2ac0\n\n📅 30일 동안 도장 찍으며 끝까지 듣는 기록 템플릿(노션·굿노트·카툰 속지)은 크몽에서 '출근길 10분 강의 루틴' 검색",
-  "status": "예약",
+  "status": "올리는 중",
   "source": "AI 노하우 하루 2개",
   "note": "2026-10-30 대화에서 직접 작성·출처 확인 | 승인: 2026-10-30 사용자 '무료강의 통해서 ai 노하우도 이 계정에 올려줘' · '1일 2개씩 올려줘' · '사실로 확인된 것만 올려줘, 출처도 넣어주고'",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261031-am.png"
