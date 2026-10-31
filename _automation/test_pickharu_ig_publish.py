@@ -27,6 +27,18 @@ def item(images, **extra):
             "caption": "투썸 가나디 케이크 정리 🍒\n\n#가나디 #투썸", "images": images, **extra}
 
 
+def make_reel(root: Path, item_id: str = "rl-20261030-kitty7") -> str:
+    folder = root / "assets" / "pickharu" / "ig" / item_id
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "reel.mp4").write_bytes(b"mp4")
+    return f"assets/pickharu/ig/{item_id}/reel.mp4"
+
+
+def reel(video, **extra):
+    return {"id": "rl-20261030-kitty7", "publish_at": "2026-10-31T19:00+09:00", "status": READY,
+            "caption": "초코 헬로키티 굿즈 정리 🎀", "video": video, **extra}
+
+
 def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_comment=False):
     calls, kinds = [], {}
 
@@ -87,6 +99,13 @@ class ProblemTest(unittest.TestCase):
     def test_blog_address_comment_is_rejected(self):
         images = make_site(self.root)
         self.assertIn("블로그", ig.problem_of(item(images, comment=f"정리 더 보기 {ig.BLOG}/224457905236"), self.root))
+
+    def test_valid_reel_passes_without_images(self):
+        self.assertEqual(ig.problem_of(reel(make_reel(self.root)), self.root), "")
+
+    def test_reel_must_be_mp4_in_repo(self):
+        self.assertIn("mp4", ig.problem_of(reel("assets/pickharu/ig/x/reel.mov"), self.root))
+        self.assertIn("없음", ig.problem_of(reel("assets/pickharu/ig/x/reel.mp4"), self.root))
 
     def test_too_many_hashtags_is_rejected(self):
         caption = "정리 blog.naver.com/goghibli " + " ".join(f"#태그{n}" for n in range(31))
@@ -229,6 +248,27 @@ class RunOnceTest(unittest.TestCase):
         result, items = self.run_once(done + [item(images)])
         self.assertEqual(items[-1]["status"], FAILED)
         self.assertIn("상한", items[-1]["note"])
+
+    def test_reel_posts_video_to_reels_tab_only_with_comment_and_no_story(self):
+        http = fake_http()
+        result, items = self.run_once([reel(make_reel(self.root), comment="출처: 기사")], http)
+        create = [c for c in http.calls if c[2].get("media_type") == "REELS"]
+        self.assertTrue(create[0][2]["video_url"].endswith("/reel.mp4"))
+        self.assertEqual(create[0][2]["share_to_feed"], "false")
+        self.assertIn("post9", result)
+        self.assertEqual(items[0]["comment_id"], "cm5")
+        self.assertFalse([c for c in http.calls if c[2].get("media_type") == "STORIES"])
+
+    def test_reels_have_their_own_cap_apart_from_feed(self):
+        images = make_site(self.root)
+        feed = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]
+        result, items = self.run_once(feed + [reel(make_reel(self.root))])
+        self.assertEqual(items[-1]["status"], DONE)
+        reels = [dict(reel(make_reel(self.root, f"rl-{n}")), id=f"rl-{n}", status=DONE,
+                      published_at="2026-10-31T09:00+09:00") for n in range(1, ig.REELS_CAP + 1)]
+        result, items = self.run_once(reels + [reel(make_reel(self.root, "rl-last"), id="rl-last")])
+        self.assertEqual(items[-1]["status"], FAILED)
+        self.assertIn("릴스", items[-1]["note"])
 
     def test_missing_ig_account_stops_before_marking_in_progress(self):
         with self.assertRaises(SystemExit):

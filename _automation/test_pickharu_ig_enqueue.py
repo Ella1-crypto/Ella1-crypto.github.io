@@ -73,6 +73,21 @@ class BuildTest(unittest.TestCase):
             self.build(ad=True)
         self.assertIn("[광고]", str(ctx.exception))
 
+    def test_reel_copies_video_and_adds_reels_tab_item(self):
+        video = Path(self.tmp.name) / "ig-20261030-kitty7.mp4"
+        video.write_bytes(b"mp4")
+        queue = eq.build_reel(video, "rl-20261030-kitty7", "키티 굿즈 🎀", self.at, [], self.site,
+                              comment="🎵 Music: Carefree", now=datetime(2026, 10, 31, 18, 0, tzinfo=KST))
+        new = queue[-1]
+        self.assertEqual(new["video"], "assets/pickharu/ig/rl-20261030-kitty7/reel.mp4")
+        self.assertTrue((self.site / new["video"]).is_file())
+        self.assertFalse(new["share_to_feed"])
+        self.assertEqual(new["comment"], "🎵 Music: Carefree")
+        self.assertNotIn("images", new)
+        with self.assertRaises(ValueError):
+            eq.build_reel(video, "rl-20261030-kitty7", "x", self.at, queue, self.site,
+                          now=datetime(2026, 10, 31, 18, 0, tzinfo=KST))
+
     def test_refuses_time_in_the_past(self):
         with self.assertRaises(ValueError):
             self.build(now=datetime(2026, 11, 1, tzinfo=KST))

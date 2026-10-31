@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime
@@ -78,6 +79,26 @@ def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root:
     story(pngs[0], site_root / story_rel)
     item["story_image"] = story_rel
     if comment.strip():  # 없으면 블로그 홈 주소 댓글
+        item["comment"] = comment.strip()
+    problem = problem_of(item, site_root)
+    if problem:
+        raise ValueError(f"넣지 않았습니다 — {problem}")
+    return queue + [item]
+
+
+def build_reel(video: Path, item_id: str, caption: str, at: datetime, queue: list[dict],
+               site_root: Path = SITE_ROOT, comment: str = "", now: datetime | None = None) -> list[dict]:
+    """릴스 영상(make_reels.py 결과)을 assets/pickharu/ig/<id>/reel.mp4로 두고 릴스 탭 전용 항목을 더한다."""
+    if any(it.get("id") == item_id for it in queue):
+        raise ValueError(f"{item_id}: 이미 예약 목록에 있음")
+    if at <= (now or datetime.now(KST)):
+        raise ValueError(f"예약 시각이 이미 지났음: {at.isoformat(timespec='minutes')}")
+    rel = f"assets/pickharu/ig/{item_id}/reel.mp4"
+    (site_root / rel).parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(video, site_root / rel)
+    item = {"id": item_id, "publish_at": at.isoformat(timespec="minutes"), "caption": caption.strip(),
+            "video": rel, "share_to_feed": False, "status": READY}
+    if comment.strip():
         item["comment"] = comment.strip()
     problem = problem_of(item, site_root)
     if problem:

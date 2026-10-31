@@ -9,6 +9,9 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 - 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 첫 줄에 [광고].
 - 게시 뒤 comment(출처 등)가 있으면 첫 댓글로 달고(블로그 주소는 넣지 않음), 스토리도 올린다(2026-10-30 사용자 지정).
   댓글·스토리가 실패해도 본 게시물은 '올림'으로 두고 comment_error·story_error에 남긴다(재게시 금지).
+- 릴스(2026-10-31 사용자 지정): item.video(assets/pickharu/ig/<id>/reel.mp4)가 있으면 사진 대신 릴스로 올린다.
+  기본은 릴스 탭에만(share_to_feed false — 피드 격자에 같은 글이 두 번 보이지 않게), 스토리는 안 올림, 첫 댓글은 같음.
+  상한은 피드와 따로 REELS_CAP.
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
 - 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -38,9 +41,13 @@ EXPECTED_USERNAME = "pick.haru.daily"
 # 비즈니스 설정 Instagram 계정 화면의 게시용 ID(2026-10-30 확인, ig-check로 토큰 접근·게시 한도 확인). 공개값.
 DEFAULT_IG_USER = "17841426433649539"
 DAILY_CAP = 8  # 2026-10-31 사용자 지정 "한도를 늘리자": 하루 8개까지(10-30엔 5개, 처음엔 2개)
+REELS_CAP = 8  # 2026-10-31 사용자 "릴스 올려줘 피드 순서대로": 올라간 카드뉴스 7개를 릴스로 — 피드 상한과 따로 셈
 KIND = "인스타"  # posted_today가 종류별로 셀 때 쓰는 값
+REEL_KIND = "릴스"
 IMAGE_RE = re.compile(r"assets/pickharu/ig/[\w.-]+/[\w.-]+\.jpe?g")
+VIDEO_RE = re.compile(r"assets/pickharu/ig/[\w.-]+/[\w.-]+\.mp4")
 IMAGE_MAX_BYTES = 8 * 1024 * 1024
+VIDEO_MAX_BYTES = 100 * 1024 * 1024
 IMAGES_MAX = 10
 CAPTION_LIMIT = 2200
 HASHTAG_LIMIT = 30
@@ -48,6 +55,7 @@ AD_TAG = "[광고]"
 BLOG = "blog.naver.com/goghibli"  # 첫 댓글에 넣지 않는다(2026-10-30 밤 사용자 지정: 블로그 주소 댓글 빼기)
 STATUS_POLL_SECONDS = 5
 STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
+VIDEO_POLL_TRIES = 120  # 영상은 최대 10분
 
 
 def comment_of(item: dict) -> str:
@@ -76,6 +84,8 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return "첫 댓글에 블로그 주소가 있음 — 블로그 주소 댓글은 빼기로 함(2026-10-30)"
     if item.get("ad") and AD_TAG not in caption.strip().splitlines()[0]:
         return f"광고 글인데 캡션 첫 줄에 {AD_TAG} 표시가 없음"
+    if "video" in item:
+        return video_problem(item["video"], root)
     images = item.get("images") or []
     if not images:
         return "사진이 없음"
@@ -91,6 +101,15 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         if path.stat().st_size > IMAGE_MAX_BYTES:
             return f"사진이 8MB 초과: {image}"
     return ""
+
+
+def video_problem(video: str, root: Path) -> str:
+    if not isinstance(video, str) or not VIDEO_RE.fullmatch(video):
+        return f"릴스 영상 경로는 assets/pickharu/ig/<글 id>/이름.mp4 여야 함: {video}"
+    path = root / video
+    if not path.is_file():
+        return f"릴스 영상 파일이 저장소에 없음: {video}"
+    return f"릴스 영상이 100MB 초과: {video}" if path.stat().st_size > VIDEO_MAX_BYTES else ""
 
 
 def find_ig_user(token: str, http: Http = http_json, configured: str = "") -> str:
@@ -110,20 +129,27 @@ def find_ig_user(token: str, http: Http = http_json, configured: str = "") -> st
                        "pickharu-bot에 페이지를 할당한 뒤 토큰을 다시 만들어야 함")
 
 
-def wait_until_ready(container: str, token: str, http: Http, sleep) -> None:
-    """인스타가 사진을 내려받아 처리할 때까지 기다린다. 그 전에 게시하면 실패한다."""
-    for _ in range(STATUS_POLL_TRIES):
+def wait_until_ready(container: str, token: str, http: Http, sleep, tries: int = STATUS_POLL_TRIES) -> None:
+    """인스타가 사진·영상을 내려받아 처리할 때까지 기다린다. 그 전에 게시하면 실패한다."""
+    for _ in range(tries):
         state = http("GET", f"{GRAPH}/{container}", {"fields": "status_code", "access_token": token})
         if state.get("status_code") == "FINISHED":
             return
         if state.get("status_code") in ("ERROR", "EXPIRED"):
             raise ThreadsError(f"인스타 사진 처리 실패: {state.get('status_code')}")
         sleep(STATUS_POLL_SECONDS)
-    raise ThreadsError("인스타 사진 처리가 3분 안에 끝나지 않음")
+    raise ThreadsError(f"인스타 처리가 {tries * STATUS_POLL_SECONDS // 60}분 안에 끝나지 않음")
 
 
 def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
     media = f"{GRAPH}/{ig_user}/media"
+    if "video" in item:
+        container = http("POST", media, {"media_type": "REELS", "video_url": SITE_URL + item["video"],
+                                         "caption": item["caption"],
+                                         "share_to_feed": "true" if item.get("share_to_feed") else "false",
+                                         "access_token": token})["id"]
+        wait_until_ready(container, token, http, sleep, VIDEO_POLL_TRIES)
+        return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
     images = item["images"]
     if len(images) == 1:
         container = http("POST", media, {"image_url": SITE_URL + images[0], "caption": item["caption"],
@@ -153,6 +179,10 @@ def publish_story(image: str, ig_user: str, token: str, http: Http, sleep) -> st
     return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
 
 
+def kind_of(item: dict) -> str:
+    return "스토리" if item.get("story_only") else REEL_KIND if "video" in item else KIND
+
+
 def image_ready(rel: str, site_root: Path = SITE_ROOT) -> bool:
     """GitHub Pages에 사진이 실제로 반영됐는지(크기까지 같은지) 본다.
 
@@ -163,7 +193,8 @@ def image_ready(rel: str, site_root: Path = SITE_ROOT) -> bool:
     try:
         with urllib.request.urlopen(request, timeout=20) as response:
             same_size = int(response.headers.get("Content-Length", -1)) == (site_root / rel).stat().st_size
-            return response.status == 200 and "image" in response.headers.get("Content-Type", "") and same_size
+            media = "video" if rel.endswith(".mp4") else "image"
+            return response.status == 200 and media in response.headers.get("Content-Type", "") and same_size
     except (OSError, ValueError):
         return False
 
@@ -188,7 +219,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
              configured_user: str = "", ready: Callable[[str], bool] | None = None) -> str:
     # posted_today가 인스타 게시물만 세도록(스토리만 올리는 글은 하루 상한에 안 셈)
-    items = [{**it, "kind": "스토리" if it.get("story_only") else KIND} for it in load_queue(path)]
+    items = [{**it, "kind": kind_of(it)} for it in load_queue(path)]
     due, items = pick_due(items, now)
     strip = lambda its: [{k: v for k, v in it.items() if k != "kind"} for it in its]
     if due is None:
@@ -196,13 +227,16 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 인스타 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     problem = problem_of(due, site_root)
-    if not problem and not due.get("story_only") and posted_today(items, now, KIND) >= DAILY_CAP:
-        problem = f"오늘 인스타 글을 이미 {DAILY_CAP}개 올려 하루 상한 초과"
+    kind = kind_of(due)
+    cap = REELS_CAP if kind == REEL_KIND else DAILY_CAP
+    if not problem and kind != "스토리" and posted_today(items, now, kind) >= cap:
+        problem = f"오늘 인스타 {'릴스' if kind == REEL_KIND else '글'}를 이미 {cap}개 올려 하루 상한 초과"
     if problem:
         save_queue(strip(with_status(items, due["id"], status=FAILED, note=problem)), path)
         commit("chore: pick.haru 인스타 예약 글 검사 실패")
         return f"올리지 않음: {problem}"
-    needed = ([] if due.get("story_only") else due["images"]) + ([due["story_image"]] if due.get("story_image") else [])
+    media = [due["video"]] if "video" in due else [] if due.get("story_only") else due["images"]
+    needed = media + ([due["story_image"]] if due.get("story_image") else [])
     if ready and not all(ready(rel) for rel in needed):
         return f"사진 반영 대기: {due['id']} (GitHub Pages 배포 전 — 예약 그대로, 다음 확인 때 올림)"
     try:
@@ -229,7 +263,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
             done["comment_id"] = post_comment(post_id, comment_of(due), token, http)
         except PUBLISH_ERRORS as error:
             done["comment_error"] = f"첫 댓글 실패: {error} — 게시물은 올라감, 댓글만 직접 달기"
-    if due.get("story", True):
+    if due.get("story", "video" not in due):
         try:
             done["story_id"] = publish_story(due.get("story_image") or due["images"][0], ig_user, token, http, sleep)
         except PUBLISH_ERRORS as error:
