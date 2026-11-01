@@ -45,6 +45,16 @@ class KakaoRuleTest(unittest.TestCase):
         self.assertIn("광고 표시", pp.problem_of({**naver, "text": KAKAO_TEXT}))
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{KAKAO_LINK}\n{pp.NAVER_DISCLOSURE}"}))
 
+    def test_naver_allows_up_to_three_option_links(self):
+        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트"), "kind": "네이버"}
+        links = ["https://naver.me/AAA1", "https://naver.me/BBB2", "https://naver.me/CCC3", "https://naver.me/DDD4"]
+        three = "\n".join(links[:3])
+        self.assertEqual(pp.problem_of({**naver, "reply": f"{three}\n\n{pp.NAVER_DISCLOSURE}"}), "")
+        four = "\n".join(links)
+        self.assertIn("링크", pp.problem_of({**naver, "reply": f"{four}\n\n{pp.NAVER_DISCLOSURE}"}))
+        mixed = f"https://naver.me/AAA1\n{KAKAO_LINK}\n\n{pp.NAVER_DISCLOSURE}"
+        self.assertIn("링크", pp.problem_of({**naver, "reply": mixed}))
+
     def test_unknown_kind_rejected(self):
         self.assertIn("종류", pp.problem_of({**item("a"), "kind": "번개장터"}))
 

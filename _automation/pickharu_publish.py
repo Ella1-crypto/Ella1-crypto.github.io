@@ -69,7 +69,8 @@ NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커�
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
-    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
+    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3,
+            "max_links": 3},  # 2026-10-30 사용자 지정: 하루 3개까지. 11-01: 같은 상품 옵션(1개·2개·세트) 링크는 한 글에 3개까지
 }
 
 
@@ -159,8 +160,9 @@ def problem_of(item: dict) -> str:
     if rule["disclosure"] not in reply:
         return f"댓글에 {kind} 고지 문구가 없음"
     urls = ANY_URL_RE.findall(reply)
-    if len(urls) != 1 or not rule["link"].fullmatch(urls[0]):
-        return f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
+    max_links = rule.get("max_links", 1)
+    if not 1 <= len(urls) <= max_links or not all(rule["link"].fullmatch(u) for u in urls):
+        return f"댓글에 {kind} 링크가 1~{max_links}개 있어야 함" if max_links > 1 else f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
     return media_problem(item)
 
 
