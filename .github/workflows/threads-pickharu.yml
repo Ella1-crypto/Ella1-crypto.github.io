@@ -12,6 +12,7 @@ on:
   schedule:
     - cron: "17,47 * * * *"   # 30분마다 (보조, 올릴 글이 없으면 바로 끝남)
     - cron: "10 0 * * 1"      # 매주 월요일 09:10 KST, 토큰 점검 + 자동 갱신
+    - cron: "50 22 * * *"     # 매일 07:50 KST, 토큰 점검만(11/1 토큰 오류를 첫 글 전에 알아채려고)
   workflow_dispatch:
     inputs:
       mode:
@@ -25,7 +26,7 @@ permissions:
 
 jobs:
   token:
-    if: github.event.schedule == '10 0 * * 1' || inputs.mode == 'check' || inputs.mode == 'refresh'
+    if: github.event.schedule == '10 0 * * 1' || github.event.schedule == '50 22 * * *' || inputs.mode == 'check' || inputs.mode == 'refresh'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     concurrency:

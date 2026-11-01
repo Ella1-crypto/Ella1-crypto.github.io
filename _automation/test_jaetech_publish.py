@@ -300,3 +300,23 @@ class WatchTest(unittest.TestCase):
                          item("c", "2026-10-30T07:30+09:00")])
         self.assertEqual(len(self.ran), 2)
         self.assertTrue(relay)
+
+
+class TokenHintTest(unittest.TestCase):
+    """토큰 오류(code 190)는 Meta 메시지에 맞는 안내를 붙인다 — 11/1 '읽을 수 없음'을 '만료'로 잘못 안내한 일."""
+
+    def test_unparsable_token_is_not_called_expired(self):
+        hint = jp.token_hint({"code": 190, "message": "Invalid OAuth access token - Cannot parse access token"})
+        self.assertIn("읽을 수 없음", hint)
+        self.assertNotIn("만료", hint)
+
+    def test_expired_token(self):
+        hint = jp.token_hint({"code": 190, "error_subcode": 463, "message": "Session has expired"})
+        self.assertIn("만료", hint)
+
+    def test_other_invalid_token(self):
+        hint = jp.token_hint({"code": 190, "message": "Error validating access token: The session has been invalidated"})
+        self.assertIn("무효", hint)
+
+    def test_not_a_token_error(self):
+        self.assertEqual(jp.token_hint({"code": 100, "message": "Invalid parameter"}), "")

@@ -51,6 +51,18 @@ class ThreadsError(RuntimeError):
     pass
 
 
+def token_hint(body: dict) -> str:
+    """토큰 오류(code 190)에 붙일 안내. 만료·읽을 수 없음·무효를 Meta 메시지로 나눈다(2026-11-01)."""
+    if body.get("code") != 190:
+        return ""
+    message = str(body.get("message", "")).lower()
+    if body.get("error_subcode") == 463 or "expired" in message:
+        return " (토큰 기간 만료 — 새 토큰을 받아 Secrets에 넣어 주세요)"
+    if "cannot parse" in message:
+        return " (저장된 토큰 값을 읽을 수 없음 — Secrets에 다른 값이 들어갔는지 보고 새 토큰을 받아 주세요)"
+    return " (토큰이 무효가 됨: 로그아웃·비밀번호 변경·앱 연결 해제 등 — 새 토큰을 받아 Secrets에 넣어 주세요)"
+
+
 def http_json(method: str, url: str, params: dict) -> dict:
     """Threads API 호출. 오류 메시지에 토큰이 섞이지 않게 API의 message만 돌려준다."""
     data = urllib.parse.urlencode(params).encode()
@@ -66,8 +78,7 @@ def http_json(method: str, url: str, params: dict) -> dict:
             body = json.loads(error.read().decode()).get("error", {})
         except Exception:
             body = {}
-        hint = " (토큰 만료 — 새 토큰을 Secrets에 넣어 주세요)" if body.get("code") == 190 else ""
-        raise ThreadsError(f"HTTP {error.code}: {body.get('message', '응답 오류')}{hint}") from None
+        raise ThreadsError(f"HTTP {error.code}: {body.get('message', '응답 오류')}{token_hint(body)}") from None
     except urllib.error.URLError as error:
         raise ThreadsError(f"연결 실패: {error.reason}") from None
 
