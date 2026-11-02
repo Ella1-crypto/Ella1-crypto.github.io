@@ -18,18 +18,19 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from jaetech_publish import DONE, IN_PROGRESS, KST, READY, load_queue, save_queue
-from pickharu_publish import COUPANG, GENERAL, KAKAO, MAX_SESSION, NAVER, QUEUE_PATH, SHOPS, problem_of, shop_of
+from pickharu_publish import COUPANG, GENERAL, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, QUEUE_PATH, SHOPS, problem_of, shop_of
 
 QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video", "images", "gif")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
-SLOT_MINUTE = {KAKAO: 40, NAVER: 25}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
+SLOT_MINUTE = {KAKAO: 40, NAVER: 25, OLIVEYOUNG: 50}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
 # 종류별 하루 자리(시, 분). 쿠팡과 카카오·네이버가 번갈아 올라가게 한다(2026-10-30 사용자 운영안).
 DAY_SLOTS = {
     GENERAL: [(8, 30), (20, 30)],
     COUPANG: [(12, 10), (15, 10)],
     KAKAO: [(13, 40), (16, 40), (19, 40)],
     NAVER: [(13, 25), (16, 25), (19, 25)],
+    OLIVEYOUNG: [(17, 50)],  # 2026-11-02 사용자 운영안: 하루 1개, 퇴근길
 }
 SLOT_GROUP = {KAKAO: "제휴", NAVER: "제휴"}  # 카카오·네이버는 같은 시간대를 나눠 쓴다(한 시간에 하나)
 TAKES_SLOT = (READY, IN_PROGRESS, DONE)  # 보류·취소·실패 글은 자리를 차지하지 않는다

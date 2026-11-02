@@ -416,5 +416,25 @@ class RefreshTest(unittest.TestCase):
         self.assertEqual(gh.calls, [])
 
 
+class OliveYoungTest(unittest.TestCase):
+    """2026-11-02 올리브영 쇼핑 큐레이터: 공식 문구를 본문 첫머리(서두)에, 링크·문구는 댓글에도."""
+    LINK = "https://oy.run/lSiE9bpu6f2JEE"
+    TOP = "이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로,\n구매 시 일정 금액의 수수료를 제공받습니다.\n\n"
+    BODY = "크림 고를 때 참고해\n스치니들은 뭐 써?\n[광고] 올리브영 쇼핑 큐레이터"
+
+    def oy(self, **kw):
+        return {**item("o", text=self.TOP + self.BODY, reply=f"보기 👉 {self.LINK}\n\n{pp.OY_DISCLOSURE}"), "kind": "올영", **kw}
+
+    def test_ok(self):
+        self.assertEqual(pp.problem_of(self.oy()), "")
+
+    def test_disclosure_must_be_at_top(self):
+        self.assertIn("첫머리", pp.problem_of(self.oy(text=self.BODY)))
+        self.assertIn("첫머리", pp.problem_of(self.oy(text="훅 한 줄\n둘째 줄\n셋째 줄\n" + self.TOP + self.BODY)))
+
+    def test_link_format(self):
+        self.assertIn("링크", pp.problem_of(self.oy(reply=f"https://www.oliveyoung.co.kr/x\n{pp.OY_DISCLOSURE}")))
+
+
 if __name__ == "__main__":
     unittest.main()
