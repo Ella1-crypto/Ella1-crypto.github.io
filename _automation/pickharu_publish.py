@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Callable
 
 from jaetech_publish import (
-    BASE, BLOCK_RE, CONTAINER_WAIT_SECONDS, DONE, FAILED, IN_PROGRESS, KST, READY, TEXT_LIMIT,
+    BASE, BLOCK_RE, CONTAINER_WAIT_SECONDS, DONE, FAILED, IN_PROGRESS, KST, LATE_LIMIT, READY, TEXT_LIMIT,
     Http, ThreadsError, git_commit_push, git_pull, http_json, load_queue, pick_due, save_queue,
     with_status,
 )
@@ -34,6 +34,11 @@ SECRET_NAME = "PICKHARU_THREADS_ACCESS_TOKEN"
 DAILY_CAP = 2  # 쿠팡 글 (2026-10-30 사용자 운영안: 하루 1~2개, 전엔 5개)
 GENERAL_CAP = 2  # 일반(비광고) 글 (2026-10-30 사용자 운영안: 하루 1~2개)
 MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처리하는 최대 시간(워크플로 timeout 350분보다 짧게)
+# 이어달리기(2026-11-02, 인스타 발행기와 같은 방식): --wait 실행이 끝나면 다음 '예약' 글 시각에 맞춰 새 --wait 실행을 부른다.
+# 30분 cron이 실제로는 3~5시간에 한 번만 돌아서(11/1·11/2 실측) push 뒤 320분이 지난 글은 cron 운에 맡겨졌다.
+RELAY_LEAD = timedelta(minutes=300)  # 새 실행이 글 시각 이만큼 전에 시작하게(MAX_SESSION 320분 안)
+RELAY_MIN = timedelta(minutes=10)  # 막힌 글 때문에 실행이 쉼 없이 이어지지 않게 최소 간격
+RELAY_MAX = timedelta(minutes=330)  # 이어달리기 job timeout(345분)보다 짧게
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
 LINK_RE = re.compile(r"https://(link\.coupang\.com|(www\.)?coupang\.com)/\S+")
 ANY_URL_RE = re.compile(r"https?://\S+")
@@ -313,6 +318,25 @@ def next_wait(items: list[dict], now: datetime, limit: timedelta) -> float | Non
     return None if wait > limit.total_seconds() else max(wait, 0.0)
 
 
+def relay_delay(items: list[dict], now: datetime) -> float | None:
+    """다음 --wait 실행을 부르기 전 기다릴 초. 남은 '예약' 글이 없으면 None."""
+    times = []
+    for it in items:
+        if it.get("status") != READY:
+            continue
+        try:
+            at = datetime.fromisoformat(it["publish_at"])
+        except (KeyError, ValueError):
+            continue
+        at = at if at.tzinfo else at.replace(tzinfo=KST)
+        if now - at <= LATE_LIMIT:  # 너무 늦은 글은 다음 실행이 '실패'로 정리하므로 기다릴 이유가 아님
+            times.append(at)
+    if not times:
+        return None
+    delay = min(times) - RELAY_LEAD - now
+    return min(max(delay, RELAY_MIN), RELAY_MAX).total_seconds()
+
+
 def session(token: str, clock: Callable[[], datetime] = lambda: datetime.now(KST), sleep=time.sleep,
             pull: Callable[[], bool] = lambda: git_pull(QUEUE_PATH), run=None,
             path: Path = QUEUE_PATH) -> list[str]:
@@ -348,6 +372,10 @@ def refresh(token: str, repo: str, pat: str, http: Http = http_json, gh=None, en
 
 
 def main() -> int:
+    if "--relay-delay" in sys.argv:  # 워크플로 이어달리기 단계용, 토큰 필요 없음
+        delay = relay_delay(load_queue(QUEUE_PATH), datetime.now(KST))
+        print("" if delay is None else int(delay))
+        return 0
     token = os.environ.get("PICKHARU_THREADS_ACCESS_TOKEN", "").strip()
     if not token:
         print("PICKHARU_THREADS_ACCESS_TOKEN Secret이 없습니다.", file=sys.stderr)

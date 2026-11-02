@@ -410,6 +410,32 @@ class SessionTest(unittest.TestCase):
                        run=lambda now: "ran", path=self.path)
 
 
+class RelayDelayTest(unittest.TestCase):
+    # NOW = 10/28 09:02
+    def at(self, when: str, status: str = pp.READY) -> dict:
+        return {"id": when, "publish_at": f"2026-10-28T{when}+09:00", "status": status}
+
+    def test_returns_none_when_nothing_scheduled(self):
+        self.assertIsNone(pp.relay_delay([self.at("10:00", pp.DONE), self.at("11:00", pp.FAILED)], NOW))
+
+    def test_far_post_caps_at_max(self):
+        items = [{"id": "x", "publish_at": "2026-10-29T07:30+09:00", "status": pp.READY}]
+        self.assertEqual(pp.relay_delay(items, NOW), pp.RELAY_MAX.total_seconds())
+
+    def test_starts_lead_time_before_medium_post(self):
+        self.assertEqual(pp.relay_delay([self.at("16:02")], NOW), 120 * 60)  # 7시간 뒤 → 2시간 쉬고 부름
+
+    def test_near_or_overdue_post_uses_minimum_gap(self):
+        self.assertEqual(pp.relay_delay([self.at("09:30")], NOW), pp.RELAY_MIN.total_seconds())
+        self.assertEqual(pp.relay_delay([self.at("07:00")], NOW), pp.RELAY_MIN.total_seconds())
+
+    def test_ignores_posts_past_late_limit(self):
+        self.assertIsNone(pp.relay_delay([self.at("04:00")], NOW))
+
+    def test_ignores_bad_time(self):
+        self.assertIsNone(pp.relay_delay([{"id": "x", "publish_at": "언젠가", "status": pp.READY}], NOW))
+
+
 class RefreshTest(unittest.TestCase):
     def test_refresh_stores_new_token_in_pickharu_secret(self):
         gh, masked = FakeGitHub(), []
