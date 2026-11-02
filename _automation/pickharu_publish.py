@@ -74,9 +74,9 @@ NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커�
 OLIVEYOUNG = "올영"
 OY_DISCLOSURE = "이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다."
 OY_LINK_RE = re.compile(r"https://oy\.run/[A-Za-z0-9]+")  # 앱 '링크 생성' 단축 주소(2026-11-02 사용자 예시)
-# 블프(11/1~11/7) 동안만 올영 하루 4개(2026-11-02 사용자 "블프 전에 다 올려야 돼"). 끝나면 SHOPS의 2개로 돌아간다.
+# 블프(11/1~11/7) 동안만 올영 하루 6개(2026-11-02 사용자 "블프 전에 다 올려야 돼", 11/3에 6개 지정). 끝나면 SHOPS의 2개로 돌아간다.
 OY_BF_END = date(2026, 11, 7)
-OY_BF_CAP = 4
+OY_BF_CAP = 6
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},

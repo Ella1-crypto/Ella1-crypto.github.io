@@ -496,7 +496,7 @@ class OliveYoungTest(unittest.TestCase):
         self.assertIn("타래", pp.problem_of(self.oy(thread="한 줄")))
 
     def test_black_friday_cap(self):
-        self.assertEqual(pp.cap_of("올영", datetime(2026, 11, 7, 21, 10, tzinfo=pp.KST)), 4)
+        self.assertEqual(pp.cap_of("올영", datetime(2026, 11, 7, 21, 10, tzinfo=pp.KST)), 6)
         self.assertEqual(pp.cap_of("올영", datetime(2026, 11, 8, 12, 50, tzinfo=pp.KST)), 2)
         self.assertEqual(pp.cap_of("쿠팡", datetime(2026, 11, 5, 12, 10, tzinfo=pp.KST)), pp.DAILY_CAP)
 
