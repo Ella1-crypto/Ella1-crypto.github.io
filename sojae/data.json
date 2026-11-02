@@ -1,14 +1,14 @@
 {
  "title": "오늘의 소재 후보",
- "checked_on": "2026-10-30",
+ "checked_on": "2026-11-02",
  "seeds": [
-  "출근가방",
-  "파우치",
-  "텀블러"
+  "수납정리",
+  "옷정리",
+  "신발정리"
  ],
- "found": 1200,
+ "found": 1003,
  "notes": [
-  "연관 키워드 1200개 중 기준을 통과한 20개입니다. 정렬: 계정 주제(패션·뷰티·생활정보) 먼저, 같은 주제 안에서 검색량 순.",
+  "연관 키워드 1003개 중 기준을 통과한 20개입니다. 정렬: 계정 주제(패션·뷰티·생활정보) 먼저, 같은 주제 안에서 검색량 순.",
   "리뷰 수·별점·반짝 유행 여부는 무료 API로 받을 수 없어 [확인 불가]입니다 — 쿠팡에서 눈으로 확인하세요.",
   "수수료율은 2026-07 자료 기준 추정입니다. 발행 전 파트너스센터 최신 요율을 확인하세요.",
   "블로그 경쟁도(상위 10개 발행일)는 네이버 검색 API 키가 없어 확인하지 못했습니다 — 개발자센터 신규 발급이 2026-07-31 종료돼, 받으려면 NAVER API HUB(카드 등록, 현재 무료 25,000회/일)로 발급해야 합니다."
@@ -19,223 +19,223 @@
  "rows": [
   {
    "rank": 1,
-   "keyword": "스탠리텀블러",
+   "keyword": "행거",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "129100",
+   "volume": "77900",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 129100 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 77900 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 2,
-   "keyword": "텀블러",
+   "keyword": "시스템행거",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "120200",
+   "volume": "57000",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 120200 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 57000 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 3,
-   "keyword": "써모스텀블러",
+   "keyword": "철제선반",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "30370",
+   "volume": "25600",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 30370 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 25600 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 4,
-   "keyword": "락앤락텀블러",
+   "keyword": "스탠드옷걸이",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "22330",
+   "volume": "22140",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 22330 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 22140 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 5,
-   "keyword": "오왈라텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "21950",
+   "keyword": "바지걸이",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "15120",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 21950 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 15120 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 6,
-   "keyword": "보온병",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "17110",
+   "keyword": "현관신발장",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "13850",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 17110 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 13850 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 7,
-   "keyword": "보온텀블러",
+   "keyword": "옷걸이행거",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "12010",
+   "volume": "13490",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12010 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 13490 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 8,
-   "keyword": "보부상가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "11820",
+   "keyword": "주방선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "12200",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 11820 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 12200 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 9,
-   "keyword": "써모스보온병",
+   "keyword": "수납함",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "10630",
+   "volume": "9010",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10630 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9010 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 10,
-   "keyword": "미니텀블러",
+   "keyword": "옷걸이봉",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "10390",
+   "volume": "7390",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10390 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 7390 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 11,
-   "keyword": "블루보틀텀블러",
+   "keyword": "스탠드행거",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "10160",
+   "volume": "6210",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10160 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 6210 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 12,
-   "keyword": "동전지갑",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "6530",
+   "keyword": "철재선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "5710",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 6530 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 5710 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 13,
-   "keyword": "운동가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "5830",
+   "keyword": "조립식선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "5480",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5830 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 5480 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 14,
-   "keyword": "헬스가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "5390",
+   "keyword": "옷행거",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "4840",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5390 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4840 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 15,
-   "keyword": "오슬로텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "5020",
+   "keyword": "바지옷걸이",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "3060",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5020 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3060 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 16,
-   "keyword": "아이패드파우치",
-   "category": "뷰티",
-   "commission": "3% 안팎",
-   "volume": "4720",
+   "keyword": "주방정리",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "2670",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4720 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2670 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 17,
-   "keyword": "손잡이텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4190",
+   "keyword": "가방보관함",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "2430",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4190 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2430 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 18,
-   "keyword": "다이소지퍼백",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4080",
+   "keyword": "이불가방",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "2410",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4080 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2410 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 19,
-   "keyword": "보온보냉텀블러",
+   "keyword": "튼튼한행거",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "3920",
+   "volume": "2370",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3920 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2370 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 20,
-   "keyword": "속옷파우치",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "2060",
+   "keyword": "조립선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "2120",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2060 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2120 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   }
  ]
 }
