@@ -469,7 +469,7 @@
   "comment": "출처 (2026.10.28 확인)\n· 빅토리아시크릿 공식 사이즈 가이드(브라·팬티 사이즈표)\n· 스킴스 공식 사이즈 가이드·상품 페이지(보이프렌드 라인 오버사이즈 설명, 루즈 팬츠 S 안쪽 기장 약 76cm)\n· 한국↔미국 브라 밴드 변환·자매 사이즈는 공식 사이즈표 기준으로 정리",
   "note": "게시 호출은 HTTP 403(Application request limit reached)였지만 실제로 올라감 — instagram.com/p/DfOQY5El9Nl/ (11/2 공개 프로필에서 확인)",
   "published_at": "2026-11-02T11:40+09:00",
-  "comment_error": "출처 댓글이 11/2 실수로 heeya.gonewnya 계정으로 달림 — 그 댓글은 사용자가 지우고, pick.haru.daily로 다시 달기",
+  "comment_error": "출처 댓글이 11/2 실수로 heeya.gonewnya 계정으로 달림 — 사용자가 나중에 직접 고쳐 올리기로 함(Claude는 손대지 않음)",
   "story_error": "스토리 실패: 게시 오류로 스토리가 안 올라감 — 게시물은 올라감, 스토리만 직접 올리기"
  },
  {
