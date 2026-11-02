@@ -72,6 +72,8 @@ jobs:
 
   relay:
     needs: publish
+    # 올리다 실패해도(예: 2026-11-02 10:15 Meta 403 요청 한도) 이어 간다 — 실행이 끊기면 남은 글이 모두 밀린다. 최소 10분 쉬고 부름.
+    if: ${{ !cancelled() && needs.publish.result != 'skipped' }}
     runs-on: ubuntu-latest
     timeout-minutes: 345
     concurrency:   # 쉬고 있는 relay는 하나만: 새 실행의 relay가 옛 것을 대신한다(실행이 불어나지 않게)
