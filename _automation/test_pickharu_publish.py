@@ -236,6 +236,17 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(self.saved()["a"]["status"], "올림")
         self.assertEqual(self.saved()["a"]["reply_id"], "p2")
 
+    def test_quote_of_quotes_old_post_only_on_body(self):
+        self.write([{**item("q"), "quote_of": "17942087787383832"}])
+        http = FakeHttp()
+        self.run_once(http)
+        posts = [p for name, p in http.calls if name == "threads"]
+        self.assertEqual(posts[0]["quote_post_id"], "17942087787383832")
+        self.assertNotIn("quote_post_id", posts[1])  # 링크 댓글은 인용하지 않음
+
+    def test_quote_of_must_be_number(self):
+        self.assertIn("quote_of", pp.problem_of({**item("q"), "quote_of": "DfMoN1eFiEk"}))
+
     def test_followup_posts_blog_link_under_existing_post(self):
         done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 3)]
         follow = {"id": "bl-1", "kind": "덧글", "reply_to_post": "18156012862490251",

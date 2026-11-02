@@ -155,6 +155,8 @@ def problem_of(item: dict) -> str:
         if len(urls) != 1 or not BLOG_LINK_RE.fullmatch(urls[0]):
             return "덧글에는 goghibli 블로그 주소가 정확히 1개 있어야 함"
         return ""
+    if item.get("quote_of") and not str(item["quote_of"]).isdigit():
+        return "인용할 글 번호(quote_of)는 숫자여야 함"
     if BLOCK_RE.search(text) or BARE_DOMAIN_RE.search(text):
         return "본문에 주소나 미완성 표시가 있음(링크는 reply에)"
     if NEO_RE.search(text):
@@ -222,7 +224,7 @@ def carousel_children(images: list[str], token: str, http: Http, sleep) -> str:
 
 
 def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video: str = "",
-            images: list[str] | None = None, gif: str = "") -> str:
+            images: list[str] | None = None, gif: str = "", quote: str = "") -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
     if video:
         params.update(media_type="VIDEO", video_url=SITE_URL + video)
@@ -234,6 +236,8 @@ def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video:
         params["gif_attachment"] = json.dumps({"gif_id": gif, "provider": "GIPHY"})
     if reply_to:
         params["reply_to_id"] = reply_to
+    if quote:  # 내 예전 글을 인용(2026-11-02 사용자 "이 글이랑 엮어서")
+        params["quote_post_id"] = quote
     container = http("POST", f"{BASE}/me/threads", params)["id"]
     if video or images:  # 사진도 Threads가 내려받아 처리할 때까지 기다린다
         wait_until_ready(container, token, http, sleep)
@@ -274,7 +278,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         # 로컬 파일은 이미 '올리는 중'이라 계속 돌면 이 글이 조용히 빠진다. 멈춰서 실패가 보이게 한다.
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     try:
-        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"),
+        post_id = publish(due["text"], token, http, sleep, video=due.get("video", ""), images=due.get("images"), quote=due.get("quote_of", ""),
                           gif=due.get("gif", ""), reply_to=str(due.get("reply_to_post", "")))
     except PUBLISH_ERRORS as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
