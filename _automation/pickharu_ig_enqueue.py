@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Callable
 
 from jaetech_publish import KST, READY, load_queue, save_queue
-from pickharu_ig_publish import MANUAL, QUEUE_PATH, SITE_ROOT, problem_of
+from pickharu_ig_publish import QUEUE_PATH, SITE_ROOT, problem_of
 
 CARD_RE = re.compile(r"\d{2}\.png")  # sheet.png 같은 확인용 이미지는 빼고 번호 붙은 카드만
 
@@ -109,7 +109,7 @@ def build_reel(video: Path, item_id: str, caption: str, at: datetime, queue: lis
                site_root: Path = SITE_ROOT, comment: str = "", now: datetime | None = None,
                manual: bool = False) -> list[dict]:
     """릴스 영상(make_reels.py 결과)을 assets/pickharu/ig/<id>/reel.mp4로 두고 릴스 탭 전용 항목을 더한다.
-    manual(2026-11-02 사용자 "음악 지정하지말고 … 내가 음악 정해서 올릴게"): 발행기가 올리지 않는 '직접 게시' 항목 +
+    manual(2026-11-02 사용자 "음악 지정하지말고 … 내가 음악 정해서 올릴게"): auto 없는 항목(발행기가 그 시각에 올리지 않고 알림) +
     같은 폴더 index.html(영상 저장·캡션·첫 댓글 복사)."""
     if any(it.get("id") == item_id for it in queue):
         raise ValueError(f"{item_id}: 이미 예약 목록에 있음")
@@ -119,7 +119,7 @@ def build_reel(video: Path, item_id: str, caption: str, at: datetime, queue: lis
     (site_root / rel).parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(video, site_root / rel)
     item = {"id": item_id, "publish_at": at.isoformat(timespec="minutes"), "caption": caption.strip(),
-            "video": rel, "share_to_feed": False, "status": MANUAL if manual else READY}
+            "video": rel, "share_to_feed": False, "status": READY}  # manual도 '예약' — 그 시각에 발행기가 직접 게시로 바꾸고 알림
     if comment.strip():
         item["comment"] = comment.strip()
     problem = problem_of(item, site_root)

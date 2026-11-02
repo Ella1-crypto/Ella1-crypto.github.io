@@ -23,6 +23,7 @@ on:
 permissions:
   contents: write
   actions: write   # relay job이 다음 wait 실행을 부른다
+  issues: write    # 직접 올릴 릴스 시각 알림(이슈 → 휴대폰 GitHub 앱 푸시)
 
 jobs:
   check:
@@ -52,6 +53,7 @@ jobs:
     env:
       PICKHARU_IG_ACCESS_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
       PICKHARU_IG_USER_ID: ${{ vars.PICKHARU_IG_USER_ID }}
+      GITHUB_TOKEN: ${{ github.token }}   # github_issue 알림용
     steps:
       - uses: actions/checkout@v5
         with:

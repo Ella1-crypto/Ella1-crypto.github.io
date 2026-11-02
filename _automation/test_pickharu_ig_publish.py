@@ -187,10 +187,10 @@ class RunOnceTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def run_once(self, items, http=None):
+    def run_once(self, items, http=None, notify=None):
         self.queue.write_text(json.dumps(items, ensure_ascii=False), encoding="utf-8")
         result = ig.run_once(NOW, "tok", http or fake_http(), commit=lambda m: self.commits.append(m) or True,
-                             sleep=lambda s: None, path=self.queue, site_root=self.root)
+                             sleep=lambda s: None, path=self.queue, site_root=self.root, notify=notify)
         return result, json.loads(self.queue.read_text(encoding="utf-8"))
 
     def test_posts_due_item_and_marks_done(self):
@@ -276,8 +276,11 @@ class RunOnceTest(unittest.TestCase):
     def test_reel_without_auto_is_left_for_user_to_post_with_music(self):
         http = fake_http()
         manual = {k: v for k, v in reel(make_reel(self.root), comment="출처: 기사").items() if k != "auto"}
-        result, items = self.run_once([manual], http)
+        sent = []
+        result, items = self.run_once([manual], http, notify=lambda it: sent.append(it["id"]) or "https://github.com/x/issues/1")
         self.assertEqual(items[0]["status"], ig.MANUAL)
+        self.assertEqual(sent, [manual["id"]])
+        self.assertIn("issues/1", items[0]["note"])
         self.assertIn("직접", result)
         self.assertFalse([c for c in http.calls if c[0] == "POST"])
 

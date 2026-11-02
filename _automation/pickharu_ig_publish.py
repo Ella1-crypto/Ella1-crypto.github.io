@@ -14,12 +14,14 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
   상한은 피드와 따로 REELS_CAP.
   2026-11-02 사용자 "음악 지정하지말고 … 내가 음악 정해서 올릴게": 릴스는 사용자가 인스타 앱에서 뜨는 음악을 골라 직접 올린다.
   auto가 true가 아닌 릴스는 올리지 않고 MANUAL로 돌려 둔다(영상·캡션·첫 댓글은 assets/pickharu/ig/<id>/index.html).
+  그 시각에 GitHub 이슈를 만들어 저장소 주인에게 배정한다 → 휴대폰 GitHub 앱 푸시로 "릴스 올릴 시간"과 준비 쪽 주소가 간다.
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
 - 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -265,10 +267,31 @@ def publish_story_only(due: dict, ig_user: str, token: str, http: Http, sleep,
     return f"스토리 올림: {due['id']} → {story_id}"
 
 
+def github_issue(item: dict) -> str:
+    """직접 올릴 릴스 알림: 이슈를 만들어 저장소 주인에게 배정(GitHub 앱 푸시). 알림이 실패해도 게시 흐름은 멈추지 않는다."""
+    token, repo = os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_REPOSITORY", "")
+    if not token or not repo:
+        return "안 보냄(GITHUB_TOKEN 없음)"
+    page = SITE_URL + item.get("page", "").removesuffix("index.html")
+    body = {"title": f"🎬 릴스 올릴 시간이에요 · {item['id']}",
+            "body": f"음악 없는 영상과 캡션·첫 댓글을 준비해 뒀어요.\n\n👉 {page}\n\n"
+                    "영상 저장 → 인스타 앱에서 뜨는 음악 골라 올리기 → 첫 댓글 붙여 넣기. 올린 뒤 이 이슈를 닫아 주세요.",
+            "assignees": [repo.split("/")[0]]}
+    request = urllib.request.Request(f"https://api.github.com/repos/{repo}/issues", data=json.dumps(body).encode(),
+                                     method="POST", headers={"Authorization": f"Bearer {token}",
+                                                             "Accept": "application/vnd.github+json"})
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            return json.loads(response.read()).get("html_url", "보냄")
+    except (OSError, ValueError) as error:
+        return f"실패({error})"
+
+
 def run_once(now: datetime, token: str, http: Http = http_json,
              commit: Callable[[str], bool] = lambda m: git_commit_push(m, QUEUE_PATH),
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
-             configured_user: str = "", ready: Callable[[str], bool] | None = None) -> str:
+             configured_user: str = "", ready: Callable[[str], bool] | None = None,
+             notify: Callable[[dict], str] | None = None) -> str:
     # posted_today가 인스타 게시물만 세도록(스토리만 올리는 글은 하루 상한에 안 셈)
     items = [{**it, "kind": kind_of(it)} for it in load_queue(path)]
     due, items = pick_due(items, now)
@@ -278,7 +301,9 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         commit("chore: pick.haru 인스타 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
     if "video" in due and due.get("auto") is not True:
-        save_queue(strip(with_status(items, due["id"], status=MANUAL, note=MANUAL_NOTE)), path)
+        sent = notify(due) if notify else ""
+        note = f"{MANUAL_NOTE} · 알림 {sent}" if sent else MANUAL_NOTE
+        save_queue(strip(with_status(items, due["id"], status=MANUAL, note=note)), path)
         commit(f"chore: pick.haru 인스타 릴스는 직접 게시로 ({due['id']})")
         return f"올리지 않음: {due['id']} — {MANUAL_NOTE}"
     problem = problem_of(due, site_root)
@@ -368,7 +393,7 @@ def main() -> int:
     if "--check" in sys.argv:
         print(f"인스타 계정 확인: {EXPECTED_USERNAME} (ID {find_ig_user(token, configured=configured)})")
         return 0
-    run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready)
+    run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready, notify=github_issue)
     if "--wait" in sys.argv:
         for line in session(token, run=run, path=QUEUE_PATH, pull=lambda: git_pull(QUEUE_PATH), sleep=capped_sleep):
             print(line)

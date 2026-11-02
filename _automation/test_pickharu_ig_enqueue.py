@@ -94,7 +94,7 @@ class BuildTest(unittest.TestCase):
         video.write_bytes(b"mp4")
         new = eq.build_reel(video, "rl-20261030-kitty7", "키티 <굿즈> 🎀", self.at, [], self.site, comment="출처: 포스터",
                             now=datetime(2026, 10, 31, 18, 0, tzinfo=KST), manual=True)[-1]
-        self.assertEqual(new["status"], "직접 게시")
+        self.assertEqual(new["status"], "예약")  # 그 시각에 발행기가 직접 게시로 바꾸고 알림
         self.assertNotIn("auto", new)
         page = (self.site / new["page"]).read_text(encoding="utf-8")
         self.assertIn("src=reel.mp4", page)
