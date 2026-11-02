@@ -75,8 +75,8 @@ SHOPS = {
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
     NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3,
             "max_links": 3},  # 2026-10-30 사용자 지정: 하루 3개까지. 11-01: 같은 상품 옵션(1개·2개·세트) 링크는 한 글에 3개까지
-    OLIVEYOUNG: {"tag": "[광고] 올리브영 쇼핑 큐레이터", "disclosure": OY_DISCLOSURE, "link": OY_LINK_RE, "cap": 1,
-                 "disclosure_top": True},  # 2026-11-02 사용자 운영안: 하루 1개
+    OLIVEYOUNG: {"tag": "[광고] 올리브영 쇼핑 큐레이터", "disclosure": OY_DISCLOSURE, "link": OY_LINK_RE, "cap": 2,
+                 "disclosure_top": True},  # 2026-11-02 사용자: 하루 1개 → 같은 날 "블프 안에 끝내"로 2개
 }
 
 
