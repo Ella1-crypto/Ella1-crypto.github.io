@@ -96,3 +96,11 @@ class SlotPlanTest(unittest.TestCase):
     def test_coupang_cap_is_two(self):
         with self.assertRaises(ValueError):
             pe.build([draft(i) for i in (1, 2, 3)], ["1", "2", "3"], [], now=self.NOW)
+
+    def test_oliveyoung_four_slots_until_black_friday_ends(self):
+        now = datetime(2026, 11, 7, 7, 0, tzinfo=pe.KST)
+        self.assertEqual(self.hhmm(pe.plan_times("올영", 6, [], now)),
+                         ["11-07 12:50", "11-07 15:50", "11-07 17:50", "11-07 21:10", "11-08 12:50", "11-08 17:50"])
+
+    def test_thread_kept_in_queue(self):
+        self.assertIn("thread", pe.QUEUE_FIELDS)

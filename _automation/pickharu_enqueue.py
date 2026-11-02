@@ -18,9 +18,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from jaetech_publish import DONE, IN_PROGRESS, KST, READY, load_queue, save_queue
-from pickharu_publish import COUPANG, GENERAL, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, QUEUE_PATH, SHOPS, problem_of, shop_of
+from pickharu_publish import (
+    COUPANG, GENERAL, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of, problem_of, shop_of,
+)
 
-QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "keyword", "product", "video", "images", "gif", "quote_of")
+QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "thread", "keyword", "product", "video", "images", "gif", "quote_of")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 SLOT_MINUTE = {KAKAO: 40, NAVER: 25, OLIVEYOUNG: 50}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
@@ -32,6 +34,8 @@ DAY_SLOTS = {
     NAVER: [(13, 25), (16, 25), (19, 25)],
     OLIVEYOUNG: [(12, 50), (17, 50)],  # 2026-11-02 사용자: 점심·퇴근길 하루 2개까지
 }
+# 블프(~11/7)엔 올영 자리를 4개로(2026-11-02 사용자 "블프 전에 다 올려야 돼")
+OY_BF_SLOTS = [(12, 50), (15, 50), (17, 50), (21, 10)]
 SLOT_GROUP = {KAKAO: "제휴", NAVER: "제휴"}  # 카카오·네이버는 같은 시간대를 나눠 쓴다(한 시간에 하나)
 TAKES_SLOT = (READY, IN_PROGRESS, DONE)  # 보류·취소·실패 글은 자리를 차지하지 않는다
 PLAN_DAYS = 7
@@ -53,7 +57,8 @@ def plan_times(kind: str, count: int, queue: list[dict], now: datetime) -> list[
     today = now.astimezone(KST).date()
     for offset in range(PLAN_DAYS):
         day = today + timedelta(days=offset)
-        for hour, minute in DAY_SLOTS[kind]:
+        slots = OY_BF_SLOTS if kind == OLIVEYOUNG and day <= OY_BF_END else DAY_SLOTS[kind]
+        for hour, minute in slots:
             at = datetime(day.year, day.month, day.day, hour, minute, tzinfo=KST)
             key = at.isoformat()[:13]
             if at < now + LEAD or key in taken:
@@ -79,8 +84,9 @@ def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime
           now: datetime | None = None) -> list[dict]:
     chosen = pick(drafts, ids)
     for kind in {shop_of(d) for d in chosen} & SHOPS.keys():
-        if sum(shop_of(d) == kind for d in chosen) > SHOPS[kind]["cap"]:
-            raise ValueError(f"{kind} 글은 하루 최대 {SHOPS[kind]['cap']}개입니다")
+        cap = cap_of(kind, now or datetime.now(KST))
+        if sum(shop_of(d) == kind for d in chosen) > cap:
+            raise ValueError(f"{kind} 글은 하루 최대 {cap}개입니다")
     existing = {it.get("id") for it in queue}
     problems = []
     for d in chosen:

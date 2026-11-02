@@ -236,6 +236,22 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(self.saved()["a"]["status"], "올림")
         self.assertEqual(self.saved()["a"]["reply_id"], "p2")
 
+    def test_thread_replies_chain_under_link_reply(self):
+        self.write([{**item("t"), "thread": ["둘째 타래", "셋째 타래"]}])
+        http = FakeHttp()
+        self.run_once(http)
+        replies = [p for name, p in http.calls if name == "threads" and "reply_to_id" in p]
+        self.assertEqual([r["reply_to_id"] for r in replies], ["p1", "p2", "p3"])
+        self.assertEqual(replies[2]["text"], "셋째 타래")
+        self.assertEqual(self.saved()["t"]["thread_ids"], ["p3", "p4"])
+
+    def test_thread_skipped_when_link_reply_fails(self):
+        self.write([{**item("t"), "thread": ["둘째 타래"]}])
+        http = FakeHttp(fail_reply=True)
+        self.run_once(http)
+        self.assertEqual(sum(1 for name, p in http.calls if name == "threads" and "reply_to_id" in p), 1)
+        self.assertNotIn("thread_ids", self.saved()["t"])
+
     def test_quote_of_quotes_old_post_only_on_body(self):
         self.write([{**item("q"), "quote_of": "17942087787383832"}])
         http = FakeHttp()
@@ -471,6 +487,18 @@ class OliveYoungTest(unittest.TestCase):
 
     def test_link_format(self):
         self.assertIn("링크", pp.problem_of(self.oy(reply=f"https://www.oliveyoung.co.kr/x\n{pp.OY_DISCLOSURE}")))
+
+    def test_thread_replies_checked_like_reply(self):
+        self.assertEqual(pp.problem_of(self.oy(thread=[f"② 두 번째 상품\n👉 {self.LINK}"])), "")
+        self.assertIn("타래", pp.problem_of(self.oy(thread=["가" * 501])))
+        self.assertIn("타래", pp.problem_of(self.oy(thread=["https://link.coupang.com/a/x"])))
+        self.assertIn("타래", pp.problem_of(self.oy(thread=["너는 이거 써?"])))
+        self.assertIn("타래", pp.problem_of(self.oy(thread="한 줄")))
+
+    def test_black_friday_cap(self):
+        self.assertEqual(pp.cap_of("올영", datetime(2026, 11, 7, 21, 10, tzinfo=pp.KST)), 4)
+        self.assertEqual(pp.cap_of("올영", datetime(2026, 11, 8, 12, 50, tzinfo=pp.KST)), 2)
+        self.assertEqual(pp.cap_of("쿠팡", datetime(2026, 11, 5, 12, 10, tzinfo=pp.KST)), pp.DAILY_CAP)
 
 
 if __name__ == "__main__":

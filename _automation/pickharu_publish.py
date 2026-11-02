@@ -18,7 +18,7 @@ import os
 import re
 import sys
 import time
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Callable
 
@@ -74,6 +74,9 @@ NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커�
 OLIVEYOUNG = "올영"
 OY_DISCLOSURE = "이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다."
 OY_LINK_RE = re.compile(r"https://oy\.run/[A-Za-z0-9]+")  # 앱 '링크 생성' 단축 주소(2026-11-02 사용자 예시)
+# 블프(11/1~11/7) 동안만 올영 하루 4개(2026-11-02 사용자 "블프 전에 다 올려야 돼"). 끝나면 SHOPS의 2개로 돌아간다.
+OY_BF_END = date(2026, 11, 7)
+OY_BF_CAP = 4
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
@@ -143,6 +146,27 @@ def top_has(text: str, phrase: str, lines: int = 3) -> bool:
     return "".join(phrase.split()) in "".join(head.split())
 
 
+def cap_of(kind: str, now: datetime) -> int:
+    if kind == OLIVEYOUNG and now.astimezone(KST).date() <= OY_BF_END:
+        return OY_BF_CAP
+    return SHOPS[kind]["cap"]
+
+
+def thread_problem(item: dict, link: re.Pattern) -> str:
+    """타래(링크 댓글 아래로 이어 다는 답글들): 상품 여러 개를 한 글에 묶을 때 상품마다 답글 하나(2026-11-02 사용자)."""
+    thread = item.get("thread", [])
+    if not isinstance(thread, list) or not all(isinstance(t, str) and t.strip() for t in thread):
+        return "타래(thread)는 비어 있지 않은 글 목록이어야 함"
+    for n, text in enumerate(thread, 2):
+        if len(text) > TEXT_LIMIT:
+            return f"타래 {n}번째 답글이 500자 초과"
+        if NEO_RE.search(text):
+            return f"타래 {n}번째 답글에 '너' 호칭이 있음 — 독자는 '스치니들'로 부름"
+        if not all(link.fullmatch(u) for u in ANY_URL_RE.findall(text)):
+            return f"타래 {n}번째 답글의 링크가 이 종류 링크가 아님"
+    return ""
+
+
 def shop_of(item: dict) -> str:
     return item.get("kind") or COUPANG  # 종류가 없으면 쿠팡 글(기존 큐 호환)
 
@@ -184,7 +208,7 @@ def problem_of(item: dict) -> str:
     max_links = rule.get("max_links", 1)
     if not 1 <= len(urls) <= max_links or not all(rule["link"].fullmatch(u) for u in urls):
         return f"댓글에 {kind} 링크가 1~{max_links}개 있어야 함" if max_links > 1 else f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
-    return media_problem(item)
+    return thread_problem(item, rule["link"]) or media_problem(item)
 
 
 def posted_today(items: list[dict], now: datetime, kind: str = COUPANG) -> int:
@@ -251,6 +275,18 @@ def publish(text: str, token: str, http: Http, sleep, reply_to: str = "", video:
     return http("POST", f"{BASE}/me/threads_publish", {"creation_id": container, "access_token": token})["id"]
 
 
+def publish_thread(thread: list[str], parent: str, token: str, http: Http, sleep) -> dict:
+    """타래 답글을 앞 답글 아래로 차례로 단다. 중간에 실패하면 거기서 멈추고 남은 것을 기록한다."""
+    ids = []
+    for n, text in enumerate(thread, 2):
+        try:
+            parent = publish(text, token, http, sleep, reply_to=parent)
+        except PUBLISH_ERRORS as error:
+            return {"thread_ids": ids, "reply_error": f"타래 {n}번째 답글 실패: {error} — 본문·앞 답글은 올라감, 나머지만 직접 달기"}
+        ids.append(parent)
+    return {"thread_ids": ids} if ids else {}
+
+
 def check_account(token: str, http: Http = http_json) -> str:
     me = http("GET", f"{BASE}/me", {"fields": "id,username", "access_token": token})
     if me.get("username") != EXPECTED_USERNAME:
@@ -270,7 +306,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
     problem = problem_of(due)
     if not problem and due.get("kind") != FOLLOWUP:
         kind = shop_of(due)
-        cap = GENERAL_CAP if is_general(due) else SHOPS[kind]["cap"]
+        cap = GENERAL_CAP if is_general(due) else cap_of(kind, now)
         if posted_today(items, now, kind) >= cap:
             problem = f"오늘 {kind} 글을 이미 {cap}개 올려 하루 상한 초과"
     if problem:
@@ -296,6 +332,8 @@ def run_once(now: datetime, token: str, http: Http = http_json,
             done["reply_id"] = publish(due["reply"], token, http, sleep, reply_to=post_id)
         except PUBLISH_ERRORS as error:
             done["reply_error"] = f"링크 댓글 실패: {error} — 본문은 올라감, 댓글만 직접 달기"
+        else:
+            done.update(publish_thread(due.get("thread", []), done["reply_id"], token, http, sleep))
     save_queue(with_status(load_queue(path), due["id"], **done), path)
     commit(f"chore: pick.haru 글 게시 완료 ({due['id']})")
     return f"올림: {due['id']} → {post_id}" + (" (댓글 실패)" if "reply_error" in done else "")
