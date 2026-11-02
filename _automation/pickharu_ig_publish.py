@@ -63,6 +63,10 @@ RECHECK_SECONDS = 300
 RELAY_LEAD = timedelta(minutes=300)  # 새 실행이 글 시각 이만큼 전에 시작하게(MAX_SESSION 320분 안)
 RELAY_MIN = timedelta(minutes=10)  # 막힌 글 때문에 실행이 쉼 없이 이어지지 않게 최소 간격
 RELAY_MAX = timedelta(minutes=330)  # 이어달리기 job timeout(345분)보다 짧게
+# 게시 호출이 오류를 내면 최근 글을 한 번 조회해 실제로 올라갔는지 본다(find_live_post).
+LOOKUP_WAIT_SECONDS = 30
+RECENT_LOOKUP = 10
+LOOKUP_SLACK = timedelta(minutes=2)  # 인스타 시각과 실행기 시계 차이 여유
 
 
 def comment_of(item: dict) -> str:
@@ -146,6 +150,38 @@ def wait_until_ready(container: str, token: str, http: Http, sleep, tries: int =
             raise ThreadsError(f"인스타 사진 처리 실패: {state.get('status_code')}")
         sleep(STATUS_POLL_SECONDS)
     raise ThreadsError(f"인스타 처리가 {tries * STATUS_POLL_SECONDS // 60}분 안에 끝나지 않음")
+
+
+def expected_media_type(item: dict) -> str:
+    if "video" in item:
+        return "VIDEO"
+    return "IMAGE" if len(item["images"]) == 1 else "CAROUSEL_ALBUM"
+
+
+def find_live_post(item: dict, ig_user: str, token: str, http: Http, since: datetime) -> str:
+    """게시 호출이 오류를 냈는데 실제로 올라간 글의 ID(없거나 조회도 실패하면 빈 문자열).
+
+    2026-11-02 10:15·11:40·12:00: 여러 장 피드의 media_publish가 403 "Application request limit reached"를
+    냈지만 글은 올라가 '실패'로 남고 출처 댓글·스토리가 빠졌다. 피드와 짝 릴스는 캡션이 같으므로
+    캡션·종류·시각(이번 시도 이후)이 모두 맞는 글만 인정한다.
+    """
+    try:
+        recent = http("GET", f"{GRAPH}/{ig_user}/media",
+                      {"fields": "id,caption,media_type,timestamp", "limit": str(RECENT_LOOKUP),
+                       "access_token": token})
+    except PUBLISH_ERRORS:
+        return ""
+    for post in recent.get("data", []):
+        try:
+            # 인스타 시각 표기: 2026-11-02T01:15:20+0000
+            posted = datetime.strptime(post.get("timestamp", ""), "%Y-%m-%dT%H:%M:%S%z")
+        except ValueError:
+            continue
+        if ((post.get("caption") or "").strip() == item["caption"].strip()
+                and post.get("media_type") == expected_media_type(item)
+                and posted >= since - LOOKUP_SLACK):
+            return post["id"]
+    return ""
 
 
 def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
@@ -261,14 +297,21 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         raise SystemExit(f"올리는 중 표시를 저장하지 못해 올리지 않음 ({due['id']}) — 큐를 확인한 뒤 다시 push")
     if due.get("story_only"):
         return publish_story_only(due, ig_user, token, http, sleep, commit, path)
+    started = datetime.now(KST)
+    recovered = {}
     try:
         post_id = publish(due, ig_user, token, http, sleep)
     except PUBLISH_ERRORS as error:
-        note = f"게시 실패: {error} — 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
-        save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
-        commit("chore: pick.haru 인스타 게시 실패 기록")
-        raise SystemExit(note)
-    done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes")}
+        sleep(LOOKUP_WAIT_SECONDS)  # 한도 오류 직후라 잠깐 쉬고 확인
+        post_id = find_live_post(due, ig_user, token, http, started)
+        if not post_id:
+            note = f"게시 실패: {error} — 최근 글 조회로는 확인 못 함, 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
+            save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)
+            commit("chore: pick.haru 인스타 게시 실패 기록")
+            raise SystemExit(note)
+        recovered = {"note": f"게시 호출은 오류({error})였지만 최근 글에서 올라간 것 확인"}
+    done = {"status": DONE, "post_id": post_id, "published_at": datetime.now(KST).isoformat(timespec="minutes"),
+            **recovered}
     if comment_of(due):
         try:
             done["comment_id"] = post_comment(post_id, comment_of(due), token, http)

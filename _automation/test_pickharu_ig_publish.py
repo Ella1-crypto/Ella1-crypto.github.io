@@ -2,7 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -10,6 +10,12 @@ import pickharu_ig_publish as ig  # noqa: E402
 from jaetech_publish import DONE, FAILED, IN_PROGRESS, KST, READY, ThreadsError  # noqa: E402
 
 NOW = datetime(2026, 10, 31, 19, 5, tzinfo=KST)
+
+
+def live(post_id, caption, media_type="CAROUSEL_ALBUM", ago=timedelta(0)):
+    """인스타 최근 글 조회 결과 한 줄(시각은 지금 기준)."""
+    at = (datetime.now(timezone.utc) - ago).strftime("%Y-%m-%dT%H:%M:%S+0000")
+    return {"id": post_id, "caption": caption, "media_type": media_type, "timestamp": at}
 
 
 def make_site(root: Path, item_id: str = "ig-20261031-ganadi", count: int = 3) -> list[str]:
@@ -39,7 +45,9 @@ def reel(video, **extra):
             "caption": "초코 헬로키티 굿즈 정리 🎀", "video": video, **extra}
 
 
-def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_comment=False):
+def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_comment=False,
+              publish_error="", recent=None, recent_error=""):
+    """publish_error: 피드·릴스 media_publish가 이 오류를 낸다. recent: 최근 게시물 조회 결과(recent_error면 조회도 실패)."""
     calls, kinds = [], {}
 
     def http(method, url, params):
@@ -49,11 +57,19 @@ def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_co
             return {"data": [{"instagram_business_account": account}] if pages else []}
         if url.endswith("/1784") and method == "GET":
             return {"id": "1784", "username": username}
+        if url.endswith("/1784/media") and method == "GET":
+            if recent_error:
+                raise ThreadsError(recent_error)
+            return {"data": recent or []}
         if url.endswith("/1784/media"):
             kinds[f"c{len(calls)}"] = params.get("media_type")
             return {"id": f"c{len(calls)}"}
         if url.endswith("/1784/media_publish"):
-            return {"id": "story7" if kinds.get(params["creation_id"]) == "STORIES" else "post9"}
+            if kinds.get(params["creation_id"]) == "STORIES":
+                return {"id": "story7"}
+            if publish_error:
+                raise ThreadsError(publish_error)
+            return {"id": "post9"}
         if url.endswith("/comments"):
             if fail_comment:
                 raise ThreadsError("HTTP 400: comment")
@@ -277,6 +293,40 @@ class RunOnceTest(unittest.TestCase):
         result, items = self.run_once(reels + [reel(make_reel(self.root, "rl-last"), id="rl-last")])
         self.assertEqual(items[-1]["status"], FAILED)
         self.assertIn("릴스", items[-1]["note"])
+
+    def test_publish_error_but_post_is_live_counts_as_done(self):
+        # 2026-11-02 10:15·11:40·12:00: media_publish가 403 "Application request limit reached"를 냈지만 인스타엔 올라감
+        caption = item([])["caption"]
+        http = fake_http(publish_error="HTTP 403: Application request limit reached",
+                         recent=[live("old1", "다른 글"), live("live3", caption + "\n")])
+        result, items = self.run_once([item(make_site(self.root), comment="출처: 투썸플레이스")], http)
+        self.assertEqual(items[0]["status"], DONE)
+        self.assertEqual(items[0]["post_id"], "live3")
+        self.assertIn("403", items[0]["note"])
+        self.assertEqual(items[0]["comment_id"], "cm5")
+        self.assertEqual(items[0]["story_id"], "story7")
+        self.assertIn("live3", result)
+
+    def test_publish_error_with_no_matching_post_stays_failed(self):
+        caption = item([])["caption"]
+        # 같은 캡션이라도 짝 릴스(VIDEO)나 예전 글은 이번 피드가 아니다
+        http = fake_http(publish_error="HTTP 403: Application request limit reached",
+                         recent=[live("old1", "다른 글"), live("reel2", caption, "VIDEO"),
+                                 live("old7", caption, ago=timedelta(hours=3))])
+        with self.assertRaises(SystemExit):
+            self.run_once([item(make_site(self.root))], http)
+        items = json.loads(self.queue.read_text(encoding="utf-8"))
+        self.assertEqual(items[0]["status"], FAILED)
+        self.assertIn("403", items[0]["note"])
+
+    def test_publish_error_and_failed_lookup_stays_failed(self):
+        http = fake_http(publish_error="HTTP 403: Application request limit reached",
+                         recent_error="HTTP 403: Application request limit reached")
+        with self.assertRaises(SystemExit):
+            self.run_once([reel(make_reel(self.root))], http)
+        items = json.loads(self.queue.read_text(encoding="utf-8"))
+        self.assertEqual(items[0]["status"], FAILED)
+        self.assertIn("확인", items[0]["note"])
 
     def test_missing_ig_account_stops_before_marking_in_progress(self):
         with self.assertRaises(SystemExit):
