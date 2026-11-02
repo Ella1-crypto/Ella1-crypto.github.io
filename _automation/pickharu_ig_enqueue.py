@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import re
 import shutil
 import subprocess
@@ -18,7 +19,7 @@ from pathlib import Path
 from typing import Callable
 
 from jaetech_publish import KST, READY, load_queue, save_queue
-from pickharu_ig_publish import QUEUE_PATH, SITE_ROOT, problem_of
+from pickharu_ig_publish import MANUAL, QUEUE_PATH, SITE_ROOT, problem_of
 
 CARD_RE = re.compile(r"\d{2}\.png")  # sheet.png 같은 확인용 이미지는 빼고 번호 붙은 카드만
 
@@ -86,9 +87,30 @@ def build(cards: Path, caption: str, at: datetime, queue: list[dict], site_root:
     return queue + [item]
 
 
+def manual_page(item_id: str, caption: str, comment: str, at: datetime) -> str:
+    """휴대폰에서 열어 영상을 받고 캡션·첫 댓글을 복사하는 쪽(음악은 사용자가 인스타 앱에서 고름)."""
+    def box(title: str, text: str) -> str:
+        return (f"<h3>{title}</h3><textarea readonly rows=8>{html.escape(text)}</textarea>"
+                "<button onclick=\"navigator.clipboard.writeText(this.previousElementSibling.value);"
+                "this.textContent='복사했어요'\">복사</button>")
+    return ("<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'>"
+            f"<meta name=robots content=noindex><title>릴스 준비 {item_id}</title>"
+            "<style>body{font-family:sans-serif;max-width:520px;margin:auto;padding:16px}"
+            "video,textarea{width:100%;box-sizing:border-box}button,a.btn{display:inline-block;margin:6px 0;"
+            "padding:10px 16px;border-radius:8px;background:#e04a7e;color:#fff;border:0;text-decoration:none}</style>"
+            f"<h2>릴스 준비 · {at.strftime('%m/%d %H:%M')}</h2>"
+            "<p>음악 없는 영상이에요. 저장한 뒤 인스타 앱에서 음악을 골라 올려 주세요.</p>"
+            "<video src=reel.mp4 controls playsinline></video>"
+            "<a class=btn href=reel.mp4 download>영상 저장</a>"
+            + box("캡션", caption) + (box("첫 댓글", comment) if comment.strip() else ""))
+
+
 def build_reel(video: Path, item_id: str, caption: str, at: datetime, queue: list[dict],
-               site_root: Path = SITE_ROOT, comment: str = "", now: datetime | None = None) -> list[dict]:
-    """릴스 영상(make_reels.py 결과)을 assets/pickharu/ig/<id>/reel.mp4로 두고 릴스 탭 전용 항목을 더한다."""
+               site_root: Path = SITE_ROOT, comment: str = "", now: datetime | None = None,
+               manual: bool = False) -> list[dict]:
+    """릴스 영상(make_reels.py 결과)을 assets/pickharu/ig/<id>/reel.mp4로 두고 릴스 탭 전용 항목을 더한다.
+    manual(2026-11-02 사용자 "음악 지정하지말고 … 내가 음악 정해서 올릴게"): 발행기가 올리지 않는 '직접 게시' 항목 +
+    같은 폴더 index.html(영상 저장·캡션·첫 댓글 복사)."""
     if any(it.get("id") == item_id for it in queue):
         raise ValueError(f"{item_id}: 이미 예약 목록에 있음")
     if at <= (now or datetime.now(KST)):
@@ -97,12 +119,18 @@ def build_reel(video: Path, item_id: str, caption: str, at: datetime, queue: lis
     (site_root / rel).parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(video, site_root / rel)
     item = {"id": item_id, "publish_at": at.isoformat(timespec="minutes"), "caption": caption.strip(),
-            "video": rel, "share_to_feed": False, "status": READY}
+            "video": rel, "share_to_feed": False, "status": MANUAL if manual else READY}
     if comment.strip():
         item["comment"] = comment.strip()
     problem = problem_of(item, site_root)
     if problem:
         raise ValueError(f"넣지 않았습니다 — {problem}")
+    if manual:
+        page = f"assets/pickharu/ig/{item_id}/index.html"
+        (site_root / page).write_text(manual_page(item_id, item["caption"], comment.strip(), at), encoding="utf-8")
+        item["page"] = page
+    else:
+        item["auto"] = True
     return queue + [item]
 
 

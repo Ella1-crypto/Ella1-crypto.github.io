@@ -89,6 +89,18 @@ class BuildTest(unittest.TestCase):
             eq.build_reel(video, "rl-20261030-kitty7", "x", self.at, queue, self.site,
                           now=datetime(2026, 10, 31, 18, 0, tzinfo=KST))
 
+    def test_manual_reel_is_not_auto_posted_and_gets_phone_page(self):
+        video = Path(self.tmp.name) / "ig-20261030-kitty7.mp4"
+        video.write_bytes(b"mp4")
+        new = eq.build_reel(video, "rl-20261030-kitty7", "키티 <굿즈> 🎀", self.at, [], self.site, comment="출처: 포스터",
+                            now=datetime(2026, 10, 31, 18, 0, tzinfo=KST), manual=True)[-1]
+        self.assertEqual(new["status"], "직접 게시")
+        self.assertNotIn("auto", new)
+        page = (self.site / new["page"]).read_text(encoding="utf-8")
+        self.assertIn("src=reel.mp4", page)
+        self.assertIn("키티 &lt;굿즈&gt;", page)
+        self.assertIn("출처: 포스터", page)
+
     def test_refuses_time_in_the_past(self):
         with self.assertRaises(ValueError):
             self.build(now=datetime(2026, 11, 1, tzinfo=KST))

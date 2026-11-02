@@ -42,7 +42,7 @@ def make_reel(root: Path, item_id: str = "rl-20261030-kitty7") -> str:
 
 def reel(video, **extra):
     return {"id": "rl-20261030-kitty7", "publish_at": "2026-10-31T19:00+09:00", "status": READY,
-            "caption": "초코 헬로키티 굿즈 정리 🎀", "video": video, **extra}
+            "caption": "초코 헬로키티 굿즈 정리 🎀", "video": video, "auto": True, **extra}
 
 
 def fake_http(username="pick.haru.daily", pages=True, status="FINISHED", fail_comment=False,
@@ -272,6 +272,14 @@ class RunOnceTest(unittest.TestCase):
         result, items = self.run_once(done + [item(images)])
         self.assertEqual(items[-1]["status"], FAILED)
         self.assertIn("상한", items[-1]["note"])
+
+    def test_reel_without_auto_is_left_for_user_to_post_with_music(self):
+        http = fake_http()
+        manual = {k: v for k, v in reel(make_reel(self.root), comment="출처: 기사").items() if k != "auto"}
+        result, items = self.run_once([manual], http)
+        self.assertEqual(items[0]["status"], ig.MANUAL)
+        self.assertIn("직접", result)
+        self.assertFalse([c for c in http.calls if c[0] == "POST"])
 
     def test_reel_posts_video_to_reels_tab_only_with_comment_and_no_story(self):
         http = fake_http()

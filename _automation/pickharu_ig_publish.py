@@ -12,6 +12,8 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 - 릴스(2026-10-31 사용자 지정): item.video(assets/pickharu/ig/<id>/reel.mp4)가 있으면 사진 대신 릴스로 올린다.
   기본은 릴스 탭에만(share_to_feed false — 피드 격자에 같은 글이 두 번 보이지 않게), 스토리는 안 올림, 첫 댓글은 같음.
   상한은 피드와 따로 REELS_CAP.
+  2026-11-02 사용자 "음악 지정하지말고 … 내가 음악 정해서 올릴게": 릴스는 사용자가 인스타 앱에서 뜨는 음악을 골라 직접 올린다.
+  auto가 true가 아닌 릴스는 올리지 않고 MANUAL로 돌려 둔다(영상·캡션·첫 댓글은 assets/pickharu/ig/<id>/index.html).
 - 하루(KST) 상한 DAILY_CAP. 계정이 pick.haru.daily가 아니면 올리지 않는다.
 - 인스타 계정 숫자 ID는 PICKHARU_IG_USER_ID(있으면) 또는 DEFAULT_IG_USER를 쓰고, 쓰기 전에 계정 이름을 확인한다.
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -58,6 +60,8 @@ STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 VIDEO_POLL_TRIES = 120  # 영상은 최대 10분
 # 기다리는 중에도 5분마다 큐를 다시 받는다. 2026-10-31: 21:00 글까지 한 번에 잠들어 그 사이 추가한 20:05 릴스를 못 봄.
 RECHECK_SECONDS = 300
+MANUAL = "직접 게시"  # 사용자가 앱에서 음악을 골라 올리는 릴스(발행기는 건너뜀)
+MANUAL_NOTE = "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음"
 # 이어달리기(2026-11-02 사용자 승인): --wait 실행이 끝나면 다음 '예약' 글 시각에 맞춰 새 --wait 실행을 부른다.
 # 30분 cron이 실제로는 몇 시간에 한 번만 돌아서(11/1 실측) 320분 뒤의 글이 밀리거나 실패했다.
 RELAY_LEAD = timedelta(minutes=300)  # 새 실행이 글 시각 이만큼 전에 시작하게(MAX_SESSION 320분 안)
@@ -273,6 +277,10 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(strip(items), path)
         commit("chore: pick.haru 인스타 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
+    if "video" in due and due.get("auto") is not True:
+        save_queue(strip(with_status(items, due["id"], status=MANUAL, note=MANUAL_NOTE)), path)
+        commit(f"chore: pick.haru 인스타 릴스는 직접 게시로 ({due['id']})")
+        return f"올리지 않음: {due['id']} — {MANUAL_NOTE}"
     problem = problem_of(due, site_root)
     kind = kind_of(due)
     cap = REELS_CAP if kind == REEL_KIND else DAILY_CAP
