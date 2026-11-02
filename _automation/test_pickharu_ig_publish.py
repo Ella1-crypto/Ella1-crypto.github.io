@@ -285,5 +285,30 @@ class RunOnceTest(unittest.TestCase):
         self.assertNotEqual(items[0]["status"], IN_PROGRESS)
 
 
+
+class RelayDelayTest(unittest.TestCase):
+    def at(self, hhmm: str, status: str = READY) -> dict:
+        return {"id": hhmm, "publish_at": f"2026-10-31T{hhmm}+09:00", "status": status}
+
+    def test_returns_none_when_nothing_scheduled(self):
+        self.assertIsNone(ig.relay_delay([self.at("20:00", DONE), self.at("21:00", FAILED)], NOW))
+
+    def test_waits_until_lead_time_before_far_post(self):
+        # 19:05 기준, 다음 글 다음 날 06:05(11시간 뒤) → 300분 전인 01:05까지 6시간이지만 최대 330분
+        items = [{"id": "x", "publish_at": "2026-11-01T06:05+09:00", "status": READY}]
+        self.assertEqual(ig.relay_delay(items, NOW), ig.RELAY_MAX.total_seconds())
+
+    def test_uses_lead_time_for_medium_distance(self):
+        items = [{"id": "x", "publish_at": "2026-11-01T02:05+09:00", "status": READY}]  # 7시간 뒤
+        self.assertEqual(ig.relay_delay(items, NOW), 120 * 60)
+
+    def test_near_or_overdue_post_uses_minimum_gap(self):
+        self.assertEqual(ig.relay_delay([self.at("20:00")], NOW), ig.RELAY_MIN.total_seconds())
+        self.assertEqual(ig.relay_delay([self.at("18:00")], NOW), ig.RELAY_MIN.total_seconds())
+
+    def test_ignores_posts_past_late_limit(self):
+        self.assertIsNone(ig.relay_delay([self.at("14:00")], NOW))
+
+
 if __name__ == "__main__":
     unittest.main()

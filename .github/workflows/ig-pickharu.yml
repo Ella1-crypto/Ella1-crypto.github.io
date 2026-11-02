@@ -2,6 +2,8 @@
 # 필요한 Secrets: PICKHARU_IG_ACCESS_TOKEN (pickharu-bot 시스템 사용자 토큰, 만료 없음)
 # 선택 Variable: PICKHARU_IG_USER_ID (인스타 계정 숫자 ID. 없으면 페이스북 페이지 연결 계정을 찾아 씀)
 # 주 경로: 큐 파일이 push되면 바로 실행 → 320분 안의 예약 글을 시각마다 기다렸다가 올린다. 보조: 30분 cron.
+# 이어달리기(2026-11-02): 올리는 실행(push·cron·wait)이 끝나면 relay job이 다음 '예약' 글 300분 전까지 쉬었다가 새 wait 실행을 부른다
+# (cron이 실제로는 몇 시간에 한 번만 돌아서). GITHUB_TOKEN으로 부른 workflow_dispatch는 새 실행을 만든다.
 name: ig-pickharu
 
 on:
@@ -13,13 +15,14 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "check = 계정만 확인, publish = 예약 글 올리기"
+        description: "check = 계정만 확인, publish = 예약 글 올리기, wait = 320분 동안 기다리며 올리기(이어달리기)"
         default: check
         type: choice
-        options: [check, publish]
+        options: [check, publish, wait]
 
 permissions:
   contents: write
+  actions: write   # relay job이 다음 wait 실행을 부른다
 
 jobs:
   check:
@@ -40,7 +43,7 @@ jobs:
   publish:
     if: >-
       (github.event_name == 'push' && github.actor != 'github-actions[bot]')
-      || github.event_name == 'schedule' || inputs.mode == 'publish'
+      || github.event_name == 'schedule' || inputs.mode == 'publish' || inputs.mode == 'wait'
     runs-on: ubuntu-latest
     timeout-minutes: 350   # push 실행은 최대 320분 동안 예약 글을 기다린다
     concurrency:
@@ -61,8 +64,32 @@ jobs:
           git config user.name "ig-pickharu-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Wait for scheduled times and publish
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || inputs.mode == 'wait'
         run: python _automation/pickharu_ig_publish.py --wait
       - name: Publish due post
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && inputs.mode != 'wait'
         run: python _automation/pickharu_ig_publish.py
+
+  relay:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    concurrency:   # 쉬고 있는 relay는 하나만: 새 실행의 relay가 옛 것을 대신한다(실행이 불어나지 않게)
+      group: ig-pickharu-relay
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Sleep until next post is near, then start a new wait run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          delay=$(python _automation/pickharu_ig_publish.py --relay-delay)
+          if [ -z "$delay" ]; then echo "남은 예약 글 없음 — 이어달리기 끝"; exit 0; fi
+          echo "${delay}초 뒤 다음 wait 실행을 부릅니다."
+          sleep "$delay"
+          gh workflow run ig-pickharu.yml --ref main -f mode=wait

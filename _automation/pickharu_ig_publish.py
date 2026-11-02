@@ -23,15 +23,15 @@ import re
 import sys
 import time
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Callable
 
 from jaetech_publish import (
-    DONE, FAILED, IN_PROGRESS, KST, Http, ThreadsError, git_commit_push, git_pull, http_json, load_queue,
-    pick_due, save_queue, with_status,
+    DONE, FAILED, IN_PROGRESS, KST, LATE_LIMIT, READY, Http, ThreadsError, git_commit_push, git_pull, http_json,
+    load_queue, pick_due, save_queue, with_status,
 )
-from pickharu_publish import PUBLISH_ERRORS, posted_today, session
+from pickharu_publish import MAX_SESSION, PUBLISH_ERRORS, posted_today, session
 
 QUEUE_PATH = Path(__file__).resolve().parent / "pickharu-ig-queue.json"
 SITE_ROOT = QUEUE_PATH.parent.parent
@@ -58,6 +58,11 @@ STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 VIDEO_POLL_TRIES = 120  # 영상은 최대 10분
 # 기다리는 중에도 5분마다 큐를 다시 받는다. 2026-10-31: 21:00 글까지 한 번에 잠들어 그 사이 추가한 20:05 릴스를 못 봄.
 RECHECK_SECONDS = 300
+# 이어달리기(2026-11-02 사용자 승인): --wait 실행이 끝나면 다음 '예약' 글 시각에 맞춰 새 --wait 실행을 부른다.
+# 30분 cron이 실제로는 몇 시간에 한 번만 돌아서(11/1 실측) 320분 뒤의 글이 밀리거나 실패했다.
+RELAY_LEAD = timedelta(minutes=300)  # 새 실행이 글 시각 이만큼 전에 시작하게(MAX_SESSION 320분 안)
+RELAY_MIN = timedelta(minutes=10)  # 막힌 글 때문에 실행이 쉼 없이 이어지지 않게 최소 간격
+RELAY_MAX = timedelta(minutes=330)  # 이어달리기 job timeout(345분)보다 짧게
 
 
 def comment_of(item: dict) -> str:
@@ -280,7 +285,30 @@ def run_once(now: datetime, token: str, http: Http = http_json,
     return f"올림: {due['id']} → {post_id}" + (f" ({', '.join(misses)})" if misses else "")
 
 
+def relay_delay(items: list[dict], now: datetime) -> float | None:
+    """다음 --wait 실행을 부르기 전 기다릴 초. 남은 '예약' 글이 없으면 None."""
+    times = []
+    for it in items:
+        if it.get("status") != READY:
+            continue
+        try:
+            at = datetime.fromisoformat(it["publish_at"])
+        except (KeyError, ValueError):
+            continue
+        at = at if at.tzinfo else at.replace(tzinfo=KST)
+        if now - at <= LATE_LIMIT:  # 너무 늦은 글은 다음 실행이 '실패'로 정리하므로 기다릴 이유가 아님
+            times.append(at)
+    if not times:
+        return None
+    delay = min(times) - RELAY_LEAD - now
+    return min(max(delay, RELAY_MIN), RELAY_MAX).total_seconds()
+
+
 def main() -> int:
+    if "--relay-delay" in sys.argv:  # 워크플로 이어달리기 단계용, 토큰 필요 없음
+        delay = relay_delay(load_queue(QUEUE_PATH), datetime.now(KST))
+        print("" if delay is None else int(delay))
+        return 0
     token = os.environ.get("PICKHARU_IG_ACCESS_TOKEN", "").strip()
     if not token:
         print("PICKHARU_IG_ACCESS_TOKEN Secret이 없습니다.", file=sys.stderr)
