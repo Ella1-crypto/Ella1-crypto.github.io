@@ -461,9 +461,10 @@
    "assets/pickharu/ig/ig-tint-bf-size-tint-cream/03.jpg",
    "assets/pickharu/ig/ig-tint-bf-size-tint-cream/04.jpg"
   ],
-  "status": "올리는 중",
+  "status": "실패",
   "story_image": "assets/pickharu/ig/ig-tint-bf-size-tint-cream/story.jpg",
-  "comment": "출처 (2026.10.28 확인)\n· 빅토리아시크릿 공식 사이즈 가이드(브라·팬티 사이즈표)\n· 스킴스 공식 사이즈 가이드·상품 페이지(보이프렌드 라인 오버사이즈 설명, 루즈 팬츠 S 안쪽 기장 약 76cm)\n· 한국↔미국 브라 밴드 변환·자매 사이즈는 공식 사이즈표 기준으로 정리"
+  "comment": "출처 (2026.10.28 확인)\n· 빅토리아시크릿 공식 사이즈 가이드(브라·팬티 사이즈표)\n· 스킴스 공식 사이즈 가이드·상품 페이지(보이프렌드 라인 오버사이즈 설명, 루즈 팬츠 S 안쪽 기장 약 76cm)\n· 한국↔미국 브라 밴드 변환·자매 사이즈는 공식 사이즈표 기준으로 정리",
+  "note": "게시 실패: HTTP 403: Application request limit reached — 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
  },
  {
   "id": "ig-tint-hometown2-tint-gray",
