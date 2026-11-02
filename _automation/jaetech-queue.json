@@ -215,7 +215,7 @@
   "publish_at": "2026-11-02T20:30+09:00",
   "text": "AI한테 일 시킬 때, 설명부터 길게 쓰느라 지치셨죠.\n\nIBM이 코세라에 올린 프롬프트 기초 강의에\n'인터뷰 패턴'이 나와요.\n내가 다 설명하는 대신,\nAI가 먼저 나한테 질문하게 하는 방법이에요.\n\n이렇게 써 보세요.\n\"다음 주 회의 보고서 초안을 쓰려고 해.\n시작하기 전에 필요한 걸\n나한테 하나씩 물어봐 줘.\"\n\n내가 빠뜨린 조건을 AI가 먼저 물어봐 줘서,\n처음부터 다시 쓰는 일을 줄일 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
   "reply": "📌 출처: IBM · 코세라 「Generative AI: Prompt Engineering Basics」 (인터뷰 패턴)\nhttps://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
-  "status": "예약",
+  "status": "올리는 중",
   "source": "루틴2 무료 강의 시리즈 · AI 노하우",
   "note": "11/1 20:30 예약이 큐 작업 지연으로 실패 → 2026-11-02 사용자 선택 \"오늘 20:30 재예약\"으로 시각만 옮김 (글·카드·첫 댓글 그대로)",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-r2-ai-20261101.png"
