@@ -128,7 +128,9 @@ def kst(stamp: str) -> datetime:
 
 
 def git(*args: str) -> subprocess.CompletedProcess:
-    return subprocess.run(["git", *args], cwd=QUEUE_PATH.parent.parent, capture_output=True, text=True)
+    # git 출력은 UTF-8(한글 커밋 메시지). Windows 기본 cp949로 읽으면 UnicodeDecodeError가 난다(11/3 텔레그램 Accept 때)
+    return subprocess.run(["git", *args], cwd=QUEUE_PATH.parent.parent, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace")
 
 
 def main() -> int:
