@@ -861,14 +861,17 @@
   "product": "today-drop",
   "expires_at": "2026-11-03T23:59",
   "publish_at": "2026-11-03T20:20+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665594,
    "message_id": 9,
    "at": "2026-11-03T15:39:40+09:00"
-  }
+  },
+  "post_id": "18120934282952309",
+  "published_at": "2026-11-03T20:20+09:00",
+  "reply_error": "링크 댓글 실패: HTTP 400: Fatal — 본문은 올라감, 댓글만 직접 달기"
  },
  {
   "id": "if-20261103-4",
