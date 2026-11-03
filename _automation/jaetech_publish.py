@@ -211,7 +211,7 @@ def wait_then_run(token: str, user_id: str, clock: Callable[[], datetime] = lamb
                   sleep=time.sleep, pull: Callable[[], bool] = git_pull, run=None,
                   path: Path = QUEUE_PATH) -> str:
     """큐 push 직후 실행: 가장 이른 예약 시각까지(최대 MAX_WAIT) 기다렸다가 최신 큐로 run_once."""
-    run = run or (lambda now: run_once(now, token, user_id, path=path))
+    run = run or (lambda now: run_and_notify(now, token, user_id, run=lambda *a: run_once(*a, path=path)))
     wait = seconds_until_next(load_queue(path), clock())
     if wait is None:
         return f"올릴 글 없음 ({int(MAX_WAIT.total_seconds() // 60)}분 안에 예약된 글 없음)"
@@ -276,6 +276,33 @@ def run_once(now: datetime, token: str, user_id: str, http: Http = http_json,
     return f"올림: {due['id']} → {post_id}" + (" (댓글 실패)" if "reply_error" in done else "")
 
 
+def notify(result: str, http: Http = http_json) -> str:
+    """게시 결과를 heeya 텔레그램 봇으로 알린다(2026-11-03 사용자). Secret이 없거나 '올릴 글 없음'이면 조용히 넘어간다.
+    알림 실패는 게시를 막지 않는다. 토큰이 든 주소는 오류 메시지에 넣지 않는다."""
+    bot = os.environ.get("HEEYA_TELEGRAM_TOKEN", "").strip()
+    chat = os.environ.get("HEEYA_TELEGRAM_CHAT_ID", "").strip()
+    if not bot or not chat or result.startswith("올릴 글 없음"):
+        return ""
+    icon = "✅" if result.startswith("올림") and "실패" not in result else "⚠️"
+    text = f"{icon} heeya {result}"
+    try:
+        http("POST", f"https://api.telegram.org/bot{bot}/sendMessage", {"chat_id": chat, "text": text})
+    except (ThreadsError, KeyError, OSError, ValueError):
+        print("::warning::텔레그램 알림 실패", flush=True)
+    return text
+
+
+def run_and_notify(now: datetime, token: str, user_id: str, run=run_once, http: Http = http_json) -> str:
+    """run_once 결과(게시 실패로 멈추는 경우 포함)를 텔레그램으로도 알린다."""
+    try:
+        result = run(now, token, user_id)
+    except SystemExit as stop:
+        notify(f"게시 실패 — {stop}", http)
+        raise
+    notify(result, http)
+    return result
+
+
 def next_ready_at(items: list[dict]) -> datetime | None:
     times = []
     for item in items:
@@ -295,7 +322,7 @@ def watch(token: str, user_id: str, clock: Callable[[], datetime] = lambda: date
     """WATCH_LIMIT 동안 큐를 지켜보며 시각이 된 글을 하나씩 올린다.
     WATCH_STEP마다 최신 큐를 다시 받아, 지켜보는 중에 새로 들어온 예약도 놓치지 않는다.
     끝났을 때 아직 '예약' 글이 남아 있으면 True(워크플로가 자기 자신을 다시 실행해 이어 지킨다)."""
-    run = run or (lambda now: run_once(now, token, user_id, path=path))
+    run = run or (lambda now: run_and_notify(now, token, user_id, run=lambda *a: run_once(*a, path=path)))
     start = clock()
     while True:
         now = clock()
@@ -334,7 +361,7 @@ def main() -> int:
             with open(out, "a", encoding="utf-8") as f:
                 f.write(f"relay={'true' if relay else 'false'}\n")
         return 0
-    print(run_once(datetime.now(KST), token, user_id))
+    print(run_and_notify(datetime.now(KST), token, user_id))
     return 0
 
 

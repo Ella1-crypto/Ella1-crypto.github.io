@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from datetime import datetime
 from pathlib import Path
 
@@ -320,3 +321,37 @@ class TokenHintTest(unittest.TestCase):
 
     def test_not_a_token_error(self):
         self.assertEqual(jp.token_hint({"code": 100, "message": "Invalid parameter"}), "")
+
+
+class NotifyTest(unittest.TestCase):
+    ENV = {"HEEYA_TELEGRAM_TOKEN": "t", "HEEYA_TELEGRAM_CHAT_ID": "1"}
+
+    def setUp(self):
+        self.sent = []
+        self.http = lambda method, url, params: self.sent.append(params) or {}
+
+    def test_sends_result_with_icon(self):
+        with unittest.mock.patch.dict(jp.os.environ, self.ENV):
+            self.assertTrue(jp.notify("올림: jt-1 → 9", self.http).startswith("✅ heeya"))
+            self.assertTrue(jp.notify("올림: jt-1 → 9 (댓글 실패)", self.http).startswith("⚠️"))
+        self.assertEqual(len(self.sent), 2)
+
+    def test_quiet_without_secret_or_nothing_due(self):
+        with unittest.mock.patch.dict(jp.os.environ, {}, clear=True):
+            self.assertEqual(jp.notify("올림: jt-1 → 9", self.http), "")
+        with unittest.mock.patch.dict(jp.os.environ, self.ENV):
+            self.assertEqual(jp.notify("올릴 글 없음", self.http), "")
+        self.assertEqual(self.sent, [])
+
+    def test_alert_failure_does_not_break(self):
+        def broken(*a):
+            raise OSError("down")
+        with unittest.mock.patch.dict(jp.os.environ, self.ENV):
+            self.assertIn("jt-1", jp.notify("올림: jt-1 → 9", broken))
+
+    def test_publish_failure_is_alerted_and_still_stops(self):
+        def fail(*a):
+            raise SystemExit("게시 실패: 토큰")
+        with unittest.mock.patch.dict(jp.os.environ, self.ENV), self.assertRaises(SystemExit):
+            jp.run_and_notify(None, "tok", "uid", run=fail, http=self.http)
+        self.assertIn("게시 실패", self.sent[0]["text"])

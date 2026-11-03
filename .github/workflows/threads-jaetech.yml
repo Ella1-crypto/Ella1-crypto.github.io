@@ -1,5 +1,6 @@
 # 재테크 한 줄 자동 게시: _automation/jaetech-queue.json 에서 시각이 된 글을 Threads에 올린다.
 # 필요한 Secrets: THREADS_ACCESS_TOKEN, THREADS_USER_ID (Settings → Secrets and variables → Actions)
+# 선택 Secrets: HEEYA_TELEGRAM_TOKEN·HEEYA_TELEGRAM_CHAT_ID (게시·실패 텔레그램 알림, @Threads_heeyadailyfit_bot)
 # 주 경로: 큐 파일이 push되면 바로 실행(--watch) → 330분 동안 큐를 지켜보며 시각이 된 글을 하나씩 올린다(첫 댓글 포함).
 #          끝날 때 '예약' 글이 남아 있으면 workflow_dispatch(mode=relay)로 자기 자신을 다시 실행해 이어 지킨다.
 #          (GITHUB_TOKEN으로 만든 workflow_dispatch는 새 실행을 만든다. 07:30 같은 이른 시각도 놓치지 않으려고)
@@ -49,6 +50,8 @@ jobs:
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          HEEYA_TELEGRAM_TOKEN: ${{ secrets.HEEYA_TELEGRAM_TOKEN }}
+          HEEYA_TELEGRAM_CHAT_ID: ${{ secrets.HEEYA_TELEGRAM_CHAT_ID }}
         run: python _automation/jaetech_publish.py --check
       - name: Refresh token
         if: github.event.schedule == '0 0 * * 1' || inputs.mode == 'refresh'
@@ -64,6 +67,8 @@ jobs:
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          HEEYA_TELEGRAM_TOKEN: ${{ secrets.HEEYA_TELEGRAM_TOKEN }}
+          HEEYA_TELEGRAM_CHAT_ID: ${{ secrets.HEEYA_TELEGRAM_CHAT_ID }}
         run: python _automation/jaetech_publish.py --watch
       - name: Relay (keep watching)
         if: steps.watch.outputs.relay == 'true'
@@ -75,4 +80,6 @@ jobs:
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          HEEYA_TELEGRAM_TOKEN: ${{ secrets.HEEYA_TELEGRAM_TOKEN }}
+          HEEYA_TELEGRAM_CHAT_ID: ${{ secrets.HEEYA_TELEGRAM_CHAT_ID }}
         run: python _automation/jaetech_publish.py
