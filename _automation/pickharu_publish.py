@@ -24,7 +24,8 @@ from typing import Callable
 
 from jaetech_publish import (
     BASE, BLOCK_RE, CONTAINER_WAIT_SECONDS, DONE, FAILED, IN_PROGRESS, KST, LATE_LIMIT, READY, TEXT_LIMIT,
-    Http, ThreadsError, git_commit_push, git_pull, http_json, load_queue, pick_due, save_queue,
+    Http, ThreadsError, git_commit_push, git_pull, http_json, load_queue, pick_due, restart_if_code_changed, save_queue,
+    session_end,
     with_status,
 )
 
@@ -425,13 +426,16 @@ def relay_delay(items: list[dict], now: datetime) -> float | None:
 
 def session(token: str, clock: Callable[[], datetime] = lambda: datetime.now(KST), sleep=time.sleep,
             pull: Callable[[], bool] = lambda: git_pull(QUEUE_PATH), run=None,
-            path: Path = QUEUE_PATH) -> list[str]:
-    """push 직후 실행: MAX_SESSION 안에 예약된 글을 시각마다 기다렸다가 하나씩 올린다."""
+            path: Path = QUEUE_PATH, restart: Callable[[datetime], None] | None = None) -> list[str]:
+    """push 직후 실행: MAX_SESSION 안에 예약된 글을 시각마다 기다렸다가 하나씩 올린다.
+    pull 할 때마다 발행기 코드가 바뀌었으면 새 코드로 다시 시작한다(ig-pickharu 도 이 함수를 쓴다)."""
     run = run or (lambda now: run_once(now, token, path=path))
+    restart = restart or restart_if_code_changed
+    end = session_end(clock(), MAX_SESSION)
     # checkout은 push 시점 커밋이라, 앞 실행을 기다리는 사이 큐가 바뀌었을 수 있다. 시작할 때 최신본부터 받는다.
     if not pull():
         raise SystemExit("최신 예약 목록을 받지 못해 올리지 않음")
-    end = clock() + MAX_SESSION
+    restart(end)
     results = []
     while True:
         wait = next_wait(load_queue(path), clock(), end - clock())
@@ -443,6 +447,7 @@ def session(token: str, clock: Callable[[], datetime] = lambda: datetime.now(KST
             # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정). 최신본을 못 받으면 올리지 않는다.
             if not pull():
                 raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
+            restart(end)
         try:
             results.append(run(clock()))
         except SystemExit as stop:

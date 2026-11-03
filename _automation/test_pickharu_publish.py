@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -6,6 +7,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import jaetech_publish as jp  # noqa: E402
 import pickharu_publish as pp  # noqa: E402
 from test_refresh_token import FakeGitHub  # noqa: E402
 
@@ -537,6 +539,65 @@ class NotifyTest(unittest.TestCase):
         def broken(method, url, params):
             raise pp.ThreadsError("down")
         self.assertIn("kk-1", pp.notify("올리는 중 표시를 저장하지 못해 올리지 않음 (kk-1)", self.path, broken))
+
+class CodeChangeRestartTest(unittest.TestCase):
+    """2026-11-03: 옛 코드로 기다리던 실행이 새 '정보' 글을 '알 수 없는 글 종류'로 실패 처리한 사고."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.path = Path(self.dir.name) / "queue.json"
+        self.path.write_text(json.dumps([item("a", at="2026-10-28T09:30+09:00")]), encoding="utf-8")
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def test_session_checks_code_after_every_pull_before_running(self):
+        order = []
+
+        def restart(end):
+            order.append(("restart", end))
+
+        def run(now):
+            order.append(("run", now))
+            pp.save_queue(pp.with_status(pp.load_queue(self.path), "a", status="올림"), self.path)
+            return "a"
+
+        pp.session("tok", clock=lambda: NOW, sleep=lambda s: None, pull=lambda: order.append(("pull",)) or True,
+                   run=run, path=self.path, restart=restart)
+        names = [o[0] for o in order]
+        self.assertEqual(names[:2], ["pull", "restart"])
+        self.assertLess(names.index("restart", 2), names.index("run"))  # 기다린 뒤 pull → 코드 확인 → 올리기
+        self.assertEqual(order[1][1], NOW + pp.MAX_SESSION)
+
+    def test_changed_code_restarts_with_same_end_time(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "x.py").write_text("A = 1\n", encoding="utf-8")
+            started = jp.code_fingerprint(root)
+            calls = []
+            end = NOW + pp.MAX_SESSION
+            jp.restart_if_code_changed(end, started, execv=lambda *a: calls.append(a), root=root)
+            self.assertEqual(calls, [])  # 그대로면 다시 시작하지 않음
+            (root / "x.py").write_text("A = 2\n", encoding="utf-8")
+            saved = os.environ.pop(jp.SESSION_END_ENV, None)
+            try:
+                jp.restart_if_code_changed(end, started, execv=lambda *a: calls.append(a), root=root)
+                self.assertEqual(len(calls), 1)
+                self.assertEqual(os.environ[jp.SESSION_END_ENV], end.isoformat())
+                later = NOW + timedelta(minutes=100)
+                self.assertEqual(jp.session_end(later, pp.MAX_SESSION), end)  # 처음 실행의 끝을 넘지 않음
+            finally:
+                os.environ.pop(jp.SESSION_END_ENV, None)
+                if saved is not None:
+                    os.environ[jp.SESSION_END_ENV] = saved
+
+    def test_session_end_without_inherited_time(self):
+        saved = os.environ.pop(jp.SESSION_END_ENV, None)
+        try:
+            self.assertEqual(jp.session_end(NOW, pp.MAX_SESSION), NOW + pp.MAX_SESSION)
+        finally:
+            if saved is not None:
+                os.environ[jp.SESSION_END_ENV] = saved
 
 
 if __name__ == "__main__":

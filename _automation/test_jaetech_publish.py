@@ -178,6 +178,22 @@ class RunOnceTest(unittest.TestCase):
         with self.assertRaises(jp.ThreadsError):
             jp.check_token("tok", http)
 
+class WatchRestartTest(unittest.TestCase):
+    def test_watch_checks_code_after_each_pull(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "q.json"
+            path.write_text(json.dumps([item("a", "2026-10-29T13:00+09:00")], ensure_ascii=False), encoding="utf-8")
+            t = {"now": datetime(2026, 10, 29, 7, 0, tzinfo=jp.KST)}
+            seen = []
+
+            def sleep(sec):
+                t["now"] += jp.timedelta(seconds=sec)
+
+            jp.watch("tok", "u1", clock=lambda: t["now"], sleep=sleep, pull=lambda: True,
+                     run=lambda now: "ran", path=path, restart=seen.append)
+            self.assertTrue(seen)
+            self.assertTrue(all(end == seen[0] for end in seen))  # 끝 시각은 한 번 정한 그대로
+
 
 if __name__ == "__main__":
     unittest.main()

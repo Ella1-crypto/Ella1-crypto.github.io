@@ -13,6 +13,7 @@ GitHub Actions(.github/workflows/threads-jaetech.yml)가 실행한다. 표준 �
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -202,6 +203,40 @@ def seconds_until_next(items: list[dict], now: datetime) -> float | None:
     return max(wait, 0.0)
 
 
+CODE_DIR = Path(__file__).resolve().parent
+SESSION_END_ENV = "AUTOMATION_SESSION_END"  # 새 코드로 다시 시작해도 처음 실행의 끝 시각(워크플로 timeout)을 지킨다
+
+
+def code_fingerprint(root: Path = CODE_DIR) -> str:
+    """발행기 코드(_automation/*.py) 지문. 기다리는 사이 git pull 로 코드가 바뀌었는지 알아챈다."""
+    digest = hashlib.sha256()
+    for p in sorted(root.glob("*.py")):
+        digest.update(p.name.encode("utf-8") + b"\0" + p.read_bytes())
+    return digest.hexdigest()
+
+
+STARTED_CODE = code_fingerprint()  # 이 프로세스가 실제로 읽어 들인 코드
+
+
+def restart_if_code_changed(end: datetime, started: str | None = None, execv=os.execv, root: Path = CODE_DIR) -> None:
+    """기다리는 동안 받은 코드가 이 프로세스가 돌리는 코드와 다르면, 새 코드로 같은 명령을 다시 시작한다.
+    2026-11-03: 15:35 전에 켜진 실행이 옛 코드로 새 '정보' 글 2개를 '알 수 없는 글 종류'로 실패 처리했다."""
+    if code_fingerprint(root) == (started or STARTED_CODE):
+        return
+    print("발행기 코드가 바뀌어 새 코드로 다시 시작합니다.", flush=True)
+    os.environ[SESSION_END_ENV] = end.isoformat()
+    execv(sys.executable, [sys.executable, *sys.argv])
+
+
+def session_end(now: datetime, limit: timedelta) -> datetime:
+    """이번 실행이 끝나야 할 때. 새 코드로 다시 시작한 실행은 처음 실행의 끝 시각을 넘지 않는다."""
+    try:
+        inherited = datetime.fromisoformat(os.environ.get(SESSION_END_ENV, ""))
+    except ValueError:
+        return now + limit
+    return min(inherited, now + limit)
+
+
 def git_pull(path: Path = QUEUE_PATH) -> bool:
     root = path.parent.parent
     return subprocess.run(["git", "pull", "--rebase"], cwd=root, capture_output=True, text=True).returncode == 0
@@ -209,9 +244,10 @@ def git_pull(path: Path = QUEUE_PATH) -> bool:
 
 def wait_then_run(token: str, user_id: str, clock: Callable[[], datetime] = lambda: datetime.now(KST),
                   sleep=time.sleep, pull: Callable[[], bool] = git_pull, run=None,
-                  path: Path = QUEUE_PATH) -> str:
+                  path: Path = QUEUE_PATH, restart: Callable[[datetime], None] | None = None) -> str:
     """큐 push 직후 실행: 가장 이른 예약 시각까지(최대 MAX_WAIT) 기다렸다가 최신 큐로 run_once."""
     run = run or (lambda now: run_and_notify(now, token, user_id, run=lambda *a: run_once(*a, path=path)))
+    restart = restart or restart_if_code_changed
     wait = seconds_until_next(load_queue(path), clock())
     if wait is None:
         return f"올릴 글 없음 ({int(MAX_WAIT.total_seconds() // 60)}분 안에 예약된 글 없음)"
@@ -221,6 +257,7 @@ def wait_then_run(token: str, user_id: str, clock: Callable[[], datetime] = lamb
         # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정). 최신본을 못 받으면 올리지 않는다.
         if not pull():
             raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
+        restart(clock() + MAX_WAIT)
     return run(clock())
 
 
@@ -318,12 +355,13 @@ def next_ready_at(items: list[dict]) -> datetime | None:
 
 def watch(token: str, user_id: str, clock: Callable[[], datetime] = lambda: datetime.now(KST),
           sleep=time.sleep, pull: Callable[[], bool] = git_pull, run=None,
-          path: Path = QUEUE_PATH) -> bool:
+          path: Path = QUEUE_PATH, restart: Callable[[datetime], None] | None = None) -> bool:
     """WATCH_LIMIT 동안 큐를 지켜보며 시각이 된 글을 하나씩 올린다.
     WATCH_STEP마다 최신 큐를 다시 받아, 지켜보는 중에 새로 들어온 예약도 놓치지 않는다.
     끝났을 때 아직 '예약' 글이 남아 있으면 True(워크플로가 자기 자신을 다시 실행해 이어 지킨다)."""
     run = run or (lambda now: run_and_notify(now, token, user_id, run=lambda *a: run_once(*a, path=path)))
-    start = clock()
+    restart = restart or restart_if_code_changed
+    end = session_end(clock(), WATCH_LIMIT)
     while True:
         now = clock()
         nxt = next_ready_at(load_queue(path))
@@ -333,13 +371,14 @@ def watch(token: str, user_id: str, clock: Callable[[], datetime] = lambda: date
         if nxt <= now:
             print(run(now), flush=True)
             continue
-        left = start + WATCH_LIMIT - now
+        left = end - now
         if left <= timedelta(0):
             return True
         nap = min(nxt - now, WATCH_STEP, left)
         sleep(nap.total_seconds())
         if not pull():
             raise SystemExit("최신 예약 목록을 받지 못해 멈춤")
+        restart(end)  # 받은 코드가 바뀌었으면 새 코드로 다시 시작(옛 코드로 새 글을 판정하지 않게)
 
 
 def main() -> int:
