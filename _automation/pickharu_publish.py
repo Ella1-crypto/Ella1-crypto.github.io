@@ -70,7 +70,7 @@ KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환�
 KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
 NAVER_DISCLOSURE = "이 포스팅은 네이버 브랜드 커넥트 활동의 일환으로, 판매 발생 시 일정액의 수수료를 제공받습니다."
 NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커넥트 링크는 naver.me 단축 주소(2026-10-27 사용자 예시)
-# 올리브영 쇼핑 큐레이터(2026-11-02 승인). 가이드: 공식 문구를 제목·서두에(하단·댓글만은 위반) → 본문 첫머리에도 검사(disclosure_top).
+# 올리브영 쇼핑 큐레이터(2026-11-02 승인). 가이드는 공식 문구를 제목·서두에 두라고 하지만, 2026-11-03 사용자가 위반 소지를 듣고도 다른 종류처럼(마지막 줄 [광고]+댓글 고지)으로 정함.
 OLIVEYOUNG = "올영"
 OY_DISCLOSURE = "이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다."
 OY_LINK_RE = re.compile(r"https://oy\.run/[A-Za-z0-9]+")  # 앱 '링크 생성' 단축 주소(2026-11-02 사용자 예시)
@@ -83,8 +83,8 @@ SHOPS = {
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
     NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3,
             "max_links": 3},  # 2026-10-30 사용자 지정: 하루 3개까지. 11-01: 같은 상품 옵션(1개·2개·세트) 링크는 한 글에 3개까지
-    OLIVEYOUNG: {"tag": "[광고] 올리브영 쇼핑 큐레이터", "disclosure": OY_DISCLOSURE, "link": OY_LINK_RE, "cap": 2,
-                 "disclosure_top": True},  # 2026-11-02 사용자: 하루 1개 → 같은 날 "블프 안에 끝내"로 2개
+    # 2026-11-02 사용자: 하루 1개 → 같은 날 "블프 안에 끝내"로 2개. 11-03 사용자: 본문 첫머리 문구 빼고 다른 종류처럼 마지막 줄 [광고]+댓글 고지
+    OLIVEYOUNG: {"tag": "[광고] 올리브영 쇼핑 큐레이터", "disclosure": OY_DISCLOSURE, "link": OY_LINK_RE, "cap": 2},
 }
 
 
@@ -138,12 +138,6 @@ def media_problem(item: dict) -> str:
 
 def is_general(item: dict) -> bool:
     return item.get("kind") == GENERAL
-
-
-def top_has(text: str, phrase: str, lines: int = 3) -> bool:
-    """본문 처음 몇 줄 안에 문구가 그대로 있는지(줄바꿈·띄어쓰기는 무시)."""
-    head = "".join(text.strip().splitlines()[:lines])
-    return "".join(phrase.split()) in "".join(head.split())
 
 
 def cap_of(kind: str, now: datetime) -> int:
@@ -202,8 +196,6 @@ def problem_of(item: dict) -> str:
         return f"본문 마지막 줄에 광고 표시({rule['tag']})가 없음"
     if rule["disclosure"] not in reply:
         return f"댓글에 {kind} 고지 문구가 없음"
-    if rule.get("disclosure_top") and not top_has(text, rule["disclosure"]):
-        return f"본문 첫머리에 {kind} 고지 문구가 없음(가이드: 제목·서두에 표기)"
     urls = ANY_URL_RE.findall(reply)
     max_links = rule.get("max_links", 1)
     if not 1 <= len(urls) <= max_links or not all(rule["link"].fullmatch(u) for u in urls):
