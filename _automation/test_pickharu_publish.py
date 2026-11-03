@@ -500,5 +500,44 @@ class OliveYoungTest(unittest.TestCase):
         self.assertEqual(pp.cap_of("쿠팡", datetime(2026, 11, 5, 12, 10, tzinfo=pp.KST)), pp.DAILY_CAP)
 
 
+class NotifyTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "q.json"
+        self.path.write_text(json.dumps([{"id": "kk-1", "text": "첫 줄\n둘째","reply_error": "링크 댓글 실패: x"}],
+                                        ensure_ascii=False), encoding="utf-8")
+        self.calls = []
+        self.http = lambda method, url, params: self.calls.append((url, params)) or {}
+        self.env = dict(pp.os.environ)
+        pp.os.environ.update(PICKHARU_TELEGRAM_TOKEN="bot", PICKHARU_TELEGRAM_CHAT_ID="7")
+
+    def tearDown(self):
+        pp.os.environ.clear()
+        pp.os.environ.update(self.env)
+        self.tmp.cleanup()
+
+    def test_sends_result_with_first_line(self):
+        text = pp.notify("올림: kk-1 → 99 (댓글 실패)", self.path, self.http)
+        self.assertEqual(self.calls[0][1]["chat_id"], "7")
+        self.assertTrue(text.startswith("⚠️"))
+        self.assertIn("첫 줄", text)
+        self.assertIn("링크 댓글 실패", text)
+
+    def test_success_icon(self):
+        self.path.write_text(json.dumps([{"id": "kk-1", "text": "첫 줄"}]), encoding="utf-8")
+        self.assertTrue(pp.notify("올림: kk-1 → 99", self.path, self.http).startswith("✅"))
+
+    def test_skips_nothing_to_post_and_missing_secret(self):
+        self.assertEqual(pp.notify("올릴 글 없음", self.path, self.http), "")
+        del pp.os.environ["PICKHARU_TELEGRAM_CHAT_ID"]
+        self.assertEqual(pp.notify("올림: kk-1 → 99", self.path, self.http), "")
+        self.assertEqual(self.calls, [])
+
+    def test_failure_does_not_raise(self):
+        def broken(method, url, params):
+            raise pp.ThreadsError("down")
+        self.assertIn("kk-1", pp.notify("올리는 중 표시를 저장하지 못해 올리지 않음 (kk-1)", self.path, broken))
+
+
 if __name__ == "__main__":
     unittest.main()

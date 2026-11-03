@@ -279,6 +279,29 @@ def publish_thread(thread: list[str], parent: str, token: str, http: Http, sleep
     return {"thread_ids": ids} if ids else {}
 
 
+def notify(result: str, path: Path = QUEUE_PATH, http: Http = http_json) -> str:
+    """게시 결과를 텔레그램으로 알린다(2026-11-03 사용자). Secret이 없거나 '올릴 글 없음'이면 조용히 넘어간다.
+    알림 실패는 게시를 막지 않는다. 토큰이 든 주소는 오류 메시지에 넣지 않는다."""
+    bot = os.environ.get("PICKHARU_TELEGRAM_TOKEN", "").strip()
+    chat = os.environ.get("PICKHARU_TELEGRAM_CHAT_ID", "").strip()
+    if not bot or not chat or result.startswith("올릴 글 없음"):
+        return ""
+    icon = "✅" if result.startswith("올림") and "실패" not in result else "⚠️"
+    text = f"{icon} pick.haru {result}"
+    match = re.search(r"\(([\w-]+)\)|: ([\w-]+) →", result)
+    item_id = next((g for g in match.groups() if g), "") if match else ""
+    item = next((it for it in load_queue(path) if it.get("id") == item_id), None) if item_id else None
+    if item:
+        text += "\n" + item["text"].splitlines()[0]
+        if item.get("reply_error"):
+            text += "\n" + item["reply_error"]
+    try:
+        http("POST", f"https://api.telegram.org/bot{bot}/sendMessage", {"chat_id": chat, "text": text})
+    except PUBLISH_ERRORS:
+        print("::warning::텔레그램 알림 실패", flush=True)
+    return text
+
+
 def check_account(token: str, http: Http = http_json) -> str:
     me = http("GET", f"{BASE}/me", {"fields": "id,username", "access_token": token})
     if me.get("username") != EXPECTED_USERNAME:
@@ -387,8 +410,13 @@ def session(token: str, clock: Callable[[], datetime] = lambda: datetime.now(KST
             # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정). 최신본을 못 받으면 올리지 않는다.
             if not pull():
                 raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
-        results.append(run(clock()))
+        try:
+            results.append(run(clock()))
+        except SystemExit as stop:
+            notify(str(stop.code), path)
+            raise
         print(results[-1], flush=True)
+        notify(results[-1], path)
 
 
 def refresh(token: str, repo: str, pat: str, http: Http = http_json, gh=None, encrypt=None,
@@ -424,7 +452,13 @@ def main() -> int:
     if "--wait" in sys.argv:
         session(token)
         return 0
-    print(run_once(datetime.now(KST), token))
+    try:
+        result = run_once(datetime.now(KST), token)
+    except SystemExit as stop:
+        notify(str(stop.code))
+        raise
+    print(result)
+    notify(result)
     return 0
 
 

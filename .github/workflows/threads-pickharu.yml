@@ -1,5 +1,6 @@
 # pick.haru 쇼핑 글 자동 게시: _automation/pickharu-queue.json 에서 시각이 된 글을 올리고 링크는 첫 댓글로 단다.
 # 필요한 Secrets: PICKHARU_THREADS_ACCESS_TOKEN (threads-oauth로 저장), GH_SECRETS_PAT (토큰 자동 갱신)
+# 선택 Secrets: PICKHARU_TELEGRAM_TOKEN·PICKHARU_TELEGRAM_CHAT_ID (게시·실패 텔레그램 알림)
 # 주 경로: 큐 파일이 push되면 바로 실행 → 320분 안의 예약 글을 시각마다 기다렸다가 하나씩 올린다.
 # 보조 경로: 30분마다 cron(밀리거나 건너뛸 수 있음). 봇 커밋은 워크플로를 다시 깨우지 않는다.
 # 이어달리기(2026-11-02): 올리는 실행(push·cron·wait)이 끝나면 relay job이 다음 '예약' 글 300분 전까지 쉬었다가 새 wait 실행을 부른다
@@ -63,6 +64,9 @@ jobs:
       cancel-in-progress: false
     env:
       PICKHARU_THREADS_ACCESS_TOKEN: ${{ secrets.PICKHARU_THREADS_ACCESS_TOKEN }}
+      # 게시 결과 텔레그램 알림(없으면 건너뜀). 2026-11-03
+      PICKHARU_TELEGRAM_TOKEN: ${{ secrets.PICKHARU_TELEGRAM_TOKEN }}
+      PICKHARU_TELEGRAM_CHAT_ID: ${{ secrets.PICKHARU_TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v5
         with:
