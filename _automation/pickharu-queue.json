@@ -841,5 +841,22 @@
    "message_id": 8,
    "at": "2026-11-03T15:39:32+09:00"
   }
+ },
+ {
+  "id": "if-20261103-3",
+  "kind": "정보",
+  "text": "오늘 오후에 풀린 거 2개🎀\n\n1. 뮷즈 국새 키캡 키링 세트\n오늘 오후 2시 반에 5차 판매 열렸어\n키캡+클리커&키링 구성, 38,000원\n1인 3개까지래\n방금 봤을 땐 실버는 벌써 품절,\n골드만 남아 있었어\n\n2. 삼립 X 호빵맨 빵 4종\n식빵맨 크림샌드, 카레빵맨 카레펀치빵\n호빵맨 딸기단팥빵, 롤빵소녀 애플롤링\n띠부씰이 100종이나 랜덤으로 들어 있대\n전국 편의점·슈퍼에서 판대\n\n스치니들은 띠부씰 모아 본 적 있어?🤍",
+  "reply": "판매처: https://www.museumshop.or.kr/kor/product/product_view.do?clickx=985&clicky=246&page=1&str_bcode=001002008&str_goodcode=202607210006\n출처: https://www.asiae.co.kr/article/distribution/2026110310121806056\n\n날짜·가격·조건은 바뀔 수 있어서\n원문에서 한 번 더 확인해 줘",
+  "product": "today-drop",
+  "expires_at": "2026-11-03T23:59",
+  "publish_at": "2026-11-03T20:20+09:00",
+  "status": "예약",
+  "approved_by": {
+   "via": "telegram",
+   "user_id": 8420322263,
+   "update_id": 479665594,
+   "message_id": 9,
+   "at": "2026-11-03T15:39:40+09:00"
+  }
  }
 ]
