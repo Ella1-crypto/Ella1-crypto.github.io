@@ -889,14 +889,17 @@
   "product": "luna",
   "expires_at": "2026-11-03T23:59",
   "publish_at": "2026-11-03T22:20+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665595,
    "message_id": 10,
    "at": "2026-11-03T15:39:49+09:00"
-  }
+  },
+  "post_id": "18082693583341606",
+  "published_at": "2026-11-03T22:20+09:00",
+  "reply_id": "18123150961941200"
  },
  {
   "id": "if-20261103-5",
