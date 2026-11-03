@@ -816,14 +816,15 @@
   "product": "coupang",
   "expires_at": "2026-11-03T16:59",
   "publish_at": "2026-11-03T16:15+09:00",
-  "status": "예약",
+  "status": "실패",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665592,
    "message_id": 7,
    "at": "2026-11-03T15:39:25+09:00"
-  }
+  },
+  "note": "알 수 없는 글 종류: 정보"
  },
  {
   "id": "if-20261103-2",
