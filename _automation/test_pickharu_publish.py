@@ -541,3 +541,55 @@ class NotifyTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+INFO_TEXT = "쿠팡 와우회원 스치니들\n오늘 오후 5시 알람 맞춰 둬⏰\n선착순 쿠폰이 풀린대🤍"
+INFO_REPLY = "출처: https://ir.newspim.com/news/view/20261102000083\n\n조건은 바뀔 수 있어서 원문 한 번 더 확인해 줘"
+
+
+def info(i, at="2026-10-28T09:00+09:00", **kw):
+    return {"id": i, "kind": "정보", "publish_at": at, "text": INFO_TEXT, "reply": INFO_REPLY, "status": "예약", **kw}
+
+
+class InfoRuleTest(unittest.TestCase):
+    def test_info_post_needs_no_ad_tag(self):
+        self.assertEqual(pp.problem_of(info("i")), "")
+
+    def test_info_reply_needs_one_to_three_source_links(self):
+        self.assertIn("출처 링크", pp.problem_of(info("i", reply="출처는 기사예요")))
+        many = "\n".join(f"https://a.kr/{n}" for n in range(4))
+        self.assertIn("출처 링크", pp.problem_of(info("i", reply=many)))
+
+    def test_info_reply_must_not_copy_body(self):
+        copied = INFO_REPLY + "\n오늘 오후 5시 알람 맞춰 둬⏰"
+        self.assertIn("옮겨", pp.problem_of(info("i", reply=copied)))
+
+    def test_info_body_still_blocks_links_and_neo(self):
+        self.assertIn("주소", pp.problem_of(info("i", text=INFO_TEXT + "\nhttps://a.kr/x")))
+        self.assertIn("너", pp.problem_of(info("i", text="너는 뭐 담았어?")))
+
+    def test_expired(self):
+        self.assertTrue(pp.expired(info("i", expires_at="2026-10-28T09:00+09:00"), NOW))
+        self.assertFalse(pp.expired(info("i", expires_at="2026-10-28T17:00"), NOW))
+        self.assertFalse(pp.expired(info("i"), NOW))
+
+
+class InfoRunOnceTest(RunOnceTest):
+    def test_info_post_gets_source_reply(self):
+        self.write([info("i")])
+        http = FakeHttp()
+        self.assertIn("p1", self.run_once(http))
+        replies = [p for n, p in http.calls if "reply_to_id" in p]
+        self.assertEqual(replies[0]["text"], INFO_REPLY)
+
+    def test_expired_info_post_is_not_published(self):
+        self.write([info("i", expires_at="2026-10-28T09:01+09:00")])
+        http = FakeHttp()
+        self.assertIn("지나", self.run_once(http))
+        self.assertFalse([c for c in http.calls if c[0] == "threads"])
+        self.assertEqual(self.saved()["i"]["status"], "실패")
+
+    def test_info_cap_is_four(self):
+        done = [info(f"d{n}", at=f"2026-10-28T0{n}:00+09:00", status="올림") for n in range(1, 5)]
+        self.write(done + [info("i")])
+        self.assertIn("상한", self.run_once(FakeHttp()))

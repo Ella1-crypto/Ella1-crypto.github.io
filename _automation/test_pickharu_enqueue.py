@@ -104,3 +104,37 @@ class SlotPlanTest(unittest.TestCase):
 
     def test_thread_kept_in_queue(self):
         self.assertIn("thread", pe.QUEUE_FIELDS)
+
+
+class InfoEnqueueTest(unittest.TestCase):
+    NOW = datetime(2026, 11, 3, 15, 30, tzinfo=pe.KST)
+
+    def info(self, n, **kw):
+        from test_pickharu_publish import INFO_REPLY, INFO_TEXT
+        return {"id": f"if-20261103-{n}", "kind": "정보", "text": INFO_TEXT, "reply": INFO_REPLY, **kw}
+
+    def test_uses_proposed_time_and_keeps_expiry(self):
+        d = self.info(1, publish_at="2026-11-03T16:15", expires_at="2026-11-03T17:00")
+        it = pe.build([d], ["1"], [], now=self.NOW)[0]
+        self.assertEqual(it["publish_at"], "2026-11-03T16:15+09:00")
+        self.assertEqual(it["expires_at"], "2026-11-03T17:00")
+        self.assertEqual(it["kind"], "정보")
+
+    def test_refuses_proposed_time_already_passed(self):
+        d = self.info(1, publish_at="2026-11-03T15:32")
+        with self.assertRaisesRegex(ValueError, "지났"):
+            pe.build([d], ["1"], [], now=self.NOW)
+
+    def test_planned_slot_after_expiry_is_refused(self):
+        d = self.info(1, expires_at="2026-11-03T18:00")  # 다음 빈 자리는 18:55
+        with self.assertRaisesRegex(ValueError, "마감"):
+            pe.build([d], ["1"], [], now=self.NOW)
+
+    def test_without_time_takes_info_slot(self):
+        it = pe.build([self.info(1)], ["1"], [], now=self.NOW)[0]
+        self.assertEqual(it["publish_at"], "2026-11-03T18:55+09:00")
+
+    def test_info_cap_four_per_batch(self):
+        ds = [self.info(n) for n in range(1, 6)]
+        with self.assertRaisesRegex(ValueError, "최대 4"):
+            pe.build(ds, ["1", "2", "3", "4", "5"], [], now=self.NOW)

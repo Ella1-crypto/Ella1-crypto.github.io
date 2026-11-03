@@ -77,6 +77,11 @@ OY_LINK_RE = re.compile(r"https://oy\.run/[A-Za-z0-9]+")  # 앱 '링크 생성' 
 # 블프(11/1~11/7) 동안만 올영 하루 6개(2026-11-02 사용자 "블프 전에 다 올려야 돼", 11/3에 6개 지정). 끝나면 SHOPS의 2개로 돌아간다.
 OY_BF_END = date(2026, 11, 7)
 OY_BF_CAP = 6
+# 할인·신상·행사 소식 글(2026-11-03 사용자, pickharu/INFO_POST.md). 광고가 아니라 광고 표시·고지 없이, 첫 댓글에 공식 출처 링크만 단다.
+INFO = "정보"
+INFO_CAP = 4
+INFO_MAX_LINKS = 3
+COPY_MIN = 8  # 첫 댓글에 이 글자 수 이상인 본문 줄이 그대로 있으면 본문 복사로 본다(2026-10-31 첫 댓글 사고)
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
@@ -141,9 +146,30 @@ def is_general(item: dict) -> bool:
 
 
 def cap_of(kind: str, now: datetime) -> int:
+    if kind == INFO:
+        return INFO_CAP
     if kind == OLIVEYOUNG and now.astimezone(KST).date() <= OY_BF_END:
         return OY_BF_CAP
     return SHOPS[kind]["cap"]
+
+
+def info_problem(item: dict) -> str:
+    """소식 글: 첫 댓글엔 출처 링크 1~3개만, 본문 줄을 옮겨 적지 않는다."""
+    reply = item.get("reply", "")
+    if not 1 <= len(ANY_URL_RE.findall(reply)) <= INFO_MAX_LINKS:
+        return f"소식 글 첫 댓글에 출처 링크가 1~{INFO_MAX_LINKS}개 있어야 함"
+    words = ANY_URL_RE.sub("", reply)
+    if any(len(line.strip()) >= COPY_MIN and line.strip() in words for line in item["text"].splitlines()):
+        return "첫 댓글이 본문을 옮겨 적음 — 첫 댓글엔 출처만"
+    return thread_problem(item, ANY_URL_RE) or media_problem(item)
+
+
+def expired(item: dict, now: datetime) -> bool:
+    """expires_at(소식이 끝나는 때)이 지났는지. GitHub 실행이 밀려 쿠폰 시각이 지난 뒤 올라가지 않게 한다."""
+    if not item.get("expires_at"):
+        return False
+    at = datetime.fromisoformat(item["expires_at"])
+    return now >= (at if at.tzinfo else at.replace(tzinfo=KST))
 
 
 def thread_problem(item: dict, link: re.Pattern) -> str:
@@ -188,6 +214,8 @@ def problem_of(item: dict) -> str:
         if reply or item.get("video"):
             return "일반 글에는 댓글·영상을 넣지 않음"
         return images_problem(item) or gif_problem(item)
+    if item.get("kind") == INFO:
+        return info_problem(item)
     kind = shop_of(item)
     if kind not in SHOPS:
         return f"알 수 없는 글 종류: {kind}"
@@ -318,7 +346,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(items, path)
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
-    problem = problem_of(due)
+    problem = problem_of(due) or ("소식 시간이 지나 올리지 않음" if expired(due, now) else "")
     if not problem and due.get("kind") != FOLLOWUP:
         kind = shop_of(due)
         cap = GENERAL_CAP if is_general(due) else cap_of(kind, now)

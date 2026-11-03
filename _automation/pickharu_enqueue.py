@@ -19,10 +19,11 @@ from pathlib import Path
 
 from jaetech_publish import DONE, IN_PROGRESS, KST, READY, load_queue, save_queue
 from pickharu_publish import (
-    COUPANG, GENERAL, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of, problem_of, shop_of,
+    COUPANG, GENERAL, INFO, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of, problem_of,
+    shop_of,
 )
 
-QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "thread", "keyword", "product", "video", "images", "gif", "quote_of")
+QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "thread", "keyword", "product", "video", "images", "gif", "quote_of", "expires_at")
 GAP = timedelta(hours=1)
 LEAD = timedelta(minutes=20)
 SLOT_MINUTE = {KAKAO: 40, NAVER: 25, OLIVEYOUNG: 50}  # 종류별 예약 분(쿠팡 :10분과 안 겹치게)
@@ -33,7 +34,9 @@ DAY_SLOTS = {
     KAKAO: [(13, 40), (16, 40), (19, 40)],
     NAVER: [(13, 25), (16, 25), (19, 25)],
     OLIVEYOUNG: [(12, 50), (17, 50)],  # 2026-11-02 사용자: 점심·퇴근길 하루 2개까지
+    INFO: [(10, 55), (14, 55), (18, 55), (21, 55)],  # 소식 글(2026-11-03). 시간이 중요한 글은 초안의 publish_at을 쓴다
 }
+FIXED_LEAD = timedelta(minutes=5)  # 소식 글의 제안 시각(publish_at)은 Accept 시점보다 이만큼은 뒤여야 한다
 # 블프(~11/7)엔 올영 자리를 4개로(2026-11-02 사용자 "블프 전에 다 올려야 돼")
 OY_BF_SLOTS = [(12, 50), (15, 50), (17, 50), (21, 10)]
 SLOT_GROUP = {KAKAO: "제휴", NAVER: "제휴"}  # 카카오·네이버는 같은 시간대를 나눠 쓴다(한 시간에 하나)
@@ -83,8 +86,9 @@ def pick(drafts: list[dict], ids: list[str]) -> list[dict]:
 def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime | None = None,
           now: datetime | None = None) -> list[dict]:
     chosen = pick(drafts, ids)
-    for kind in {shop_of(d) for d in chosen} & SHOPS.keys():
-        cap = cap_of(kind, now or datetime.now(KST))
+    now = now or datetime.now(KST)
+    for kind in {shop_of(d) for d in chosen} & (SHOPS.keys() | {INFO}):
+        cap = cap_of(kind, now)
         if sum(shop_of(d) == kind for d in chosen) > cap:
             raise ValueError(f"{kind} 글은 하루 최대 {cap}개입니다")
     existing = {it.get("id") for it in queue}
@@ -101,14 +105,26 @@ def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime
             raise ValueError("시각이 push 실행 대기 시간(320분)을 넘습니다")
         times = [start + GAP * i for i in range(len(chosen))]
     else:
-        planned = {kind: iter(plan_times(kind, sum(shop_of(d) == kind for d in chosen), queue,
-                                         now or datetime.now(KST)))
-                   for kind in {shop_of(d) for d in chosen}}
-        times = [next(planned[shop_of(d)]) for d in chosen]
+        fixed = {d["id"]: kst(d["publish_at"]) for d in chosen if d.get("kind") == INFO and d.get("publish_at")}
+        free = [d for d in chosen if d["id"] not in fixed]
+        planned = {kind: iter(plan_times(kind, sum(shop_of(d) == kind for d in free), queue, now))
+                   for kind in {shop_of(d) for d in free}}
+        times = [fixed.get(d["id"]) or next(planned[shop_of(d)]) for d in chosen]
+        for d, at in zip(chosen, times):
+            if d["id"] in fixed and at < now + FIXED_LEAD:
+                raise ValueError(f"{d['id']}: 제안 시각 {at:%m/%d %H:%M}이 지났어요 — 시각을 바꿔 다시 보내 주세요")
+    for d, at in zip(chosen, times):
+        if d.get("expires_at") and at >= kst(d["expires_at"]):
+            raise ValueError(f"{d['id']}: 예약 시각 {at:%m/%d %H:%M}이 소식 마감 {kst(d['expires_at']):%m/%d %H:%M} 뒤예요")
     new = [{**{k: d[k] for k in QUEUE_FIELDS if k in d and k != "publish_at"},
             "publish_at": at.isoformat(timespec="minutes"), "status": READY}
            for d, at in zip(chosen, times)]
     return queue + new
+
+
+def kst(stamp: str) -> datetime:
+    at = datetime.fromisoformat(stamp)
+    return at if at.tzinfo else at.replace(tzinfo=KST)
 
 
 def git(*args: str) -> subprocess.CompletedProcess:
