@@ -81,6 +81,9 @@ OY_BF_CAP = 6
 INFO = "정보"
 INFO_CAP = 4
 INFO_MAX_LINKS = 3
+# 소식 글은 광고가 아니므로 제휴 링크를 달면 숨은 광고가 된다(2026-11-03, FIND_TO_THREADS.md). 쿠팡 일반 상품 주소는 되고 파트너스 표시(lptag)는 막는다.
+AFFILIATE_RE = re.compile(r"https?://(link\.coupang\.com|coupa\.ng|gift-link\.kakao\.com|naver\.me|oy\.run|appu\.kr"
+                          r"|([\w-]+\.)*linkprice\.com|s\.click\.aliexpress\.com)/|[?&]lptag=", re.IGNORECASE)
 COPY_MIN = 8  # 첫 댓글에 이 글자 수 이상인 본문 줄이 그대로 있으면 본문 복사로 본다(2026-10-31 첫 댓글 사고)
 # 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
@@ -158,6 +161,8 @@ def info_problem(item: dict) -> str:
     reply = item.get("reply", "")
     if not 1 <= len(ANY_URL_RE.findall(reply)) <= INFO_MAX_LINKS:
         return f"소식 글 첫 댓글에 출처 링크가 1~{INFO_MAX_LINKS}개 있어야 함"
+    if any(AFFILIATE_RE.search(u) for part in [reply, *(item.get("thread") or [])] for u in ANY_URL_RE.findall(part)):
+        return "소식 글엔 제휴 링크(쿠팡파트너스·카카오·네이버·올영·애드릭스·링크프라이스)를 달지 않음"
     words = ANY_URL_RE.sub("", reply)
     if any(len(line.strip()) >= COPY_MIN and line.strip() in words for line in item["text"].splitlines()):
         return "첫 댓글이 본문을 옮겨 적음 — 첫 댓글엔 출처만"

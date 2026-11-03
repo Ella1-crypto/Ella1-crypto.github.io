@@ -560,6 +560,18 @@ class InfoRuleTest(unittest.TestCase):
         many = "\n".join(f"https://a.kr/{n}" for n in range(4))
         self.assertIn("출처 링크", pp.problem_of(info("i", reply=many)))
 
+    def test_info_reply_blocks_affiliate_links(self):
+        for url in ("https://link.coupang.com/a/abc", "https://gift-link.kakao.com/c/x1", "https://naver.me/ab12",
+                    "https://oy.run/abc", "https://appu.kr/xyz", "https://click.linkprice.com/x",
+                    "https://www.coupang.com/vp/products/1?lptag=AF123"):
+            with self.subTest(url=url):
+                self.assertIn("제휴 링크", pp.problem_of(info("i", reply=f"출처: {url}")))
+        self.assertIn("제휴 링크", pp.problem_of(info("i", thread=["https://oy.run/abc"])))
+
+    def test_info_reply_allows_plain_official_pages(self):
+        reply = "출처: https://www.coupang.com/np/campaigns/123\nhttps://www.newsis.com/view/NISX1"
+        self.assertEqual(pp.problem_of(info("i", reply=reply)), "")
+
     def test_info_reply_must_not_copy_body(self):
         copied = INFO_REPLY + "\n오늘 오후 5시 알람 맞춰 둬⏰"
         self.assertIn("옮겨", pp.problem_of(info("i", reply=copied)))
