@@ -303,7 +303,7 @@
   "publish_at": "2026-11-03T09:30+09:00",
   "text": "AI한테 부탁했는데 엉뚱한 답이 올 때 있죠.\n\nMicrosoft Learn의 Copilot Chat 입문 강의에\n'프롬프트 네 가지 요소'가 나와요.\n목표, 컨텍스트, 소스, 기대치예요.\n\n이렇게 써 보세요.\n\"팀장님께 보낼 주간 보고 메일을 써 줘.\n이번 주 신규 고객이 3곳 늘었다는 게 핵심이야.\n아래 붙여 넣은 회의 메모만 참고해 줘.\n다섯 줄 안으로, 존댓말로 써 줘.\"\n\n네 가지를 한 번에 넣어 두면\n다시 묻고 고치는 횟수를 줄일 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
   "reply": "📌 출처: Microsoft · Microsoft Learn 「기본적인 생성형 AI 기술 구축」 (최적의 결과를 얻기 위해 효과적인 프롬프트 작성 — 네 가지 프롬프트 요소)\nhttps://learn.microsoft.com/ko-kr/training/modules/write-effective-prompts-do-more-prompting/\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
-  "status": "예약",
+  "status": "올리는 중",
   "source": "AI 노하우 하루 2개",
   "note": "Microsoft Learn Copilot Chat 입문 · 프롬프트 네 가지 요소(컨텍스트·목표·소스·기대치), 트랙 2 업무 팁 | 승인: 2026-10-30 사용자 '무료강의 통해서 ai 노하우도 이 계정에 올려줘' · '1일 2개씩 올려줘' · '사실로 확인된 것만 올려줘, 출처도 넣어주고' + 2026-11-02 사용자 선택 \"11/3 새로 2편 써서 예약\"(자동 작업 미실행분 메우기)",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261103-am.png"
