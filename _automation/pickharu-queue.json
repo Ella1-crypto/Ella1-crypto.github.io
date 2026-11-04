@@ -925,14 +925,17 @@
   "product": "stay-bedding",
   "expires_at": "2026-11-04T11:00",
   "publish_at": "2026-11-04T09:10+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665597,
    "message_id": 12,
    "at": "2026-11-03T15:40:01+09:00"
-  }
+  },
+  "post_id": "17936231904142416",
+  "published_at": "2026-11-04T09:10+09:00",
+  "reply_id": "18133595623705700"
  },
  {
   "id": "if-20261104-1",
