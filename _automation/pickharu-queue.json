@@ -911,14 +911,17 @@
   "reply": "출처: http://www.enewstoday.co.kr/news/articleView.html?idxno=2487622\n\n날짜·가격·조건은 바뀔 수 있어서\n원문에서 한 번 더 확인해 줘",
   "product": "dryou",
   "publish_at": "2026-11-04T14:55+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665596,
    "message_id": 11,
    "at": "2026-11-03T15:39:53+09:00"
-  }
+  },
+  "post_id": "17918238432462629",
+  "published_at": "2026-11-04T14:55+09:00",
+  "reply_id": "18027766001869810"
  },
  {
   "id": "if-20261103-6",
