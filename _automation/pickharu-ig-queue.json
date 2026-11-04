@@ -668,9 +668,10 @@
    "assets/pickharu/ig/ig-clip-jt-20261103pm-tint-gray/03.jpg",
    "assets/pickharu/ig/ig-clip-jt-20261103pm-tint-gray/04.jpg"
   ],
-  "status": "올리는 중",
+  "status": "실패",
   "story_image": "assets/pickharu/ig/ig-clip-jt-20261103pm-tint-gray/story.jpg",
-  "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "note": "게시 실패: HTTP 403: Application request limit reached — 최근 글 조회로는 확인 못 함, 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
  },
  {
   "id": "rl-clip-jt-20261103pm-tint-gray",
