@@ -945,13 +945,16 @@
   "product": "openrun",
   "expires_at": "2026-11-04T11:55",
   "publish_at": "2026-11-04T09:30+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665599,
    "message_id": 24,
    "at": "2026-11-04T08:44:15+09:00"
-  }
+  },
+  "post_id": "18146856304587625",
+  "published_at": "2026-11-04T09:30+09:00",
+  "reply_id": "18118516613327762"
  }
 ]
