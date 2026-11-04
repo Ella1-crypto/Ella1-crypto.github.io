@@ -362,10 +362,13 @@
   "publish_at": "2026-11-04T20:30+09:00",
   "text": "AI가 만들어 준 문서,\n대화창에서 다시 찾느라 스크롤만 내린 적 있죠.\n\nAnthropic 무료 강좌 Claude 101(한국어 페이지)에\n'아티팩트로 만들기' 레슨이 있어요.\n\n아티팩트는 Claude가 만든 문서·도표 같은 결과물을\n대화 옆에 따로 열어 주는 기능이에요.\n고치고, 다시 열고, 공유할 수 있고\n무료 플랜에서도 쓸 수 있어요.\n\n이렇게 써 보세요.\n\"이번 달 팀 일정표를 문서로 만들어 줘.\n날짜, 담당자, 할 일로 나누고,\n나중에 고칠 수 있게 아티팩트로 띄워 줘.\"\n\n필요한 결과물만 따로 두고\n이어서 고쳐 쓸 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
   "reply": "📌 출처: Anthropic · Claude Academy 「Claude 101」 (아티팩트로 만들기)\nhttps://academy.claude.com/ko/courses/claude-101\n\n아티팩트 기능: Claude 도움말\nhttps://support.claude.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
-  "status": "올리는 중",
+  "status": "올림",
   "source": "AI 노하우 하루 2개",
   "note": "Claude Academy Claude 101(한국어) · 아티팩트로 만들기 — 레슨 목록·도움말(무료 플랜 포함, 편집·공유) 확인, 트랙 5 활용 도구 | 승인: 2026-10-30 사용자 '무료강의 통해서 ai 노하우도 이 계정에 올려줘' · '1일 2개씩 올려줘' · '사실로 확인된 것만 올려줘, 출처도 넣어주고' (자동 작업 ai-knowhow-series)",
-  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261104-pm.png"
+  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261104-pm.png",
+  "post_id": "17922093330242065",
+  "published_at": "2026-11-04T20:30+09:00",
+  "reply_id": "18129108601809965"
  },
  {
   "id": "maeum-13-20261107",
