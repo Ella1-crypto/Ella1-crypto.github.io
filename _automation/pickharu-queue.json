@@ -1033,5 +1033,36 @@
    "message_id": 46,
    "at": "2026-11-04T21:30:20+09:00"
   }
+ },
+ {
+  "id": "if-20261105-3",
+  "kind": "정보",
+  "text": "아이허브 22% 코드 열린 김에\n리뷰 많은 영양제 5개 모아 봤어🎀\n\n1. Gold C 비타민C 240정\n캘리포니아골드뉴트리션\n리뷰 38만 개+, 평점 4.8 · 2만 원대\n\n2. 비타민D3 5,000IU 90정\n캘리포니아골드뉴트리션\n리뷰 32만 개+, 평점 4.8 · 7천 원대\n\n3. 고흡수 마그네슘 240정\n닥터스베스트\n리뷰 21만 개+, 평점 4.8 · 2만 원대\n한 달에 9만 개 넘게 팔렸대\n\n4. LactoBif 30 유산균 120정\n캘리포니아골드뉴트리션\n리뷰 17만 개+, 평점 4.7 · 3만 원대\n\n5. 오메가 800 30정\n캘리포니아골드뉴트리션\n리뷰 14만 개+, 평점 4.8 · 1만 원대\n\n가격은 코드 SING2611 적용 전이고\n코드는 11월 11일 밤 11시 59분까지래🤍\n\n먹는 약이 있으면\n성분 한 번 확인하고 골라 줘\n\n스치니들은 뭐 쟁여 둘 거야?",
+  "reply": "1 비타민C: https://kr.iherb.com/pr/p/61865\n리뷰 수 출처(베스트셀러): https://kr.iherb.com/catalog/topsellers\n\n날짜·가격·조건은 바뀔 수 있어서\n원문에서 한 번 더 확인해 줘",
+  "thread": [
+   "2 비타민D3: https://kr.iherb.com/pr/p/70316",
+   "3 마그네슘: https://kr.iherb.com/pr/p/16567",
+   "4 유산균: https://kr.iherb.com/pr/p/143853",
+   "5 오메가3: https://kr.iherb.com/pr/p/82845"
+  ],
+  "product": "iherb-top5",
+  "images": [
+   "assets/pickharu/if-20261105-3-0.png",
+   "assets/pickharu/if-20261105-3-1.png",
+   "assets/pickharu/if-20261105-3-2.png",
+   "assets/pickharu/if-20261105-3-3.png",
+   "assets/pickharu/if-20261105-3-4.png",
+   "assets/pickharu/if-20261105-3-5.png"
+  ],
+  "expires_at": "2026-11-11T23:59",
+  "publish_at": "2026-11-05T18:55+09:00",
+  "status": "예약",
+  "approved_by": {
+   "via": "telegram",
+   "user_id": 8420322263,
+   "update_id": 479665604,
+   "message_id": 54,
+   "at": "2026-11-04T21:35:16+09:00"
+  }
  }
 ]
