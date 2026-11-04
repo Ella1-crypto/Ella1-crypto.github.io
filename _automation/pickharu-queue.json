@@ -988,5 +988,25 @@
    "message_id": 39,
    "at": "2026-11-04T20:46:24+09:00"
   }
+ },
+ {
+  "id": "if-20261105-1",
+  "kind": "정보",
+  "text": "성수·홍대에\n빼빼로데이 콘셉트 스토어 열렸대🎀\n\n1. CU 포켓몬·다마고치 굿즈 28종\n낮잠 자는 포켓몬 인형·키링이 있고\n다마고치는 편의점 첫 협업이래\n11월 4일부터 12일까지\n성수디저트파크점은 포켓몬,\n홍대AK점은 다마고치 콘셉트 스토어\n\n2. GS25 빼스티벌\n호빵맨 줄자 키링 세트,\n짱구 필름카메라 세트,\n흰둥이 장바구니 세트가 나왔고\n낱개 빼빼로엔 무무씨와 친구들 4종\n제휴카드로 빼빼로 2+2는 9일까지,\nGS페이로 굿즈 세트 사면\n30% 돌려주는 건 10일까지래\n\n세븐일레븐·이마트24도\n캐릭터 세트 냈대🤍\n\n스치니들은 어디 굿즈가 제일 탐나?",
+  "reply": "출처: https://thetracker.co.kr/View.aspx?No=4295274\nCU: https://www.joongangenews.com/news/articleView.html?idxno=560164\nGS25: https://www.joongangenews.com/news/articleView.html?idxno=560159\n\n날짜·가격·조건은 바뀔 수 있어서\n원문에서 한 번 더 확인해 줘",
+  "product": "pepero",
+  "images": [
+   "assets/pickharu/if-20261105-1-1.png",
+   "assets/pickharu/if-20261105-1-2.png"
+  ],
+  "publish_at": "2026-11-05T10:55+09:00",
+  "status": "예약",
+  "approved_by": {
+   "via": "telegram",
+   "user_id": 8420322263,
+   "update_id": 479665602,
+   "message_id": 43,
+   "at": "2026-11-04T20:52:00+09:00"
+  }
  }
 ]
