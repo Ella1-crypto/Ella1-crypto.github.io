@@ -708,9 +708,10 @@
    "assets/pickharu/ig/ig-kitty-cam-c/03.jpg",
    "assets/pickharu/ig/ig-kitty-cam-c/04.jpg"
   ],
-  "status": "예약",
+  "status": "취소",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-kitty-cam-c/story.jpg",
-  "comment": "📌 출처: 카카오 선물하기 상품 페이지 [부이 디지털 카메라 헬로키티 에디션] 상품 정보·상세 이미지 (11월 4일 확인)\n사진: 같은 상품 페이지의 상품 사진"
+  "comment": "📌 출처: 카카오 선물하기 상품 페이지 [부이 디지털 카메라 헬로키티 에디션] 상품 정보·상세 이미지 (11월 4일 확인)\n사진: 같은 상품 페이지의 상품 사진",
+  "note": "11/5 사용자 요청: 같은 날 릴스를 올려서 캐러셀 취소"
  }
 ]
