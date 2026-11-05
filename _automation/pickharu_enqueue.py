@@ -19,8 +19,8 @@ from pathlib import Path
 
 from jaetech_publish import DONE, IN_PROGRESS, KST, READY, load_queue, save_queue
 from pickharu_publish import (
-    COUPANG, GENERAL, INFO, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of, problem_of,
-    shop_of,
+    COUPANG, FOLLOWUP, GENERAL, INFO, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of,
+    problem_of, shop_of, total_cap,
 )
 
 QUEUE_FIELDS = ("id", "kind", "publish_at", "text", "reply", "thread", "keyword", "product", "video", "images", "gif", "quote_of", "expires_at")
@@ -56,18 +56,27 @@ def plan_times(kind: str, count: int, queue: list[dict], now: datetime) -> list[
     group = SLOT_GROUP.get(kind, kind)
     taken = {str(it.get("publish_at", ""))[:13] for it in queue
              if SLOT_GROUP.get(shop_of(it), shop_of(it)) == group and it.get("status") in TAKES_SLOT}
+    per_day: dict[str, int] = {}  # 날짜별로 이미 잡힌 글 수(덧글 제외) — 하루 전체 상한용
+    for it in queue:
+        if it.get("kind") != FOLLOWUP and it.get("status") in TAKES_SLOT:
+            day_key = str(it.get("publish_at", ""))[:10]
+            per_day[day_key] = per_day.get(day_key, 0) + 1
     times = []
     today = now.astimezone(KST).date()
     for offset in range(PLAN_DAYS):
         day = today + timedelta(days=offset)
+        limit = total_cap(datetime(day.year, day.month, day.day, tzinfo=KST))
         slots = OY_BF_SLOTS if kind == OLIVEYOUNG and day <= OY_BF_END else DAY_SLOTS[kind]
         for hour, minute in slots:
             at = datetime(day.year, day.month, day.day, hour, minute, tzinfo=KST)
             key = at.isoformat()[:13]
             if at < now + LEAD or key in taken:
                 continue
+            if limit is not None and per_day.get(day.isoformat(), 0) >= limit:
+                break
             times.append(at)
             taken.add(key)
+            per_day[day.isoformat()] = per_day.get(day.isoformat(), 0) + 1
             if len(times) == count:
                 return times
     raise ValueError(f"{kind} 글을 넣을 빈 자리가 {PLAN_DAYS}일 안에 없습니다")
@@ -107,8 +116,14 @@ def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime
     else:
         fixed = {d["id"]: kst(d["publish_at"]) for d in chosen if d.get("kind") == INFO and d.get("publish_at")}
         free = [d for d in chosen if d["id"] not in fixed]
-        planned = {kind: iter(plan_times(kind, sum(shop_of(d) == kind for d in free), queue, now))
-                   for kind in {shop_of(d) for d in free}}
+        # 종류를 하나씩 잡으면서 앞에서 잡은 자리를 다음 종류 계산에 넣어 하루 전체 상한이 한 번에 넘치지 않게 한다
+        work = list(queue) + [{"kind": d.get("kind"), "publish_at": fixed[d["id"]].isoformat(), "status": READY}
+                              for d in chosen if d["id"] in fixed]
+        planned = {}
+        for kind in sorted({shop_of(d) for d in free}):
+            kind_times = plan_times(kind, sum(shop_of(d) == kind for d in free), work, now)
+            planned[kind] = iter(kind_times)
+            work += [{"kind": kind, "publish_at": t.isoformat(), "status": READY} for t in kind_times]
         times = [fixed.get(d["id"]) or next(planned[shop_of(d)]) for d in chosen]
         for d, at in zip(chosen, times):
             if d["id"] in fixed and at < now + FIXED_LEAD:

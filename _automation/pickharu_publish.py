@@ -149,6 +149,15 @@ def is_general(item: dict) -> bool:
     return item.get("kind") == GENERAL
 
 
+TOTAL_CAP = 4  # 2026-11-05 사용자 "발행 수를 조정": 종류(쿠팡·카카오·네이버·올영·일반·소식) 합쳐 하루 4개, 덧글 제외
+TOTAL_CAP_FROM = date(2026, 11, 8)  # 블프 올영 예약(~11/7)이 끝난 다음 날부터
+
+
+def total_cap(now: datetime) -> int | None:
+    """그날의 종류 합계 상한. 적용 전이면 None."""
+    return TOTAL_CAP if now.astimezone(KST).date() >= TOTAL_CAP_FROM else None
+
+
 def cap_of(kind: str, now: datetime) -> int:
     if kind == INFO:
         return INFO_CAP
@@ -237,13 +246,14 @@ def problem_of(item: dict) -> str:
     return thread_problem(item, rule["link"]) or media_problem(item)
 
 
-def posted_today(items: list[dict], now: datetime, kind: str = COUPANG) -> int:
-    """오늘(KST) 올렸거나 올라갔을 수 있는 kind 글 수. 게시 실패도 실제로는 올라갔을 수 있어 센다."""
+def posted_today(items: list[dict], now: datetime, kind: str | None = COUPANG) -> int:
+    """오늘(KST) 올렸거나 올라갔을 수 있는 kind 글 수(kind=None이면 덧글 뺀 전체). 게시 실패도 실제로는 올라갔을 수 있어 센다."""
     today = now.astimezone(KST).date()
     count = 0
     for it in items:
         maybe_posted = it.get("status") == FAILED and str(it.get("note", "")).startswith("게시 실패")
-        if shop_of(it) != kind or (it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted):
+        same_kind = it.get("kind") != FOLLOWUP if kind is None else shop_of(it) == kind
+        if not same_kind or (it.get("status") not in (DONE, IN_PROGRESS) and not maybe_posted):
             continue
         stamp = it.get("published_at") or it.get("publish_at")
         if not stamp:
@@ -356,8 +366,11 @@ def run_once(now: datetime, token: str, http: Http = http_json,
     if not problem and due.get("kind") != FOLLOWUP:
         kind = shop_of(due)
         cap = GENERAL_CAP if is_general(due) else cap_of(kind, now)
+        limit = total_cap(now)
         if posted_today(items, now, kind) >= cap:
             problem = f"오늘 {kind} 글을 이미 {cap}개 올려 하루 상한 초과"
+        elif limit is not None and posted_today(items, now, None) >= limit:
+            problem = f"오늘 글을 이미 {limit}개 올려 하루 전체 상한 초과"
     if problem:
         save_queue(with_status(items, due["id"], status=FAILED, note=problem), path)
         commit("chore: pick.haru 예약 글 검사 실패")

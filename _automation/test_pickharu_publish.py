@@ -369,6 +369,29 @@ class RunOnceTest(unittest.TestCase):
         self.write(prior + [item("a")])
         self.assertIn("상한", self.run_once(FakeHttp()))
 
+    def test_total_cap_four_across_kinds_from_nov8(self):
+        # 2026-11-05 사용자 "발행 수를 조정": 블프가 끝난 11/8부터 종류 합쳐 하루 4개
+        now = datetime(2026, 11, 8, 19, 2, tzinfo=pp.KST)
+        done = [kakao("k1", at="2026-11-08T13:40+09:00", status="올림"),
+                {"id": "g1", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "text": "다들 점심 뭐 먹어?", "status": "올림"},
+                item("c1", at="2026-11-08T12:10+09:00", status="올림"),
+                {**kakao("n1", at="2026-11-08T16:25+09:00", status="올림"), "kind": "네이버"}]
+        self.write(done + [kakao("k2", at="2026-11-08T19:00+09:00")])
+        self.assertIn("전체 상한", self.run_once(FakeHttp(), now=now))
+
+    def test_followup_does_not_count_toward_total_cap(self):
+        now = datetime(2026, 11, 8, 19, 2, tzinfo=pp.KST)
+        done = [kakao("k1", at="2026-11-08T13:40+09:00", status="올림"),
+                item("c1", at="2026-11-08T12:10+09:00", status="올림"),
+                {"id": "bl", "kind": "덧글", "publish_at": "2026-11-08T13:41+09:00", "status": "올림"},
+                {"id": "bl2", "kind": "덧글", "publish_at": "2026-11-08T13:42+09:00", "status": "올림"}]
+        self.write(done + [kakao("k2", at="2026-11-08T19:00+09:00")])
+        self.assertIn("p1", self.run_once(FakeHttp(), now=now))
+
+    def test_total_cap_not_applied_before_nov8(self):
+        self.assertIsNone(pp.total_cap(datetime(2026, 11, 7, 12, 0, tzinfo=pp.KST)))
+        self.assertEqual(pp.total_cap(datetime(2026, 11, 8, 0, 0, tzinfo=pp.KST)), 4)
+
     def test_daily_cap(self):
         done = [item(f"d{i}", at=f"2026-10-28T0{i}:00+09:00", status="올림") for i in range(1, 6)]
         self.write(done + [item("a")])

@@ -97,6 +97,30 @@ class SlotPlanTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             pe.build([draft(i) for i in (1, 2, 3)], ["1", "2", "3"], [], now=self.NOW)
 
+    def test_full_day_of_four_pushes_to_next_day_from_nov8(self):
+        # 2026-11-05 사용자 "발행 수를 조정": 11/8부터 종류 합쳐 하루 4개
+        now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)
+        queue = [{"id": "g", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "status": "예약"},
+                 {"id": "i", "kind": "정보", "publish_at": "2026-11-08T10:55+09:00", "status": "예약"},
+                 {"id": "k", "kind": "카카오", "publish_at": "2026-11-08T13:40+09:00", "status": "예약"},
+                 {"id": "o", "kind": "올영", "publish_at": "2026-11-08T17:50+09:00", "status": "예약"}]
+        self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 1, queue, now)), ["11-09 12:10"])
+
+    def test_one_batch_of_mixed_kinds_respects_total_cap(self):
+        now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)
+        queue = [{"id": "g", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "status": "예약"},
+                 {"id": "i", "kind": "정보", "publish_at": "2026-11-08T10:55+09:00", "status": "예약"}]
+        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261108-{n}", "kind": "카카오"} for n in (1, 2)]
+        new = pe.build([draft(1)] + ks, ["ph-20261028-1", "kk-20261108-1", "kk-20261108-2"], queue, now=now)
+        days = [q["publish_at"][:10] for q in new]  # build는 기존 예약까지 포함한 전체 목록을 돌려준다
+        self.assertEqual(sum(d == "2026-11-08" for d in days), 4)
+        self.assertEqual(len(new), 5)
+
+    def test_followups_do_not_fill_the_day(self):
+        now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)
+        queue = [{"id": f"bl{i}", "kind": "덧글", "publish_at": f"2026-11-08T1{i}:00+09:00", "status": "예약"} for i in range(5)]
+        self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 1, queue, now)), ["11-08 12:10"])
+
     def test_oliveyoung_four_slots_until_black_friday_ends(self):
         now = datetime(2026, 11, 7, 7, 0, tzinfo=pe.KST)
         self.assertEqual(self.hhmm(pe.plan_times("올영", 6, [], now)),
