@@ -1,8 +1,11 @@
-# 2026-10-30 18:51 KST
+# 2026-11-05 20:04 KST
+[권한] pages_show_list: 대상 전체
 [권한] instagram_basic: 대상 전체
 [권한] instagram_manage_comments: 대상 전체
+[권한] instagram_manage_insights: 대상 전체
 [권한] instagram_content_publish: 대상 전체
 [권한] instagram_manage_messages: 대상 전체
+[권한] pages_read_engagement: 대상 전체
 [토큰] 종류 SYSTEM_USER, 유효 True, 만료 0
 [성공] 인스타 ID 직접: {'id': '17841426433649539', 'username': 'pick.haru.daily'}
 [성공] 인스타 ID 직접(id만): {'id': '17841426433649539'}
@@ -11,7 +14,7 @@
 [실패] 포트폴리오 클라이언트 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
 [실패] 포트폴리오 소유 인스타: HTTP 403: (#200) Requires business_management permission to manage the object
 [실패] 포트폴리오 인스타(구): HTTP 403: (#200) Requires business_management permission to manage the object
-[성공] 토큰 주인: {'id': '122095235919538763', 'name': 'pickharu-bot'}
+[성공] 토큰 주인: {'id': '122098884963531381', 'name': 'pick.haru__1 publisher System User'}
 [성공] 페이지 연결 인스타: {'data': []}
-[실패] 인스타 호스트: HTTP 400: Invalid OAuth access token - Cannot parse access token (토큰 만료 — 새 토큰을 Secrets에 넣어 주세요)
+[실패] 인스타 호스트: HTTP 400: Invalid OAuth access token - Cannot parse access token (저장된 토큰 값을 읽을 수 없음 — Secrets에 다른 값이 들어갔는지 보고 새 토큰을 받아 주세요)
 결론: pick.haru.daily 보임
