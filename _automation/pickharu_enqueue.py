@@ -39,6 +39,9 @@ DAY_SLOTS = {
 FIXED_LEAD = timedelta(minutes=5)  # 소식 글의 제안 시각(publish_at)은 Accept 시점보다 이만큼은 뒤여야 한다
 # 블프(~11/7)엔 올영 자리를 4개로(2026-11-02 사용자 "블프 전에 다 올려야 돼")
 OY_BF_SLOTS = [(12, 50), (15, 50), (17, 50), (21, 10)]
+# 2026-11-05 사용자 "카카오·네이버는 주 3회·하루 1개": 11/8부터 카카오 화·목·토 19:40, 네이버 월·수·금 19:25 (월=0)
+ALLOWED_WEEKDAYS = {KAKAO: {1, 3, 5}, NAVER: {0, 2, 4}}
+GIFT_SLOTS = {KAKAO: [(19, 40)], NAVER: [(19, 25)]}
 SLOT_GROUP = {KAKAO: "제휴", NAVER: "제휴"}  # 카카오·네이버는 같은 시간대를 나눠 쓴다(한 시간에 하나)
 TAKES_SLOT = (READY, IN_PROGRESS, DONE)  # 보류·취소·실패 글은 자리를 차지하지 않는다
 PLAN_DAYS = 7
@@ -67,6 +70,10 @@ def plan_times(kind: str, count: int, queue: list[dict], now: datetime) -> list[
         day = today + timedelta(days=offset)
         limit = total_cap(datetime(day.year, day.month, day.day, tzinfo=KST))
         slots = OY_BF_SLOTS if kind == OLIVEYOUNG and day <= OY_BF_END else DAY_SLOTS[kind]
+        if limit is not None and kind in ALLOWED_WEEKDAYS:
+            if day.weekday() not in ALLOWED_WEEKDAYS[kind]:
+                continue
+            slots = GIFT_SLOTS[kind]
         for hour, minute in slots:
             at = datetime(day.year, day.month, day.day, hour, minute, tzinfo=KST)
             key = at.isoformat()[:13]

@@ -107,14 +107,27 @@ class SlotPlanTest(unittest.TestCase):
         self.assertEqual(self.hhmm(pe.plan_times("쿠팡", 1, queue, now)), ["11-09 12:10"])
 
     def test_one_batch_of_mixed_kinds_respects_total_cap(self):
-        now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)
-        queue = [{"id": "g", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "status": "예약"},
-                 {"id": "i", "kind": "정보", "publish_at": "2026-11-08T10:55+09:00", "status": "예약"}]
-        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261108-{n}", "kind": "카카오"} for n in (1, 2)]
-        new = pe.build([draft(1)] + ks, ["ph-20261028-1", "kk-20261108-1", "kk-20261108-2"], queue, now=now)
-        days = [q["publish_at"][:10] for q in new]  # build는 기존 예약까지 포함한 전체 목록을 돌려준다
-        self.assertEqual(sum(d == "2026-11-08" for d in days), 4)
+        now = datetime(2026, 11, 10, 7, 0, tzinfo=pe.KST)  # 화요일
+        queue = [{"id": "g", "kind": "일반", "publish_at": "2026-11-10T08:30+09:00", "status": "예약"},
+                 {"id": "i", "kind": "정보", "publish_at": "2026-11-10T10:55+09:00", "status": "예약"},
+                 {"id": "o", "kind": "올영", "publish_at": "2026-11-10T17:50+09:00", "status": "예약"}]
+        k = {**draft(1, KAKAO_TEXT, KAKAO_REPLY), "id": "kk-20261110-1", "kind": "카카오"}
+        new = pe.build([draft(1), k], ["ph-20261028-1", "kk-20261110-1"], queue, now=now)
+        days = {q["id"]: q["publish_at"][:10] for q in new}  # build는 기존 예약까지 포함한 전체 목록을 돌려준다
+        self.assertEqual(sum(d == "2026-11-10" for d in days.values()), 4)
         self.assertEqual(len(new), 5)
+
+    def test_kakao_only_tue_thu_sat_and_naver_only_mon_wed_fri_from_nov8(self):
+        # 2026-11-05 사용자 "카카오·네이버는 주 2~3회 … 주 3회·하루 1개"
+        now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)  # 일요일
+        self.assertEqual(self.hhmm(pe.plan_times("카카오", 2, [], now)), ["11-10 19:40", "11-12 19:40"])
+        self.assertEqual(self.hhmm(pe.plan_times("네이버", 2, [], now)), ["11-09 19:25", "11-11 19:25"])
+
+    def test_kakao_naver_one_per_day_from_nov8(self):
+        now = datetime(2026, 11, 10, 7, 0, tzinfo=pe.KST)
+        ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261110-{n}", "kind": "카카오"} for n in (1, 2)]
+        with self.assertRaises(ValueError):
+            pe.build(ks, ["kk-20261110-1", "kk-20261110-2"], [], now=now)
 
     def test_followups_do_not_fill_the_day(self):
         now = datetime(2026, 11, 8, 7, 0, tzinfo=pe.KST)

@@ -376,17 +376,24 @@ class RunOnceTest(unittest.TestCase):
                 {"id": "g1", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "text": "다들 점심 뭐 먹어?", "status": "올림"},
                 item("c1", at="2026-11-08T12:10+09:00", status="올림"),
                 {**kakao("n1", at="2026-11-08T16:25+09:00", status="올림"), "kind": "네이버"}]
-        self.write(done + [kakao("k2", at="2026-11-08T19:00+09:00")])
+        general2 = {"id": "g2", "kind": "일반", "publish_at": "2026-11-08T19:00+09:00", "text": "다들 저녁 뭐 먹어?", "status": "예약"}
+        self.write(done + [general2])  # 일반 글 상한(2)은 남아 있어도 종류 합계 4개면 막힘
         self.assertIn("전체 상한", self.run_once(FakeHttp(), now=now))
 
     def test_followup_does_not_count_toward_total_cap(self):
         now = datetime(2026, 11, 8, 19, 2, tzinfo=pp.KST)
-        done = [kakao("k1", at="2026-11-08T13:40+09:00", status="올림"),
+        done = [{**kakao("n1", at="2026-11-08T13:25+09:00", status="올림"), "kind": "네이버"},
                 item("c1", at="2026-11-08T12:10+09:00", status="올림"),
+                {"id": "x1", "kind": "일반", "publish_at": "2026-11-08T08:30+09:00", "text": "다들 점심 뭐 먹어?", "status": "올림"},
                 {"id": "bl", "kind": "덧글", "publish_at": "2026-11-08T13:41+09:00", "status": "올림"},
                 {"id": "bl2", "kind": "덧글", "publish_at": "2026-11-08T13:42+09:00", "status": "올림"}]
         self.write(done + [kakao("k2", at="2026-11-08T19:00+09:00")])
         self.assertIn("p1", self.run_once(FakeHttp(), now=now))
+
+    def test_kakao_and_naver_one_per_day_from_nov8(self):
+        self.assertEqual(pp.cap_of("카카오", datetime(2026, 11, 7, 12, 0, tzinfo=pp.KST)), 3)
+        self.assertEqual(pp.cap_of("카카오", datetime(2026, 11, 8, 12, 0, tzinfo=pp.KST)), 1)
+        self.assertEqual(pp.cap_of("네이버", datetime(2026, 11, 9, 12, 0, tzinfo=pp.KST)), 1)
 
     def test_total_cap_not_applied_before_nov8(self):
         self.assertIsNone(pp.total_cap(datetime(2026, 11, 7, 12, 0, tzinfo=pp.KST)))

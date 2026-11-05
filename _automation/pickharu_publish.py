@@ -158,9 +158,14 @@ def total_cap(now: datetime) -> int | None:
     return TOTAL_CAP if now.astimezone(KST).date() >= TOTAL_CAP_FROM else None
 
 
+GIFT_CAP = 1  # 2026-11-05 사용자 "카카오·네이버는 주 3회·하루 1개" (11/8부터, 요일은 pickharu_enqueue.ALLOWED_WEEKDAYS)
+
+
 def cap_of(kind: str, now: datetime) -> int:
     if kind == INFO:
         return INFO_CAP
+    if kind in (KAKAO, NAVER) and now.astimezone(KST).date() >= TOTAL_CAP_FROM:
+        return GIFT_CAP
     if kind == OLIVEYOUNG and now.astimezone(KST).date() <= OY_BF_END:
         return OY_BF_CAP
     return SHOPS[kind]["cap"]
