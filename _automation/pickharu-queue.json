@@ -1011,14 +1011,17 @@
    "assets/pickharu/if-20261105-1-2.png"
   ],
   "publish_at": "2026-11-05T10:55+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665602,
    "message_id": 43,
    "at": "2026-11-04T20:52:00+09:00"
-  }
+  },
+  "post_id": "17944386462379455",
+  "published_at": "2026-11-05T10:55+09:00",
+  "reply_id": "18110646127913367"
  },
  {
   "id": "if-20261105-2",
