@@ -1,10 +1,10 @@
 {
  "title": "오늘의 소재 후보",
- "checked_on": "2026-11-06",
+ "checked_on": "2026-11-07",
  "seeds": [
-  "출근가방",
-  "파우치",
-  "텀블러"
+  "자취템",
+  "인테리어소품",
+  "조명"
  ],
  "found": 1200,
  "notes": [
@@ -19,223 +19,223 @@
  "rows": [
   {
    "rank": 1,
-   "keyword": "스탠리텀블러",
+   "keyword": "수납장",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "153000",
+   "volume": "43800",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 153000 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 43800 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 2,
-   "keyword": "텀블러",
+   "keyword": "탈취제",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "123200",
+   "volume": "29950",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 123200 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 29950 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 3,
-   "keyword": "써모스텀블러",
+   "keyword": "주방수납장",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "33170",
+   "volume": "26430",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 33170 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 26430 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 4,
-   "keyword": "락앤락텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "22990",
+   "keyword": "로션",
+   "category": "뷰티",
+   "commission": "3% 안팎",
+   "volume": "9890",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 22990 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9890 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 5,
-   "keyword": "오왈라텀블러",
+   "keyword": "수납함",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "20870",
+   "volume": "9760",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 20870 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9760 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 6,
-   "keyword": "보온병",
+   "keyword": "딥디크차량용방향제",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "19690",
+   "volume": "4300",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 19690 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4300 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 7,
-   "keyword": "써모스보온병",
+   "keyword": "청소용품",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "12360",
+   "volume": "4050",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12360 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4050 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 8,
-   "keyword": "보온텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "12250",
+   "keyword": "신발탈취제",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "4010",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12250 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4010 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 9,
-   "keyword": "보부상가방",
-   "category": "패션",
+   "keyword": "쇼파패드3인용",
+   "category": "뷰티",
    "commission": "3% 안팎",
-   "volume": "11180",
+   "volume": "3020",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 11180 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3020 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 10,
-   "keyword": "미니텀블러",
+   "keyword": "욕실용품",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "10560",
+   "volume": "2890",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10560 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2890 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 11,
-   "keyword": "블루보틀텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "10370",
+   "keyword": "신발냄새제거",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "2050",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10370 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2050 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 12,
-   "keyword": "운동가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "5760",
+   "keyword": "냄새탈취제",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "1490",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5760 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 1490 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 13,
-   "keyword": "오슬로텀블러",
+   "keyword": "주방수도꼭지",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "5150",
+   "volume": "1440",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5150 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 1440 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 14,
-   "keyword": "헬스가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "5110",
+   "keyword": "담배탈취제",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "820",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5110 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 820 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 15,
-   "keyword": "아이패드파우치",
-   "category": "뷰티",
-   "commission": "3% 안팎",
-   "volume": "4640",
+   "keyword": "의자",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "77400",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4640 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 77400 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 16,
-   "keyword": "손잡이텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4110",
+   "keyword": "LED전등",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "35340",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4110 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 35340 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 17,
-   "keyword": "다이소지퍼백",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4040",
+   "keyword": "벽시계",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "30200",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4040 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 30200 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 18,
-   "keyword": "신발주머니",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "4040",
+   "keyword": "거실LED등",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "15120",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4040 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 15120 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 19,
-   "keyword": "보온보냉텀블러",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "3860",
+   "keyword": "거실등",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "13640",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3860 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 13640 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 20,
-   "keyword": "소형지퍼백",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "2000",
+   "keyword": "레일조명",
+   "category": "미분류",
+   "commission": "[확인 불가]",
+   "volume": "12410",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2000 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 12410 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   }
  ]
 }
