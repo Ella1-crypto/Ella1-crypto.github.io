@@ -700,5 +700,15 @@
    "note": "사용자 채팅 '오늘 21:30에 올려줭' (+ '그냥 이미지 다 넣어줘', 일러스트 3번째)",
    "at": "2026-11-06T13:59:41"
   }
+ },
+ {
+  "id": "ai-20261107-am",
+  "publish_at": "2026-11-07T09:30+09:00",
+  "text": "세일 기간에 가격 메모만 쌓이고\n정리는 못 하고 있다면.\n\n경기도 지식(GSEEK)이 무료로 올린\n「요즘 일잘러가 쓰는 BEST 생성형 AI」에\n'Code Interpreter를 활용한 데이터 분석'\n수업이 있어요.\n엑셀 파일을 올리고\nAI에게 분석을 맡기는 방법이에요.\n\n이렇게 써 보세요.\n\"블프 전에 적어 둔 가격 기록 엑셀이야.\n상품별로 처음 가격과 지금 가격 차이를\n표로 만들고,\n많이 내린 순서로 정렬해 줘.\"\n\n계산을 직접 안 해도\n살 것과 기다릴 것을 나눠 볼 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
+  "reply": "📌 출처: 경기도 · 지식(GSEEK) 「요즘 일잘러가 쓰는 BEST 생성형 AI」 (5차시 Code Interpreter를 활용한 데이터 분석)\nhttps://www.gseek.kr/user/course/online/view?ref=digital_51905\n\n무료 학습: GSEEK 서비스 소개\nhttps://www.gseek.kr/user/service/intro\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
+  "status": "예약",
+  "source": "AI 노하우 하루 1개",
+  "note": "GSEEK 「요즘 일잘러가 쓰는 BEST 생성형 AI」 · 5차시 Code Interpreter를 활용한 데이터 분석 — 차시 목록·'누구나 무료' 11/6 확인, 트랙 2·쇼핑 장면 | 예약 작업 ai-knowhow-series가 11/5부터 돌지 않아 PC 세션에서 직접 작성(11/6 사용자 '왜 안올라갔지? 올려줘')",
+  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261107-am.png"
  }
 ]
