@@ -24,10 +24,15 @@ class MissingTest(unittest.TestCase):
         self.assertEqual(sc.missing(FULL, TODAY), [])
 
     def test_reports_each_gap(self):
-        gaps = sc.missing(FULL[:2], TODAY)
+        gaps = sc.missing(FULL[:1], TODAY)
         self.assertEqual(len(gaps), 2)
-        self.assertIn("AI 노하우 11/04: 1/2", gaps[0])
+        self.assertIn("AI 노하우 11/04: 0/1", gaps[0])
         self.assertIn("free-course-series", gaps[1])
+
+    def test_one_ai_post_a_day_is_enough(self):
+        # 2026-11-05 운영 전략: AI 노하우 하루 2개 → 1개 (09:30만)
+        items = [FULL[0], FULL[1], FULL[3]]
+        self.assertEqual(sc.missing(items, TODAY), [])
 
     def test_failed_and_wrong_shape_not_counted(self):
         items = [item("jt-20261103", "2026-11-03T13:00+09:00", "실패"),

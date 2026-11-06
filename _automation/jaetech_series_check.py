@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/series-check.yml)가 매일 낮에 이 검사�
 
 기대하는 자리(오늘 = 검사하는 날, KST):
 - 재테크 한 줄: 오늘 jt- 글 1개 (작업 11:09 → 13:00 예약)
-- AI 노하우: 내일 ai- 글 2개 (09:30·20:30)
+- AI 노하우: 내일 ai- 글 1개 (09:30) — 2026-11-05 운영 전략 「하루 2→1」
 - 무료강의: 내일 r2- 글 1개 (07:30)
 """
 from __future__ import annotations
@@ -20,7 +20,7 @@ from jaetech_publish import KST, QUEUE_PATH, http_json, load_queue
 
 SLOTS = (  # (이름, id 모양, 며칠 뒤, 필요한 개수, 다시 돌릴 예약 작업)
     ("재테크 한 줄", re.compile(r"jt-\d{8}"), 0, 1, "jaetech-one-liner"),
-    ("AI 노하우", re.compile(r"ai-\d{8}"), 1, 2, "ai-knowhow-series"),
+    ("AI 노하우", re.compile(r"ai-\d{8}"), 1, 1, "ai-knowhow-series"),
     ("무료강의", re.compile(r"r2-\d{8}"), 1, 1, "free-course-series"),
 )
 LIVE = {"예약", "올리는 중", "올림"}
