@@ -672,13 +672,16 @@
    "https://www.fnnews.com/news/202611060854382101"
   ],
   "note": "11/6 PC 세션 사용자 요청 29CM 이구위크 셀렉션(사용자 제작, 19개 이구위크예정 확인)",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "chat",
    "note": "사용자 채팅 '셀렉션 만든 뒤 올려' + 셀렉션 링크 전달",
    "at": "2026-11-06T13:05:03"
   },
-  "image_url": "https://ella1-crypto.github.io/threads-media/heeya-tg-20261106-1330-1.png"
+  "image_url": "https://ella1-crypto.github.io/threads-media/heeya-tg-20261106-1330-1.png",
+  "post_id": "18106711379335145",
+  "published_at": "2026-11-06T14:40+09:00",
+  "reply_id": "18019009601958395"
  },
  {
   "id": "tg-20261106-2130-coordi",
