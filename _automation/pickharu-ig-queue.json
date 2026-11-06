@@ -733,8 +733,13 @@
    "assets/pickharu/ig/ig-skims-collage-1106-final/07.jpg",
    "assets/pickharu/ig/ig-skims-collage-1106-final/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-skims-collage-1106-final/story.jpg",
-  "comment": "📌 출처 (11월 6일 기준)\n스킴스 세일: https://skims.com/collections/sale (한국 사이트, ₩140,000 이상 무료배송)"
+  "comment": "📌 출처 (11월 6일 기준)\n스킴스 세일: https://skims.com/collections/sale (한국 사이트, ₩140,000 이상 무료배송)",
+  "post_id": "18112265444070364",
+  "published_at": "2026-11-06T16:42+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17980070817140909",
+  "story_id": "17921917374242626"
  }
 ]
