@@ -692,7 +692,7 @@
    "https://29cm.onelink.me/1080201211/765nzavs"
   ],
   "note": "11/6 PC 세션 사용자 요청 코디팁(셀렉션 19개 기반), 이미지 3장 캐러셀(색 칩·옷 모양·또과장 GPT 일러스트)",
-  "status": "올리는 중",
+  "status": "올림",
   "image_urls": [
    "https://ella1-crypto.github.io/threads-media/heeya-tg-20261106-coordi-1.png",
    "https://ella1-crypto.github.io/threads-media/heeya-tg-20261106-coordi-2.png",
@@ -702,7 +702,10 @@
    "via": "chat",
    "note": "사용자 채팅 '오늘 21:30에 올려줭' (+ '그냥 이미지 다 넣어줘', 일러스트 3번째)",
    "at": "2026-11-06T13:59:41"
-  }
+  },
+  "post_id": "18138740578710350",
+  "published_at": "2026-11-06T21:30+09:00",
+  "reply_id": "18133555781507115"
  },
  {
   "id": "ai-20261107-am",
