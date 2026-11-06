@@ -9,6 +9,7 @@ GitHub Actions(.github/workflows/threads-jaetech.yml)가 실행한다. 표준 �
 - 예약 시각을 LATE_LIMIT 넘게 지난 글은 올리지 않고 '실패'로 남긴다.
 - 500자 초과, 본문 주소, 미완성 표시가 있으면 올리지 않는다.
 - image_url(공개 https 주소 1개)이 있으면 사진 1장 글로 올리고, 사진 준비(FINISHED)를 기다린 뒤 게시한다.
+- image_urls(2~20장)이면 캐러셀로 올린다(2026-11-06 사용자 "그냥 이미지 다 넣어줘").
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
 """
 from __future__ import annotations
@@ -38,6 +39,7 @@ PUBLISH_RETRY_WAIT_SECONDS = 15
 CONTAINER_WAIT_SECONDS = 3
 IMAGE_STATUS_WAIT_SECONDS = 5
 IMAGE_STATUS_TRIES = 24
+CAROUSEL_MAX = 20  # Threads 캐러셀 한도
 BLOCK_RE = re.compile(r"https?://|www\.|example\.com|\[확인 필요\]|\[\s*_{2,}", re.IGNORECASE)
 REPLY_BLOCK_RE = re.compile(r"example\.com|\[확인 필요\]|\[\s*_{2,}|\[크몽\]|\[링크\]", re.IGNORECASE)
 WATCH_LIMIT = timedelta(minutes=330)  # --watch 한 번이 큐를 지켜보는 시간(워크플로 timeout 350분보다 짧게)
@@ -96,15 +98,29 @@ def wait_until_ready(container: str, token: str, http: Http = http_json, sleep=t
     raise ThreadsError("사진 준비가 끝나지 않음")
 
 
+def carousel_children(urls: list[str], token: str, user_id: str, http: Http, sleep) -> str:
+    """사진마다 캐러셀 항목 컨테이너를 만들고, 각각 FINISHED를 기다린 뒤 쉼표로 이은 id를 돌려준다."""
+    children = [http("POST", f"{BASE}/{user_id}/threads", {"media_type": "IMAGE", "image_url": url,
+                                                          "is_carousel_item": "true", "access_token": token})["id"]
+                for url in urls]
+    for child in children:
+        wait_until_ready(child, token, http, sleep)
+    return ",".join(children)
+
+
 def publish_text(text: str, token: str, user_id: str, http: Http = http_json, sleep=time.sleep,
-                 reply_to: str = "", image_url: str = "") -> str:
+                 reply_to: str = "", image_url: str = "", image_urls: list[str] | None = None) -> str:
     params = {"media_type": "TEXT", "text": text, "access_token": token}
-    if image_url:
+    if image_urls and len(image_urls) > 1:
+        params.update(media_type="CAROUSEL", children=carousel_children(image_urls, token, user_id, http, sleep))
+    elif image_urls:
+        image_url = image_urls[0]
+    if image_url and params["media_type"] == "TEXT":
         params.update(media_type="IMAGE", image_url=image_url)
     if reply_to:
         params["reply_to_id"] = reply_to
     container = http("POST", f"{BASE}/{user_id}/threads", params)["id"]
-    if image_url:
+    if params["media_type"] != "TEXT":
         wait_until_ready(container, token, http, sleep)
     else:
         sleep(CONTAINER_WAIT_SECONDS)
@@ -152,6 +168,11 @@ def problem_of(item: dict) -> str:
     image_url = item.get("image_url", "")
     if image_url and not image_url.startswith("https://"):
         return "사진 주소가 공개 https 주소가 아님"
+    image_urls = item.get("image_urls") or []
+    if len(image_urls) > CAROUSEL_MAX:
+        return f"사진 {len(image_urls)}장 (Threads 캐러셀은 {CAROUSEL_MAX}장까지)"
+    if any(not str(url).startswith("https://") for url in image_urls):
+        return "사진 주소 중 공개 https 주소가 아닌 것이 있음"
     reply = item.get("reply", "")
     if len(reply) > TEXT_LIMIT:
         return f"댓글 {len(reply)}자 (500자 초과)"
@@ -293,7 +314,8 @@ def run_once(now: datetime, token: str, user_id: str, http: Http = http_json,
     if not commit(f"chore: 재테크 글 올리는 중 ({due['id']})"):
         return "올리는 중 표시를 저장하지 못해 올리지 않음"
     try:
-        post_id = publish_text(due["text"], token, user_id, http, sleep, image_url=due.get("image_url", ""))
+        post_id = publish_text(due["text"], token, user_id, http, sleep, image_url=due.get("image_url", ""),
+                               image_urls=due.get("image_urls"))
     except (ThreadsError, KeyError) as error:
         note = f"게시 실패: {error} — Threads에 올라갔는지 먼저 확인한 뒤 다시 예약"
         save_queue(with_status(load_queue(path), due["id"], status=FAILED, note=note), path)

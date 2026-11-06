@@ -261,6 +261,33 @@ class ReplyTest(RunOnceTest):
         self.assertNotIn("threads_publish", calls)
         self.assertEqual(self.statuses(), {"a": "실패"})
 
+    def test_several_images_post_as_carousel(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        urls = [f"https://ella1-crypto.github.io/threads-media/{n}.png" for n in ("x", "y", "z")]
+        it["image_urls"] = urls
+        self.write([it])
+        sent = []
+
+        def http(method, url, params):
+            sent.append(params)
+            if method == "GET" and params.get("fields") == "status":
+                return {"status": "FINISHED"}
+            return FakeHttp()(method, url, params)
+        result = jp.run_once(NOW, "tok", "u1", http, lambda m: True, sleep=lambda s: None, path=self.path)
+        self.assertIn("p1", result)
+        items = [p for p in sent if p.get("is_carousel_item") == "true"]
+        self.assertEqual([p["image_url"] for p in items], urls)
+        parent = next(p for p in sent if p.get("media_type") == "CAROUSEL")
+        self.assertEqual(parent["children"], "c1,c1,c1")
+        self.assertEqual(parent["text"], it["text"])
+
+    def test_carousel_rejects_non_https_or_too_many(self):
+        it = item("a", "2026-10-19T12:10+09:00")
+        it["image_urls"] = ["https://ella1-crypto.github.io/threads-media/x.png", r"C:\y.png"]
+        self.assertIn("https", jp.problem_of(it))
+        it["image_urls"] = ["https://ella1-crypto.github.io/threads-media/x.png"] * 21
+        self.assertIn("20", jp.problem_of(it))
+
     def test_non_https_image_blocks_post(self):
         it = item("a", "2026-10-19T12:10+09:00")
         it["image_url"] = r"C:\Users\x.png"
