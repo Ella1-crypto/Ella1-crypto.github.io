@@ -1,10 +1,10 @@
 {
  "title": "오늘의 소재 후보",
- "checked_on": "2026-11-07",
+ "checked_on": "2026-11-08",
  "seeds": [
-  "자취템",
-  "인테리어소품",
-  "조명"
+  "캠핑용품",
+  "여행용품",
+  "차량용품"
  ],
  "found": 1200,
  "notes": [
@@ -19,223 +19,223 @@
  "rows": [
   {
    "rank": 1,
-   "keyword": "수납장",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "43800",
+   "keyword": "카드지갑",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "59000",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 43800 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 59000 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 2,
-   "keyword": "탈취제",
+   "keyword": "캠핑매트",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "29950",
+   "volume": "15150",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 29950 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 15150 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 3,
-   "keyword": "주방수납장",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "26430",
+   "keyword": "명품스카프",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "14030",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 26430 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 14030 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 4,
-   "keyword": "로션",
-   "category": "뷰티",
+   "keyword": "골프모자",
+   "category": "패션",
    "commission": "3% 안팎",
-   "volume": "9890",
+   "volume": "13720",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 9890 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 13720 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 5,
-   "keyword": "수납함",
+   "keyword": "피크닉매트",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "9760",
+   "volume": "12160",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 9760 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 12160 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 6,
-   "keyword": "딥디크차량용방향제",
+   "keyword": "트렁크매트",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "4300",
+   "volume": "10570",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4300 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 10570 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 7,
-   "keyword": "청소용품",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "4050",
+   "keyword": "로션",
+   "category": "뷰티",
+   "commission": "3% 안팎",
+   "volume": "10040",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4050 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 10040 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 8,
-   "keyword": "신발탈취제",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "4010",
+   "keyword": "수납함",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "9860",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 4010 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 9860 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 9,
-   "keyword": "쇼파패드3인용",
-   "category": "뷰티",
-   "commission": "3% 안팎",
-   "volume": "3020",
+   "keyword": "일회용칫솔",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "4510",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 3020 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 4510 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 10,
-   "keyword": "욕실용품",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "2890",
+   "keyword": "골프티셔츠",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "3010",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2890 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3010 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 11,
-   "keyword": "신발냄새제거",
+   "keyword": "캠핑수납가방",
    "category": "패션",
    "commission": "3% 안팎",
-   "volume": "2050",
+   "volume": "2170",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2050 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 2170 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 12,
-   "keyword": "냄새탈취제",
+   "keyword": "테슬라차박매트",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "1490",
+   "volume": "1610",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1490 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 1610 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 13,
-   "keyword": "주방수도꼭지",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "1440",
+   "keyword": "여행용화장품",
+   "category": "뷰티",
+   "commission": "3% 안팎",
+   "volume": "850",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1440 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 850 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 14,
-   "keyword": "담배탈취제",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "820",
+   "keyword": "여행용샴푸린스",
+   "category": "뷰티",
+   "commission": "3% 안팎",
+   "volume": "760",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 820 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 760 ≥ 300, 뷰티 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 15,
-   "keyword": "의자",
-   "category": "미분류",
-   "commission": "[확인 불가]",
-   "volume": "77400",
+   "keyword": "여행용세제",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "680",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 77400 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 680 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 16,
-   "keyword": "LED전등",
-   "category": "미분류",
-   "commission": "[확인 불가]",
-   "volume": "35340",
+   "keyword": "싼타페차박매트",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "650",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 35340 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 650 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 17,
-   "keyword": "벽시계",
-   "category": "미분류",
-   "commission": "[확인 불가]",
-   "volume": "30200",
+   "keyword": "캠핑용수납가방",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "510",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 30200 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 510 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 18,
-   "keyword": "거실LED등",
-   "category": "미분류",
-   "commission": "[확인 불가]",
-   "volume": "15120",
+   "keyword": "등산의자",
+   "category": "스포츠",
+   "commission": "3% 안팎",
+   "volume": "1170",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 15120 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 1170 ≥ 300, 스포츠 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 19,
-   "keyword": "거실등",
+   "keyword": "계산기",
    "category": "미분류",
    "commission": "[확인 불가]",
-   "volume": "13640",
+   "volume": "1193100",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 13640 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 1193100 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   },
   {
    "rank": 20,
-   "keyword": "레일조명",
+   "keyword": "타이머",
    "category": "미분류",
    "commission": "[확인 불가]",
-   "volume": "12410",
+   "volume": "128700",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12410 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
+   "reason": "월간 검색 128700 ≥ 300, 미분류 [확인 불가], 경쟁 중간"
   }
  ]
 }
