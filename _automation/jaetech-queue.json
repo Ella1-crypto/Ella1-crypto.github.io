@@ -758,9 +758,12 @@
   "publish_at": "2026-11-08T09:30+09:00",
   "text": "AI한테 \"이 바지 M 맞을까?\" 물었는데\n뻔한 답만 돌아온 적 있죠.\n\nOpenAI Academy의 무료 강의\n'AI Foundations'에 '맥락 더하기'가 나와요.\n(영어 강의예요.)\n\n질문만 던지지 말고,\n판단에 필요한 내 정보를 같이 주는 거예요.\n\n이렇게 써 보세요.\n\"허리 72cm, 엉덩이 96cm,\n허벅지가 굵은 편이야.\n아래 사이즈표에서 S와 M을 비교해 주고,\n앉았을 때 낄 수 있는 곳도 알려 줘.\n(사이즈표 붙여넣기)\"\n\n막연한 추천 대신,\n내 치수 기준으로 비교한 답을 받을 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
   "reply": "📌 출처: OpenAI · OpenAI Academy 「AI Foundations」 (add useful context · 맥락 더하기)\nhttps://help.openai.com/en/articles/20001270-openai-academy-courses\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
-  "status": "올리는 중",
+  "status": "올림",
   "source": "AI 노하우 하루 1개",
   "note": "OpenAI Academy 「AI Foundations」(영어, 무료, 60~75분) · 맥락 더하기(add useful context) — OpenAI 도움말 11/7 확인, 트랙 1·쇼핑 장면(사이즈표 비교)",
-  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261108-am.png"
+  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261108-am.png",
+  "post_id": "17930323773431773",
+  "published_at": "2026-11-08T09:30+09:00",
+  "reply_id": "17865788577693295"
  }
 ]
