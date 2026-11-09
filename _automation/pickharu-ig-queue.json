@@ -1086,5 +1086,23 @@
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/story.jpg",
   "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요."
+ },
+ {
+  "id": "ig-aitip-03-chatgpt-masterclass",
+  "publish_at": "2026-11-13T18:30+09:00",
+  "caption": "챗GPT 질문, 5칸이면 돼요 ✍️\n\n무료강의에서 찾은 AI 노하우 3편이에요.\n인프런 '업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스'는 15강(13시간 14분), 수강기한 무제한인 입문 강의예요. 그중 5~7강이 '프롬프트 이해와 활용'이에요.\n\nClaude를 만든 Anthropic의 문서 '프롬프팅 모범 사례'는 AI를 똑똑하지만 우리 회사 사정은 모르는 신입 직원처럼 생각하라고 해요. Claude 기준 문서지만, 챗GPT에 질문할 때도 같은 원리로 써 볼 수 있어요.\n그 내용을 제가 다섯 칸으로 묶어 봤어요.\n① 역할 ② 맥락·이유 ③ 할 일 ④ 형식·순서 ⑤ 예시\n\n카드 속 예시 질문 3개는 제가 만든 예시예요. [ ] 안만 바꿔 써 보세요.\n\n📌 11월 7일 강의 페이지 가격 칸에 '무료'로 나와 있었어요. 신청할 때 결제창이 뜨면 유료로 바뀐 거예요.\n📌 강의 게시일·마지막 업데이트가 2024년 9월 4일이라 화면 메뉴는 지금과 다를 수 있어요.\n\n📩 무료 강의 100개+ 노션 목록이 필요하면 DM으로 '강의'라고 보내 주세요. 바로 보내 드릴게요\n질문 쓸 때 꺼내 보게 저장해 두세요.\n\n#챗GPT #프롬프트 #AI무료강의 #인프런 #직장인AI",
+  "images": [
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/01.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/02.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/03.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/04.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/05.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/06.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/07.jpg",
+   "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/08.jpg"
+  ],
+  "status": "예약",
+  "story_image": "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/story.jpg",
+  "comment": "출처: 인프런 '업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스' 강의 페이지, Anthropic 문서 '프롬프팅 모범 사례'(Claude 기준, 한국어판) — 2026년 11월 7일 확인. 5칸 묶음과 예시 질문은 희야가 만든 예시예요."
  }
 ]
