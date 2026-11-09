@@ -47,7 +47,15 @@
   "post_id": "18090787571695621",
   "published_at": "2026-10-30T23:16+09:00",
   "comment_id": "18190788307419852",
-  "story_id": "18120021676959234"
+  "story_id": "18120021676959234",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "tint",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (세일 캘린더 1차, 틴트 비교군)",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-20261031-xmas",
@@ -503,7 +511,15 @@
   "note": "게시 호출은 HTTP 403(Application request limit reached)였지만 실제로 올라감 — instagram.com/p/DfOSsHnAW8V/ (11/2 공개 프로필에서 확인)",
   "published_at": "2026-11-02T12:00+09:00",
   "story_error": "스토리 실패: 게시 오류로 스토리가 안 올라감 — 게시물은 올라감, 스토리만 직접 올리기",
-  "comment_manual": "11/2 출처 댓글을 pick.haru.daily 계정으로 브라우저에서 직접 달음(작성자 확인)"
+  "comment_manual": "11/2 출처 댓글을 pick.haru.daily 계정으로 브라우저에서 직접 달음(작성자 확인)",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "tint",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (틴트 비교군)",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-tint-oy-honey2-tint-mint",
@@ -521,7 +537,15 @@
   "published_at": "2026-11-02T18:31+09:00",
   "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
   "comment_id": "18499619488099010",
-  "story_id": "17909809008665162"
+  "story_id": "17909809008665162",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "tint",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (틴트 비교군)",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-tintkeep-oy-haul-tint-mint",
@@ -808,7 +832,17 @@
   "published_at": "2026-11-09T08:01+09:00",
   "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
   "comment_id": "17962542237255543",
-  "story_id": "17924364795444623"
+  "story_id": "17924364795444623",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "부모님 올리면 얼마나 줄어들까?"
+  }
  },
  {
   "id": "rl-yt06-clean-20261109",
@@ -823,7 +857,17 @@
   "auto": true,
   "post_id": "17958709971273197",
   "published_at": "2026-11-09T10:14+09:00",
-  "comment_id": "18127448104883820"
+  "comment_id": "18127448104883820",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "부모님 올리면 얼마나 줄어들까?"
+  }
  },
  {
   "id": "ig-clip-jt-20261109-tint-gray",
@@ -842,7 +886,17 @@
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-clip-jt-20261109-tint-gray/story.jpg",
   "comment": "출처 (2026.11.09 확인)\n· 경로우대 100만 원·장애인 200만 원·부녀자 50만 원·한부모 100만 원, 부녀자·한부모 중복 시 한부모만: 국가법령정보센터 소득세법 제51조(2026.1.1 시행)\n· 장애인 부양가족 나이 제한 없음: 소득세법 제50조 · 12월 31일 기준 판정: 소득세법 제53조\n· 장애인 범위(장애인복지법 장애인·상이자·주기적 치료가 필요한 중증 환자, 장애인증명서 첨부): 소득세법 시행령 제107조(2026.10.1 시행)\n· 총급여 약 4,147만 원은 소득세법 제47조 근로소득공제로 계산한 값이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
-  "note": "2026-11-09 밤 사용자 \"오늘 올린 인스타카드뉴스 양식으로\": yt06 클린 양식 8장(out/yt07-clean-20261110)으로 교체"
+  "note": "2026-11-09 밤 사용자 \"오늘 올린 인스타카드뉴스 양식으로\": yt06 클린 양식 8장(out/yt07-clean-20261110)으로 교체",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "기본공제 옆 칸 추가공제 4가지"
+  }
  },
  {
   "id": "rl-clip-jt-20261109-tint-gray",
@@ -853,7 +907,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.09 확인)\n· 경로우대 100만 원·장애인 200만 원·부녀자 50만 원·한부모 100만 원, 부녀자·한부모 중복 시 한부모만: 국가법령정보센터 소득세법 제51조(2026.1.1 시행)\n· 장애인 부양가족 나이 제한 없음: 소득세법 제50조 · 12월 31일 기준 판정: 소득세법 제53조\n· 장애인 범위(장애인복지법 장애인·상이자·주기적 치료가 필요한 중증 환자, 장애인증명서 첨부): 소득세법 시행령 제107조(2026.10.1 시행)\n· 총급여 약 4,147만 원은 소득세법 제47조 근로소득공제로 계산한 값이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-clip-jt-20261109-tint-gray/index.html",
-  "note": "2026-11-09 밤: 6탄 릴스 스타일(이미지 장면)로 교체"
+  "note": "2026-11-09 밤: 6탄 릴스 스타일(이미지 장면)로 교체",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "기본공제 옆 칸 추가공제 4가지"
+  }
  },
  {
   "id": "ig-ad-inpock-049-hand-warmer",
@@ -875,7 +939,15 @@
   "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
   "comment_id": "18133907560688199",
   "story_id": "17868471198677869",
-  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/7"
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/7",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "20:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다 (훅은 모두 캐릭터+포인트+?! 공식이라 같음)",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-049-hand-warmer",
@@ -887,7 +959,15 @@
   "comment": "출처: 쿠팡 상품 페이지(키티 자동 발열 손난로 발열 패드 5쌍(10개입) HOLDX, 상품번호 9803835437, 옵션 키티) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/9 확인)",
   "ad": true,
   "page": "assets/pickharu/ig/rl-ad-inpock-049-hand-warmer/index.html",
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/8"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/8",
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "20:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-050-chiikawa-magnet-keyring",
@@ -903,7 +983,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-050-chiikawa-magnet-keyring/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(자석 페어 키링 모몽가 커플 열쇠고리 하치와래 우사기 피규어 키홀더, 상품번호 9740357949) 11/8 확인 — 대표 사진은 하치와레·우사기 조합이고 옵션마다 캐릭터 조합이 달라요. 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(자석 페어 키링 모몽가 커플 열쇠고리 하치와래 우사기 피규어 키홀더, 상품번호 9740357949) 11/8 확인 — 대표 사진은 하치와레·우사기 조합이고 옵션마다 캐릭터 조합이 달라요. 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "12:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-050-chiikawa-magnet-keyring",
@@ -914,7 +1002,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(자석 페어 키링 모몽가 커플 열쇠고리 하치와래 우사기 피규어 키홀더, 상품번호 9740357949) 11/8 확인 — 대표 사진은 하치와레·우사기 조합이고 옵션마다 캐릭터 조합이 달라요. 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-050-chiikawa-magnet-keyring/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "12:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-051-kitty-seatbelt-cover",
@@ -930,7 +1026,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-051-kitty-seatbelt-cover/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(헬로 키티 안전벨트 커버 2PCS, 상품번호 9574143395, 옵션 A) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(헬로 키티 안전벨트 커버 2PCS, 상품번호 9574143395, 옵션 A) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "20:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-051-kitty-seatbelt-cover",
@@ -941,7 +1045,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(헬로 키티 안전벨트 커버 2PCS, 상품번호 9574143395, 옵션 A) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-051-kitty-seatbelt-cover/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "20:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-052-chiikawa-toilet-roll",
@@ -957,7 +1069,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-052-chiikawa-toilet-roll/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 두루마리 휴지 프린팅 롤 화장지, 상품번호 9782687800, 옵션 12롤·25m) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 두루마리 휴지 프린팅 롤 화장지, 상품번호 9782687800, 옵션 12롤·25m) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "12:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-052-chiikawa-toilet-roll",
@@ -968,7 +1088,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 두루마리 휴지 프린팅 롤 화장지, 상품번호 9782687800, 옵션 12롤·25m) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-052-chiikawa-toilet-roll/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "12:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-054-chiikawa-art-frame",
@@ -984,7 +1112,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-054-chiikawa-art-frame/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 우사기 모나리자 명화 탁상 액자 데스크탑 오브제, 상품번호 9765245126, 옵션 LW602 우사기 진주 귀걸이 / LW603 하치와레 모나리자) 11/9 확인 — 크기·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 우사기 모나리자 명화 탁상 액자 데스크탑 오브제, 상품번호 9765245126, 옵션 LW602 우사기 진주 귀걸이 / LW603 하치와레 모나리자) 11/9 확인 — 크기·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "20:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-054-chiikawa-art-frame",
@@ -995,7 +1131,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(치이카와 먼작귀 우사기 모나리자 명화 탁상 액자 데스크탑 오브제, 상품번호 9765245126, 옵션 LW602 우사기 진주 귀걸이 / LW603 하치와레 모나리자) 11/9 확인 — 크기·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-054-chiikawa-art-frame/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "20:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-055-chiikawa-art-frame-7-10",
@@ -1011,7 +1155,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-055-chiikawa-art-frame-7-10/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(먼작귀 치이카와 우사기 하치와레 세계 명화 사진 액자 인테리어 장식 데스크테리어, 상품번호 9002039263, 7인치/10인치) 11/9 확인 — 디자인 옵션·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(먼작귀 치이카와 우사기 하치와레 세계 명화 사진 액자 인테리어 장식 데스크테리어, 상품번호 9002039263, 7인치/10인치) 11/9 확인 — 디자인 옵션·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "12:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-055-chiikawa-art-frame-7-10",
@@ -1022,7 +1174,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(먼작귀 치이카와 우사기 하치와레 세계 명화 사진 액자 인테리어 장식 데스크테리어, 상품번호 9002039263, 7인치/10인치) 11/9 확인 — 디자인 옵션·가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표 이미지, 11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-055-chiikawa-art-frame-7-10/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "12:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-ad-inpock-057-sanrio-tree-orgel",
@@ -1038,7 +1198,15 @@
   "status": "예약",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-057-sanrio-tree-orgel/story.jpg",
-  "comment": "출처: 쿠팡 상품 페이지(AREAX 산리오 헬로키티 크리스마스트리 오르골 조립 블록, 상품번호 9801821420, 옵션 오르골 조립 블록 × 크리스마스 트리) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표·상세 이미지, 11/9 확인)"
+  "comment": "출처: 쿠팡 상품 페이지(AREAX 산리오 헬로키티 크리스마스트리 오르골 조립 블록, 상품번호 9801821420, 옵션 오르골 조립 블록 × 크리스마스 트리) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표·상세 이미지, 11/9 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "20:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "rl-ad-inpock-057-sanrio-tree-orgel",
@@ -1049,7 +1217,15 @@
   "status": "예약",
   "comment": "출처: 쿠팡 상품 페이지(AREAX 산리오 헬로키티 크리스마스트리 오르골 조립 블록, 상품번호 9801821420, 옵션 오르골 조립 블록 × 크리스마스 트리) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표·상세 이미지, 11/9 확인)",
   "page": "assets/pickharu/ig/rl-ad-inpock-057-sanrio-tree-orgel/index.html",
-  "ad": true
+  "ad": true,
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "20:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-aitip-01-chatgpt-work",
@@ -1067,7 +1243,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-01-chatgpt-work/story.jpg",
-  "comment": "출처: GSEEK(경기도평생학습포털) '일잘러의 노하우, ChatGPT를 활용한 업무효율UP!' 강의 페이지 (2026년 10월 30일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: GSEEK(경기도평생학습포털) '일잘러의 노하우, ChatGPT를 활용한 업무효율UP!' 강의 페이지 (2026년 10월 30일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시 질문은 희야가 만든 예시예요.",
+  "test": {
+   "group": "aitip-hook",
+   "variable": "hook_type",
+   "variant": "④질문",
+   "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "④",
+   "hook_text": "메일 하나에 30분 걸리죠?"
+  }
  },
  {
   "id": "ig-aitip-02-generative-ai-manual",
@@ -1085,7 +1271,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/story.jpg",
-  "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요.",
+  "test": {
+   "group": "aitip-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "생성형 AI 무료강의 10차시 정리"
+  }
  },
  {
   "id": "ig-aitip-03-chatgpt-masterclass",
@@ -1103,7 +1299,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-03-chatgpt-masterclass/story.jpg",
-  "comment": "출처: 인프런 '업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스' 강의 페이지, Anthropic 문서 '프롬프팅 모범 사례'(Claude 기준, 한국어판) — 2026년 11월 7일 확인. 5칸 묶음과 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: 인프런 '업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스' 강의 페이지, Anthropic 문서 '프롬프팅 모범 사례'(Claude 기준, 한국어판) — 2026년 11월 7일 확인. 5칸 묶음과 예시 질문은 희야가 만든 예시예요.",
+  "test": {
+   "group": "aitip-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "챗GPT 질문, 5칸이면 돼요"
+  }
  },
  {
   "id": "ig-aitip-04-best-generative-ai",
@@ -1121,7 +1327,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-04-best-generative-ai/story.jpg",
-  "comment": "출처: GSEEK(경기도 평생학습포털) '요즘 일잘러가 쓰는 BEST 생성형 AI' 강의 페이지, OpenAI 도움말 'ChatGPT Custom Instructions'·'Creating and editing GPTs' (2026년 11월 8일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시는 희야가 만든 예시예요."
+  "comment": "출처: GSEEK(경기도 평생학습포털) '요즘 일잘러가 쓰는 BEST 생성형 AI' 강의 페이지, OpenAI 도움말 'ChatGPT Custom Instructions'·'Creating and editing GPTs' (2026년 11월 8일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시는 희야가 만든 예시예요.",
+  "test": {
+   "group": "aitip-hook",
+   "variable": "hook_type",
+   "variant": "④질문",
+   "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "④",
+   "hook_text": "새 채팅마다 같은 설명 또?"
+  }
  },
  {
   "id": "ig-yt01-clean-repost",
@@ -1139,7 +1355,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt01-clean-repost/story.jpg",
-  "comment": "출처 (2026.11.02 확인)\n· 매달 원천징수(간이세액표): 국가법령정보센터 소득세법 제134조\n· 2월 연말정산·환급·10만 원 초과 분납·신고서 미제출 시 공제: 소득세법 제137조\n· 원천징수 비율 80%·120% 신청: 소득세법 시행령 제194조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.02 확인)\n· 매달 원천징수(간이세액표): 국가법령정보센터 소득세법 제134조\n· 2월 연말정산·환급·10만 원 초과 분납·신고서 미제출 시 공제: 소득세법 제137조\n· 원천징수 비율 80%·120% 신청: 소득세법 시행령 제194조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "③",
+   "hook_text": "매달 떼는 세금은 미리 낸 세금이에요"
+  }
  },
  {
   "id": "ig-yt02-clean-repost",
@@ -1157,7 +1383,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt02-clean-repost/story.jpg",
-  "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "계산 흐름 4단계 환급? 추가 납부?"
+  }
  },
  {
   "id": "ig-yt03-clean",
@@ -1175,7 +1411,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt03-clean/story.jpg",
-  "comment": "출처 (2026.11.03 확인)\n· 소득공제(인적공제 등은 종합소득금액에서 공제): 국가법령정보센터 소득세법 제50조\n· 세액공제(의료비 15% 등, 산출세액에서 공제): 소득세법 제59조의4\n· 세액공제액이 산출세액을 넘으면 없는 것으로 봄, 기부금 세액공제만 10년 이월: 소득세법 제61조\n· 금액 예시는 지방소득세 등을 뺀 대략 계산이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.03 확인)\n· 소득공제(인적공제 등은 종합소득금액에서 공제): 국가법령정보센터 소득세법 제50조\n· 세액공제(의료비 15% 등, 산출세액에서 공제): 소득세법 제59조의4\n· 세액공제액이 산출세액을 넘으면 없는 것으로 봄, 기부금 세액공제만 10년 이월: 소득세법 제61조\n· 금액 예시는 지방소득세 등을 뺀 대략 계산이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "소득공제 vs 세액공제 차이"
+  }
  },
  {
   "id": "ig-yt04-clean-repost",
@@ -1193,7 +1439,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt04-clean-repost/story.jpg",
-  "comment": "출처 (2026.11.05 확인)\n· 2월분 근로소득 지급 때 연말정산: 국가법령정보센터 소득세법 제137조\n· 근로소득 지급명세서 다음 해 3월 10일까지 제출: 소득세법 제164조\n· 종합소득세 확정신고 5월 1일~31일: 소득세법 제70조\n· 연말정산 뒤 5년 안 경정청구: 국세기본법 제45조의2\n· 2025년 귀속 간소화 서비스 2026년 1월 15일 개통: 다음 뉴스 보도(2026.01.15)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.05 확인)\n· 2월분 근로소득 지급 때 연말정산: 국가법령정보센터 소득세법 제137조\n· 근로소득 지급명세서 다음 해 3월 10일까지 제출: 소득세법 제164조\n· 종합소득세 확정신고 5월 1일~31일: 소득세법 제70조\n· 연말정산 뒤 5년 안 경정청구: 국세기본법 제45조의2\n· 2025년 귀속 간소화 서비스 2026년 1월 15일 개통: 다음 뉴스 보도(2026.01.15)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "연말정산 일정 5단계만 기억해요"
+  }
  },
  {
   "id": "ig-yt05-clean-repost",
@@ -1211,7 +1467,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt05-clean-repost/story.jpg",
-  "comment": "출처 (2026.11.06 확인)\n· 칸 순서·국세청/기타 줄·문화체육사용분(총급여 7천만 원 이하): 국가법령정보센터 소득세법 시행규칙 별지 제37호서식 근로소득자 소득·세액 공제신고서(2026.3.20 개정)\n· 특별소득공제·특별세액공제·월세 미신청 시 표준세액공제 연 13만 원: 소득세법 제59조의4 제9항(같은 서식 유의사항)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.11.06 확인)\n· 칸 순서·국세청/기타 줄·문화체육사용분(총급여 7천만 원 이하): 국가법령정보센터 소득세법 시행규칙 별지 제37호서식 근로소득자 소득·세액 공제신고서(2026.3.20 개정)\n· 특별소득공제·특별세액공제·월세 미신청 시 표준세액공제 연 13만 원: 소득세법 제59조의4 제9항(같은 서식 유의사항)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "공제신고서 칸 순서만 알면 쉬워요"
+  }
  },
  {
   "id": "ig-hometown2-clean-repost",
@@ -1229,7 +1495,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-hometown2-clean-repost/story.jpg",
-  "comment": "출처 (2026.10.31 확인)\n· 공제 비율·한도: 국가법령정보센터 조세특례제한법 제58조, KBthink 연말정산 고향사랑기부 안내\n· 제도 안내·간소화 반영: 서울시 고향사랑기부제 안내 (news.seoul.go.kr)\n· 법인 허용·공제 확대 개정안: 머니투데이(2026.6.1), 뉴스1 보도\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+  "comment": "출처 (2026.10.31 확인)\n· 공제 비율·한도: 국가법령정보센터 조세특례제한법 제58조, KBthink 연말정산 고향사랑기부 안내\n· 제도 안내·간소화 반영: 서울시 고향사랑기부제 안내 (news.seoul.go.kr)\n· 법인 허용·공제 확대 개정안: 머니투데이(2026.6.1), 뉴스1 보도\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "고향사랑기부 세액공제 정리"
+  }
  },
  {
   "id": "rl-yt01-clean-repost",
@@ -1240,7 +1516,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.02 확인)\n· 매달 원천징수(간이세액표): 국가법령정보센터 소득세법 제134조\n· 2월 연말정산·환급·10만 원 초과 분납·신고서 미제출 시 공제: 소득세법 제137조\n· 원천징수 비율 80%·120% 신청: 소득세법 시행령 제194조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-yt01-clean-repost/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다 (같은 글의 카드뉴스와 형식 비교는 보고서가 ig-/rl- 짝으로 계산)",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "③",
+   "hook_text": "매달 떼는 세금은 미리 낸 세금이에요"
+  }
  },
  {
   "id": "rl-yt02-clean-repost",
@@ -1251,7 +1537,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-yt02-clean-repost/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "계산 흐름 4단계 환급? 추가 납부?"
+  }
  },
  {
   "id": "rl-yt03-clean",
@@ -1262,7 +1558,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.03 확인)\n· 소득공제(인적공제 등은 종합소득금액에서 공제): 국가법령정보센터 소득세법 제50조\n· 세액공제(의료비 15% 등, 산출세액에서 공제): 소득세법 제59조의4\n· 세액공제액이 산출세액을 넘으면 없는 것으로 봄, 기부금 세액공제만 10년 이월: 소득세법 제61조\n· 금액 예시는 지방소득세 등을 뺀 대략 계산이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-yt03-clean/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "소득공제 vs 세액공제 차이"
+  }
  },
  {
   "id": "rl-yt04-clean-repost",
@@ -1273,7 +1579,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.05 확인)\n· 2월분 근로소득 지급 때 연말정산: 국가법령정보센터 소득세법 제137조\n· 근로소득 지급명세서 다음 해 3월 10일까지 제출: 소득세법 제164조\n· 종합소득세 확정신고 5월 1일~31일: 소득세법 제70조\n· 연말정산 뒤 5년 안 경정청구: 국세기본법 제45조의2\n· 2025년 귀속 간소화 서비스 2026년 1월 15일 개통: 다음 뉴스 보도(2026.01.15)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-yt04-clean-repost/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "연말정산 일정 5단계만 기억해요"
+  }
  },
  {
   "id": "rl-yt05-clean-repost",
@@ -1284,7 +1600,17 @@
   "status": "예약",
   "comment": "출처 (2026.11.06 확인)\n· 칸 순서·국세청/기타 줄·문화체육사용분(총급여 7천만 원 이하): 국가법령정보센터 소득세법 시행규칙 별지 제37호서식 근로소득자 소득·세액 공제신고서(2026.3.20 개정)\n· 특별소득공제·특별세액공제·월세 미신청 시 표준세액공제 연 13만 원: 소득세법 제59조의4 제9항(같은 서식 유의사항)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-yt05-clean-repost/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "공제신고서 칸 순서만 알면 쉬워요"
+  }
  },
  {
   "id": "rl-hometown2-clean-repost",
@@ -1295,7 +1621,17 @@
   "status": "예약",
   "comment": "출처 (2026.10.31 확인)\n· 공제 비율·한도: 국가법령정보센터 조세특례제한법 제58조, KBthink 연말정산 고향사랑기부 안내\n· 제도 안내·간소화 반영: 서울시 고향사랑기부제 안내 (news.seoul.go.kr)\n· 법인 허용·공제 확대 개정안: 머니투데이(2026.6.1), 뉴스1 보도\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "page": "assets/pickharu/ig/rl-hometown2-clean-repost/index.html",
-  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: 옛 양식 연말정산 다시 올리기(그날 옛 글 보관). 음악 직접 넣어 게시",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "⑥",
+   "hook_text": "고향사랑기부 세액공제 정리"
+  }
  },
  {
   "id": "rl-aitip-01-chatgpt-work",
@@ -1306,7 +1642,17 @@
   "status": "예약",
   "comment": "출처: GSEEK(경기도평생학습포털) '일잘러의 노하우, ChatGPT를 활용한 업무효율UP!' 강의 페이지 (2026년 10월 30일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시 질문은 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-01-chatgpt-work/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "test": {
+   "group": "aitip-hook-reel",
+   "variable": "hook_type",
+   "variant": "④질문",
+   "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "④",
+   "hook_text": "메일 하나에 30분 걸리죠?"
+  }
  },
  {
   "id": "rl-aitip-02-generative-ai-manual",
@@ -1317,7 +1663,17 @@
   "status": "예약",
   "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-02-generative-ai-manual/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "test": {
+   "group": "aitip-hook-reel",
+   "variable": "hook_type",
+   "variant": "④질문",
+   "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "④",
+   "hook_text": "AI 도구 7종류 뭘 켜야 할까요?"
+  }
  },
  {
   "id": "rl-aitip-03-chatgpt-masterclass",
@@ -1328,7 +1684,17 @@
   "status": "예약",
   "comment": "출처: 인프런 '업무에 바로 적용하는 텍스트 생성AI 활용법: 챗GPT 마스터클래스' 강의 페이지, Anthropic 문서 '프롬프팅 모범 사례'(Claude 기준, 한국어판) — 2026년 11월 7일 확인. 5칸 묶음과 예시 질문은 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-03-chatgpt-masterclass/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "test": {
+   "group": "aitip-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "②",
+   "hook_text": "챗GPT 질문, 5칸이면 돼요"
+  }
  },
  {
   "id": "rl-aitip-04-best-generative-ai",
@@ -1339,7 +1705,17 @@
   "status": "예약",
   "comment": "출처: GSEEK(경기도 평생학습포털) '요즘 일잘러가 쓰는 BEST 생성형 AI' 강의 페이지, OpenAI 도움말 'ChatGPT Custom Instructions'·'Creating and editing GPTs' (2026년 11월 8일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시는 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-04-best-generative-ai/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시"
+  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "test": {
+   "group": "aitip-hook-reel",
+   "variable": "hook_type",
+   "variant": "④질문",
+   "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09",
+   "variant_label": "④",
+   "hook_text": "새 채팅마다 같은 설명 또?"
+  }
  },
  {
   "id": "ig-redesign-sale-calendar-1",
@@ -1357,7 +1733,15 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-redesign-sale-calendar-1/story.jpg",
-  "comment": "출처 (2026.11.9 확인)\n· 29CM 이구위크(11/9 19:00~11/19 23:59, 매일 10시 쿠폰·12시 럭키박스, 카테고리데이 날짜): 29CM 이구위크 티징 페이지, 어패럴뉴스\n· W컨셉 더블유위크(11/9~11/25, 10시 균일가·18시 50% 쿠폰): 아시아경제 11/9, W컨셉\n· G마켓 빅스마일데이(11/2~11/13): G마켓 빅스마일데이 혜택 페이지\n· 11번가 그랜드십일절(11/1~11/11): ZDNet Korea 10/29, 스페셜타임즈 11/9\n· 알리익스프레스 광군제(11/1~11/18): 뉴시스 10/29, ZDNet Korea 11/4\n· 롯데마트 메가통큰(10/29~11/11): 비즈워치 10/30, 파이낸셜뉴스 10/31\n· 코리아 그랜드 페스티벌(10/29~11/15): 대한민국 정책브리핑(korea.kr)\n· 미국 블랙프라이데이 11/27·사이버먼데이 11/30: 2026년 추수감사절(11/26) 다음 날 기준\n· 무신사 무진장·에이블리·지그재그·유니클로 감사제: 11/9 기준 공식 발표 확인 못 함"
+  "comment": "출처 (2026.11.9 확인)\n· 29CM 이구위크(11/9 19:00~11/19 23:59, 매일 10시 쿠폰·12시 럭키박스, 카테고리데이 날짜): 29CM 이구위크 티징 페이지, 어패럴뉴스\n· W컨셉 더블유위크(11/9~11/25, 10시 균일가·18시 50% 쿠폰): 아시아경제 11/9, W컨셉\n· G마켓 빅스마일데이(11/2~11/13): G마켓 빅스마일데이 혜택 페이지\n· 11번가 그랜드십일절(11/1~11/11): ZDNet Korea 10/29, 스페셜타임즈 11/9\n· 알리익스프레스 광군제(11/1~11/18): 뉴시스 10/29, ZDNet Korea 11/4\n· 롯데마트 메가통큰(10/29~11/11): 비즈워치 10/30, 파이낸셜뉴스 10/31\n· 코리아 그랜드 페스티벌(10/29~11/15): 대한민국 정책브리핑(korea.kr)\n· 미국 블랙프라이데이 11/27·사이버먼데이 11/30: 2026년 추수감사절(11/26) 다음 날 기준\n· 무신사 무진장·에이블리·지그재그·유니클로 감사제: 11/9 기준 공식 발표 확인 못 함",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "clean",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-redesign-oy-honey-3",
@@ -1374,7 +1758,15 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-redesign-oy-honey-3/story.jpg",
-  "comment": "출처 (유튜브, 2026.10.31 확인 · 사용법은 영상 속 사용법 요약 · 광고 영상 제외 · 숫자는 추천한 유튜버 수)\n· 이니스프리 그린티 세라마이드 밀크(6): 톡신 / 류정, 제나, 미닝, HOONION, 효블리\n· 토리든 다이브인 세럼(5): 박지윤의 피부 설명서 / 희지, 박경열, 닥터블랑, 최종시안\n· 라로슈포제 시카플라스트 밤 B5+(5): 피부 읽는 안리정 / 윤이든, 희지, 미닝, 최종시안 · 반대 의견: 화니\n· 닥터지 그린 마일드 업 선 플러스(5): 디렉터파이 / 소살, 한태호, 제나, Kook연주\n· 롬앤 베러 댄 치크(5): 김아린 / 유리하다, 짱순, 오션, 유알비\n· 아비브 어성초 패드(4): 혜리미 / 윤이든, 박현지, 제이미포유\n· 에스트라 아토베리어365 크림(4): 피부과 김진용 / 박지윤, Jaina, 최원준\n· 웰라쥬 블루 100 앰플(4): 희지 / 10시엔 디붕, 지려밍, 소윤\n· 정샘물 쿠션(4): 10시엔 디붕 / 민베리, 포푼젤, 수앤유\n· 페리페라 브로우(4): 홍이모 / 상은언니, 조효진, Risabae\n· 홀리카홀리카 젤테일(4): 박비단 / 오션, 상은언니, 민스코\n· 롬앤 쥬시 래스팅 틴트(4): 하이예나 / 미닝, 수앤유, 유리하다\n· 릴리바이레드 치크밤(4): 헤메코 / 홍이모, 지냐, 미닝\n· 사진: 글로우픽 상품 이미지(1·2편과 같은 사진)"
+  "comment": "출처 (유튜브, 2026.10.31 확인 · 사용법은 영상 속 사용법 요약 · 광고 영상 제외 · 숫자는 추천한 유튜버 수)\n· 이니스프리 그린티 세라마이드 밀크(6): 톡신 / 류정, 제나, 미닝, HOONION, 효블리\n· 토리든 다이브인 세럼(5): 박지윤의 피부 설명서 / 희지, 박경열, 닥터블랑, 최종시안\n· 라로슈포제 시카플라스트 밤 B5+(5): 피부 읽는 안리정 / 윤이든, 희지, 미닝, 최종시안 · 반대 의견: 화니\n· 닥터지 그린 마일드 업 선 플러스(5): 디렉터파이 / 소살, 한태호, 제나, Kook연주\n· 롬앤 베러 댄 치크(5): 김아린 / 유리하다, 짱순, 오션, 유알비\n· 아비브 어성초 패드(4): 혜리미 / 윤이든, 박현지, 제이미포유\n· 에스트라 아토베리어365 크림(4): 피부과 김진용 / 박지윤, Jaina, 최원준\n· 웰라쥬 블루 100 앰플(4): 희지 / 10시엔 디붕, 지려밍, 소윤\n· 정샘물 쿠션(4): 10시엔 디붕 / 민베리, 포푼젤, 수앤유\n· 페리페라 브로우(4): 홍이모 / 상은언니, 조효진, Risabae\n· 홀리카홀리카 젤테일(4): 박비단 / 오션, 상은언니, 민스코\n· 롬앤 쥬시 래스팅 틴트(4): 하이예나 / 미닝, 수앤유, 유리하다\n· 릴리바이레드 치크밤(4): 헤메코 / 홍이모, 지냐, 미닝\n· 사진: 글로우픽 상품 이미지(1·2편과 같은 사진)",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "clean",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  },
  {
   "id": "ig-redesign-daiso-honey-2",
@@ -1391,6 +1783,14 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-redesign-daiso-honey-2/story.jpg",
-  "comment": "출처 (유튜브, 2026.10.31 확인 · 사용법은 영상 속 사용법 요약 · 숫자는 소개한 유튜버 수)\n· 바다포도 스킨팩(5): 지연쌤의 피부참견 / LeoJ Makeup, 뷰드름 유튜버 인씨, 겸다미, 디에디트 라이프\n· 로지-히알론 리퀴드 마스크(4): 뷰드름 유튜버 인씨 / 지연쌤의 피부참견, LeoJ Makeup, 효블리\n· 라센스 로에 큐어 2X 크림(3): 피부는 희쌤 / Yoo True, 오션\n· 후시덤 SOS크림(2): 박지윤의 피부 설명서 / 뷰드름 유튜버 인씨\n· 딘토 노스탈지아 아이 팔레트(3): LeoJ Makeup / 신지훈의 뷰티비, 뷰드름 유튜버 인씨\n· 태그 멀티 컨투어 스틱(3): 신지훈의 뷰티비 / 재유JEYU, 효블리\n· 태그 에어 픽싱 브로우 카라(2): 재유JEYU / 뷰드름 유튜버 인씨\n· 입큰 퍼스널 디테일 립 스머저(2): 오션 / 뷰드름 유튜버 인씨\n· 핑거 팡팡 퍼프(2): 효블리 / 오션\n· 핑크 메탈 립 브러시(2): 미닝 / 효블리\n· 태그 비건 디파인 브러쉬 듀오(2): 이별미 / 미닝\n· 재고: 다이소몰 표시, 2026.10.31 확인(매장 재고와 다를 수 있어요)\n· 사진: 다이소몰 상품 이미지(1편과 같은 사진)"
+  "comment": "출처 (유튜브, 2026.10.31 확인 · 사용법은 영상 속 사용법 요약 · 숫자는 소개한 유튜버 수)\n· 바다포도 스킨팩(5): 지연쌤의 피부참견 / LeoJ Makeup, 뷰드름 유튜버 인씨, 겸다미, 디에디트 라이프\n· 로지-히알론 리퀴드 마스크(4): 뷰드름 유튜버 인씨 / 지연쌤의 피부참견, LeoJ Makeup, 효블리\n· 라센스 로에 큐어 2X 크림(3): 피부는 희쌤 / Yoo True, 오션\n· 후시덤 SOS크림(2): 박지윤의 피부 설명서 / 뷰드름 유튜버 인씨\n· 딘토 노스탈지아 아이 팔레트(3): LeoJ Makeup / 신지훈의 뷰티비, 뷰드름 유튜버 인씨\n· 태그 멀티 컨투어 스틱(3): 신지훈의 뷰티비 / 재유JEYU, 효블리\n· 태그 에어 픽싱 브로우 카라(2): 재유JEYU / 뷰드름 유튜버 인씨\n· 입큰 퍼스널 디테일 립 스머저(2): 오션 / 뷰드름 유튜버 인씨\n· 핑거 팡팡 퍼프(2): 효블리 / 오션\n· 핑크 메탈 립 브러시(2): 미닝 / 효블리\n· 태그 비건 디파인 브러쉬 듀오(2): 이별미 / 미닝\n· 재고: 다이소몰 표시, 2026.10.31 확인(매장 재고와 다를 수 있어요)\n· 사진: 다이소몰 상품 이미지(1편과 같은 사진)",
+  "test": {
+   "group": "look-clean-vs-tint",
+   "variable": "color",
+   "variant": "clean",
+   "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-09"
+  }
  }
 ]

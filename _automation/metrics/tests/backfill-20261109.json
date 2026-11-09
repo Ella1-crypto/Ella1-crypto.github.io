@@ -1,0 +1,53 @@
+{
+ "note": "2026-11-09 7일 테스트 보드 백필(11/10~11/16 예약 글 + 비교 대상인 이미 올린 글). hook_type은 studio script.json의 고른 훅 유형, 없는 건 표지 제목으로 판단.",
+ "items": [
+  {"queue": "ig", "id": "ig-yt01-clean-repost", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "③", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "매달 떼는 세금은 미리 낸 세금이에요"}},
+  {"queue": "ig", "id": "ig-yt02-clean-repost", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "계산 흐름 4단계 환급? 추가 납부?"}},
+  {"queue": "ig", "id": "ig-yt03-clean", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "소득공제 vs 세액공제 차이"}},
+  {"queue": "ig", "id": "ig-yt04-clean-repost", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "연말정산 일정 5단계만 기억해요"}},
+  {"queue": "ig", "id": "ig-yt05-clean-repost", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "공제신고서 칸 순서만 알면 쉬워요"}},
+  {"queue": "ig", "id": "ig-hometown2-clean-repost", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "고향사랑기부 세액공제 정리"}},
+  {"queue": "ig", "id": "ig-yt06-clean-20261109", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "부모님 올리면 얼마나 줄어들까?"}},
+  {"queue": "ig", "id": "ig-clip-jt-20261109-tint-gray", "test": {"group": "yt-repost-hook", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다", "hook_text": "기본공제 옆 칸 추가공제 4가지"}},
+
+  {"queue": "ig", "id": "rl-yt01-clean-repost", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "③", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다 (같은 글의 카드뉴스와 형식 비교는 보고서가 ig-/rl- 짝으로 계산)", "hook_text": "매달 떼는 세금은 미리 낸 세금이에요"}},
+  {"queue": "ig", "id": "rl-yt02-clean-repost", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "계산 흐름 4단계 환급? 추가 납부?"}},
+  {"queue": "ig", "id": "rl-yt03-clean", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "소득공제 vs 세액공제 차이"}},
+  {"queue": "ig", "id": "rl-yt04-clean-repost", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "연말정산 일정 5단계만 기억해요"}},
+  {"queue": "ig", "id": "rl-yt05-clean-repost", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "공제신고서 칸 순서만 알면 쉬워요"}},
+  {"queue": "ig", "id": "rl-hometown2-clean-repost", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "⑥", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "고향사랑기부 세액공제 정리"}},
+  {"queue": "ig", "id": "rl-yt06-clean-20261109", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "부모님 올리면 얼마나 줄어들까?"}},
+  {"queue": "ig", "id": "rl-clip-jt-20261109-tint-gray", "test": {"group": "yt-repost-hook-reel", "variable": "hook_type", "variant": "②", "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다", "hook_text": "기본공제 옆 칸 추가공제 4가지"}},
+
+  {"queue": "ig", "id": "ig-aitip-01-chatgpt-work", "test": {"group": "aitip-hook", "variable": "hook_type", "variant": "④", "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다", "hook_text": "메일 하나에 30분 걸리죠?"}},
+  {"queue": "ig", "id": "ig-aitip-02-generative-ai-manual", "test": {"group": "aitip-hook", "variable": "hook_type", "variant": "②", "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다", "hook_text": "생성형 AI 무료강의 10차시 정리"}},
+  {"queue": "ig", "id": "ig-aitip-03-chatgpt-masterclass", "test": {"group": "aitip-hook", "variable": "hook_type", "variant": "②", "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다", "hook_text": "챗GPT 질문, 5칸이면 돼요"}},
+  {"queue": "ig", "id": "ig-aitip-04-best-generative-ai", "test": {"group": "aitip-hook", "variable": "hook_type", "variant": "④", "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다", "hook_text": "새 채팅마다 같은 설명 또?"}},
+  {"queue": "ig", "id": "rl-aitip-01-chatgpt-work", "test": {"group": "aitip-hook-reel", "variable": "hook_type", "variant": "④", "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다", "hook_text": "메일 하나에 30분 걸리죠?"}},
+  {"queue": "ig", "id": "rl-aitip-02-generative-ai-manual", "test": {"group": "aitip-hook-reel", "variable": "hook_type", "variant": "④", "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다", "hook_text": "AI 도구 7종류 뭘 켜야 할까요?"}},
+  {"queue": "ig", "id": "rl-aitip-03-chatgpt-masterclass", "test": {"group": "aitip-hook-reel", "variable": "hook_type", "variant": "②", "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다", "hook_text": "챗GPT 질문, 5칸이면 돼요"}},
+  {"queue": "ig", "id": "rl-aitip-04-best-generative-ai", "test": {"group": "aitip-hook-reel", "variable": "hook_type", "variant": "④", "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다", "hook_text": "새 채팅마다 같은 설명 또?"}},
+
+  {"queue": "ig", "id": "ig-ad-inpock-049-hand-warmer", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "20:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다 (훅은 모두 캐릭터+포인트+?! 공식이라 같음)"}},
+  {"queue": "ig", "id": "ig-ad-inpock-050-chiikawa-magnet-keyring", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "12:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-ad-inpock-051-kitty-seatbelt-cover", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "20:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-ad-inpock-052-chiikawa-toilet-roll", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "12:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-ad-inpock-054-chiikawa-art-frame", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "20:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-ad-inpock-055-chiikawa-art-frame-7-10", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "12:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-ad-inpock-057-sanrio-tree-orgel", "test": {"group": "ad-inpock-time", "variable": "time", "variant": "20:30", "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-049-hand-warmer", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "20:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-050-chiikawa-magnet-keyring", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "12:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-051-kitty-seatbelt-cover", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "20:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-052-chiikawa-toilet-roll", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "12:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-054-chiikawa-art-frame", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "20:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-055-chiikawa-art-frame-7-10", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "12:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+  {"queue": "ig", "id": "rl-ad-inpock-057-sanrio-tree-orgel", "test": {"group": "ad-inpock-time-reel", "variable": "time", "variant": "20:40", "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다"}},
+
+  {"queue": "ig", "id": "ig-redesign-sale-calendar-1", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "clean", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-redesign-oy-honey-3", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "clean", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-redesign-daiso-honey-2", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "clean", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다"}},
+  {"queue": "ig", "id": "ig-tint-oy-honey2-tint-mint", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "tint", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (틴트 비교군)"}},
+  {"queue": "ig", "id": "ig-tint-daiso-honey-tint-butter", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "tint", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (틴트 비교군)"}},
+  {"queue": "ig", "id": "ig-20261030-sale", "test": {"group": "look-clean-vs-tint", "variable": "color", "variant": "tint", "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다 (세일 캘린더 1차, 틴트 비교군)"}}
+ ]
+}

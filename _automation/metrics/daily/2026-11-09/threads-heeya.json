@@ -1,0 +1,652 @@
+{
+ "account": "threads-heeya",
+ "handle": "heeya.dailyfit",
+ "collected_at": "2026-11-09T23:51+09:00",
+ "window_days": 45,
+ "profile": {
+  "profile_views_day": 1247,
+  "followers": 106
+ },
+ "posts": {
+  "jt-20261019": {
+   "media_id": "17905304370666541",
+   "format": "text",
+   "published_at": "2026-10-19T05:10:18+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DeqeZkrE1WY",
+   "metrics": {
+    "views": 136,
+    "likes": 0,
+    "replies": 0,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261023": {
+   "media_id": "17920591128242904",
+   "format": "text",
+   "published_at": "2026-10-23T06:10:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/De04a3llrJ2",
+   "metrics": {
+    "views": 629,
+    "likes": 1,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261026": {
+   "media_id": "18137667394738799",
+   "format": "text",
+   "published_at": "2026-10-26T06:10:09+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/De8mzkKG8iu",
+   "metrics": {
+    "views": 404,
+    "likes": 0,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261029": {
+   "media_id": "18108127097364636",
+   "format": "text",
+   "published_at": "2026-10-28T22:30:09+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfDgjGlmT2x",
+   "metrics": {
+    "views": 156,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261030": {
+   "media_id": "18346121659262440",
+   "format": "text",
+   "published_at": "2026-10-29T22:30:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfGFV3nlrd4",
+   "metrics": {
+    "views": 154,
+    "likes": 1,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261031": {
+   "media_id": "17979946224131527",
+   "format": "image",
+   "published_at": "2026-10-30T22:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfIqI3AH3jY",
+   "metrics": {
+    "views": 2600,
+    "likes": 24,
+    "replies": 3,
+    "reposts": 6,
+    "quotes": 1,
+    "shares": 14
+   }
+  },
+  "r2-20261101": {
+   "media_id": "18107988497636251",
+   "format": "image",
+   "published_at": "2026-10-31T22:30:10+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfLO7rtlKUV",
+   "metrics": {
+    "views": 132,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261102": {
+   "media_id": "18503599000102817",
+   "format": "image",
+   "published_at": "2026-11-01T22:30:14+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfNzu__HX3e",
+   "metrics": {
+    "views": 26,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261103": {
+   "media_id": "18023196335947156",
+   "format": "image",
+   "published_at": "2026-11-02T22:30:13+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfQYhi7gYKF",
+   "metrics": {
+    "views": 1524,
+    "likes": 12,
+    "replies": 2,
+    "reposts": 7,
+    "quotes": 0,
+    "shares": 4
+   }
+  },
+  "r2-20261104": {
+   "media_id": "18111701807607460",
+   "format": "image",
+   "published_at": "2026-11-03T22:30:25+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfS9Ub3kYYA",
+   "metrics": {
+    "views": 1027,
+    "likes": 7,
+    "replies": 1,
+    "reposts": 2,
+    "quotes": 0,
+    "shares": 5
+   }
+  },
+  "r2-20261105": {
+   "media_id": "18132824938754031",
+   "format": "image",
+   "published_at": "2026-11-04T22:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfViHPqmMk0",
+   "metrics": {
+    "views": 105,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 1
+   }
+  },
+  "r2-20261106": {
+   "media_id": "18118631131807825",
+   "format": "image",
+   "published_at": "2026-11-05T22:30:14+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfYG6Ixoyif",
+   "metrics": {
+    "views": 17,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261107": {
+   "media_id": "18121815049983203",
+   "format": "image",
+   "published_at": "2026-11-06T22:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/Dfars9zkUoE",
+   "metrics": {
+    "views": 8,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261028": {
+   "media_id": "18023841974921633",
+   "format": "text",
+   "published_at": "2026-10-28T04:00:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfBhhFSm3_a",
+   "metrics": {
+    "views": 126,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261029": {
+   "media_id": "18062239700795143",
+   "format": "text",
+   "published_at": "2026-10-29T04:30:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfEJvsSkUev",
+   "metrics": {
+    "views": 195,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261030": {
+   "media_id": "18143950684525119",
+   "format": "text",
+   "published_at": "2026-10-30T04:30:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfGuimrFrQ-",
+   "metrics": {
+    "views": 121,
+    "likes": 2,
+    "replies": 2,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-ai-20261101": {
+   "media_id": "18117245141033496",
+   "format": "image",
+   "published_at": "2026-11-02T11:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfPM_fVG6hH",
+   "metrics": {
+    "views": 84,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261031-am": {
+   "media_id": "18075964520495797",
+   "format": "image",
+   "published_at": "2026-10-31T00:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfI33tHG2CN",
+   "metrics": {
+    "views": 157,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261031-pm": {
+   "media_id": "18071908766502496",
+   "format": "image",
+   "published_at": "2026-10-31T11:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfKDZr2EeUM",
+   "metrics": {
+    "views": 233,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 2,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261031": {
+   "media_id": "18114852083117069",
+   "format": "text",
+   "published_at": "2026-10-31T04:30:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfJTVcilSxd",
+   "metrics": {
+    "views": 136,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261102": {
+   "media_id": "18002721504010707",
+   "format": "text",
+   "published_at": "2026-11-02T04:30:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfOc7O_FtQx",
+   "metrics": {
+    "views": 18,
+    "likes": 0,
+    "replies": 2,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261103-am": {
+   "media_id": "18126621781917868",
+   "format": "image",
+   "published_at": "2026-11-03T00:30:14+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfQmQc7mcbo",
+   "metrics": {
+    "views": 97,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261103-pm": {
+   "media_id": "18088609865700880",
+   "format": "image",
+   "published_at": "2026-11-03T11:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfRxyTlm1Bn",
+   "metrics": {
+    "views": 83,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261103-pm": {
+   "media_id": "17940419187391193",
+   "format": "image",
+   "published_at": "2026-11-03T09:00:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfRgnsxmxi2",
+   "metrics": {
+    "views": 406,
+    "likes": 5,
+    "replies": 7,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261104-am": {
+   "media_id": "18220795387345171",
+   "format": "image",
+   "published_at": "2026-11-04T00:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfTLDNfgJYe",
+   "metrics": {
+    "views": 38,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261104-pm": {
+   "media_id": "17922093330242065",
+   "format": "image",
+   "published_at": "2026-11-04T11:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfUWlPLG3ZN",
+   "metrics": {
+    "views": 190,
+    "likes": 1,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "maeum-13-20261105": {
+   "media_id": "17993811108059603",
+   "format": "text",
+   "published_at": "2026-11-05T03:10:09+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfWCJ46HArG",
+   "metrics": {
+    "views": 1,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261105": {
+   "media_id": "18113381198128314",
+   "format": "image",
+   "published_at": "2026-11-05T04:30:10+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfWLT5IFGwh",
+   "metrics": {
+    "views": 81,
+    "likes": 0,
+    "replies": 2,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261105-am": {
+   "media_id": "18075688301589122",
+   "format": "image",
+   "published_at": "2026-11-05T00:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfVv2MCG991",
+   "metrics": {
+    "views": 53,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261105-pm": {
+   "media_id": "18496609321108724",
+   "format": "image",
+   "published_at": "2026-11-05T11:30:10+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfW7X_GFWRt",
+   "metrics": {
+    "views": 20,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "maeum-14-20261106b": {
+   "media_id": "18047324813827184",
+   "format": "text",
+   "published_at": "2026-11-06T03:10:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfYm8wSAKy1",
+   "metrics": {
+    "views": 4,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "maeum-15-20261107b": {
+   "media_id": "18646211251041377",
+   "format": "text",
+   "published_at": "2026-11-07T03:10:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfbLvkoDfIh",
+   "metrics": {
+    "views": 33,
+    "likes": 1,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "maeum-16-20261108b": {
+   "media_id": "18075972284759504",
+   "format": "text",
+   "published_at": "2026-11-08T03:10:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/Dfdwi_EjeqQ",
+   "metrics": {
+    "views": 5,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261106": {
+   "media_id": "18132666013816871",
+   "format": "text",
+   "published_at": "2026-11-06T04:30:06+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfYwGo2AJTy",
+   "metrics": {
+    "views": 63,
+    "likes": 0,
+    "replies": 2,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "maeum-17-20261109b": {
+   "media_id": "18164090395496237",
+   "format": "text",
+   "published_at": "2026-11-09T03:10:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfgVVbdjBn1",
+   "metrics": {
+    "views": 41,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "fashion-20261106-pm": {
+   "media_id": "18134510189501556",
+   "format": "image",
+   "published_at": "2026-11-07T11:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfcE9ydm8Gh",
+   "metrics": {
+    "views": 20,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "tg-20261106-1330-1": {
+   "media_id": "18106711379335145",
+   "format": "image",
+   "published_at": "2026-11-06T05:40:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfY4HgunNed",
+   "metrics": {
+    "views": 36,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "tg-20261106-2130-coordi": {
+   "media_id": "18138740578710350",
+   "format": "image",
+   "published_at": "2026-11-06T21:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "HTTP 400: Unsupported get request. Object with ID '18138740578710350' does not exist, cannot be loaded due to missing permissions, or does not support this operation"
+  },
+  "ai-20261107-am": {
+   "media_id": "18125642944992507",
+   "format": "image",
+   "published_at": "2026-11-07T00:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/Dfa5b0KDadH",
+   "metrics": {
+    "views": 27,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261107": {
+   "media_id": "17963487456000669",
+   "format": "text",
+   "published_at": "2026-11-07T04:30:07+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfbU5m4jZcY",
+   "metrics": {
+    "views": 115,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "ai-20261108-am": {
+   "media_id": "17930323773431773",
+   "format": "image",
+   "published_at": "2026-11-08T00:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfdeOvgiQ9K",
+   "metrics": {
+    "views": 93,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261108": {
+   "media_id": "18158699758518026",
+   "format": "text",
+   "published_at": "2026-11-08T04:30:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/Dfd5savDXxj",
+   "metrics": {
+    "views": 171,
+    "likes": 1,
+    "replies": 4,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 1
+   }
+  },
+  "ai-20261109-am": {
+   "media_id": "18348034375250552",
+   "format": "image",
+   "published_at": "2026-11-09T00:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfgDBq_malN",
+   "metrics": {
+    "views": 13,
+    "likes": 0,
+    "replies": 1,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "r2-20261109": {
+   "media_id": "18049208489826846",
+   "format": "image",
+   "published_at": "2026-11-08T22:30:11+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/Dff1SswgcwA",
+   "metrics": {
+    "views": 168,
+    "likes": 2,
+    "replies": 3,
+    "reposts": 2,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "jt-20261109": {
+   "media_id": "17936830797405257",
+   "format": "text",
+   "published_at": "2026-11-09T04:30:08+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfgefWSjZIl",
+   "metrics": {
+    "views": 152,
+    "likes": 0,
+    "replies": 3,
+    "reposts": 0,
+    "quotes": 0,
+    "shares": 0
+   }
+  },
+  "tg-20261109-1830-igu": {
+   "media_id": "18133053013806739",
+   "format": "image",
+   "published_at": "2026-11-09T09:30:12+0000",
+   "permalink": "https://www.threads.com/@heeya.dailyfit/post/DfhA0vBG6oT",
+   "metrics": {
+    "views": 1106,
+    "likes": 4,
+    "replies": 1,
+    "reposts": 1,
+    "quotes": 0,
+    "shares": 2
+   }
+  }
+ },
+ "unmatched": [],
+ "errors": []
+}

@@ -1,0 +1,46 @@
+# 4계정 성과 수집(하루 1번): _automation/metrics_collect.py 로 큐에 '올림'인 글의 조회·반응을 받아 _automation/metrics/daily/<날짜>/ 에 저장하고 커밋한다.
+# 필요한 Secrets(이미 게시 워크플로에 있는 것): PICKHARU_THREADS_ACCESS_TOKEN, THREADS_ACCESS_TOKEN(+THREADS_USER_ID), PICKHARU_IG_ACCESS_TOKEN
+# 기본은 맥에서 못 받는 pick.haru__1 스레드만 받는다(맥의 예약 작업 sns-metrics-daily가 23:30 KST에 인스타·heeya를 받음).
+# 게시·큐 수정은 하지 않는다. 토큰은 환경변수로만 받고 로그에 남기지 않는다.
+name: metrics-collect
+
+on:
+  schedule:
+    - cron: "40 14 * * *"   # 매일 23:40 KST (맥 수집 10분 뒤)
+  workflow_dispatch:
+    inputs:
+      accounts:
+        description: "수집할 계정(쉼표): threads-pickharu, threads-heeya, ig-pickharu"
+        default: threads-pickharu
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: metrics-collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PICKHARU_THREADS_ACCESS_TOKEN: ${{ secrets.PICKHARU_THREADS_ACCESS_TOKEN }}
+      THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+      THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+      PICKHARU_IG_ACCESS_TOKEN: ${{ secrets.PICKHARU_IG_ACCESS_TOKEN }}
+      PICKHARU_IG_USER_ID: ${{ vars.PICKHARU_IG_USER_ID }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Configure git
+        run: |
+          git config user.name "metrics-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Collect and commit
+        run: python _automation/metrics_collect.py --accounts "${{ inputs.accounts || 'threads-pickharu' }}" --commit
