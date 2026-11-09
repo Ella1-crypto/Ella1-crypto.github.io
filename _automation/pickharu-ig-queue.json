@@ -1068,5 +1068,23 @@
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-aitip-01-chatgpt-work/story.jpg",
   "comment": "출처: GSEEK(경기도평생학습포털) '일잘러의 노하우, ChatGPT를 활용한 업무효율UP!' 강의 페이지 (2026년 10월 30일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시 질문은 희야가 만든 예시예요."
+ },
+ {
+  "id": "ig-aitip-02-generative-ai-manual",
+  "publish_at": "2026-11-12T18:30+09:00",
+  "caption": "AI 도구 7종류, 뭘 켜야 할까요? 🤖\n\n무료강의에서 찾은 AI 노하우 2편이에요.\n경기도평생학습포털 GSEEK의 '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼'은 10차시(총 4시간)로,\n문서 요약·딥리서치·이미지·영상·엑셀·발표자료까지 다뤄요.\n\n오늘의 팁은 하나예요.\n도구 이름부터 외우기보다, 내 일이 글인지·자료 찾기인지·사진·표·발표인지 먼저 나누면 고르기가 쉬워요.\n(차시 제목엔 도구 이름이 없어서 카드엔 'AI 종류'로만 정리했어요.)\n\n예시 질문 3개(문서 요약·엑셀·발표자료)는 제가 만든 예시예요. [ ] 안만 바꿔 써 보세요.\n\n📌 학습기간 신청일부터 30일 · 수료 60% · 비회원은 수료증이 안 나와요.\n📌 강의 페이지엔 금액 표기가 없고, 무료강의 노션 목록 기준 무료예요. 신청할 때 결제창이 뜨면 유료로 바뀐 거예요.\n\n📩 무료 강의 100개+ 노션 목록이 필요하면 DM으로 '강의'라고 보내 주세요. 바로 보내 드릴게요\nAI 켤 때 꺼내 보게 저장해 두세요.\n\n#생성형AI #AI도구 #AI무료강의 #직장인AI #GSEEK",
+  "images": [
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/01.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/02.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/03.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/04.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/05.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/06.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/07.jpg",
+   "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/08.jpg"
+  ],
+  "status": "예약",
+  "story_image": "assets/pickharu/ig/ig-aitip-02-generative-ai-manual/story.jpg",
+  "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요."
  }
 ]
