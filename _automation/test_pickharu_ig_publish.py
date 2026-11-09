@@ -105,8 +105,8 @@ class ProblemTest(unittest.TestCase):
         images = make_site(self.root)
         self.assertIn("[광고]", ig.problem_of(item(images, ad=True), self.root))
         first = item(images, ad=True, caption="[광고] 쿠팡파트너스 · 겨울 담요 3개 🍒\n본문")
-        self.assertIn("마지막 줄", ig.problem_of(first, self.root))
-        ok = item(images, ad=True, caption="겨울 담요 3개 🍒\n본문\n#담요\n[광고] 쿠팡파트너스")
+        self.assertIn("끝부분", ig.problem_of(first, self.root))
+        ok = item(images, ad=True, caption="겨울 담요 3개 🍒\n본문\n#담요\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.")
         self.assertEqual(ig.problem_of(ok, self.root), "")
 
     def test_source_comment_without_blog_passes(self):
