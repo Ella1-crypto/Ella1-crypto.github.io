@@ -1158,5 +1158,23 @@
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt02-clean-repost/story.jpg",
   "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
+ },
+ {
+  "id": "ig-yt03-clean",
+  "publish_at": "2026-11-13T15:30+09:00",
+  "caption": "연말정산 3탄, 소득공제 vs 세액공제 몰랐던 거 4개 🧾\n\n① 빼는 자리가 달라요\n   소득공제는 세율 곱하기 전 금액을, 세액공제는 계산된 세금을 줄여 줘요\n② 소득공제 100만 원은 내 세율만큼 줄어요\n   6% 구간이면 약 6만 원, 15% 구간이면 약 15만 원\n③ 세액공제는 정해진 비율이에요\n   의료비 공제 대상 100만 원이면 세율 상관없이 15만 원\n④ 낼 세금보다 큰 세액공제는 없어져요\n   남는다고 돌려주지 않고, 기부금만 10년 이월돼요\n\n지방소득세 등은 뺀 대략 계산이에요.\n내 금액은 회사 담당자나 국세청 126에 확인해 주세요.\n출처는 첫 댓글에 정리했어요.\n\n이 차이, 알고 계셨어요? 댓글로 알려 주세요.\n저장해 두고, 1월에 꺼내 보세요 🤍\n\n#연말정산 #소득공제 #세액공제 #13월의월급 #직장인재테크",
+  "images": [
+   "assets/pickharu/ig/ig-yt03-clean/01.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/02.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/03.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/04.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/05.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/06.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/07.jpg",
+   "assets/pickharu/ig/ig-yt03-clean/08.jpg"
+  ],
+  "status": "예약",
+  "story_image": "assets/pickharu/ig/ig-yt03-clean/story.jpg",
+  "comment": "출처 (2026.11.03 확인)\n· 소득공제(인적공제 등은 종합소득금액에서 공제): 국가법령정보센터 소득세법 제50조\n· 세액공제(의료비 15% 등, 산출세액에서 공제): 소득세법 제59조의4\n· 세액공제액이 산출세액을 넘으면 없는 것으로 봄, 기부금 세액공제만 10년 이월: 소득세법 제61조\n· 금액 예시는 지방소득세 등을 뺀 대략 계산이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요"
  }
 ]
