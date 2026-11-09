@@ -273,7 +273,13 @@ def github_issue(item: dict) -> str:
     if not token or not repo:
         return "안 보냄(GITHUB_TOKEN 없음)"
     page = SITE_URL + item.get("page", "").removesuffix("index.html")
-    body = {"title": f"🎬 릴스 올릴 시간이에요 · {item['id']}",
+    if item.get("post_id"):  # 2026-11-09 사용자 "올리고 알려주면 내가 수정할게": 자동으로 올라간 카드뉴스 → 앱에서 음악 넣기 알림
+        body = {"title": f"📸 카드뉴스 올라갔어요 · 음악 넣기 · {item['id']}",
+                "body": "인스타 앱에서 방금 올라간 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요. 넣은 뒤 이 이슈를 닫아 주세요.",
+                "assignees": [repo.split("/")[0]]}
+    else:
+        body = None
+    body = body or {"title": f"🎬 릴스 올릴 시간이에요 · {item['id']}",
             "body": f"음악 없는 영상과 캡션·첫 댓글을 준비해 뒀어요.\n\n👉 {page}\n\n"
                     "영상 저장 → 인스타 앱에서 뜨는 음악 골라 올리기 → 첫 댓글 붙여 넣기. 올린 뒤 이 이슈를 닫아 주세요.",
             "assignees": [repo.split("/")[0]]}
@@ -355,6 +361,10 @@ def run_once(now: datetime, token: str, http: Http = http_json,
             done["story_id"] = publish_story(due.get("story_image") or due["images"][0], ig_user, token, http, sleep)
         except PUBLISH_ERRORS as error:
             done["story_error"] = f"스토리 실패: {error} — 게시물은 올라감, 스토리만 직접 올리기"
+    if notify and due.get("ad") and "video" not in due:
+        sent = notify({**due, **done})
+        if sent:
+            done["music_note"] = f"음악 넣기 알림 {sent}"
     save_queue(with_status(load_queue(path), due["id"], **done), path)
     commit(f"chore: pick.haru 인스타 게시 완료 ({due['id']})")
     misses = [k for k in ("comment_error", "story_error") if k in done]
