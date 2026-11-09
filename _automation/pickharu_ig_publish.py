@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 인스타 규칙:
 - 사진은 assets/pickharu/ig/<글 id>/NN.jpg (인스타 API는 JPEG만 받음), 1~10장. 2장 이상이면 캐러셀.
-- 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 첫 줄에 [광고].
+- 캡션 2,200자, 해시태그 30개까지. 광고 글(ad: true)은 캡션 마지막 줄에 [광고](2026-11-09 사용자 "[광고] 캡션 마지막 줄에 넣어달라니까").
 - 게시 뒤 comment(출처 등)가 있으면 첫 댓글로 달고(블로그 주소는 넣지 않음), 스토리도 올린다(2026-10-30 사용자 지정).
   댓글·스토리가 실패해도 본 게시물은 '올림'으로 두고 comment_error·story_error에 남긴다(재게시 금지).
 - 릴스(2026-10-31 사용자 지정): item.video(assets/pickharu/ig/<id>/reel.mp4)가 있으면 사진 대신 릴스로 올린다.
@@ -99,8 +99,12 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return f"해시태그가 {HASHTAG_LIMIT}개를 넘음"
     if BLOG in comment_of(item):
         return "첫 댓글에 블로그 주소가 있음 — 블로그 주소 댓글은 빼기로 함(2026-10-30)"
-    if item.get("ad") and AD_TAG not in caption.strip().splitlines()[0]:
-        return f"광고 글인데 캡션 첫 줄에 {AD_TAG} 표시가 없음"
+    if item.get("ad"):
+        lines = caption.strip().splitlines()
+        if not lines or not lines[-1].lstrip().startswith(AD_TAG):
+            return f"광고 글인데 캡션 마지막 줄이 {AD_TAG}로 시작하지 않음"
+        if AD_TAG in lines[0]:
+            return f"광고 표시는 캡션 첫 줄이 아니라 마지막 줄에 둠({AD_TAG})"
     if "video" in item:
         return video_problem(item["video"], root)
     images = item.get("images") or []

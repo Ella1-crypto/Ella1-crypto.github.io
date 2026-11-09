@@ -101,10 +101,12 @@ class ProblemTest(unittest.TestCase):
     def test_more_than_ten_images_is_rejected(self):
         self.assertIn("10장", ig.problem_of(item(make_site(self.root, count=11)), self.root))
 
-    def test_ad_post_needs_ad_tag_on_first_line(self):
+    def test_ad_post_needs_ad_tag_on_last_line(self):
         images = make_site(self.root)
         self.assertIn("[광고]", ig.problem_of(item(images, ad=True), self.root))
-        ok = item(images, ad=True, caption="[광고] 쿠팡파트너스 · 겨울 담요 3개 🍒\n본문")
+        first = item(images, ad=True, caption="[광고] 쿠팡파트너스 · 겨울 담요 3개 🍒\n본문")
+        self.assertIn("마지막 줄", ig.problem_of(first, self.root))
+        ok = item(images, ad=True, caption="겨울 담요 3개 🍒\n본문\n#담요\n[광고] 쿠팡파트너스")
         self.assertEqual(ig.problem_of(ok, self.root), "")
 
     def test_source_comment_without_blog_passes(self):
