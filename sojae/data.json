@@ -1,14 +1,14 @@
 {
  "title": "오늘의 소재 후보",
- "checked_on": "2026-11-09",
+ "checked_on": "2026-11-10",
  "seeds": [
-  "수납정리",
-  "옷정리",
-  "신발정리"
+  "주방정리",
+  "주방용품",
+  "밀폐용기"
  ],
- "found": 1003,
+ "found": 1200,
  "notes": [
-  "연관 키워드 1003개 중 기준을 통과한 20개입니다. 정렬: 계정 주제(패션·뷰티·생활정보) 먼저, 같은 주제 안에서 검색량 순.",
+  "연관 키워드 1200개 중 기준을 통과한 20개입니다. 정렬: 계정 주제(패션·뷰티·생활정보) 먼저, 같은 주제 안에서 검색량 순.",
   "리뷰 수·별점·반짝 유행 여부는 무료 API로 받을 수 없어 [확인 불가]입니다 — 쿠팡에서 눈으로 확인하세요.",
   "수수료율은 2026-07 자료 기준 추정입니다. 발행 전 파트너스센터 최신 요율을 확인하세요.",
   "블로그 경쟁도(상위 10개 발행일)는 네이버 검색 API 키가 없어 확인하지 못했습니다 — 개발자센터 신규 발급이 2026-07-31 종료돼, 받으려면 NAVER API HUB(카드 등록, 현재 무료 25,000회/일)로 발급해야 합니다."
@@ -19,223 +19,223 @@
  "rows": [
   {
    "rank": 1,
-   "keyword": "행거",
+   "keyword": "스탠리텀블러",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "83700",
+   "volume": "159300",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 83700 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 159300 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 2,
-   "keyword": "시스템행거",
+   "keyword": "락앤락텀블러",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "58000",
+   "volume": "24270",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 58000 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 24270 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 3,
-   "keyword": "스탠드옷걸이",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "24640",
-   "competition": "중간",
-   "reviews": "[확인 불가]",
-   "trend": "[확인 불가]",
-   "reason": "월간 검색 24640 ≥ 300, 생활 2% 안팎, 경쟁 중간"
-  },
-  {
-   "rank": 4,
-   "keyword": "바지걸이",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "16140",
-   "competition": "중간",
-   "reviews": "[확인 불가]",
-   "trend": "[확인 불가]",
-   "reason": "월간 검색 16140 ≥ 300, 패션 3% 안팎, 경쟁 중간"
-  },
-  {
-   "rank": 5,
-   "keyword": "옷걸이행거",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "14620",
-   "competition": "중간",
-   "reviews": "[확인 불가]",
-   "trend": "[확인 불가]",
-   "reason": "월간 검색 14620 ≥ 300, 생활 2% 안팎, 경쟁 중간"
-  },
-  {
-   "rank": 6,
-   "keyword": "현관신발장",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "13470",
-   "competition": "중간",
-   "reviews": "[확인 불가]",
-   "trend": "[확인 불가]",
-   "reason": "월간 검색 13470 ≥ 300, 패션 3% 안팎, 경쟁 중간"
-  },
-  {
-   "rank": 7,
    "keyword": "주방선반",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "12750",
+   "volume": "12820",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 12750 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 12820 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+  },
+  {
+   "rank": 4,
+   "keyword": "일회용앞치마",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "12080",
+   "competition": "중간",
+   "reviews": "[확인 불가]",
+   "trend": "[확인 불가]",
+   "reason": "월간 검색 12080 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+  },
+  {
+   "rank": 5,
+   "keyword": "밀폐용기",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "11620",
+   "competition": "중간",
+   "reviews": "[확인 불가]",
+   "trend": "[확인 불가]",
+   "reason": "월간 검색 11620 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+  },
+  {
+   "rank": 6,
+   "keyword": "주방가위",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "7220",
+   "competition": "중간",
+   "reviews": "[확인 불가]",
+   "trend": "[확인 불가]",
+   "reason": "월간 검색 7220 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+  },
+  {
+   "rank": 7,
+   "keyword": "주방저울",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "5580",
+   "competition": "중간",
+   "reviews": "[확인 불가]",
+   "trend": "[확인 불가]",
+   "reason": "월간 검색 5580 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 8,
-   "keyword": "수납함",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "10050",
+   "keyword": "헬스가방",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "5420",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 10050 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 5420 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 9,
-   "keyword": "옷걸이봉",
+   "keyword": "글라스락밀폐용기",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "7820",
+   "volume": "3990",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 7820 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3990 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 10,
-   "keyword": "스탠드행거",
+   "keyword": "락앤락밀폐용기",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "6760",
+   "volume": "3410",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 6760 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3410 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 11,
-   "keyword": "철재선반",
-   "category": "생활",
-   "commission": "2% 안팎",
-   "volume": "5650",
+   "keyword": "위생장갑",
+   "category": "패션",
+   "commission": "3% 안팎",
+   "volume": "3040",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5650 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 3040 ≥ 300, 패션 3% 안팎, 경쟁 중간"
   },
   {
    "rank": 12,
-   "keyword": "조립식선반",
+   "keyword": "대용량밀폐용기",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "5510",
+   "volume": "1640",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 5510 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 1640 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 13,
-   "keyword": "바지옷걸이",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "2940",
+   "keyword": "씽크대선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "1500",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2940 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 1500 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 14,
-   "keyword": "대형수납함",
+   "keyword": "냉동지퍼백",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "2580",
+   "volume": "740",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2580 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 740 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 15,
-   "keyword": "튼튼한행거",
+   "keyword": "수납정리",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "2440",
+   "volume": "680",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2440 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 680 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 16,
-   "keyword": "가방보관함",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "2370",
+   "keyword": "걸이형선반",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "570",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2370 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 570 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 17,
-   "keyword": "이불가방",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "2240",
+   "keyword": "주방용전자저울",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "490",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2240 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 490 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 18,
-   "keyword": "틈새수납",
+   "keyword": "주방그릇",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "2100",
+   "volume": "470",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 2100 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 470 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 19,
-   "keyword": "가방거치대",
-   "category": "패션",
-   "commission": "3% 안팎",
-   "volume": "1900",
+   "keyword": "스테인리스밀폐용기",
+   "category": "생활",
+   "commission": "2% 안팎",
+   "volume": "390",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1900 ≥ 300, 패션 3% 안팎, 경쟁 중간"
+   "reason": "월간 검색 390 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   },
   {
    "rank": 20,
-   "keyword": "행거커버",
+   "keyword": "주방조리도구",
    "category": "생활",
    "commission": "2% 안팎",
-   "volume": "1820",
+   "volume": "380",
    "competition": "중간",
    "reviews": "[확인 불가]",
    "trend": "[확인 불가]",
-   "reason": "월간 검색 1820 ≥ 300, 생활 2% 안팎, 경쟁 중간"
+   "reason": "월간 검색 380 ≥ 300, 생활 2% 안팎, 경쟁 중간"
   }
  ]
 }
