@@ -293,6 +293,38 @@ def github_issue(item: dict) -> str:
         return f"실패({error})"
 
 
+def telegram_notify(item: dict) -> str:
+    """2026-11-09 사용자 "텔레그램으로 알려줘": 자동으로 올라간 광고 카드뉴스(음악 넣기)·직접 올릴 릴스 알림을
+    스레드와 같은 봇(Secrets PICKHARU_TELEGRAM_TOKEN·PICKHARU_TELEGRAM_CHAT_ID)으로 보낸다. 실패해도 게시는 계속."""
+    bot = os.environ.get("PICKHARU_TELEGRAM_TOKEN", "").strip()
+    chat = os.environ.get("PICKHARU_TELEGRAM_CHAT_ID", "").strip()
+    if not bot or not chat:
+        return ""
+    first = (item.get("caption", "").strip().splitlines() or [""])[0][:60]
+    if item.get("post_id"):
+        text = (f"📸 인스타 카드뉴스 올라갔어요 · {item['id']}\n{first}\n"
+                "앱에서 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요.")
+    else:
+        page = SITE_URL + item.get("page", "").removesuffix("index.html")
+        text = (f"🎬 인스타 릴스 올릴 시간이에요 · {item['id']}\n{first}\n"
+                f"영상 저장·캡션 복사 👉 {page}\n인스타 앱에서 음악 골라 올린 뒤 첫 댓글을 붙여 주세요.")
+    data = json.dumps({"chat_id": chat, "text": text}).encode()
+    request = urllib.request.Request(f"https://api.telegram.org/bot{bot}/sendMessage", data=data, method="POST",
+                                     headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=20):
+            return "텔레그램 보냄"
+    except (OSError, ValueError):
+        print("::warning::인스타 텔레그램 알림 실패", flush=True)
+        return "텔레그램 실패"
+
+
+def notify_all(item: dict) -> str:
+    """텔레그램 + GitHub 이슈 둘 다(하나가 실패해도 다른 하나는 간다)."""
+    sent = [s for s in (telegram_notify(item), github_issue(item)) if s]
+    return " · ".join(sent)
+
+
 def run_once(now: datetime, token: str, http: Http = http_json,
              commit: Callable[[str], bool] = lambda m: git_commit_push(m, QUEUE_PATH),
              sleep=time.sleep, path: Path = QUEUE_PATH, site_root: Path = SITE_ROOT,
@@ -403,7 +435,7 @@ def main() -> int:
     if "--check" in sys.argv:
         print(f"인스타 계정 확인: {EXPECTED_USERNAME} (ID {find_ig_user(token, configured=configured)})")
         return 0
-    run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready, notify=github_issue)
+    run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready, notify=notify_all)
     if "--wait" in sys.argv:
         for line in session(token, run=run, path=QUEUE_PATH, pull=lambda: git_pull(QUEUE_PATH), sleep=capped_sleep):
             print(line)
