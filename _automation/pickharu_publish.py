@@ -248,6 +248,9 @@ def problem_of(item: dict) -> str:
     max_links = rule.get("max_links", 1)
     if not 1 <= len(urls) <= max_links or not all(rule["link"].fullmatch(u) for u in urls):
         return f"댓글에 {kind} 링크가 1~{max_links}개 있어야 함" if max_links > 1 else f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
+    # 2026-11-09 사용자 "[광고]를 첫 댓글에 처음에 넣어줘야징": 첫 댓글 첫 줄도 광고 표시로 시작
+    if not reply.lstrip().startswith("[광고]"):
+        return f"첫 댓글 첫 줄이 [광고]로 시작하지 않음({rule['tag']})"
     return thread_problem(item, rule["link"]) or media_problem(item)
 
 

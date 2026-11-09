@@ -14,7 +14,7 @@ from test_refresh_token import FakeGitHub  # noqa: E402
 NOW = datetime(2026, 10, 28, 9, 2, tzinfo=pp.KST)
 LINK = "https://link.coupang.com/a/abc123"
 TEXT = "출근 가방 정리 이걸로 끝냈어\n파우치 몇 개 들고 다녀?\n[광고] 쿠팡파트너스"
-REPLY = f"제품 보러 가기 👉 {LINK}\n\n{pp.DISCLOSURE}"
+REPLY = f"[광고] 쿠팡파트너스\n제품 보러 가기 👉 {LINK}\n\n{pp.DISCLOSURE}"
 
 
 def item(i, at="2026-10-28T09:00+09:00", text=TEXT, reply=REPLY, status="예약"):
@@ -23,7 +23,7 @@ def item(i, at="2026-10-28T09:00+09:00", text=TEXT, reply=REPLY, status="예약"
 
 KAKAO_LINK = "https://gift-link.kakao.com/c/LtojEzBd"
 KAKAO_TEXT = "생일 선물 고민될 때 이거 어때?\n받는 사람이 고를 수 있는 구성이야\n[광고] 카카오 선물하기"
-KAKAO_REPLY = f"선물하러 가기 👉 {KAKAO_LINK}\n\n{pp.KAKAO_DISCLOSURE}"
+KAKAO_REPLY = f"[광고] 카카오 선물하기\n선물하러 가기 👉 {KAKAO_LINK}\n\n{pp.KAKAO_DISCLOSURE}"
 
 
 def kakao(i, at="2026-10-28T09:00+09:00", status="예약", **kw):
@@ -42,7 +42,7 @@ class KakaoRuleTest(unittest.TestCase):
 
     def test_naver_rules(self):
         naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트",
-                        reply=f"보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
+                        reply=f"[광고] 네이버 브랜드 커넥트\n보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
         self.assertEqual(pp.problem_of(naver), "")
         self.assertIn("광고 표시", pp.problem_of({**naver, "text": KAKAO_TEXT}))
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{KAKAO_LINK}\n{pp.NAVER_DISCLOSURE}"}))
@@ -51,7 +51,7 @@ class KakaoRuleTest(unittest.TestCase):
         naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트"), "kind": "네이버"}
         links = ["https://naver.me/AAA1", "https://naver.me/BBB2", "https://naver.me/CCC3", "https://naver.me/DDD4"]
         three = "\n".join(links[:3])
-        self.assertEqual(pp.problem_of({**naver, "reply": f"{three}\n\n{pp.NAVER_DISCLOSURE}"}), "")
+        self.assertEqual(pp.problem_of({**naver, "reply": f"[광고]\n{three}\n\n{pp.NAVER_DISCLOSURE}"}), "")
         four = "\n".join(links)
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{four}\n\n{pp.NAVER_DISCLOSURE}"}))
         mixed = f"https://naver.me/AAA1\n{KAKAO_LINK}\n\n{pp.NAVER_DISCLOSURE}"
@@ -507,7 +507,7 @@ class OliveYoungTest(unittest.TestCase):
     BODY = "크림 고를 때 참고해\n스치니들은 뭐 써?\n[광고] 올리브영 쇼핑 큐레이터"
 
     def oy(self, **kw):
-        return {**item("o", text=self.BODY, reply=f"보기 👉 {self.LINK}\n\n{pp.OY_DISCLOSURE}"), "kind": "올영", **kw}
+        return {**item("o", text=self.BODY, reply=f"[광고] 올리브영 쇼핑 큐레이터\n보기 👉 {self.LINK}\n\n{pp.OY_DISCLOSURE}"), "kind": "올영", **kw}
 
     def test_ok_without_top_disclosure(self):
         self.assertEqual(pp.problem_of(self.oy()), "")
@@ -696,3 +696,21 @@ class InfoRunOnceTest(RunOnceTest):
         done = [info(f"d{n}", at=f"2026-10-28T0{n}:00+09:00", status="올림") for n in range(1, 5)]
         self.write(done + [info("i")])
         self.assertIn("상한", self.run_once(FakeHttp()))
+
+
+class AdFirstReplyTest(unittest.TestCase):
+    """2026-11-09 사용자: 광고 글 첫 댓글은 [광고]로 시작."""
+
+    def test_reply_must_start_with_ad_tag(self):
+        bare = REPLY.split("\n", 1)[1]
+        self.assertIn("[광고]", pp.problem_of(item("a", reply=bare)))
+        self.assertEqual(pp.problem_of(item("a")), "")
+
+    def test_enqueue_adds_ad_tag(self):
+        import pickharu_enqueue as pe
+        d = {"id": "ph-x", "keyword": "k", "product": "p", "text": TEXT, "reply": REPLY.split("\n", 1)[1],
+             "status": "초안", "reviews": 100}
+        from datetime import datetime
+        new = pe.build([d], ["ph-x"], [], datetime(2030, 1, 1, 9, 0, tzinfo=pe.KST),
+                       now=datetime(2030, 1, 1, 8, 0, tzinfo=pe.KST))
+        self.assertTrue(new[0]["reply"].startswith("[광고] 쿠팡파트너스\n"))

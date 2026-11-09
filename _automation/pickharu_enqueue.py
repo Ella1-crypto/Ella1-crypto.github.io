@@ -108,6 +108,10 @@ def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime
         if sum(shop_of(d) == kind for d in chosen) > cap:
             raise ValueError(f"{kind} 글은 하루 최대 {cap}개입니다")
     existing = {it.get("id") for it in queue}
+    for d in chosen:  # 2026-11-09 사용자: 광고 글 첫 댓글 맨 앞에 [광고] 표시
+        kind = shop_of(d)
+        if kind in SHOPS and d.get("reply") and not d["reply"].lstrip().startswith("[광고]"):
+            d["reply"] = f"{SHOPS[kind]['tag']}\n" + d["reply"].lstrip()
     problems = []
     for d in chosen:
         if d["id"] in existing:
