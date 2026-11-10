@@ -2318,10 +2318,10 @@
   "caption": "힉스필드 3일 무료, 지금 열렸어요 🚨\n\n11월 9일 시작한 힉스필드 MCP 72시간 체험이에요. 시작은 0원, 72시간 뒤엔 울트라로 자동 결제(첫 달 40% 할인)라 안 쓸 거면 48시간쯤 해지 알람 맞추세요.\n클로드 설정 → 커넥터에 https://mcp.higgsfield.ai/mcp 넣으면 바로 써요.\n\n📩 AI 영상 무료 강의 목록이 필요하면 DM으로 '강의'라고 보내 주세요\n해지 순서는 저장해 두고 친구한테도 공유해 주세요.\n\n#힉스필드 #Higgsfield #AI영상 #힉스필드무료 #AI팁",
   "video": "assets/pickharu/ig/rl-aitip-urgent-higgsfield/reel.mp4",
   "share_to_feed": false,
-  "status": "예약",
+  "status": "직접 게시",
   "comment": "🔌 클로드 커넥터 주소: https://mcp.higgsfield.ai/mcp\n(클로드 설정 → 커넥터 → 사용자 지정 커넥터 추가에 붙여 넣기)\n\n출처: 힉스필드 공식 발표(11월 9일), 힉스필드 MCP 페이지(11월 11일 확인), 힉스필드 해지 메뉴는 9월 기준 정리 글. 조건·가격은 바뀔 수 있어요. 힉스필드와 제휴하지 않았어요.",
   "page": "assets/pickharu/ig/rl-aitip-urgent-higgsfield/index.html",
-  "note": "2026-11-11 사용자 '인스타도 예약 빨리 올려줘' — 힉스필드 긴급편 릴스 dark1, 음성 -10 LUFS",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/14",
   "test": {
    "group": "aitip-hook-reel",
    "variable": "hook_type",
