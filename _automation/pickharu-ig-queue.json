@@ -2293,10 +2293,10 @@
    "assets/pickharu/ig/ig-aitip-urgent-higgsfield/06.jpg",
    "assets/pickharu/ig/ig-aitip-urgent-higgsfield/07.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-urgent-higgsfield/story.jpg",
   "comment": "🔌 클로드 커넥터 주소: https://mcp.higgsfield.ai/mcp\n(클로드 설정 → 커넥터 → 사용자 지정 커넥터 추가에 붙여 넣기)\n\n출처: 힉스필드 공식 발표(11월 9일), 힉스필드 MCP 페이지(11월 11일 확인), 힉스필드 해지 메뉴는 9월 기준 정리 글. 조건·가격은 바뀔 수 있어요. 힉스필드와 제휴하지 않았어요.",
-  "note": "2026-11-11 사용자 '인스타도 예약 빨리 올려줘' — 힉스필드 3일 무료 긴급편",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
   "test": {
    "group": "aitip-hook",
    "variable": "hook_type",
@@ -2306,7 +2306,11 @@
    "tagged_at": "2026-11-11",
    "variant_label": "②",
    "hook_text": "힉스필드 3일 무료, 지금 열렸어요"
-  }
+  },
+  "post_id": "18120507355991204",
+  "published_at": "2026-11-11T07:01+09:00",
+  "comment_id": "17873524758648384",
+  "story_id": "17970927036214850"
  },
  {
   "id": "rl-aitip-urgent-higgsfield",
