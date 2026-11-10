@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 안전장치 (재테크 자동 게시와 같은 방식 + 쇼핑 글 규칙):
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 토큰 계정이 pick.haru__1이 아니면 올리지 않는다.
-- 쇼핑 글은 쿠팡(기본), 카카오 선물하기(kind "카카오"), 네이버 브랜드 커넥트(kind "네이버") 세 종류. 종류마다 하루(KST) 상한, 본문 마지막 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS).
+- 쇼핑 글은 쿠팡(기본), 카카오 선물하기(kind "카카오"), 네이버 브랜드 커넥트(kind "네이버") 세 종류. 종류마다 하루(KST) 상한, 첫 댓글 첫 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS). 2026-11-10부터 본문 끝 [광고] 검사 없음.
 - 본문 500자, 본문 주소 금지.
 - 본문은 올라갔는데 댓글만 실패하면 본문은 그대로 '올림'으로 두고 reply_error에 남긴다(본문 재게시 금지).
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -61,7 +61,7 @@ IMAGE_MAX_BYTES = 8 * 1024 * 1024
 IMAGES_MAX = 20
 # GIF는 GIPHY id로 붙인다(Threads 공식 문서: gif_attachment, 글자만 있는 글에서만, 제공처는 GIPHY만).
 GIF_ID_RE = re.compile(r"[A-Za-z0-9]{10,40}")
-AD_TAG = "[광고] 쿠팡파트너스"  # 본문 마지막 줄 (2026-10-27 사용자 지정: 첫 줄 [광고] 대신)
+AD_TAG = "[광고] 쿠팡파트너스"  # 첫 댓글 첫 줄 (2026-11-10 사용자: 본문 끝에서 첫 댓글로만 옮김)
 GENERAL = "일반"  # 계정 신뢰용 일반 글(링크 없음). 광고 글 상한과 따로 GENERAL_CAP으로 센다.
 # 이미 올라간 글에 블로그 주소를 덧붙이는 댓글(2026-10-31 사용자 "연결도 자동으로 해줘"). 광고 댓글은 링크 1개 규칙이라 따로 단다.
 FOLLOWUP = "덧글"
@@ -86,7 +86,7 @@ INFO_MAX_LINKS = 3
 AFFILIATE_RE = re.compile(r"https?://(link\.coupang\.com|coupa\.ng|gift-link\.kakao\.com|naver\.me|oy\.run|appu\.kr"
                           r"|([\w-]+\.)*linkprice\.com|s\.click\.aliexpress\.com)/|[?&]lptag=", re.IGNORECASE)
 COPY_MIN = 8  # 첫 댓글에 이 글자 수 이상인 본문 줄이 그대로 있으면 본문 복사로 본다(2026-10-31 첫 댓글 사고)
-# 종류별 규칙: 본문 마지막 줄 표시, 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
+# 종류별 규칙: 광고 표시(첫 댓글 첫 줄), 댓글 고지 문구, 댓글 링크, 하루 상한 (카카오 문구·링크 형식은 2026-10-27 사용자가 준 그대로)
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
@@ -240,8 +240,8 @@ def problem_of(item: dict) -> str:
     if kind not in SHOPS:
         return f"알 수 없는 글 종류: {kind}"
     rule = SHOPS[kind]
-    if rule["tag"] not in text.strip().splitlines()[-1]:
-        return f"본문 마지막 줄에 광고 표시({rule['tag']})가 없음"
+    # 2026-11-10 사용자 "본문 끝 [광고]를 빼고 첫 댓글에만" (응 바꿔줘): 본문 마지막 줄 검사 없앰.
+    # 광고 표시는 아래 '첫 댓글 첫 줄 [광고]' 검사가 맡는다. 본문에 남아 있어도(옛 큐) 막지 않는다.
     if rule["disclosure"] not in reply:
         return f"댓글에 {kind} 고지 문구가 없음"
     urls = ANY_URL_RE.findall(reply)
@@ -250,7 +250,7 @@ def problem_of(item: dict) -> str:
         return f"댓글에 {kind} 링크가 1~{max_links}개 있어야 함" if max_links > 1 else f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
     # 2026-11-09 사용자 "[광고]를 첫 댓글에 처음에 넣어줘야징": 첫 댓글 첫 줄도 광고 표시로 시작
     if not reply.lstrip().startswith("[광고]"):
-        return f"첫 댓글 첫 줄이 [광고]로 시작하지 않음({rule['tag']})"
+        return f"첫 댓글 첫 줄이 [광고]로 시작하지 않음(광고 표시 {rule['tag']})"
     return thread_problem(item, rule["link"]) or media_problem(item)
 
 

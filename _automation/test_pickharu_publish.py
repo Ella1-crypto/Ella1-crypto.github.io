@@ -35,7 +35,7 @@ class KakaoRuleTest(unittest.TestCase):
         self.assertEqual(pp.problem_of(kakao("k")), "")
 
     def test_kakao_needs_its_own_tag_disclosure_and_link(self):
-        self.assertIn("광고 표시", pp.problem_of(kakao("k", text=TEXT)))
+        self.assertEqual(pp.problem_of(kakao("k", text=TEXT)), "")  # 2026-11-10: 본문 끝 표시 검사 없음
         self.assertIn("고지", pp.problem_of(kakao("k", reply=f"{KAKAO_LINK}\n{pp.DISCLOSURE}")))
         self.assertIn("링크", pp.problem_of(kakao("k", reply=f"{LINK}\n{pp.KAKAO_DISCLOSURE}")))
         self.assertIn("링크", pp.problem_of(kakao("k", reply=f"https://gift.kakao.com/x\n{pp.KAKAO_DISCLOSURE}")))
@@ -44,7 +44,7 @@ class KakaoRuleTest(unittest.TestCase):
         naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트",
                         reply=f"[광고] 네이버 브랜드 커넥트\n보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
         self.assertEqual(pp.problem_of(naver), "")
-        self.assertIn("광고 표시", pp.problem_of({**naver, "text": KAKAO_TEXT}))
+        self.assertEqual(pp.problem_of({**naver, "text": KAKAO_TEXT}), "")  # 2026-11-10: 본문 끝 표시 검사 없음
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{KAKAO_LINK}\n{pp.NAVER_DISCLOSURE}"}))
 
     def test_naver_allows_up_to_three_option_links(self):
@@ -90,7 +90,8 @@ class ProblemTest(unittest.TestCase):
         self.assertIn("주소", pp.problem_of(item("a", text=f"이거 좋아 {LINK}\n[광고] 쿠팡파트너스")))
 
     def test_requires_ad_tag_on_last_line(self):
-        self.assertIn("광고 표시", pp.problem_of(item("a", text="[광고] 출근 가방 정리\n파우치 몇 개 들고 다녀?")))
+        self.assertEqual(pp.problem_of(item("a", text="출근 가방 정리\n파우치 몇 개 들고 다녀?")), "")  # 2026-11-10: 본문엔 [광고] 없어도 됨
+        self.assertIn("[광고]", pp.problem_of(item("a", reply=REPLY.replace("[광고] 쿠팡파트너스\n", ""))))
 
     def test_requires_disclosure_in_reply(self):
         self.assertIn("고지", pp.problem_of(item("a", reply=f"보러 가기 {LINK}")))
@@ -514,7 +515,7 @@ class OliveYoungTest(unittest.TestCase):
 
     def test_disclosure_still_required_in_reply_and_tag_at_end(self):
         self.assertIn("고지", pp.problem_of(self.oy(reply=f"보기 👉 {self.LINK}")))
-        self.assertIn("마지막 줄", pp.problem_of(self.oy(text="크림 고를 때 참고해\n스치니들은 뭐 써?")))
+        self.assertEqual(pp.problem_of(self.oy(text="크림 고를 때 참고해\n스치니들은 뭐 써?")), "")  # 2026-11-10: 본문 끝 표시 검사 없음
 
     def test_link_format(self):
         self.assertIn("링크", pp.problem_of(self.oy(reply=f"https://www.oliveyoung.co.kr/x\n{pp.OY_DISCLOSURE}")))
