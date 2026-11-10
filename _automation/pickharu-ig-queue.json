@@ -984,7 +984,7 @@
    "assets/pickharu/ig/ig-ad-inpock-050-chiikawa-magnet-keyring/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-050-chiikawa-magnet-keyring/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-050-chiikawa-magnet-keyring/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(자석 페어 키링 모몽가 커플 열쇠고리 하치와래 우사기 피규어 키홀더, 상품번호 9740357949) 11/8 확인 — 대표 사진은 하치와레·우사기 조합이고 옵션마다 캐릭터 조합이 달라요. 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
@@ -995,7 +995,13 @@
    "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-09"
-  }
+  },
+  "post_id": "18082008167720766",
+  "published_at": "2026-11-10T12:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18007673361007655",
+  "story_id": "17999063462833816",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/10"
  },
  {
   "id": "rl-ad-inpock-050-chiikawa-magnet-keyring",
