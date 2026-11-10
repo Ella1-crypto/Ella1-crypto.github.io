@@ -635,12 +635,15 @@
    "https://self-compassion.org/blog/why-caregivers-need-self-compassion-2/"
   ],
   "note": "마음 10분 『나를 사랑하기로 했습니다』(크리스틴 네프·크리스토퍼 거머) 19장 돌보는 사람들을 위한 자기연민",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "claude-code",
    "note": "사용자 \"이걸로 마음10분 스레드 작성하고 예약해줘\"",
    "at": "2026-11-05T21:00+09:00"
-  }
+  },
+  "post_id": "18118845881521291",
+  "published_at": "2026-11-10T12:10+09:00",
+  "reply_id": "17896713678436873"
  },
  {
   "id": "maeum-19-20261111b",
