@@ -1034,7 +1034,7 @@
    "assets/pickharu/ig/ig-ad-inpock-051-kitty-seatbelt-cover/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-051-kitty-seatbelt-cover/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-051-kitty-seatbelt-cover/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(헬로 키티 안전벨트 커버 2PCS, 상품번호 9574143395, 옵션 A) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표 이미지(11/9 확인)",
@@ -1045,7 +1045,13 @@
    "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-09"
-  }
+  },
+  "post_id": "18030119612916747",
+  "published_at": "2026-11-10T20:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17919137817515803",
+  "story_id": "18079564988448346",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/12"
  },
  {
   "id": "rl-ad-inpock-051-kitty-seatbelt-cover",
