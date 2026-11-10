@@ -2279,5 +2279,54 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-10"
   }
+ },
+ {
+  "id": "ig-aitip-urgent-higgsfield",
+  "publish_at": "2026-11-11T07:00+09:00",
+  "caption": "힉스필드 3일 무료, 지금 열렸어요 🚨\n대신 72시간 뒤엔 울트라 요금제로 자동 결제돼서 해지 순서까지 같이 정리했어요.\n\n✔ 11월 9일 시작한 힉스필드 MCP 72시간 체험이에요\n✔ 시작은 0원, 끝나면 울트라 자동 갱신(첫 달 40% 할인)\n✔ 클로드 설정 → 커넥터에 주소 하나 넣으면 바로 써요\n✔ 안 쓸 거면 48시간쯤 알람 맞추고 해지하세요\n\n한정 이벤트라 종료일이 공지되지 않았어요. 조건은 시작 화면 문구가 기준이에요.\n\nAI 영상 무료 강의 목록이 필요하면 DM으로 '강의' 보내 주세요 🎀\n저장해 두고 3일 동안 하나씩 따라 해 보세요.\n\n#힉스필드 #Higgsfield #AI영상 #AI영상만들기 #힉스필드무료 #AI팁 #무료강의 #릴스만들기 #직장인AI",
+  "images": [
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/01.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/02.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/03.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/04.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/05.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/06.jpg",
+   "assets/pickharu/ig/ig-aitip-urgent-higgsfield/07.jpg"
+  ],
+  "status": "예약",
+  "story_image": "assets/pickharu/ig/ig-aitip-urgent-higgsfield/story.jpg",
+  "comment": "출처: 힉스필드 공식 발표(11월 9일), 힉스필드 MCP 페이지(11월 11일 확인), 힉스필드 해지 메뉴는 9월 기준 정리 글. 조건·가격은 바뀔 수 있어요. 힉스필드와 제휴하지 않았어요.",
+  "note": "2026-11-11 사용자 '인스타도 예약 빨리 올려줘' — 힉스필드 3일 무료 긴급편",
+  "test": {
+   "group": "aitip-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "AI 노하우 카드뉴스는 구체 질문 훅(④)이 숫자 훅(②)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-11",
+   "variant_label": "②",
+   "hook_text": "힉스필드 3일 무료, 지금 열렸어요"
+  }
+ },
+ {
+  "id": "rl-aitip-urgent-higgsfield",
+  "publish_at": "2026-11-11T07:10+09:00",
+  "caption": "힉스필드 3일 무료, 지금 열렸어요 🚨\n\n11월 9일 시작한 힉스필드 MCP 72시간 체험이에요. 시작은 0원, 72시간 뒤엔 울트라로 자동 결제(첫 달 40% 할인)라 안 쓸 거면 48시간쯤 해지 알람 맞추세요.\n클로드 설정 → 커넥터에 https://mcp.higgsfield.ai/mcp 넣으면 바로 써요.\n\n📩 AI 영상 무료 강의 목록이 필요하면 DM으로 '강의'라고 보내 주세요\n해지 순서는 저장해 두고 친구한테도 공유해 주세요.\n\n#힉스필드 #Higgsfield #AI영상 #힉스필드무료 #AI팁",
+  "video": "assets/pickharu/ig/rl-aitip-urgent-higgsfield/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "comment": "출처: 힉스필드 공식 발표(11월 9일), 힉스필드 MCP 페이지(11월 11일 확인), 힉스필드 해지 메뉴는 9월 기준 정리 글. 조건·가격은 바뀔 수 있어요. 힉스필드와 제휴하지 않았어요.",
+  "page": "assets/pickharu/ig/rl-aitip-urgent-higgsfield/index.html",
+  "note": "2026-11-11 사용자 '인스타도 예약 빨리 올려줘' — 힉스필드 긴급편 릴스 dark1, 음성 -10 LUFS",
+  "test": {
+   "group": "aitip-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "AI 노하우 릴스(dark1)는 구체 질문 훅(④)이 숫자 훅(②)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-11",
+   "variant_label": "②",
+   "hook_text": "힉스필드 3일 무료, 지금 열렸어요"
+  }
  }
 ]
