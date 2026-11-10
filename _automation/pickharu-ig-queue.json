@@ -1853,7 +1853,7 @@
    "assets/pickharu/ig/ig-yt08-clean-20261111/07.jpg",
    "assets/pickharu/ig/ig-yt08-clean-20261111/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt08-clean-20261111/story.jpg",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제50조(기본공제)·제59조의4(특별세액공제), 소득세법 시행령 제106조(부양가족 중복 시 기준, 2026.11.10 확인), 국세기본법 제47조의3(과소신고가산세)·제47조의4(납부지연가산세)",
   "test": {
@@ -1864,7 +1864,12 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-10",
    "variant_label": "③"
-  }
+  },
+  "post_id": "17954928192342042",
+  "published_at": "2026-11-11T08:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18378067312213635",
+  "story_id": "18130800149312574"
  },
  {
   "id": "rl-yt08-clean-20261111",
