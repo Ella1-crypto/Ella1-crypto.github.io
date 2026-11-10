@@ -1742,7 +1742,7 @@
    "assets/pickharu/ig/ig-redesign-sale-calendar-1/07.jpg",
    "assets/pickharu/ig/ig-redesign-sale-calendar-1/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-redesign-sale-calendar-1/story.jpg",
   "comment": "출처 (2026.11.9 확인)\n· 29CM 이구위크(11/9 19:00~11/19 23:59, 매일 10시 쿠폰·12시 럭키박스, 카테고리데이 날짜): 29CM 이구위크 티징 페이지, 어패럴뉴스\n· W컨셉 더블유위크(11/9~11/25, 10시 균일가·18시 50% 쿠폰): 아시아경제 11/9, W컨셉\n· G마켓 빅스마일데이(11/2~11/13): G마켓 빅스마일데이 혜택 페이지\n· 11번가 그랜드십일절(11/1~11/11): ZDNet Korea 10/29, 스페셜타임즈 11/9\n· 알리익스프레스 광군제(11/1~11/18): 뉴시스 10/29, ZDNet Korea 11/4\n· 롯데마트 메가통큰(10/29~11/11): 비즈워치 10/30, 파이낸셜뉴스 10/31\n· 코리아 그랜드 페스티벌(10/29~11/15): 대한민국 정책브리핑(korea.kr)\n· 미국 블랙프라이데이 11/27·사이버먼데이 11/30: 2026년 추수감사절(11/26) 다음 날 기준\n· 무신사 무진장·에이블리·지그재그·유니클로 감사제: 11/9 기준 공식 발표 확인 못 함",
   "test": {
@@ -1752,7 +1752,12 @@
    "hypothesis": "클린 룩(크림 정보형)이 틴트 룩보다 도달 대비 저장+공유가 높다",
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-09"
-  }
+  },
+  "post_id": "18090139292282055",
+  "published_at": "2026-11-10T16:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18117124646071712",
+  "story_id": "17988986738889080"
  },
  {
   "id": "ig-redesign-oy-honey-3",
