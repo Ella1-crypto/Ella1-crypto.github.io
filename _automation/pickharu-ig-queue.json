@@ -1835,7 +1835,16 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt08-clean-20261111/story.jpg",
-  "comment": "📌 출처: 국가법령정보센터 소득세법 제50조(기본공제)·제59조의4(특별세액공제), 소득세법 시행령 제106조(부양가족 중복 시 기준, 2026.11.10 확인), 국세기본법 제47조의3(과소신고가산세)·제47조의4(납부지연가산세)"
+  "comment": "📌 출처: 국가법령정보센터 소득세법 제50조(기본공제)·제59조의4(특별세액공제), 소득세법 시행령 제106조(부양가족 중복 시 기준, 2026.11.10 확인), 국세기본법 제47조의3(과소신고가산세)·제47조의4(납부지연가산세)",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10",
+   "variant_label": "③"
+  }
  },
  {
   "id": "rl-yt08-clean-20261111",
@@ -1845,6 +1854,15 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제50조(기본공제)·제59조의4(특별세액공제), 소득세법 시행령 제106조(부양가족 중복 시 기준, 2026.11.10 확인), 국세기본법 제47조의3(과소신고가산세)·제47조의4(납부지연가산세)",
-  "page": "assets/pickharu/ig/rl-yt08-clean-20261111/index.html"
+  "page": "assets/pickharu/ig/rl-yt08-clean-20261111/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10",
+   "variant_label": "③"
+  }
  }
 ]
