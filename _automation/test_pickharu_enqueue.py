@@ -29,11 +29,18 @@ class KakaoEnqueueTest(unittest.TestCase):
         queue = pe.build([k], ["1"], [], START)
         self.assertEqual(queue[0]["kind"], "카카오")
 
-    def test_kakao_cap_is_three(self):
+    def test_kakao_cap_by_date(self):
+        # build()가 '지금 시각'으로 한도를 봐서, 날짜를 안 주면 11/8 이후엔 결과가 바뀌었다(테스트가 날짜 따라 깨짐).
         ks = [{**draft(n, KAKAO_TEXT, KAKAO_REPLY), "id": f"kk-20261028-{n}", "kind": "카카오"} for n in (1, 2, 3, 4)]
-        self.assertEqual(len(pe.build(ks, ["1", "2", "3"], [], START)), 3)
+        # 11/7까지: 하루 3개 (2026-10-30 사용자)
+        self.assertEqual(len(pe.build(ks, ["1", "2", "3"], [], START, now=START)), 3)
         with self.assertRaises(ValueError):
-            pe.build(ks, ["1", "2", "3", "4"], [], START)
+            pe.build(ks, ["1", "2", "3", "4"], [], START, now=START)
+        # 11/8부터: 하루 1개 (2026-11-05 사용자 "카카오·네이버는 주 3회·하루 1개")
+        later = datetime(2026, 11, 10, 9, 0, tzinfo=pe.KST)
+        self.assertEqual(len(pe.build(ks, ["1"], [], later, now=later)), 1)
+        with self.assertRaises(ValueError):
+            pe.build(ks, ["1", "2"], [], later, now=later)
 
 
 class BuildTest(unittest.TestCase):
