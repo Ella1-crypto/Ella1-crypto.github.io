@@ -1959,5 +1959,131 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-10"
   }
+ },
+ {
+  "id": "ig-ad-inpock-002-kitty-star-magnet",
+  "publish_at": "2026-11-12T12:30+09:00",
+  "caption": "키티 별 마그넷, 문 열면 반짝여요 ⭐\n\n헬로키티 별 냉장고 마그넷은\n키티 아래 매달린 별이\n문을 열고 닫을 때, 손으로 톡 칠 때 빛나요.\n\n셰프·시계·머그·캔디·박스·보틀 6종 중\n하나가 랜덤으로 오고,\n세로 8~11cm라 냉장고에도 현관문에도 붙여요.\n\n6종 중에 누가 왔으면 해요? 댓글로 알려 주세요.\n주방 꾸밀 때 꺼내 보게 저장해 두고, 키티 좋아하는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 002번에 있어요 👆\n\n#헬로키티 #냉장고자석 #마그넷 #주방꾸미기 #키티굿즈\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "images": [
+   "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/01.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/02.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/03.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/04.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/05.jpg"
+  ],
+  "status": "예약",
+  "ad": true,
+  "story_image": "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet/story.jpg",
+  "comment": "출처: 쿠팡 상품 페이지(헬로키티 냉장고 자석 클래식 인테리어 마그넷 별 미니소 6종 랜덤, 상품번호 9699728596) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "12:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
+ },
+ {
+  "id": "rl-ad-inpock-002-kitty-star-magnet",
+  "publish_at": "2026-11-12T12:40+09:00",
+  "caption": "키티 별 마그넷, 문 열면 반짝여요 ⭐\n\n헬로키티 별 냉장고 마그넷은\n키티 아래 매달린 별이\n문을 열고 닫을 때, 손으로 톡 칠 때 빛나요.\n\n셰프·시계·머그·캔디·박스·보틀 6종 중\n하나가 랜덤으로 오고,\n세로 8~11cm라 냉장고에도 현관문에도 붙여요.\n\n주방 꾸밀 때 꺼내 보게 저장해 두고, 키티 좋아하는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 002번에 있어요 👆\n\n#헬로키티 #냉장고자석 #마그넷 #주방꾸미기 #키티굿즈\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "video": "assets/pickharu/ig/rl-ad-inpock-002-kitty-star-magnet/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "comment": "출처: 쿠팡 상품 페이지(헬로키티 냉장고 자석 클래식 인테리어 마그넷 별 미니소 6종 랜덤, 상품번호 9699728596) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "page": "assets/pickharu/ig/rl-ad-inpock-002-kitty-star-magnet/index.html",
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "12:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
+ },
+ {
+  "id": "ig-ad-inpock-003-kitty-toast-handwarmer",
+  "publish_at": "2026-11-13T12:30+09:00",
+  "caption": "식빵 손난로, 반으로 쪼개져요 🍞\n\n헬로키티 토스트 손난로는\n두 쪽이 자석으로 붙어 있어서\n떼면 둘이 하나씩 쥘 수 있어요.\n\n앞쪽 작은 창 안에 키티가 들어 있고\n불이 켜지면 창이 은은하게 빛나요.\n온도는 3단계로 고르는 충전식이에요.\n\n혼자 쓸래요, 둘이 나눌래요? 댓글로 알려 주세요.\n출근길 손 시릴 때 꺼내 보게 저장해 두고, 같이 다니는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 003번에 있어요 👆\n\n#헬로키티 #손난로 #충전식손난로 #겨울필수템 #키티굿즈\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "images": [
+   "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/01.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/02.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/03.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/04.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/05.jpg"
+  ],
+  "status": "예약",
+  "ad": true,
+  "story_image": "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/story.jpg",
+  "comment": "출처: 쿠팡 상품 페이지(헬로 키티 전기 쪼개지는 손난로 전기 충전식 핸드 워머 휴대용 2in1, 상품번호 9791677573) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "12:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
+ },
+ {
+  "id": "rl-ad-inpock-003-kitty-toast-handwarmer",
+  "publish_at": "2026-11-13T12:40+09:00",
+  "caption": "식빵 손난로, 반으로 쪼개져요 🍞\n\n헬로키티 토스트 손난로는\n두 쪽이 자석으로 붙어 있어서\n떼면 둘이 하나씩 쥘 수 있어요.\n\n앞쪽 작은 창 안에 키티가 들어 있고\n불이 켜지면 창이 은은하게 빛나요.\n온도는 3단계로 고르는 충전식이에요.\n\n출근길 손 시릴 때 꺼내 보게 저장해 두고, 같이 다니는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 003번에 있어요 👆\n\n#헬로키티 #손난로 #충전식손난로 #겨울필수템 #키티굿즈\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "video": "assets/pickharu/ig/rl-ad-inpock-003-kitty-toast-handwarmer/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "comment": "출처: 쿠팡 상품 페이지(헬로 키티 전기 쪼개지는 손난로 전기 충전식 핸드 워머 휴대용 2in1, 상품번호 9791677573) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "page": "assets/pickharu/ig/rl-ad-inpock-003-kitty-toast-handwarmer/index.html",
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "12:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
+ },
+ {
+  "id": "ig-ad-inpock-004-kitty-3d-glass",
+  "publish_at": "2026-11-13T20:30+09:00",
+  "caption": "와인잔 속에 키티가 쏙 들어가 있어요 🥂\n\n키티 3D 유리잔은\n잔 안쪽 바닥에 작은 키티 피규어가 서 있어서\n음료를 따르면 키티가 살짝 잠겨요.\n\n길쭉한 샴페인잔과 둥근 와인잔 두 모양이라\n분위기 따라 고르면 되고,\n연말 홈파티 테이블이나 집들이 선물로 좋아요.\n\n샴페인잔 파세요, 와인잔 파세요? 댓글로 알려 주세요.\n연말 모임 준비할 때 꺼내 보게 저장해 두고, 키티 좋아하는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 004번에 있어요 👆\n\n#헬로키티 #와인잔 #샴페인잔 #홈파티 #집들이선물\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "images": [
+   "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/01.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/02.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/03.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/04.jpg",
+   "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/05.jpg"
+  ],
+  "status": "예약",
+  "ad": true,
+  "story_image": "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass/story.jpg",
+  "comment": "출처: 쿠팡 상품 페이지(키티 3D 샴폐인 와인 유리잔 집들이 선물용, 상품번호 9732276979) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "test": {
+   "group": "ad-inpock-time",
+   "variable": "time",
+   "variant": "20:30",
+   "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
+ },
+ {
+  "id": "rl-ad-inpock-004-kitty-3d-glass",
+  "publish_at": "2026-11-13T20:40+09:00",
+  "caption": "와인잔 속에 키티가 쏙 들어가 있어요 🥂\n\n키티 3D 유리잔은\n잔 안쪽 바닥에 작은 키티 피규어가 서 있어서\n음료를 따르면 키티가 살짝 잠겨요.\n\n길쭉한 샴페인잔과 둥근 와인잔 두 모양이라\n분위기 따라 고르면 되고,\n연말 홈파티 테이블이나 집들이 선물로 좋아요.\n\n연말 모임 준비할 때 꺼내 보게 저장해 두고, 키티 좋아하는 친구에게 공유해 주세요.\n\n📌 구매 링크는 프로필 인포크 004번에 있어요 👆\n\n#헬로키티 #와인잔 #샴페인잔 #홈파티 #집들이선물\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "video": "assets/pickharu/ig/rl-ad-inpock-004-kitty-3d-glass/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "comment": "출처: 쿠팡 상품 페이지(키티 3D 샴폐인 와인 유리잔 집들이 선물용, 상품번호 9732276979) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
+  "page": "assets/pickharu/ig/rl-ad-inpock-004-kitty-3d-glass/index.html",
+  "test": {
+   "group": "ad-inpock-time-reel",
+   "variable": "time",
+   "variant": "20:40",
+   "hypothesis": "광고 릴스는 저녁(20:40)이 점심(12:40)보다 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-10"
+  }
  }
 ]
