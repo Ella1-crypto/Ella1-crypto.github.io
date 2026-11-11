@@ -898,7 +898,7 @@
   "publish_at": "2026-11-11T09:30+09:00",
   "text": "살까 말까 고민할 때마다\n사이즈표·후기·반품비를\n처음부터 다시 찾고 있다면.\n\nAnthropic이 한국어로 연 Claude 101 강의에\n'스킬로 작업하기' 레슨이 있어요.\n스킬은 반복하는 일을 매번 같은 순서로 하게\n지침을 묶어 둔 폴더예요.\n코드 없이 Claude와 대화하며 만들 수 있고,\n무료 플랜에서도 쓸 수 있어요.\n\n이렇게 써 보세요.\n\"옷 살지 말지 정할 때 쓰는 스킬을 만들고 싶어.\n상세페이지 내용과 후기를 붙여 넣으면\n사이즈표, 후기 장단점, 배송비와 반품비를\n늘 같은 표로 정리하고,\n마지막 줄에 '보류할 이유' 하나를 적어 줘.\"\n\nClaude가 필요한 걸 되물어 가며\n스킬을 만들어 주니,\n다음부터는 같은 틀로 비교해 볼 수 있어요.\n\n하루 10분 7일 체험판은 첫 댓글에.",
   "reply": "📌 출처: Anthropic · Claude Academy 「Claude 101」 (레슨 7 '스킬로 작업하기' — 대화로 맞춤형 스킬 만들기, 계정 없이 열람 가능)\nhttps://academy.claude.com/ko/courses/claude-101/working-with-skills\n스킬 지원 플랜(Free 포함, 설정에서 코드 실행·파일 생성 켜기): Claude 도움말\nhttps://support.claude.com/en/articles/12512176-what-are-skills\n\n🎧 하루 10분 무료 강의 루틴 7일 체험판 (노션, 복제 가능)\nhttps://tricolor-dietician-d49.notion.site/7-4097a9e6f202818b9d4fe71b9d43c3d6",
-  "status": "예약",
+  "status": "올리는 중",
   "source": "AI 노하우 하루 1개",
   "note": "Anthropic Claude 101(Claude Academy 한국어) 레슨 7 '스킬로 작업하기' — 11/10 레슨 페이지·Claude 도움말(what-are-skills: Free 플랜 포함, 코드 실행 필요) 확인, 트랙 3 표준화 설정·구매판단 장면(사이즈표·후기·반품비 같은 표)",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261111-am.png"
