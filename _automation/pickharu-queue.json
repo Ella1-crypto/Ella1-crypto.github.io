@@ -1654,7 +1654,7 @@
   "product": "11st-ali",
   "expires_at": "2026-11-11T22:00",
   "publish_at": "2026-11-11T21:40+09:00",
-  "status": "예약",
+  "status": "올리는 중",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
