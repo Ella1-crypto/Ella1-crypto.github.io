@@ -1267,7 +1267,7 @@
    "assets/pickharu/ig/ig-aitip-01-chatgpt-work/07.jpg",
    "assets/pickharu/ig/ig-aitip-01-chatgpt-work/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-01-chatgpt-work/story.jpg",
   "comment": "출처: GSEEK(경기도평생학습포털) '일잘러의 노하우, ChatGPT를 활용한 업무효율UP!' 강의 페이지 (2026년 10월 30일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시 질문은 희야가 만든 예시예요.",
   "test": {
@@ -1279,7 +1279,12 @@
    "tagged_at": "2026-11-09",
    "variant_label": "④",
    "hook_text": "메일 하나에 30분 걸리죠?"
-  }
+  },
+  "post_id": "17946138243365627",
+  "published_at": "2026-11-11T18:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18029318846698982",
+  "story_id": "17882518233543442"
  },
  {
   "id": "ig-aitip-02-generative-ai-manual",
