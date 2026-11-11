@@ -198,10 +198,11 @@ def find_live_post(item: dict, ig_user: str, token: str, http: Http, since: date
 def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
     media = f"{GRAPH}/{ig_user}/media"
     if "video" in item:
-        container = http("POST", media, {"media_type": "REELS", "video_url": SITE_URL + item["video"],
-                                         "caption": item["caption"],
-                                         "share_to_feed": "true" if item.get("share_to_feed") else "false",
-                                         "access_token": token})["id"]
+        params = {"media_type": "REELS", "video_url": SITE_URL + item["video"], "caption": item["caption"],
+                  "share_to_feed": "true" if item.get("share_to_feed") else "false", "access_token": token}
+        if item.get("ai_generated"):  # 인스타 'AI 정보' 라벨(Content Publishing API is_ai_generated, 2026-06-22 changelog)
+            params["is_ai_generated"] = "true"
+        container = http("POST", media, params)["id"]
         wait_until_ready(container, token, http, sleep, VIDEO_POLL_TRIES)
         return http("POST", f"{GRAPH}/{ig_user}/media_publish", {"creation_id": container, "access_token": token})["id"]
     images = item["images"]

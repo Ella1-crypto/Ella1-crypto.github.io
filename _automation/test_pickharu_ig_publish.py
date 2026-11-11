@@ -296,6 +296,16 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(items[0]["comment_id"], "cm5")
         self.assertFalse([c for c in http.calls if c[2].get("media_type") == "STORIES"])
 
+    def test_reel_ai_generated_sends_ai_label_only_when_marked(self):
+        http = fake_http()
+        self.run_once([reel(make_reel(self.root), ai_generated=True)], http)
+        create = [c for c in http.calls if c[2].get("media_type") == "REELS"]
+        self.assertEqual(create[0][2]["is_ai_generated"], "true")
+        http = fake_http()
+        self.run_once([reel(make_reel(self.root))], http)
+        create = [c for c in http.calls if c[2].get("media_type") == "REELS"]
+        self.assertNotIn("is_ai_generated", create[0][2])
+
     def test_reels_have_their_own_cap_apart_from_feed(self):
         images = make_site(self.root)
         feed = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]
