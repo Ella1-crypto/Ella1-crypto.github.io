@@ -1379,7 +1379,7 @@
    "assets/pickharu/ig/ig-yt01-clean-repost/07.jpg",
    "assets/pickharu/ig/ig-yt01-clean-repost/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt01-clean-repost/story.jpg",
   "comment": "출처 (2026.11.02 확인)\n· 매달 원천징수(간이세액표): 국가법령정보센터 소득세법 제134조\n· 2월 연말정산·환급·10만 원 초과 분납·신고서 미제출 시 공제: 소득세법 제137조\n· 원천징수 비율 80%·120% 신청: 소득세법 시행령 제194조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "test": {
@@ -1391,7 +1391,12 @@
    "tagged_at": "2026-11-09",
    "variant_label": "③",
    "hook_text": "매달 떼는 세금은 미리 낸 세금이에요"
-  }
+  },
+  "post_id": "18083514263424827",
+  "published_at": "2026-11-11T15:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18132871747696557",
+  "story_id": "18019501325986934"
  },
  {
   "id": "ig-yt02-clean-repost",
