@@ -1654,13 +1654,16 @@
   "product": "11st-ali",
   "expires_at": "2026-11-11T22:00",
   "publish_at": "2026-11-11T21:40+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665614,
    "message_id": 118,
    "at": "2026-11-11T20:36:22+09:00"
-  }
+  },
+  "post_id": "18132118240892363",
+  "published_at": "2026-11-11T21:40+09:00",
+  "reply_id": "17937807762408684"
  }
 ]
