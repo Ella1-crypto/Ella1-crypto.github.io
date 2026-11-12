@@ -1681,5 +1681,28 @@
   "status": "예약",
   "source": "inpock:060",
   "note": "2026-11-11 사용자 승인(통합 센터). 인스타 릴스 rl-ad-inpock-060-dareu-keyboard(11/12 20:30) 10분 뒤. 002 스레드(ph-20261112i-1)를 11/17 12:40으로 미루고 이 자리에"
+ },
+ {
+  "id": "if-20261112cjkleaguesanrio-1",
+  "kind": "정보",
+  "text": "산리오 친구들이랑 K리그가 만났대⚽🎀\n그 굿즈가 처음 온라인으로 나왔어\n\nCJ온스타일 앱 온라인 팝업\n11월 12일 오늘 오전 10시부터\n11월 18일 수요일까지래\n\n지난 7월 더현대 서울 팝업에\n열흘 동안 약 4만 8천 명이 왔던 굿즈야\n이번엔 줄 안 서고 앱에서 고르면 돼\n\nK리그 29개 구단 협업 굿즈 153종\n한정 수량이라 빨리 빠질 수 있대\n\n1. 인형 키링\n오프라인 팝업에서 제일 많이 팔린 거래\n가방에 달면 응원팀이 바로 티 나🧸\n\n2. 랜덤 부적 키링\nK리그1·K리그2 따로 있대\n뭐가 나올지 뽑는 재미까지\n\n3. 투명 파우치·짐색·레디백\n경기장 갈 때 들고 가기 좋은 구성이야\n\n4. 머플러·우양산·4단 방석\n겨울 직관 갈 때 하나씩 챙기기 좋아🤍\n\n스치니들 응원팀은 어디야?",
+  "reply": "출처: https://corp.cjonstyle.com/en/newsroom/press/180\n\n날짜·가격·조건은 바뀔 수 있어서\n원문에서 한 번 더 확인해 줘",
+  "product": "cj-kleague-sanrio",
+  "images": [
+   "assets/pickharu/if-20261112cjB-0.jpg",
+   "assets/pickharu/if-20261112cjB-1.jpg",
+   "assets/pickharu/if-20261112cjB-2.jpg",
+   "assets/pickharu/if-20261112cjB-3.jpg"
+  ],
+  "expires_at": "2026-11-12T23:59",
+  "publish_at": "2026-11-12T18:55+09:00",
+  "status": "예약",
+  "approved_by": {
+   "via": "telegram",
+   "user_id": 8420322263,
+   "update_id": 479665617,
+   "message_id": 143,
+   "at": "2026-11-12T16:17:43+09:00"
+  }
  }
 ]
