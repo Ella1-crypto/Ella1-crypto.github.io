@@ -1711,10 +1711,10 @@
   "caption": "생성형 AI 무료강의 10차시 정리 🤖\n\n무료강의에서 찾은 AI 노하우 2편.\nGSEEK '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼'\n10차시(총 4시간)를 일 종류별로 정리했어요.\n도구 이름보다 내 일이 글·자료 찾기·사진·표·발표 중\n뭔지 먼저 나누면 고르기 쉬워요.\n예시 질문 3개는 제가 만든 예시예요.\n\n📌 학습기간 30일 · 수료 60% · 비회원은 수료증 X\n📌 강의 페이지엔 금액 표기가 없고,\n무료강의 목록 기준 무료예요.\n\n📩 무료 강의 100개+ 노션 목록이 필요하면\nDM으로 '강의'라고 보내 주세요.\n바로 보내 드릴게요\nAI 켤 때 꺼내 보게 저장해 두세요.\n\n#생성형AI #AI도구 #AI무료강의 #직장인AI #GSEEK",
   "video": "assets/pickharu/ig/rl-aitip-02-generative-ai-manual/reel.mp4",
   "share_to_feed": false,
-  "status": "예약",
+  "status": "직접 게시",
   "comment": "출처: GSEEK(경기도평생학습포털) '업무에 따라 골라 쓰는 생성형 AI 실전 매뉴얼' 강의 페이지 (2026년 11월 3일 확인). 무료 여부는 무료강의 노션 목록 기준이고, 예시 질문은 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-02-generative-ai-manual/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/27",
   "test": {
    "group": "aitip-hook-reel",
    "variable": "hook_type",
