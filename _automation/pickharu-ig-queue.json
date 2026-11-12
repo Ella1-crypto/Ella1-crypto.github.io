@@ -1219,7 +1219,7 @@
    "assets/pickharu/ig/ig-ad-inpock-057-sanrio-tree-orgel/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-057-sanrio-tree-orgel/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-057-sanrio-tree-orgel/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(AREAX 산리오 헬로키티 크리스마스트리 오르골 조립 블록, 상품번호 9801821420, 옵션 오르골 조립 블록 × 크리스마스 트리) 11/9 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(대표·상세 이미지, 11/9 확인)",
@@ -1231,7 +1231,12 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-09"
   },
-  "note": " · 2026-11-10 사용자: '내가 정해준 순서(001→005→057) 먼저' → 11/12 057을 점심, 002를 저녁으로 맞바꿈"
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18220570258344878",
+  "published_at": "2026-11-12T12:31+09:00",
+  "comment_id": "18057768365587977",
+  "story_id": "18020265104748088",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/23"
  },
  {
   "id": "rl-ad-inpock-057-sanrio-tree-orgel",
