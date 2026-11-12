@@ -1696,7 +1696,7 @@
   ],
   "expires_at": "2026-11-12T23:59",
   "publish_at": "2026-11-12T18:55+09:00",
-  "status": "예약",
+  "status": "올리는 중",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
