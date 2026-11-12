@@ -2402,7 +2402,16 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt09-clean-20261113/story.jpg",
-  "comment": "📌 출처: 국가법령정보센터 소득세법 제51조의3(연금보험료공제), 정책브리핑 보건복지부 2026년 국민연금 보험료율 9.5% 안내, 국민연금공단 기준소득월액 상한 안내(2026.7~), 2026.11.11 확인"
+  "comment": "📌 출처: 국가법령정보센터 소득세법 제51조의3(연금보험료공제), 정책브리핑 보건복지부 2026년 국민연금 보험료율 9.5% 안내, 국민연금공단 기준소득월액 상한 안내(2026.7~), 2026.11.11 확인",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-12",
+   "variant_label": "⑥"
+  }
  },
  {
   "id": "rl-yt09-clean-20261113",
@@ -2412,6 +2421,15 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제51조의3(연금보험료공제), 정책브리핑 보건복지부 2026년 국민연금 보험료율 9.5% 안내, 국민연금공단 기준소득월액 상한 안내(2026.7~), 2026.11.11 확인",
-  "page": "assets/pickharu/ig/rl-yt09-clean-20261113/index.html"
+  "page": "assets/pickharu/ig/rl-yt09-clean-20261113/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "⑥정리",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-12",
+   "variant_label": "⑥"
+  }
  }
 ]
