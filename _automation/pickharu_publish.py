@@ -38,6 +38,7 @@ MAX_SESSION = timedelta(minutes=320)  # push 실행 하나가 기다리며 처�
 # 이어달리기(2026-11-02, 인스타 발행기와 같은 방식): --wait 실행이 끝나면 다음 '예약' 글 시각에 맞춰 새 --wait 실행을 부른다.
 # 30분 cron이 실제로는 3~5시간에 한 번만 돌아서(11/1·11/2 실측) push 뒤 320분이 지난 글은 cron 운에 맡겨졌다.
 RELAY_LEAD = timedelta(minutes=300)  # 새 실행이 글 시각 이만큼 전에 시작하게(MAX_SESSION 320분 안)
+POLL_EVERY = timedelta(minutes=5)  # --wait 실행이 자는 동안 예약 목록을 다시 보는 간격(11/12 추가)
 RELAY_MIN = timedelta(minutes=10)  # 막힌 글 때문에 실행이 쉼 없이 이어지지 않게 최소 간격
 RELAY_MAX = timedelta(minutes=330)  # 이어달리기 job timeout(345분)보다 짧게
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
@@ -463,12 +464,23 @@ def session(token: str, clock: Callable[[], datetime] = lambda: datetime.now(KST
         if wait is None:
             return results or ["올릴 글 없음"]
         if wait > 0:
-            print(f"{int(wait // 60)}분 {int(wait % 60)}초 기다린 뒤 올립니다.", flush=True)
-            sleep(wait)
-            # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정). 최신본을 못 받으면 올리지 않는다.
-            if not pull():
-                raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
-            restart(end)
+            # 한 번에 끝까지 자지 않고 POLL_EVERY마다 깨어 큐를 다시 본다. 자는 동안 더 이른 글이 승인되면
+            # 그 글을 놓치고 원래 글 시각까지 늦어진다(11/12 18:55 스레드 글이 19:40까지 밀림).
+            print(f"{int(wait // 60)}분 {int(wait % 60)}초 기다린 뒤 올립니다(그동안 {int(POLL_EVERY.total_seconds() // 60)}분마다 예약 목록 확인).", flush=True)
+            left = wait
+            while left > 0:
+                nap = min(left, POLL_EVERY.total_seconds())
+                sleep(nap)
+                left -= nap
+                # 기다리는 동안 큐가 바뀌었을 수 있다(취소·수정·새 글). 최신본을 못 받으면 올리지 않는다.
+                if not pull():
+                    raise SystemExit("기다린 뒤 최신 예약 목록을 받지 못해 올리지 않음")
+                restart(end)
+                fresh = next_wait(load_queue(path), clock(), end - clock())
+                if left > 0 and (fresh is None or fresh < left):
+                    break  # 글이 취소됐거나 더 이른 글이 생김 → 처음부터 다시 계산
+            if left > 0:
+                continue
         try:
             results.append(run(clock()))
         except SystemExit as stop:

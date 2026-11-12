@@ -446,6 +446,36 @@ class SessionTest(unittest.TestCase):
         self.assertEqual(result, ["a", "b"])
         self.assertEqual([r[1].strftime("%H:%M") for r in ran], ["09:30", "11:00"])
 
+    def test_picks_up_earlier_post_added_while_sleeping(self):
+        # 11/12: 19:40 글까지 자는 동안 18:55 글이 승인돼 45분 늦음 → 자는 동안에도 큐를 다시 봐야 한다.
+        self.path.write_text(json.dumps([item("late", at="2026-10-28T11:00+09:00")]), encoding="utf-8")
+        clock = {"now": NOW}
+        ran = []
+
+        def sleep(s):
+            clock["now"] += timedelta(seconds=s)
+
+        def pull():
+            items = pp.load_queue(self.path)
+            if clock["now"] >= NOW + timedelta(minutes=10) and not any(it["id"] == "new" for it in items):
+                items.append(item("new", at="2026-10-28T09:30+09:00"))
+                pp.save_queue(items, self.path)
+            return True
+
+        def run(now):
+            items = pp.load_queue(self.path)
+            first = min((it for it in items if it["status"] == "예약"), key=lambda it: it["publish_at"])
+            pp.save_queue(pp.with_status(items, first["id"], status="올림"), self.path)
+            ran.append((first["id"], now))
+            return first["id"]
+
+        result = pp.session("tok", clock=lambda: clock["now"], sleep=sleep, pull=pull, run=run, path=self.path)
+        self.assertEqual(result, ["new", "late"])
+        new_at = ran[0][1]
+        self.assertGreaterEqual(new_at, datetime(2026, 10, 28, 9, 30, tzinfo=pp.KST))
+        self.assertLess(new_at - datetime(2026, 10, 28, 9, 30, tzinfo=pp.KST), pp.POLL_EVERY)
+        self.assertEqual(ran[1][1].strftime("%H:%M"), "11:00")
+
     def test_ignores_posts_beyond_session_window(self):
         self.path.write_text(json.dumps([item("a", at="2026-10-28T20:00+09:00")]), encoding="utf-8")
         result = pp.session("tok", clock=lambda: NOW, sleep=lambda s: None, pull=lambda: True,
