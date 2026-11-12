@@ -1422,7 +1422,7 @@
    "assets/pickharu/ig/ig-yt02-clean-repost/07.jpg",
    "assets/pickharu/ig/ig-yt02-clean-repost/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt02-clean-repost/story.jpg",
   "comment": "출처 (2026.11.02 확인)\n· 근로소득공제(총급여 1,500만~4,500만 원: 750만 원 + 초과분의 15%): 국가법령정보센터 소득세법 제47조\n· 종합소득 세율(1,400만 원 이하 6%, 1,400만~5,000만 원 15%): 소득세법 제55조\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "test": {
@@ -1434,7 +1434,12 @@
    "tagged_at": "2026-11-09",
    "variant_label": "②",
    "hook_text": "계산 흐름 4단계 환급? 추가 납부?"
-  }
+  },
+  "post_id": "18122541707076279",
+  "published_at": "2026-11-12T15:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18126322258906985",
+  "story_id": "17921036766455067"
  },
  {
   "id": "ig-yt03-clean",
