@@ -40,6 +40,11 @@ class MissingTest(unittest.TestCase):
         gaps = sc.missing(items, TODAY)
         self.assertTrue(any("재테크" in g for g in gaps) and any("무료강의" in g for g in gaps))
 
+    def test_ai_video_series_id_counts(self):
+        # 11/12: ai-video-03이 11/13 09:30에 예약돼 있었는데 0/1로 경보가 갔다.
+        items = [FULL[0], item("ai-video-03", "2026-11-04T09:30+09:00"), FULL[3]]
+        self.assertEqual(sc.missing(items, TODAY), [])
+
     def test_send_needs_secrets(self):
         sent = []
         with unittest.mock.patch.dict(sc.os.environ, {}, clear=True):

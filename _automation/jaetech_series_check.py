@@ -20,7 +20,8 @@ from jaetech_publish import KST, QUEUE_PATH, http_json, load_queue
 
 SLOTS = (  # (이름, id 모양, 며칠 뒤, 필요한 개수, 다시 돌릴 예약 작업)
     ("재테크 한 줄", re.compile(r"jt-\d{8}"), 0, 1, "jaetech-one-liner"),
-    ("AI 노하우", re.compile(r"ai-\d{8}"), 1, 1, "ai-knowhow-series"),
+    # 11/10부터 AI 노하우 영상 연재는 ai-video-NN id를 쓴다(11/12 가짜 경보로 추가). r2-ai-… 는 앞이 r2- 라 안 맞음.
+    ("AI 노하우", re.compile(r"ai-(\d{8}|video-\d+)"), 1, 1, "ai-knowhow-series"),
     ("무료강의", re.compile(r"r2-\d{8}"), 1, 1, "free-course-series"),
 )
 LIVE = {"예약", "올리는 중", "올림"}
