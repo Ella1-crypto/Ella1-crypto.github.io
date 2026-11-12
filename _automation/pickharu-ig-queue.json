@@ -2457,9 +2457,14 @@
    "assets/pickharu/ig/ig-cj-kleague-sanrio-20261112/03.jpg",
    "assets/pickharu/ig/ig-cj-kleague-sanrio-20261112/04.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-cj-kleague-sanrio-20261112/story.jpg",
-  "comment": "📌 출처: CJ온스타일 보도자료(2026.11.12) corp.cjonstyle.com/en/newsroom/press/180 · 가격: CJ온스타일 앱 'K리그 X 산리오캐릭터즈' 상품관 11/12 확인, 바뀔 수 있어요 · 상품 이미지 CJ온스타일 · © 2026 SANRIO CO., LTD. © K LEAGUE"
+  "comment": "📌 출처: CJ온스타일 보도자료(2026.11.12) corp.cjonstyle.com/en/newsroom/press/180 · 가격: CJ온스타일 앱 'K리그 X 산리오캐릭터즈' 상품관 11/12 확인, 바뀔 수 있어요 · 상품 이미지 CJ온스타일 · © 2026 SANRIO CO., LTD. © K LEAGUE",
+  "post_id": "18138811774731863",
+  "published_at": "2026-11-12T19:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17917782069493273",
+  "story_id": "18649197157038342"
  },
  {
   "id": "rl-cj-kleague-sanrio-20261112",
