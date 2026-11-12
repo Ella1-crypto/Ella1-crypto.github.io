@@ -2418,7 +2418,7 @@
    "assets/pickharu/ig/ig-yt09-clean-20261113/07.jpg",
    "assets/pickharu/ig/ig-yt09-clean-20261113/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt09-clean-20261113/story.jpg",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제51조의3(연금보험료공제), 정책브리핑 보건복지부 2026년 국민연금 보험료율 9.5% 안내, 국민연금공단 기준소득월액 상한 안내(2026.7~), 2026.11.11 확인",
   "test": {
@@ -2429,7 +2429,12 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-12",
    "variant_label": "⑥"
-  }
+  },
+  "post_id": "18159149623469783",
+  "published_at": "2026-11-13T08:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18121702288977305",
+  "story_id": "18118711130105697"
  },
  {
   "id": "rl-yt09-clean-20261113",
