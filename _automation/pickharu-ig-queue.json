@@ -2524,7 +2524,7 @@
    "assets/pickharu/ig/ig-yt10-clean-20261114/07.jpg",
    "assets/pickharu/ig/ig-yt10-clean-20261114/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt10-clean-20261114/story.jpg",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제52조 제1항(특별소득공제 보험료), 보건복지부 2026년 건강보험료율 7.19% 보도자료, 국민건강보험공단 장기요양보험료율 0.9448% 안내, 고용노동부 고용보험료율(실업급여 근로자 0.9%) 안내",
   "test": {
@@ -2535,7 +2535,12 @@
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-13",
    "variant_label": "②"
-  }
+  },
+  "post_id": "18140219782633821",
+  "published_at": "2026-11-14T08:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18152657113478838",
+  "story_id": "18107334317019429"
  },
  {
   "id": "rl-yt10-clean-20261114",
