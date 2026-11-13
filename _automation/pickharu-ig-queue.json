@@ -2511,7 +2511,16 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt10-clean-20261114/story.jpg",
-  "comment": "📌 출처: 국가법령정보센터 소득세법 제52조 제1항(특별소득공제 보험료), 보건복지부 2026년 건강보험료율 7.19% 보도자료, 국민건강보험공단 장기요양보험료율 0.9448% 안내, 고용노동부 고용보험료율(실업급여 근로자 0.9%) 안내"
+  "comment": "📌 출처: 국가법령정보센터 소득세법 제52조 제1항(특별소득공제 보험료), 보건복지부 2026년 건강보험료율 7.19% 보도자료, 국민건강보험공단 장기요양보험료율 0.9448% 안내, 고용노동부 고용보험료율(실업급여 근로자 0.9%) 안내",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-13",
+   "variant_label": "②"
+  }
  },
  {
   "id": "rl-yt10-clean-20261114",
@@ -2521,6 +2530,15 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 국가법령정보센터 소득세법 제52조 제1항(특별소득공제 보험료), 보건복지부 2026년 건강보험료율 7.19% 보도자료, 국민건강보험공단 장기요양보험료율 0.9448% 안내, 고용노동부 고용보험료율(실업급여 근로자 0.9%) 안내",
-  "page": "assets/pickharu/ig/rl-yt10-clean-20261114/index.html"
+  "page": "assets/pickharu/ig/rl-yt10-clean-20261114/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-13",
+   "variant_label": "②"
+  }
  }
 ]
