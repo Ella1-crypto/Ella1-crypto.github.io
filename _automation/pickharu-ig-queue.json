@@ -1460,7 +1460,7 @@
    "assets/pickharu/ig/ig-yt03-clean/07.jpg",
    "assets/pickharu/ig/ig-yt03-clean/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt03-clean/story.jpg",
   "comment": "출처 (2026.11.03 확인)\n· 소득공제(인적공제 등은 종합소득금액에서 공제): 국가법령정보센터 소득세법 제50조\n· 세액공제(의료비 15% 등, 산출세액에서 공제): 소득세법 제59조의4\n· 세액공제액이 산출세액을 넘으면 없는 것으로 봄, 기부금 세액공제만 10년 이월: 소득세법 제61조\n· 금액 예시는 지방소득세 등을 뺀 대략 계산이에요\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "test": {
@@ -1472,7 +1472,12 @@
    "tagged_at": "2026-11-09",
    "variant_label": "⑥",
    "hook_text": "소득공제 vs 세액공제 차이"
-  }
+  },
+  "post_id": "18067439093518815",
+  "published_at": "2026-11-13T15:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18347704936284701",
+  "story_id": "18149306959569863"
  },
  {
   "id": "ig-yt04-clean-repost",
