@@ -2079,7 +2079,7 @@
    "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-003-kitty-toast-handwarmer/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(헬로 키티 전기 쪼개지는 손난로 전기 충전식 핸드 워머 휴대용 2in1, 상품번호 9791677573) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
@@ -2090,7 +2090,13 @@
    "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-10"
-  }
+  },
+  "post_id": "18165758734540654",
+  "published_at": "2026-11-13T12:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18250921426314136",
+  "story_id": "18643967215053127",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/30"
  },
  {
   "id": "rl-ad-inpock-003-kitty-toast-handwarmer",
