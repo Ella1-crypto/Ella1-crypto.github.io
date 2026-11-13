@@ -2589,10 +2589,15 @@
    "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass-v2/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass-v2/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-004-kitty-3d-glass-v2/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(키티 3D 샴폐인 와인 유리잔 집들이 선물용, 상품번호 9732276979) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 대표·상세 이미지(11/10 확인)",
-  "note": "2026-11-13 사용자 \"다시 올려줘\": 20:31 올라간 글(마지막 장 사진 잘림, https://www.instagram.com/p/Dfrh0JxF1yb/)은 사용자가 앱에서 보관, 마지막 장 고친 판으로 다시 올림"
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18015183803998488",
+  "published_at": "2026-11-13T22:31+09:00",
+  "comment_id": "18642677218020285",
+  "story_id": "18132402698474540",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/36"
  }
 ]
