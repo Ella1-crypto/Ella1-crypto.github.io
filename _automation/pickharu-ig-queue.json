@@ -2303,7 +2303,7 @@
    "assets/pickharu/ig/ig-ad-inpock-007-nars-liquid-blush/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-007-nars-liquid-blush/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-007-nars-liquid-blush/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(NARS 나스 인세이셔블 리퀴드 블러쉬 8.5ml, 섹스 어필, 상품번호 9636756399, 로켓배송·브랜드 본사 정품 표기) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진: 쿠팡 상품 이미지(11/10 확인)",
@@ -2314,7 +2314,13 @@
    "hypothesis": "광고 카드뉴스는 20:30 게시가 12:30보다 도달 대비 저장+공유가 높다",
    "kpi": "saves_shares_per_reach",
    "tagged_at": "2026-11-10"
-  }
+  },
+  "post_id": "18111633014169342",
+  "published_at": "2026-11-14T20:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17955312111331115",
+  "story_id": "18091359914281361",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/44"
  },
  {
   "id": "rl-ad-inpock-007-nars-liquid-blush",
