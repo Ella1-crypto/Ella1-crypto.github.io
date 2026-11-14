@@ -1498,7 +1498,7 @@
    "assets/pickharu/ig/ig-yt04-clean-repost/07.jpg",
    "assets/pickharu/ig/ig-yt04-clean-repost/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt04-clean-repost/story.jpg",
   "comment": "출처 (2026.11.05 확인)\n· 2월분 근로소득 지급 때 연말정산: 국가법령정보센터 소득세법 제137조\n· 근로소득 지급명세서 다음 해 3월 10일까지 제출: 소득세법 제164조\n· 종합소득세 확정신고 5월 1일~31일: 소득세법 제70조\n· 연말정산 뒤 5년 안 경정청구: 국세기본법 제45조의2\n· 2025년 귀속 간소화 서비스 2026년 1월 15일 개통: 다음 뉴스 보도(2026.01.15)\n· 내 상황은 회사 담당자나 국세청 126 상담으로 확인해 주세요",
   "test": {
@@ -1510,7 +1510,12 @@
    "tagged_at": "2026-11-09",
    "variant_label": "②",
    "hook_text": "연말정산 일정 5단계만 기억해요"
-  }
+  },
+  "post_id": "18120482564047196",
+  "published_at": "2026-11-14T15:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18031149851877279",
+  "story_id": "17912883291603887"
  },
  {
   "id": "ig-yt05-clean-repost",
