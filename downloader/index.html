@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>미디어 다운로더</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1d1d1f; --mute:#6e6e73; --line:#e3e1dc; --accent:#1f3a5f; --err:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141414; --card:#1e1e1e; --ink:#f2f2f2; --mute:#a0a0a5; --line:#333; --accent:#8fb3e3; --err:#ff8a80; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif; line-height:1.5; }
+  main { max-width:560px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--mute); margin:0 0 24px; font-size:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+  label { display:block; font-size:13px; color:var(--mute); margin:0 0 6px; }
+  input { width:100%; font:inherit; font-size:16px; padding:12px; border:1px solid var(--line); border-radius:10px; background:transparent; color:var(--ink); }
+  input:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  .row { display:flex; gap:8px; margin-top:10px; }
+  button, .btn { font:inherit; font-weight:600; border:0; border-radius:10px; padding:12px 16px; cursor:pointer; background:var(--accent); color:var(--card); text-decoration:none; text-align:center; flex:1; }
+  button.ghost, .btn.ghost { background:transparent; color:var(--accent); border:1px solid var(--line); }
+  button:disabled { opacity:.5; cursor:wait; }
+  details summary { cursor:pointer; color:var(--mute); font-size:14px; }
+  details[open] summary { margin-bottom:12px; }
+  .field + .field { margin-top:12px; }
+  .msg { font-size:14px; margin-top:10px; min-height:1.5em; }
+  .msg.err { color:var(--err); }
+  .result { display:none; }
+  .result.show { display:block; }
+  .media { display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; }
+  .media img { width:120px; aspect-ratio:16/9; object-fit:cover; border-radius:8px; background:var(--line); flex:none; }
+  .media h2 { font-size:16px; margin:0 0 4px; word-break:break-all; }
+  .media p { margin:0; color:var(--mute); font-size:13px; }
+  .hint { color:var(--mute); font-size:12px; margin-top:8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>미디어 다운로더</h1>
+  <p class="sub">YouTube · Instagram · Threads · TikTok 주소를 붙여 넣으세요. (개인용)</p>
+
+  <div class="card">
+    <label for="url">주소</label>
+    <input id="url" type="url" inputmode="url" placeholder="https://www.instagram.com/reel/…" autocomplete="off">
+    <div class="row">
+      <button id="paste" class="ghost" type="button">붙여넣기</button>
+      <button id="go" type="button">가져오기</button>
+    </div>
+    <div id="msg" class="msg" role="status"></div>
+  </div>
+
+  <div id="result" class="card result">
+    <div class="media">
+      <img id="thumb" alt="" referrerpolicy="no-referrer">
+      <div><h2 id="title"></h2><p id="meta"></p></div>
+    </div>
+    <div class="row">
+      <a id="dlVideo" class="btn" href="#">영상 (MP4)</a>
+      <a id="dlAudio" class="btn ghost" href="#">소리만 (MP3)</a>
+    </div>
+    <p class="hint">버튼을 누르면 PC에서 내려받은 뒤 전달합니다. 긴 영상은 시작까지 시간이 걸려요.</p>
+  </div>
+
+  <details class="card" id="settings">
+    <summary>서버 설정</summary>
+    <div class="field">
+      <label for="server">서버 주소 (Cloudflare Tunnel)</label>
+      <input id="server" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="token">비밀번호 (ACCESS_TOKEN)</label>
+      <input id="token" type="password" autocomplete="off">
+    </div>
+    <div class="row"><button id="save" type="button">저장하고 연결 확인</button></div>
+    <div id="smsg" class="msg" role="status"></div>
+  </details>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const store = {
+    get(k) { try { return localStorage.getItem('mdl.' + k) || ''; } catch { return ''; } },
+    set(k, v) { try { localStorage.setItem('mdl.' + k, v); } catch {} },
+  };
+  $('server').value = store.get('server');
+  $('token').value = store.get('token');
+  if (!store.get('server') || !store.get('token')) $('settings').open = true;
+
+  const base = () => $('server').value.trim().replace(/\/+$/, '');
+  const say = (el, text, err) => { el.textContent = text; el.classList.toggle('err', !!err); };
+
+  $('save').onclick = async () => {
+    store.set('server', base());
+    store.set('token', $('token').value.trim());
+    say($('smsg'), '확인 중…');
+    try {
+      const r = await fetch(base() + '/api/health');
+      say($('smsg'), r.ok ? '연결됐어요.' : '서버가 응답하지 않아요.', !r.ok);
+      if (r.ok) setTimeout(() => { $('settings').open = false; }, 800);
+    } catch { say($('smsg'), 'PC 서버나 터널이 꺼져 있어요.', true); }
+  };
+
+  $('paste').onclick = async () => {
+    try { $('url').value = (await navigator.clipboard.readText()).trim(); $('go').click(); }
+    catch { $('url').focus(); }
+  };
+
+  const fmt = s => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '';
+
+  async function fetchInfo() {
+    const url = $('url').value.trim();
+    if (!url) return $('url').focus();
+    if (!base() || !$('token').value.trim()) { $('settings').open = true; return say($('msg'), '먼저 서버 설정을 해 주세요.', true); }
+    $('go').disabled = true;
+    $('result').classList.remove('show');
+    say($('msg'), '정보를 가져오는 중…');
+    try {
+      const r = await fetch(base() + '/api/info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + $('token').value.trim() },
+        body: JSON.stringify({ url }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || '실패했어요.');
+      $('title').textContent = j.title;
+      $('meta').textContent = [j.site, j.uploader, fmt(j.duration)].filter(Boolean).join(' · ');
+      $('thumb').src = j.thumbnail || '';
+      $('thumb').style.display = j.thumbnail ? '' : 'none';
+      const q = kind => `${base()}/api/download?${new URLSearchParams({ url, kind, token: $('token').value.trim() })}`;
+      $('dlVideo').href = q('video');
+      $('dlAudio').href = q('audio');
+      $('result').classList.add('show');
+      say($('msg'), '');
+    } catch (e) {
+      say($('msg'), e.message === 'Failed to fetch' ? 'PC 서버나 터널이 꺼져 있어요.' : e.message, true);
+    } finally { $('go').disabled = false; }
+  }
+  $('go').onclick = fetchInfo;
+  $('url').addEventListener('keydown', e => { if (e.key === 'Enter') fetchInfo(); });
+
+  // 공유 대상 등으로 ?url= 이 붙어 오면 바로 조회
+  const shared = new URLSearchParams(location.search).get('url');
+  if (shared) { $('url').value = shared; fetchInfo(); }
+})();
+</script>
+</body>
+</html>
