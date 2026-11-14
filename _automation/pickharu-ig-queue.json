@@ -1773,10 +1773,10 @@
   "caption": "새 채팅마다 같은 설명 또? 🤖\n\n무료강의에서 찾은 AI 노하우 4편.\nGSEEK '요즘 일잘러가 쓰는 BEST 생성형 AI'\n8차시(3시간 35분) 중\n4차시 GPTs와 이어지는 팁이에요.\n개인 계정은 새 GPT를 못 만들어서\n(OpenAI 도움말 11/8),\n맞춤 설정에 '나'와 '답하는 방식'을 적어 두면\n새 채팅마다 그걸 참고해요.\n예시는 제가 만든 예시예요.\n\n📩 무료 강의 100개+ 노션 목록이 필요하면\nDM으로 '강의'라고 보내 주세요.\n바로 보내 드릴게요\n새 채팅 열 때 꺼내 보게 저장해 두세요.\n\n#챗GPT #챗GPT맞춤설정 #AI무료강의 #생성형AI #직장인AI",
   "video": "assets/pickharu/ig/rl-aitip-04-best-generative-ai/reel.mp4",
   "share_to_feed": false,
-  "status": "예약",
+  "status": "직접 게시",
   "comment": "출처: GSEEK(경기도 평생학습포털) '요즘 일잘러가 쓰는 BEST 생성형 AI' 강의 페이지, OpenAI 도움말 'ChatGPT Custom Instructions'·'Creating and editing GPTs' (2026년 11월 8일 확인). 무료 여부는 무료강의 노션 목록(10월 27일 확인) 기준이고, 예시는 희야가 만든 예시예요.",
   "page": "assets/pickharu/ig/rl-aitip-04-best-generative-ai/index.html",
-  "note": "2026-11-09 사용자: AI 노하우 릴스 dark1, 음악 직접 넣어 게시",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/43",
   "test": {
    "group": "aitip-hook-reel",
    "variable": "hook_type",
