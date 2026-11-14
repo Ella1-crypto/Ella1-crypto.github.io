@@ -61,14 +61,14 @@
       <a id="dlVideo" class="btn" href="#">영상 (MP4)</a>
       <a id="dlAudio" class="btn ghost" href="#">소리만 (MP3)</a>
     </div>
-    <p class="hint">버튼을 누르면 PC에서 내려받은 뒤 전달합니다. 긴 영상은 시작까지 시간이 걸려요.</p>
+    <p class="hint">버튼을 누르면 서버가 내려받은 뒤 전달합니다. 긴 영상은 시작까지 시간이 걸려요.</p>
   </div>
 
   <details class="card" id="settings">
     <summary>서버 설정</summary>
     <div class="field">
-      <label for="server">서버 주소 (Cloudflare Tunnel)</label>
-      <input id="server" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off">
+      <label for="server">서버 주소 (Oracle 서버, 없으면 PC 주소)</label>
+      <input id="server" type="url" placeholder="https://1-2-3-4.sslip.io" autocomplete="off">
     </div>
     <div class="field">
       <label for="token">비밀번호 (ACCESS_TOKEN)</label>
@@ -90,17 +90,21 @@
   if (!store.get('server') || !store.get('token')) $('settings').open = true;
 
   const base = () => $('server').value.trim().replace(/\/+$/, '');
+  const token = () => $('token').value.trim();
   const say = (el, text, err) => { el.textContent = text; el.classList.toggle('err', !!err); };
+  const auth = () => ({ Authorization: 'Bearer ' + token() });
 
   $('save').onclick = async () => {
     store.set('server', base());
-    store.set('token', $('token').value.trim());
+    store.set('token', token());
     say($('smsg'), '확인 중…');
     try {
       const r = await fetch(base() + '/api/health');
-      say($('smsg'), r.ok ? '연결됐어요.' : '서버가 응답하지 않아요.', !r.ok);
-      if (r.ok) setTimeout(() => { $('settings').open = false; }, 800);
-    } catch { say($('smsg'), 'PC 서버나 터널이 꺼져 있어요.', true); }
+      if (!r.ok) return say($('smsg'), '서버가 응답하지 않아요.', true);
+      const pc = await pcServer();
+      say($('smsg'), pc ? '연결됐어요. 막히면 PC 서버로 자동 전환해요.' : '연결됐어요.');
+      setTimeout(() => { $('settings').open = false; }, 1200);
+    } catch { say($('smsg'), '서버가 꺼져 있어요.', true); }
   };
 
   $('paste').onclick = async () => {
@@ -110,32 +114,61 @@
 
   const fmt = s => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '';
 
+  // Oracle 서버가 알고 있는 PC 서버(trycloudflare) 주소
+  async function pcServer() {
+    try {
+      const r = await fetch(base() + '/api/fallback', { headers: auth() });
+      const j = await r.json();
+      return r.ok && j.url && j.url !== base() ? j.url : '';
+    } catch { return ''; }
+  }
+
+  async function askInfo(server, url) {
+    try {
+      const r = await fetch(server + '/api/info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...auth() },
+        body: JSON.stringify({ url }),
+      });
+      const j = await r.json().catch(() => ({}));
+      return r.ok ? { ok: true, info: j } : { ok: false, error: j.error || '실패했어요.', code: j.code || (r.status === 429 ? 'busy' : 'failed') };
+    } catch { return { ok: false, error: '서버가 꺼져 있어요.', code: 'offline' }; }
+  }
+
   async function fetchInfo() {
     const url = $('url').value.trim();
     if (!url) return $('url').focus();
-    if (!base() || !$('token').value.trim()) { $('settings').open = true; return say($('msg'), '먼저 서버 설정을 해 주세요.', true); }
+    if (!base() || !token()) { $('settings').open = true; return say($('msg'), '먼저 서버 설정을 해 주세요.', true); }
     $('go').disabled = true;
     $('result').classList.remove('show');
     say($('msg'), '정보를 가져오는 중…');
     try {
-      const r = await fetch(base() + '/api/info', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + $('token').value.trim() },
-        body: JSON.stringify({ url }),
-      });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error || '실패했어요.');
+      let server = base();
+      let res = await askInfo(server, url);
+      // 막혔거나(봇 확인·로그인) 바쁘거나 꺼져 있으면 PC 서버로 다시 시도
+      if (!res.ok && ['blocked', 'busy', 'offline', 'failed'].includes(res.code)) {
+        const pc = await pcServer();
+        if (pc) {
+          say($('msg'), '기본 서버가 막혀서 PC 서버로 다시 시도하는 중…');
+          const second = await askInfo(pc, url);
+          if (second.ok) { server = pc; res = second; }
+          else if (second.code === 'offline') res.error += ' (PC 서버도 꺼져 있어요)';
+          else res = second;
+        }
+      }
+      if (!res.ok) throw new Error(res.error);
+      const j = res.info;
       $('title').textContent = j.title;
-      $('meta').textContent = [j.site, j.uploader, fmt(j.duration)].filter(Boolean).join(' · ');
+      $('meta').textContent = [j.site, j.uploader, fmt(j.duration), server === base() ? '' : 'PC 서버'].filter(Boolean).join(' · ');
       $('thumb').src = j.thumbnail || '';
       $('thumb').style.display = j.thumbnail ? '' : 'none';
-      const q = kind => `${base()}/api/download?${new URLSearchParams({ url, kind, token: $('token').value.trim() })}`;
+      const q = kind => `${server}/api/download?${new URLSearchParams({ url, kind, token: token() })}`;
       $('dlVideo').href = q('video');
       $('dlAudio').href = q('audio');
       $('result').classList.add('show');
       say($('msg'), '');
     } catch (e) {
-      say($('msg'), e.message === 'Failed to fetch' ? 'PC 서버나 터널이 꺼져 있어요.' : e.message, true);
+      say($('msg'), e.message, true);
     } finally { $('go').disabled = false; }
   }
   $('go').onclick = fetchInfo;

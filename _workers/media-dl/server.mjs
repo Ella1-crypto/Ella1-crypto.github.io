@@ -13,14 +13,17 @@
  *   COOKIES_BROWSER   예: firefox, chrome, edge — 로그인이 필요한 Instagram 게시물용
  *   COOKIES_FILE      cookies.txt 경로 (COOKIES_BROWSER 대신)
  *   ALLOWED_ORIGINS   쉼표 구분. 기본 https://ella1-crypto.github.io,http://localhost:5178
+ *   YTDLP_EXTRA       yt-dlp에 덧붙일 옵션 (예: --js-runtimes node)
+ *   FALLBACK_FILE     PC 서버 주소 보관 파일. 기본 ./fallback.json
  *
  * API
  *   POST /api/info      {url}                → 제목·썸네일·길이
+ *   GET|POST /api/fallback  {url}     → PC 서버(trycloudflare) 주소 조회·등록 — Oracle 서버가 PC 주소를 알려 주는 용도
  *   GET  /api/download?url=&kind=video|audio&token=  → 파일 (다운로드 링크는 헤더를 못 넣어서 token을 쿼리로 받음)
  */
 import http from 'node:http';
 import { spawn } from 'node:child_process';
-import { mkdtemp, readdir, rm, stat } from 'node:fs/promises';
+import { mkdtemp, readdir, rm, stat, readFile, writeFile } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -34,6 +37,8 @@ const YTDLP = process.env.YTDLP || 'yt-dlp';
 const ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://ella1-crypto.github.io,http://localhost:5178')
   .split(',').map(s => s.trim()).filter(Boolean);
 const MAX_JOBS = 2;
+// PC 서버가 켜질 때 알려 주는 자기 trycloudflare 주소를 보관한다 (Oracle 서버 쪽에서 쓰임)
+const FALLBACK_FILE = process.env.FALLBACK_FILE || path.join(path.dirname(fileURLToPath(import.meta.url)), 'fallback.json');
 const JOB_TIMEOUT_MS = 10 * 60 * 1000;
 
 if (TOKEN.length < 16) {
@@ -60,6 +65,9 @@ export function checkUrl(raw) {
   return u.toString();
 }
 
+// 예: YTDLP_EXTRA="--js-runtimes node" (YouTube 보안 문제 풀이에 Node를 쓰게 함)
+const EXTRA = (process.env.YTDLP_EXTRA || '').split(/\s+/).filter(Boolean);
+
 function cookieArgs() {
   if (process.env.COOKIES_FILE) return ['--cookies', process.env.COOKIES_FILE];
   if (process.env.COOKIES_BROWSER) return ['--cookies-from-browser', process.env.COOKIES_BROWSER];
@@ -74,9 +82,19 @@ function tokenOk(given) {
 
 let running = 0;
 
+let fallback = { url: '', at: 0 };
+readFile(FALLBACK_FILE, 'utf8').then(t => { fallback = JSON.parse(t); }).catch(() => {});
+
+export function checkFallbackUrl(raw) {
+  let u;
+  try { u = new URL(String(raw || '').trim()); } catch { return null; }
+  if (u.protocol !== 'https:' || u.username || u.password || u.port || u.pathname !== '/' || u.search) return null;
+  return /^[a-z0-9-]+\.trycloudflare\.com$/.test(u.hostname) ? u.origin : null;
+}
+
 function runYtdlp(args, { cwd } = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(YTDLP, [...cookieArgs(), '--no-playlist', '--no-warnings', ...args], { cwd, windowsHide: true });
+    const child = spawn(YTDLP, [...EXTRA, ...cookieArgs(), '--no-playlist', '--no-warnings', ...args], { cwd, windowsHide: true });
     let out = '', err = '';
     const timer = setTimeout(() => { child.kill(); reject(new Error('시간 초과')); }, JOB_TIMEOUT_MS);
     child.stdout.on('data', d => { if (out.length < 20e6) out += d; });
@@ -85,7 +103,7 @@ function runYtdlp(args, { cwd } = {}) {
     child.on('close', code => {
       clearTimeout(timer);
       if (code === 0) resolve(out);
-      else reject(new Error(friendlyError(err)));
+      else reject(friendlyError(err));
     });
   });
 }
@@ -93,11 +111,13 @@ function runYtdlp(args, { cwd } = {}) {
 function friendlyError(stderr) {
   const s = stderr || '';
   console.error('[yt-dlp]', s.trim().split('\n').slice(-3).join(' | '));
-  if (/login|sign in|cookies|private|rate-limit/i.test(s)) return '로그인이 필요한 게시물이거나 사이트가 막았습니다. COOKIES_BROWSER 설정을 확인하세요.';
-  if (/Unsupported URL/i.test(s)) return '지원하지 않는 주소입니다.';
-  if (/No video formats|There is no video/i.test(s)) return '영상이 없는 게시물입니다(사진만 있는 게시물은 아직 지원하지 않음).';
-  if (/unavailable|not available|removed/i.test(s)) return '삭제됐거나 볼 수 없는 영상입니다.';
-  return '가져오지 못했습니다. yt-dlp를 최신으로 업데이트해 보세요(yt-dlp -U).';
+  const fail = (msg, code = 'failed') => Object.assign(new Error(msg), { code });
+  // blocked: 이 서버 IP·쿠키로는 안 됨 → 페이지가 PC 서버로 다시 시도한다
+  if (/login|sign in|not a bot|cookies|private|rate.?limit|HTTP Error (403|429)/i.test(s)) return fail('로그인이 필요한 게시물이거나 사이트가 막았습니다. 쿠키 설정을 확인하세요.', 'blocked');
+  if (/Unsupported URL/i.test(s)) return fail('지원하지 않는 주소입니다.', 'unsupported');
+  if (/No video formats|There is no video/i.test(s)) return fail('영상이 없는 게시물입니다(사진만 있는 게시물은 아직 지원하지 않음).', 'novideo');
+  if (/unavailable|not available|removed/i.test(s)) return fail('삭제됐거나 볼 수 없는 영상입니다.', 'gone');
+  return fail('가져오지 못했습니다. yt-dlp를 최신으로 업데이트해 보세요(yt-dlp -U).');
 }
 
 async function info(url) {
@@ -184,6 +204,18 @@ export const server = http.createServer(async (req, res) => {
     const bearer = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
     if (!tokenOk(bearer || u.searchParams.get('token'))) return json(req, res, 401, { error: '비밀번호가 틀렸습니다.' });
 
+    if (u.pathname === '/api/fallback' && req.method === 'GET') return json(req, res, 200, fallback);
+    if (u.pathname === '/api/fallback' && req.method === 'POST') {
+      let body;
+      try { body = JSON.parse(await readBody(req)); } catch { return json(req, res, 400, { error: '요청 형식 오류' }); }
+      const url = checkFallbackUrl(body.url);
+      if (!url) return json(req, res, 400, { error: 'trycloudflare 주소만 됩니다.' });
+      fallback = { url, at: Date.now() };
+      writeFile(FALLBACK_FILE, JSON.stringify(fallback)).catch(e => console.error('fallback 저장 실패', e.message));
+      console.log('PC 서버 주소 등록:', url);
+      return json(req, res, 200, fallback);
+    }
+
     if (u.pathname === '/api/info' && req.method === 'POST') {
       let body;
       try { body = JSON.parse(await readBody(req)); } catch { return json(req, res, 400, { error: '요청 형식 오류' }); }
@@ -207,7 +239,7 @@ export const server = http.createServer(async (req, res) => {
 
     json(req, res, 404, { error: 'not found' });
   } catch (err) {
-    if (!res.headersSent) json(req, res, 502, { error: err.message || '서버 오류' });
+    if (!res.headersSent) json(req, res, 502, { error: err.message || '서버 오류', code: err.code || 'failed' });
     else res.destroy();
   }
 });

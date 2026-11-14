@@ -9,9 +9,8 @@ if not exist settings.bat (
 call settings.bat
 echo yt-dlp 업데이트 확인 중...
 yt-dlp -U
-start "media-dl 서버" cmd /k node server.mjs
 echo.
-echo 아래에 나오는 https://....trycloudflare.com 주소를 다운로더 페이지 [서버 설정]에 넣으세요.
-echo 이 창을 닫으면 터널이 꺼집니다.
+echo 이 창을 닫으면 PC 서버가 꺼집니다. (최소화해 두면 됩니다)
 echo.
-cloudflared tunnel --url http://localhost:8790
+node launcher.mjs
+pause
