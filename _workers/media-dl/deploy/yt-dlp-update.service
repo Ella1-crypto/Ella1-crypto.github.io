@@ -1,0 +1,6 @@
+[Unit]
+Description=yt-dlp 최신 버전으로 업데이트
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/yt-dlp -U

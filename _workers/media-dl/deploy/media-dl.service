@@ -1,0 +1,22 @@
+[Unit]
+Description=미디어 다운로더 (yt-dlp 중계)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=mediadl
+WorkingDirectory=/opt/media-dl
+EnvironmentFile=/etc/media-dl.env
+Environment=FALLBACK_FILE=/var/lib/media-dl/fallback.json
+Environment=XDG_CACHE_HOME=/var/lib/media-dl/cache
+ExecStart=/usr/bin/node server.mjs
+Restart=always
+RestartSec=3
+StateDirectory=media-dl
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
