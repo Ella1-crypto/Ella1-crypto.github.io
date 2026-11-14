@@ -4,8 +4,8 @@ YouTube·Instagram·Threads·TikTok 주소를 넣으면 영상(MP4)이나 소리
 
 ```
 폰/PC 브라우저 (ella1-crypto.github.io/downloader/)
-  → https://xxxx.trycloudflare.com   (Cloudflare Tunnel, 무료·가입 불필요)
-  → 내 PC 127.0.0.1:8790             (node server.mjs)
+  ① https://<IP>.sslip.io            Oracle 무료 서버 (24시간, 평소)
+  ② https://xxxx.trycloudflare.com   내 PC (①이 막히면 자동 전환)
   → yt-dlp → YouTube / Instagram …
 ```
 
