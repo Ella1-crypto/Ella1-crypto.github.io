@@ -1755,7 +1755,7 @@
   "product": "chiikawa-clinic-popup-hyundai",
   "expires_at": "2026-11-15T23:59",
   "publish_at": "2026-11-15T10:40+09:00",
-  "status": "예약",
+  "status": "올리는 중",
   "approved_by": {
    "via": "chat",
    "note": "사용자 채팅 '응 비어있는 시간' — 초안 승인 후 빈 시각 지정 위임",
