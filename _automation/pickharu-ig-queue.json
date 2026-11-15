@@ -2651,11 +2651,16 @@
    "assets/pickharu/ig/ig-ff-coat-20261115/07.jpg",
    "assets/pickharu/ig/ig-ff-coat-20261115/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ff-coat-20261115/story.jpg",
   "comment": "출처: 파페치 상품 페이지(11월 14일 확인) — 가격은 사이즈마다 파는 가게가 달라 바뀔 수 있어요. 결제 전에 그 사이즈 값을 다시 봐 주세요.\n사진: 상품 사진 FARFETCH · 코디 사진 핀터레스트(각 원작자)",
-  "note": "2026-11-14 사용자 승인(통합 센터). 파페치 제휴(링크프라이스). 카드 안엔 [광고] 안 넣고 캡션 맨 끝에만. 상품 링크는 캡션에 안 넣고 블로그로 보냄(파페치만 예외). 짝: dailyfit 스레드 ff-coat-20261115(11/15 15:30), 블로그 20261114_farfetch-coat-styling-tips."
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18136379146777255",
+  "published_at": "2026-11-15T20:31+09:00",
+  "comment_id": "18132873625764844",
+  "story_id": "18155340103549707",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/47"
  },
  {
   "id": "rl-ff-coat-20261115",
