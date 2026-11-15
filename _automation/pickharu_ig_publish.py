@@ -115,6 +115,12 @@ def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
         return f"사진은 {IMAGES_MAX}장까지(지금 {len(images)}장)"
     # story_image: 스토리용 9:16(1080x1920) 판. 없으면 첫 장을 그대로 스토리에(2026-10-30 사용자: 사이즈가 안 맞음)
     for image in images + ([item["story_image"]] if item.get("story_image") else []):
+        # 2026-11-15 사용자 "카드에 영상 들어간 거": 캐러셀 칸에 mp4(영상 칸)도 넣을 수 있다. 스토리는 사진만.
+        if isinstance(image, str) and VIDEO_RE.fullmatch(image) and image != item.get("story_image") and len(images) > 1:
+            problem = video_problem(image, root)
+            if problem:
+                return problem
+            continue
         if not isinstance(image, str) or not IMAGE_RE.fullmatch(image):
             return f"사진 경로는 assets/pickharu/ig/<글 id>/이름.jpg 여야 함: {image}"
         path = root / image
@@ -212,9 +218,14 @@ def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
     else:
         children = []
         for image in images:
-            child = http("POST", media, {"image_url": SITE_URL + image, "is_carousel_item": "true",
-                                         "access_token": token})["id"]
-            wait_until_ready(child, token, http, sleep)
+            if image.endswith(".mp4"):  # 영상 칸(2026-11-15)
+                child = http("POST", media, {"media_type": "VIDEO", "video_url": SITE_URL + image,
+                                             "is_carousel_item": "true", "access_token": token})["id"]
+                wait_until_ready(child, token, http, sleep, VIDEO_POLL_TRIES)
+            else:
+                child = http("POST", media, {"image_url": SITE_URL + image, "is_carousel_item": "true",
+                                             "access_token": token})["id"]
+                wait_until_ready(child, token, http, sleep)
             children.append(child)
         container = http("POST", media, {"media_type": "CAROUSEL", "children": ",".join(children),
                                          "caption": item["caption"], "access_token": token})["id"]

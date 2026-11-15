@@ -92,6 +92,16 @@ class ProblemTest(unittest.TestCase):
     def test_valid_carousel_passes(self):
         self.assertEqual(ig.problem_of(item(make_site(self.root)), self.root), "")
 
+    def test_carousel_may_hold_a_video_slide(self):
+        images = make_site(self.root)
+        video = make_reel(self.root, "ig-20261031-ganadi").replace("reel.mp4", "reel.mp4")
+        self.assertEqual(ig.problem_of(item([video] + images[1:]), self.root), "")
+
+    def test_story_image_cannot_be_video(self):
+        images = make_site(self.root)
+        video = make_reel(self.root, "ig-20261031-ganadi")
+        self.assertNotEqual(ig.problem_of(item(images, story_image=video), self.root), "")
+
     def test_png_is_rejected_because_instagram_takes_jpeg_only(self):
         self.assertIn("jpg", ig.problem_of(item(["assets/pickharu/ig/x/01.png"]), self.root))
 
@@ -140,6 +150,16 @@ class PublishTest(unittest.TestCase):
         self.assertEqual(media[0][2]["image_url"], ig.SITE_URL + "a/01.jpg")
         self.assertEqual(media[-1][2]["media_type"], "CAROUSEL")
         self.assertIn("가나디", media[-1][2]["caption"])
+
+    def test_carousel_video_slide_is_sent_as_video_child(self):
+        http = fake_http()
+        ig.publish(item(["a/01.mp4", "a/02.jpg"]), "1784", "tok", http, sleep=lambda s: None)
+        media = [c for c in http.calls if c[1].endswith("/1784/media")]
+        self.assertEqual(media[0][2]["media_type"], "VIDEO")
+        self.assertEqual(media[0][2]["video_url"], ig.SITE_URL + "a/01.mp4")
+        self.assertEqual(media[0][2]["is_carousel_item"], "true")
+        self.assertNotIn("media_type", media[1][2])
+        self.assertEqual(media[-1][2]["media_type"], "CAROUSEL")
 
     def test_single_image_posts_without_carousel(self):
         http = fake_http()
