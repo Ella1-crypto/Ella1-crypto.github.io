@@ -2692,10 +2692,16 @@
    "assets/pickharu/ig/ig-ff-props-20261116/07.jpg",
    "assets/pickharu/ig/ig-ff-props-20261116/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ff-props-20261116/story.jpg",
-  "comment": "출처: 파페치 상품 페이지(11월 14일 확인) — 가격은 사이즈마다 파는 가게가 달라 바뀔 수 있어요.\n코디 사진: 핀터레스트(각 원작자) · 상품 사진: FARFETCH"
+  "comment": "출처: 파페치 상품 페이지(11월 14일 확인) — 가격은 사이즈마다 파는 가게가 달라 바뀔 수 있어요.\n코디 사진: 핀터레스트(각 원작자) · 상품 사진: FARFETCH",
+  "post_id": "18183360463432756",
+  "published_at": "2026-11-16T20:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18655454131058283",
+  "story_id": "18160803670493664",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/51"
  },
  {
   "id": "rl-ff-props-20261116",
