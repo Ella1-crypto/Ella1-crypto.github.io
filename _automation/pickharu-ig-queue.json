@@ -2771,11 +2771,16 @@
    "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet-v5/04.jpg",
    "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet-v5/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-ad-inpock-002-kitty-star-magnet-v5/story.jpg",
   "comment": "출처: 쿠팡 상품 페이지(헬로키티 냉장고 자석 클래식 인테리어 마그넷 별 미니소 6종 랜덤, 상품번호 9699728596) 11/10 확인 — 가격·배송 등 상세는 상품 페이지에서 확인해 주세요.\n사진·영상: 쿠팡 상품 이미지 + 핀터레스트 원본 장면을 바탕으로 AI 생성·합성(1장 손 장면), 11/15",
-  "note": "2026-11-15 23:1x 사용자 '카드 OK'(통합 센터). C 민트 점선 박스 5장, 1장은 영상 칸(R2 v5 손가락 톡 7.8초, 무음 트랙). 릴스 rl-ad-inpock-002-kitty-star-magnet-v5(12:40)와 세트. 카드 화면 안 크레딧 줄 없음(출처는 첫 댓글). 캐러셀 영상 칸은 발행기 11/15 패치로 지원."
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18016457879763410",
+  "published_at": "2026-11-16T12:31+09:00",
+  "comment_id": "18202288327380342",
+  "story_id": "18458834941120060",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/49"
  },
  {
   "id": "rl-ad-inpock-002-kitty-star-magnet-v5",
