@@ -1,0 +1,1113 @@
+{
+ "account": "ig-pickharu",
+ "handle": "pick.haru.daily",
+ "collected_at": "2026-11-16T09:28+09:00",
+ "window_days": 45,
+ "profile": {
+  "followers": 6,
+  "media_count": 30
+ },
+ "posts": {
+  "ig-20261030-ganadi": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-30T23:26+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261030-kitty7": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-30T22:46+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261030-sale": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-30T23:16+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-xmas": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T07:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-bf-tax": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T08:00+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "st-20261030-kitty7": {
+   "media_id": null,
+   "format": "image",
+   "published_at": "2026-10-30T23:36+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "st-20261030-sale": {
+   "media_id": null,
+   "format": "image",
+   "published_at": "2026-10-30T23:38+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "st-20261030-ganadi": {
+   "media_id": null,
+   "format": "image",
+   "published_at": "2026-10-30T23:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-pepero2": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T19:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-coat": {
+   "media_id": "17912067891305593",
+   "format": "carousel",
+   "published_at": "2026-10-31T10:31:00+0000",
+   "permalink": "https://www.instagram.com/p/DfJ8nQGEYOe/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-20261101-coat-long": {
+   "media_id": "18128938510879524",
+   "format": "carousel",
+   "published_at": "2026-11-01T00:24:06+0000",
+   "permalink": "https://www.instagram.com/p/DfLb99RF-Q0/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-20261031-oy-bf": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T08:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-oy-rec2": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T12:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261031-oy-tips2": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-10-31T21:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-20261101-oy-brush": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-01T15:44+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261030-kitty7": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T18:46+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261030-sale": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261030-ganadi": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:03+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-xmas": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:11+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-bf-tax": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:21+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-oy-bf": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:32+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-oy-rec2": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T19:41+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-pepero2": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-10-31T21:00+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261031-oy-tips2": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T19:00+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261101-coat-brown": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T17:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261101-bf-size-b": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T18:21+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-20261101-oy-brush": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T19:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tintkeep-oy-haul-tint-mint": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-01T20:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tint-chiikawa-shop-tint-lilac": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-01T21:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tint-coat-brown-tint-cream": {
+   "media_id": "18135716686708399",
+   "format": "carousel",
+   "published_at": "2026-11-01T22:45:34+0000",
+   "permalink": "https://www.instagram.com/p/DfN1fFMm4q-/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-tint-week1-tint-gray": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-02T10:15+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tint-bf-size-tint-cream": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-02T11:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tint-daiso-honey-tint-butter": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-02T12:00+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-tint-oy-honey2-tint-mint": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-02T18:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tintkeep-oy-haul-tint-mint": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T20:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-chiikawa-shop-tint-lilac": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-01T21:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-coat-long-tint-cream": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T10:05+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-week1-tint-gray": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T11:20+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-hometown2-tint-gray": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T13:10+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-coat-tint-cream": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T12:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-daiso-honey-tint-butter": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T12:10+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-tint-oy-honey2-tint-mint": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-02T18:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-clip-jt-20261102-tint-gray": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-03T08:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-clip-jt-20261102-tint-gray": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-03T08:10+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-clip-jt-20261103pm-tint-gray": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-04T20:30+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-clip-jt-20261103pm-tint-gray": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-04T20:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-clip-jt-20261106-tint-gray": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-06T08:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-skims-collage-1106-final": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-06T16:42+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-clip-jt-20261107-tint-gray": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-07T08:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-clip-jt-20261107-tint-gray": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-07T08:10+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-yt06-clean-20261109": {
+   "media_id": "18128577109882803",
+   "format": "carousel",
+   "published_at": "2026-11-08T23:01:25+0000",
+   "permalink": "https://www.instagram.com/p/Dff439NE7s3/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt06-clean-20261109": {
+   "media_id": "18132997561842500",
+   "format": "reel",
+   "published_at": "2026-11-09T00:58:39+0000",
+   "permalink": "https://www.instagram.com/reel/DfgGM-eSiV0/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-clip-jt-20261109-tint-gray": {
+   "media_id": "18128271988849705",
+   "format": "carousel",
+   "published_at": "2026-11-09T23:01:08+0000",
+   "permalink": "https://www.instagram.com/p/Dfido0sG6FI/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-clip-jt-20261109-tint-gray": {
+   "media_id": "18091863812677861",
+   "format": "reel",
+   "published_at": "2026-11-10T00:52:47+0000",
+   "permalink": "https://www.instagram.com/reel/DfiqWhiyrEc/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-049-hand-warmer": {
+   "media_id": "18066442421792170",
+   "format": "carousel",
+   "published_at": "2026-11-09T11:30:45+0000",
+   "permalink": "https://www.instagram.com/p/DfhOoN8m_gg/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-049-hand-warmer": {
+   "media_id": "18121212875067085",
+   "format": "reel",
+   "published_at": "2026-11-09T11:44:49+0000",
+   "permalink": "https://www.instagram.com/reel/DfhQD7MShRP/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-050-chiikawa-magnet-keyring": {
+   "media_id": "18082008167720766",
+   "format": "carousel",
+   "published_at": "2026-11-10T03:30:33+0000",
+   "permalink": "https://www.instagram.com/p/Dfi8eAFGi9G/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-050-chiikawa-magnet-keyring": {
+   "media_id": "18135210880750757",
+   "format": "reel",
+   "published_at": "2026-11-10T04:05:25+0000",
+   "permalink": "https://www.instagram.com/reel/DfjAaTDy7L_/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-051-kitty-seatbelt-cover": {
+   "media_id": "18030119612916747",
+   "format": "carousel",
+   "published_at": "2026-11-10T11:30:50+0000",
+   "permalink": "https://www.instagram.com/p/DfjzbKnlxZb/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-051-kitty-seatbelt-cover": {
+   "media_id": "17998261068022426",
+   "format": "reel",
+   "published_at": "2026-11-10T11:42:04+0000",
+   "permalink": "https://www.instagram.com/reel/Dfj0rjwyf-n/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-057-sanrio-tree-orgel": {
+   "media_id": "18220570258344878",
+   "format": "carousel",
+   "published_at": "2026-11-12T03:31:04+0000",
+   "permalink": "https://www.instagram.com/p/DfoGGyBjb44/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-057-sanrio-tree-orgel": {
+   "media_id": "18474670789190690",
+   "format": "reel",
+   "published_at": "2026-11-12T04:26:04+0000",
+   "permalink": "https://www.instagram.com/reel/DfoMVaey4YK/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-aitip-01-chatgpt-work": {
+   "media_id": "17946138243365627",
+   "format": "carousel",
+   "published_at": "2026-11-11T09:30:48+0000",
+   "permalink": "https://www.instagram.com/p/DfmKfa2mwiD/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-aitip-02-generative-ai-manual": {
+   "media_id": "17948021961393513",
+   "format": "carousel",
+   "published_at": "2026-11-12T09:31:04+0000",
+   "permalink": "https://www.instagram.com/p/DfovTf9lNi9/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-aitip-03-chatgpt-masterclass": {
+   "media_id": "18116752781125638",
+   "format": "carousel",
+   "published_at": "2026-11-13T09:31:13+0000",
+   "permalink": "https://www.instagram.com/p/DfrUIe0l2uh/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-aitip-04-best-generative-ai": {
+   "media_id": "18000070313830160",
+   "format": "carousel",
+   "published_at": "2026-11-14T09:31:12+0000",
+   "permalink": "https://www.instagram.com/p/Dft46Z0lz2P/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt01-clean-repost": {
+   "media_id": "18083514263424827",
+   "format": "carousel",
+   "published_at": "2026-11-11T06:31:26+0000",
+   "permalink": "https://www.instagram.com/p/Dfl19IhDdHK/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt02-clean-repost": {
+   "media_id": "18122541707076279",
+   "format": "carousel",
+   "published_at": "2026-11-12T06:31:13+0000",
+   "permalink": "https://www.instagram.com/p/DfoaugjlJBO/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt03-clean": {
+   "media_id": "18067439093518815",
+   "format": "carousel",
+   "published_at": "2026-11-13T06:31:12+0000",
+   "permalink": "https://www.instagram.com/p/Dfq_hMJF2sD/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt04-clean-repost": {
+   "media_id": "18120482564047196",
+   "format": "carousel",
+   "published_at": "2026-11-14T06:31:14+0000",
+   "permalink": "https://www.instagram.com/p/DftkUNtDjkN/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt05-clean-repost": {
+   "media_id": "18127895563993941",
+   "format": "carousel",
+   "published_at": "2026-11-15T06:30:56+0000",
+   "permalink": "https://www.instagram.com/p/DfwJFkaDmcH/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt01-clean-repost": {
+   "media_id": "18201776986379857",
+   "format": "reel",
+   "published_at": "2026-11-11T09:54:35+0000",
+   "permalink": "https://www.instagram.com/reel/DfmNLXsiHz6/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt02-clean-repost": {
+   "media_id": "18120936482318759",
+   "format": "reel",
+   "published_at": "2026-11-12T09:56:54+0000",
+   "permalink": "https://www.instagram.com/reel/DfoyOSFCLXq/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt03-clean": {
+   "media_id": "18110581181526937",
+   "format": "reel",
+   "published_at": "2026-11-13T10:22:04+0000",
+   "permalink": "https://www.instagram.com/reel/DfrZ6CGyPR7/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt04-clean-repost": {
+   "media_id": "18202117945391204",
+   "format": "reel",
+   "published_at": "2026-11-14T06:52:40+0000",
+   "permalink": "https://www.instagram.com/reel/DftmuGoilAD/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt05-clean-repost": {
+   "media_id": "18128616142854531",
+   "format": "reel",
+   "published_at": "2026-11-15T08:17:04+0000",
+   "permalink": "https://www.instagram.com/reel/DfwVL5mSkZ_/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-aitip-01-chatgpt-work": {
+   "media_id": "17945234544384236",
+   "format": "reel",
+   "published_at": "2026-11-11T09:57:28+0000",
+   "permalink": "https://www.instagram.com/reel/DfmNfHtijAq/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-aitip-02-generative-ai-manual": {
+   "media_id": "18103738406356807",
+   "format": "reel",
+   "published_at": "2026-11-12T09:58:55+0000",
+   "permalink": "https://www.instagram.com/reel/DfoycHziKL2/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-aitip-03-chatgpt-masterclass": {
+   "media_id": "18141168832631466",
+   "format": "reel",
+   "published_at": "2026-11-13T10:24:16+0000",
+   "permalink": "https://www.instagram.com/reel/DfraKRQSoqg/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-aitip-04-best-generative-ai": {
+   "media_id": "17916225666512933",
+   "format": "reel",
+   "published_at": "2026-11-14T10:39:12+0000",
+   "permalink": "https://www.instagram.com/reel/DfuAnIByJmZ/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-redesign-sale-calendar-1": {
+   "media_id": "18090139292282055",
+   "format": "carousel",
+   "published_at": "2026-11-10T07:30:44+0000",
+   "permalink": "https://www.instagram.com/p/DfjX9QxiZs3/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-redesign-oy-honey-3": {
+   "media_id": "18119926492807200",
+   "format": "carousel",
+   "published_at": "2026-11-11T07:31:08+0000",
+   "permalink": "https://www.instagram.com/p/Dfl8yXmDXkE/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-redesign-daiso-honey-2": {
+   "media_id": "18172406503467840",
+   "format": "carousel",
+   "published_at": "2026-11-12T07:31:00+0000",
+   "permalink": "https://www.instagram.com/p/DfohkzFoBbz/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt08-clean-20261111": {
+   "media_id": "17954928192342042",
+   "format": "carousel",
+   "published_at": "2026-11-10T23:01:06+0000",
+   "permalink": "https://www.instagram.com/p/DflCbc5mNfK/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt08-clean-20261111": {
+   "media_id": "18108153383204753",
+   "format": "reel",
+   "published_at": "2026-11-11T00:49:33+0000",
+   "permalink": "https://www.instagram.com/reel/DflOnwuShtU/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-001-kitty-apple-lamp": {
+   "media_id": "18077503196472260",
+   "format": "carousel",
+   "published_at": "2026-11-11T03:30:49+0000",
+   "permalink": "https://www.instagram.com/p/DflhS5HFxAp/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-001-kitty-apple-lamp": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-11T12:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-005-kitty-chair-cushion": {
+   "media_id": "18256194436312187",
+   "format": "carousel",
+   "published_at": "2026-11-11T11:30:42+0000",
+   "permalink": "https://www.instagram.com/p/DfmYNm3m1uR/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-005-kitty-chair-cushion": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-11T20:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-003-kitty-toast-handwarmer": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-13T12:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-ad-inpock-003-kitty-toast-handwarmer": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-13T12:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-004-kitty-3d-glass": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-13T20:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-redesign-sale-calendar-1": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-10T16:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-redesign-oy-honey-3": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-11T16:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-redesign-daiso-honey-2": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-12T16:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-006-kitty-wedding-figure": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-14T12:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-ad-inpock-006-kitty-wedding-figure": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-14T12:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-007-nars-liquid-blush": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-14T20:31+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "rl-ad-inpock-007-nars-liquid-blush": {
+   "media_id": null,
+   "format": "reel",
+   "published_at": "2026-11-14T20:40+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-aitip-urgent-higgsfield": {
+   "media_id": "18120507355991204",
+   "format": "carousel",
+   "published_at": "2026-11-10T22:00:54+0000",
+   "permalink": "https://www.instagram.com/p/Dfk7hyCD_t6/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-aitip-urgent-higgsfield": {
+   "media_id": "17956639200295775",
+   "format": "reel",
+   "published_at": "2026-11-11T00:42:06+0000",
+   "permalink": "https://www.instagram.com/reel/DflN73jyAbD/",
+   "metrics": {
+    "likes": 1,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ad-inpock-060-dareu-keyboard": {
+   "media_id": "18128827634488625",
+   "format": "reel",
+   "published_at": "2026-11-12T11:30:31+0000",
+   "permalink": "https://www.instagram.com/reel/Dfo88u_DOau/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt09-clean-20261113": {
+   "media_id": "18159149623469783",
+   "format": "carousel",
+   "published_at": "2026-11-12T23:01:22+0000",
+   "permalink": "https://www.instagram.com/p/DfqMCdwl810/",
+   "metrics": {
+    "likes": 1,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt09-clean-20261113": {
+   "media_id": "17913167991310052",
+   "format": "reel",
+   "published_at": "2026-11-13T00:52:06+0000",
+   "permalink": "https://www.instagram.com/reel/DfqYp_wSKVl/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-cj-kleague-sanrio-20261112": {
+   "media_id": "18138811774731863",
+   "format": "carousel",
+   "published_at": "2026-11-12T10:30:42+0000",
+   "permalink": "https://www.instagram.com/p/Dfo2IgalGze/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-cj-kleague-sanrio-20261112": {
+   "media_id": "17976952602169287",
+   "format": "reel",
+   "published_at": "2026-11-12T10:47:41+0000",
+   "permalink": "https://www.instagram.com/reel/Dfo3_IESrMF/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-yt10-clean-20261114": {
+   "media_id": "18140219782633821",
+   "format": "carousel",
+   "published_at": "2026-11-13T23:01:24+0000",
+   "permalink": "https://www.instagram.com/p/Dfsw1lsj4Aw/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-yt10-clean-20261114": {
+   "media_id": "17909100063597869",
+   "format": "reel",
+   "published_at": "2026-11-13T23:57:39+0000",
+   "permalink": "https://www.instagram.com/reel/Dfs3OVByssI/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ad-inpock-003-kitty-toast-handwarmer-v2": {
+   "media_id": null,
+   "format": "carousel",
+   "published_at": "2026-11-13T22:01+09:00",
+   "permalink": null,
+   "metrics": {},
+   "not_found": "인스타 미디어 목록에서 못 찾음(지웠거나 보관함, 또는 캡션이 다름)"
+  },
+  "ig-ad-inpock-004-kitty-3d-glass-v2": {
+   "media_id": "18015183803998488",
+   "format": "carousel",
+   "published_at": "2026-11-13T13:30:55+0000",
+   "permalink": "https://www.instagram.com/p/DfrvjYUFGcB/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "ig-ff-coat-20261115": {
+   "media_id": "18136379146777255",
+   "format": "carousel",
+   "published_at": "2026-11-15T11:31:20+0000",
+   "permalink": "https://www.instagram.com/p/DfwrdzyDjji/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  },
+  "rl-ff-coat-20261115": {
+   "media_id": "18107723201346760",
+   "format": "reel",
+   "published_at": "2026-11-15T11:48:28+0000",
+   "permalink": "https://www.instagram.com/reel/DfwtIgMyU_J/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   },
+   "insights_error": "HTTP 400: (#10) Application does not have permission for this action"
+  }
+ },
+ "unmatched": [
+  {
+   "media_id": "18111508634239944",
+   "format": "reel",
+   "published_at": "2026-11-12T07:11:07+0000",
+   "caption_first_line": "연말정산 9탄, 국민연금 낸 만큼 전부 소득공제예요 🧾",
+   "permalink": "https://www.instagram.com/reel/DfofOVmiM9Z/",
+   "metrics": {
+    "likes": 0,
+    "comments": 0
+   }
+  },
+  {
+   "media_id": "18351393061255535",
+   "format": "reel",
+   "published_at": "2026-11-06T11:29:21+0000",
+   "caption_first_line": "닝닝이 자주 입는 스킴스, 블프 전 30% 세일 중이에요 🛍️",
+   "permalink": "https://www.instagram.com/reel/DfZf9RvC_Wg/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   }
+  },
+  {
+   "media_id": "18142750975714439",
+   "format": "reel",
+   "published_at": "2026-11-05T14:49:31+0000",
+   "caption_first_line": "[광고] 키티 리본 한가운데, 동그라미의 정체는? 🎀",
+   "permalink": "https://www.instagram.com/reel/DfXSCqMyFNY/",
+   "metrics": {
+    "likes": 1,
+    "comments": 0
+   }
+  },
+  {
+   "media_id": "18088060406343609",
+   "format": "reel",
+   "published_at": "2026-11-04T15:22:30+0000",
+   "caption_first_line": "크리스마스 데이트, 오픈 날짜만 10곳 모았어요 🎄",
+   "permalink": "https://www.instagram.com/reel/DfUxCEMycQh/",
+   "metrics": {
+    "likes": 0,
+    "comments": 1
+   }
+  }
+ ],
+ "errors": [
+  "인사이트 권한 없음(instagram_manage_insights 필요) — like/comments만 저장: HTTP 400: (#10) Application does not have permission for this action"
+ ]
+}
