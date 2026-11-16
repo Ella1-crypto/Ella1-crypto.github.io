@@ -48,8 +48,8 @@ def missing(items: list[dict], today: date) -> list[str]:
 
 def message(gaps: list[str], today: date) -> str:
     return "\n".join([f"⚠️ heeya 연재 빈자리 ({today:%m/%d} 점검)",
-                      "PC 예약 작업이 안 돈 것 같아요(PC 잠자기·앱 꺼짐).", *gaps,
-                      "", "PC를 켜고 heeya 세션에 \"빈자리 채워줘\"라고 보내 주세요."])
+                      "맥북 예약 작업이 안 돈 것 같아요(맥 잠자기·앱 꺼짐·권한 확인 창에서 멈춤).", *gaps,
+                      "", "통합 센터에 \"빈자리 채워줘\"라고 보내 주세요."])
 
 
 def send(text: str, http=http_json) -> bool:
