@@ -151,12 +151,16 @@ def is_general(item: dict) -> bool:
 
 
 TOTAL_CAP = 4  # 2026-11-05 사용자 "발행 수를 조정": 종류(쿠팡·카카오·네이버·올영·일반·소식) 합쳐 하루 4개, 덧글 제외
+TOTAL_CAP_DAY = {date(2026, 11, 17): 5}  # 2026-11-17 사용자 "하나 더 늘려": 그날만 5개(산리오×일리고 + 쿠팡 둘 다)
 TOTAL_CAP_FROM = date(2026, 11, 8)  # 블프 올영 예약(~11/7)이 끝난 다음 날부터
 
 
 def total_cap(now: datetime) -> int | None:
     """그날의 종류 합계 상한. 적용 전이면 None."""
-    return TOTAL_CAP if now.astimezone(KST).date() >= TOTAL_CAP_FROM else None
+    day = now.astimezone(KST).date()
+    if day in TOTAL_CAP_DAY:
+        return TOTAL_CAP_DAY[day]
+    return TOTAL_CAP if day >= TOTAL_CAP_FROM else None
 
 
 GIFT_CAP = 1  # 2026-11-05 사용자 "카카오·네이버는 주 3회·하루 1개" (11/8부터, 요일은 pickharu_enqueue.ALLOWED_WEEKDAYS)
