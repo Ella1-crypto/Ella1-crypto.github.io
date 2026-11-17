@@ -2976,10 +2976,16 @@
    "assets/pickharu/ig/ig-sale-calendar-2/07.jpg",
    "assets/pickharu/ig/ig-sale-calendar-2/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-sale-calendar-2/story.jpg",
-  "comment": "출처·바로가기 (11/16 확인)\n· 29CM 이구위크 (~11/19) https://www.29cm.co.kr/content/campaign/2026/11/29-week\n· SSG닷컴 윈터 패션 쓱세일 (11/16~11/22) https://event.ssg.com/eventDetail.ssg?nevntId=1000000024729\n· 무신사 무진장 블프 (11/22 시작 예정) 기사: https://www.segyebiz.com/newsView/20261116512315\n· W컨셉 더블유위크 (~11/25) https://display.wconcept.co.kr/rn/promotion/121\n· 쿠팡 가전·디지털 블프 (~11/29) 기사: https://www.segyebiz.com/newsView/20261116512315\n· 오늘의집 집요한세일 블프 (11/16~11/30) https://events.ohou.se/promotion-pages/big-promotion\n· 지그재그 겨울 직잭팟 (11/16~12/2) https://zigzag.kr/events/ecadbd75-3b75-4ad0-b84a-edd261a729f6\n· 에이블리 에블프 (11/16~12/3) 기사: https://zdnet.co.kr/view/?no=20261116114004\n· 파페치 FW26 세일 (종료일 공지 없음) https://www.farfetch.com/kr/shopping/women/sale/all/items.aspx\n· 짐샤크 블랙프라이데이 (종료일 공지 없음) https://row.gymshark.com/pages/black-friday\n· 미국 블프 11/27·사이버먼데이 11/30: 추수감사절(11/26) 다음 날 기준\n· 유니클로 감사제·올영 12월 세일·쿠팡 블프 본행사: 11/16 기준 공식 발표 전\n날짜·혜택은 바뀔 수 있어서 결제 전에 원문에서 한 번 더 확인해 주세요"
+  "comment": "출처·바로가기 (11/16 확인)\n· 29CM 이구위크 (~11/19) https://www.29cm.co.kr/content/campaign/2026/11/29-week\n· SSG닷컴 윈터 패션 쓱세일 (11/16~11/22) https://event.ssg.com/eventDetail.ssg?nevntId=1000000024729\n· 무신사 무진장 블프 (11/22 시작 예정) 기사: https://www.segyebiz.com/newsView/20261116512315\n· W컨셉 더블유위크 (~11/25) https://display.wconcept.co.kr/rn/promotion/121\n· 쿠팡 가전·디지털 블프 (~11/29) 기사: https://www.segyebiz.com/newsView/20261116512315\n· 오늘의집 집요한세일 블프 (11/16~11/30) https://events.ohou.se/promotion-pages/big-promotion\n· 지그재그 겨울 직잭팟 (11/16~12/2) https://zigzag.kr/events/ecadbd75-3b75-4ad0-b84a-edd261a729f6\n· 에이블리 에블프 (11/16~12/3) 기사: https://zdnet.co.kr/view/?no=20261116114004\n· 파페치 FW26 세일 (종료일 공지 없음) https://www.farfetch.com/kr/shopping/women/sale/all/items.aspx\n· 짐샤크 블랙프라이데이 (종료일 공지 없음) https://row.gymshark.com/pages/black-friday\n· 미국 블프 11/27·사이버먼데이 11/30: 추수감사절(11/26) 다음 날 기준\n· 유니클로 감사제·올영 12월 세일·쿠팡 블프 본행사: 11/16 기준 공식 발표 전\n날짜·혜택은 바뀔 수 있어서 결제 전에 원문에서 한 번 더 확인해 주세요",
+  "post_id": "18214821553366562",
+  "published_at": "2026-11-17T16:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18131115754893642",
+  "story_id": "18221236801346563",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/54"
  },
  {
   "id": "ig-aitip-05p-prompt-engineering",
