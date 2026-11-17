@@ -147,7 +147,7 @@ def main() -> int:
     parser.add_argument("--comment", help="첫 댓글 텍스트 파일(블로그 글·스레드 글 링크 + 출처)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
-    if git("pull", "--rebase").returncode != 0:
+    if git("pull", "--rebase", "--autostash").returncode != 0:
         print("최신 저장소를 받지 못했습니다(git pull 실패).", file=sys.stderr)
         return 1
     caption = Path(args.caption).read_text(encoding="utf-8")
@@ -166,7 +166,7 @@ def main() -> int:
     save_queue(queue, QUEUE_PATH)
     git("add", "--", str(QUEUE_PATH), *new["images"], new["story_image"])
     if git("commit", "-m", f"chore: pick.haru 인스타 예약 ({new['id']})").returncode != 0 or (
-            git("push").returncode != 0 and not (git("pull", "--rebase").returncode == 0
+            git("push").returncode != 0 and not (git("pull", "--rebase", "--autostash").returncode == 0
                                                  and git("push").returncode == 0)):
         print("커밋·푸시에 실패했습니다. 예약 목록 파일을 확인하세요.", file=sys.stderr)
         return 1
