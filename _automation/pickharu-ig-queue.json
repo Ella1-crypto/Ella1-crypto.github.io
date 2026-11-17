@@ -2836,9 +2836,14 @@
    "assets/pickharu/ig/ig-aitip-05-kocca-ai-video-story/07.jpg",
    "assets/pickharu/ig/ig-aitip-05-kocca-ai-video-story/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-05-kocca-ai-video-story/story.jpg",
-  "comment": "출처: 에듀코카(한국콘텐츠진흥원) 「AI를 이해하기-창작의 동반자로서 AI - 스토리텔링이 있는 AI 영상제작」 강의 페이지 (2026년 11월 11일 확인). 예시 한 줄은 희야가 만든 예시예요."
+  "comment": "출처: 에듀코카(한국콘텐츠진흥원) 「AI를 이해하기-창작의 동반자로서 AI - 스토리텔링이 있는 AI 영상제작」 강의 페이지 (2026년 11월 11일 확인). 예시 한 줄은 희야가 만든 예시예요.",
+  "post_id": "18140224360636194",
+  "published_at": "2026-11-17T18:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18129463657873506",
+  "story_id": "18507839611099244"
  },
  {
   "id": "rl-aitip-05-kocca-ai-video-story",
