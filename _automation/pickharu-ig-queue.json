@@ -3049,7 +3049,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt12-clean-20261118/story.jpg",
-  "comment": "📌 출처: 국가법령정보센터 조세특례제한법 제87조(주택청약종합저축 소득공제)"
+  "comment": "📌 출처: 국가법령정보센터 조세특례제한법 제87조(주택청약종합저축 소득공제)",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-17",
+   "variant_label": "② 숫자",
+   "hook_text": "청약통장 넣은 돈 40% 공제"
+  }
  },
  {
   "id": "rl-yt12-clean-20261118",
@@ -3059,6 +3069,16 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 국가법령정보센터 조세특례제한법 제87조(주택청약종합저축 소득공제)",
-  "page": "assets/pickharu/ig/rl-yt12-clean-20261118/index.html"
+  "page": "assets/pickharu/ig/rl-yt12-clean-20261118/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-17",
+   "variant_label": "② 숫자",
+   "hook_text": "청약통장 넣은 돈 40% 공제"
+  }
  }
 ]
