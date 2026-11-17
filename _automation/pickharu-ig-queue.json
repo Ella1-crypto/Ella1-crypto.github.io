@@ -3066,7 +3066,7 @@
    "assets/pickharu/ig/ig-yt12-clean-20261118/07.jpg",
    "assets/pickharu/ig/ig-yt12-clean-20261118/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt12-clean-20261118/story.jpg",
   "comment": "📌 출처: 국가법령정보센터 조세특례제한법 제87조(주택청약종합저축 소득공제)",
   "test": {
@@ -3078,7 +3078,12 @@
    "tagged_at": "2026-11-17",
    "variant_label": "② 숫자",
    "hook_text": "청약통장 넣은 돈 40% 공제"
-  }
+  },
+  "post_id": "18643813525038869",
+  "published_at": "2026-11-18T08:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18122076860020070",
+  "story_id": "18060682907650024"
  },
  {
   "id": "rl-yt12-clean-20261118",
