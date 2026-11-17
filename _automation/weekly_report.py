@@ -263,7 +263,9 @@ def test_board(start: datetime, end: datetime) -> list[dict]:
         elif len(rows) == 1 and rows[0]["mean"] is not None:
             verdict = "비교 상대 없음"
         if any(r["provisional"] for r in rows):
-            verdict += " · 임시(좋아요+댓글 기준, 인사이트 권한 전)"
+            # 좋아요+댓글은 0~2개 수준이라 승패를 말할 수 없다 — 도달·저장·공유가 들어올 때까지 판정하지 않는다
+            ref = ", ".join(f"{r['variant']} {r['mean']:.3g}" for r in rows if r["mean"] is not None)
+            verdict = "판정 보류(인사이트 권한 전)" + (f" · 좋아요+댓글 참고값: {ref}" if ref else "")
         out.append({**group, "rows": rows, "verdict": verdict})
     out.sort(key=lambda g: g["group"] or "")
     return out
