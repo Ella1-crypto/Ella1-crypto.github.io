@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>대마도 진짜 비용 | 희야의 데일리무드</title>
+<meta name="description" content="대마도 당일치기 뱃값에 부두세·유류할증료·출국세까지 더해, 결제까지 가는 진짜 금액을 계산해요.">
+<link rel="canonical" href="https://ella1-crypto.github.io/tsushima/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="대마도 진짜 비용">
+<meta property="og:description" content="대마도 당일치기 뱃값에 부두세·유류할증료·출국세까지 더해, 결제까지 가는 진짜 금액을 계산해요.">
+<meta property="og:url" content="https://ella1-crypto.github.io/tsushima/">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
+<style>
+  :root{
+    --nv-bg:#fffdfa; --nv-ink:#231f1c; --nv-sub:#6d655e;
+    --nv-line:#e6ded4; --nv-key:#a8453a; --nv-soft:#f7f1e9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+      --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+    --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+    color-scheme:dark;
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--nv-bg);color:var(--nv-ink);
+    font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+
+  .nv{border-bottom:1px solid var(--nv-line);background:var(--nv-bg)}
+  .nv-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px}
+  .nv-home{font-weight:700;font-size:15px;color:var(--nv-ink);text-decoration:none;letter-spacing:-.01em}
+  .nv-links{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto}
+  .nv-links a{font-size:14px;color:var(--nv-sub);text-decoration:none;padding:3px 0;border-bottom:1px solid transparent}
+  .nv-links a:hover,.nv-links a:focus{color:var(--nv-key);border-bottom-color:var(--nv-key)}
+  .nv-links a[aria-current="page"]{color:var(--nv-key);font-weight:700}
+
+  .ft{border-top:1px solid var(--nv-line);background:var(--nv-soft);margin-top:48px}
+  .ft-in{max-width:760px;margin:0 auto;font-size:13px;line-height:1.9;color:var(--nv-sub);
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 32px}
+  .ft-in a{color:var(--nv-sub)}
+  .ft-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .ft-row a{font-weight:700;color:var(--nv-ink);text-decoration:none}
+  .ft-row a:hover{color:var(--nv-key)}
+</style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebPage",
+ "headline": "대마도 진짜 비용",
+ "description": "대마도 당일치기 뱃값에 부두세·유류할증료·출국세까지 더해, 결제까지 가는 진짜 금액을 계산해요.",
+ "url": "https://ella1-crypto.github.io/tsushima/",
+ "inLanguage": "ko",
+ "dateModified": "2026-11-19"
+}
+</script>
+</head>
+<body>
+
+<header class="nv">
+  <div class="nv-in">
+    <a class="nv-home" href="/">희야의 데일리무드</a>
+    <nav class="nv-links" aria-label="사이트 메뉴"><a href="/tsushima/" aria-current="page">대마도 비용</a><a href="/mounjaro/">마운자로 계산기</a><a href="/privacy/">개인정보처리방침</a></nav>
+  </div>
+</header>
+
+
+<style>
+  /* 레이아웃: 훅 → 계산기 한 덩어리 → 왜 붙는지 → 1박 2일 비교. 색은 바다·배표의 남색 + 종이 크라프트. */
+  :root{
+    --ts-card:#ffffff; --ts-soft:#f4f1ec; --ts-key:#1f5673; --ts-keysoft:#e7f0f5;
+    --ts-warn:#a8453a; --ts-good:#2e6b4f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ts-card:#232020; --ts-soft:#2b2725; --ts-key:#8fbdd6; --ts-keysoft:#23323b;
+      --ts-warn:#e4897c; --ts-good:#86c7a5;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ts-card:#232020; --ts-soft:#2b2725; --ts-key:#8fbdd6; --ts-keysoft:#23323b;
+    --ts-warn:#e4897c; --ts-good:#86c7a5;
+  }
+
+  .ts{box-sizing:border-box;width:100%;max-width:760px;margin:0 auto;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:28px 8px;font-size:16px;line-height:1.78}
+  .ts *,.ts *::before,.ts *::after{box-sizing:border-box}
+  .ts h1,.ts h2,.ts h3,.ts p,.ts ul,.ts li,.ts table{margin:0;padding:0}
+  .ts ul{padding-left:1.15em}
+  .ts li{margin:.28em 0}
+  .ts h1,.ts h2,.ts h3{font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    text-wrap:balance;line-height:1.38}
+  .ts h1{font-size:30px;letter-spacing:-.02em;margin-bottom:10px}
+  .ts h2{font-size:21px;margin:40px 0 12px;padding-top:18px;border-top:1px solid var(--nv-line)}
+  .ts h3{font-size:17px;margin:24px 0 8px}
+  .ts p{margin:0 0 14px}
+  .ts a{color:var(--ts-key)}
+  .ts-dek{font-size:15px;color:var(--nv-sub);margin-bottom:22px}
+
+  .ts-lede{background:var(--ts-keysoft);border-radius:14px;padding:18px 18px 5px;margin-bottom:24px}
+  .ts-lede p{font-size:17px;line-height:1.7}
+  .ts-lede p:first-child{font-weight:700}
+
+  .ts-wrap{overflow-x:auto;margin:0 0 10px;-webkit-overflow-scrolling:touch}
+  .ts table{width:100%;min-width:430px;border-collapse:collapse;font-size:14.5px}
+  .ts th,.ts td{padding:10px 11px;border-bottom:1px solid var(--nv-line);text-align:left;vertical-align:top}
+  .ts th{font-size:12.5px;font-weight:700;color:var(--nv-sub);background:var(--ts-soft);white-space:nowrap}
+  .ts td.n,.ts th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ts tr.hl td{background:var(--ts-keysoft);font-weight:700}
+  .ts-src{font-size:12.5px;color:var(--nv-sub);margin:6px 0 0;line-height:1.7}
+
+  /* ── 계산기 ── */
+  .ts-calc{border:1px solid var(--nv-line);border-radius:16px;background:var(--ts-card);
+    padding:20px 17px 18px;margin:22px 0}
+  .ts-ch{font-family:"Gowun Dodum","Apple SD Gothic Neo",sans-serif;font-size:19px;font-weight:700}
+  .ts-cs{font-size:13px;color:var(--nv-sub);margin:4px 0 0}
+  .ts-f{display:flex;flex-direction:column;gap:6px;margin-top:16px}
+  .ts-f>span{font-size:12.5px;font-weight:700;color:var(--nv-sub)}
+  .ts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ts select,.ts input{font:inherit;font-size:15px;color:var(--nv-ink);background:var(--nv-bg);
+    border:1px solid var(--nv-line);border-radius:10px;padding:10px 11px;width:100%;min-width:0;
+    -webkit-appearance:none;appearance:none}
+  .ts input{text-align:right;font-variant-numeric:tabular-nums}
+  .ts select:focus,.ts input:focus{outline:2px solid var(--ts-key);outline-offset:1px}
+  .ts-inline{display:flex;gap:8px;align-items:center}
+  .ts-inline input{flex:1 1 auto}
+  .ts-inline em{flex:0 0 auto;font-style:normal;font-size:13px;color:var(--nv-sub)}
+
+  .ts-out{margin-top:20px;border:1px solid var(--nv-line);border-radius:13px;overflow:hidden}
+  .ts-out table{min-width:0;font-size:14.5px}
+  .ts-out td{border-bottom:1px solid var(--nv-line)}
+  .ts-out td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  .ts-out tr:last-child td{border-bottom:0}
+  .ts-sum td{background:var(--ts-keysoft);color:var(--ts-key);font-size:16px}
+  .ts-sum td:last-child{font-size:20px}
+  .ts-note-s{font-size:12.5px;color:var(--nv-sub);padding:9px 13px;background:var(--ts-soft)}
+
+  .ts-cta{display:block;margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:var(--ts-key);color:var(--nv-bg);text-align:center;text-decoration:none;
+    font-weight:700;font-size:15.5px;line-height:1.5}
+  .ts-cta:hover,.ts-cta:focus{filter:brightness(1.08)}
+  .ts-cta small{display:block;font-weight:400;font-size:12.5px;opacity:.85;margin-top:3px}
+  .ts-ad{font-size:12px;color:var(--nv-sub);margin-top:8px;text-align:center;line-height:1.7}
+
+  .ts-note{background:var(--ts-soft);border-radius:12px;padding:14px 16px;font-size:14px;
+    color:var(--nv-sub);line-height:1.75;margin:14px 0}
+  .ts-note b{color:var(--nv-ink)}
+  .ts-warn{border:1px solid var(--ts-warn);border-radius:12px;padding:15px 16px;font-size:14.5px;
+    line-height:1.75;margin:16px 0;background:var(--ts-card)}
+  .ts-cap{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ts-warn);margin-bottom:7px}
+
+  @media (max-width:440px){
+    .ts{font-size:15.5px}.ts h1{font-size:25px}.ts-grid{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){.ts *{transition:none!important;animation:none!important}}
+</style>
+
+<article class="ts">
+
+  <h1>대마도 진짜 비용</h1>
+  <p class="ts-dek">뱃값에 부두세·유류할증료·출국세가 따로 붙어요. 상품을 고르면 결제까지 가는 금액이 나와요.</p>
+
+  <div class="ts-lede">
+    <p>2만 4,900원짜리 승선권이 결제까지 가면 8만 9천 원이에요.</p>
+    <p>표시가의 3.6배예요. 부산항 부두세와 유류할증료는 예약할 때 여행사에 따로 입금하고, 대마도 부두세와 출국세는 섬에서 엔화 현금으로 내거든요.</p>
+    <p>그래서 <b>가이드·전용버스·점심까지 붙은 5만 원짜리 패키지가 승선권보다 싸요.</b> 그쪽은 부두세와 유류할증료가 표시가에 이미 들어 있어요.</p>
+  </div>
+
+  <div class="ts-calc">
+    <div class="ts-ch">대마도 당일치기 계산기</div>
+    <p class="ts-cs">상품을 고르면 숨은 부가금까지 더해서 실제로 나가는 돈이 나와요.</p>
+
+    <label class="ts-f" for="tsProd">
+      <span>상품 고르기</span>
+      <select id="tsProd"></select>
+    </label>
+
+    <div class="ts-grid">
+      <label class="ts-f" for="tsLocal">
+        <span>현지 교통비</span>
+        <div class="ts-inline"><input id="tsLocal" type="number" inputmode="numeric" value="20000"><em>원</em></div>
+      </label>
+      <label class="ts-f" for="tsFood">
+        <span>식비</span>
+        <div class="ts-inline"><input id="tsFood" type="number" inputmode="numeric" value="30000"><em>원</em></div>
+      </label>
+    </div>
+
+    <div class="ts-grid">
+      <label class="ts-f" for="tsShop">
+        <span>쇼핑·기념품</span>
+        <div class="ts-inline"><input id="tsShop" type="number" inputmode="numeric" value="50000"><em>원</em></div>
+      </label>
+      <label class="ts-f" for="tsPeople">
+        <span>함께 가는 인원</span>
+        <div class="ts-inline"><input id="tsPeople" type="number" inputmode="numeric" min="1" value="2"><em>명</em></div>
+      </label>
+    </div>
+
+    <label class="ts-f" for="tsRate">
+      <span>환율 (100엔당)</span>
+      <div class="ts-inline"><input id="tsRate" type="number" inputmode="decimal" step="0.1" value="836.9"><em>원</em></div>
+    </label>
+
+    <div class="ts-out">
+      <table>
+        <tbody>
+          <tr><td>표시가</td><td id="tsOutPrice">—</td></tr>
+          <tr><td>+ 부산항 부두세</td><td id="tsOutPort">—</td></tr>
+          <tr><td>+ 유류할증료 <span id="tsOutFuelNote"></span></td><td id="tsOutFuel">—</td></tr>
+          <tr><td>+ 대마도 부두세 500엔</td><td id="tsOutPortJp">—</td></tr>
+          <tr><td>+ 일본 출국세 3,000엔</td><td id="tsOutExit">—</td></tr>
+          <tr><td>+ 가이드·기사 경비</td><td id="tsOutGuide">—</td></tr>
+          <tr class="ts-sum"><td>배표만 따지면 (1인)</td><td id="tsOutReal">—</td></tr>
+          <tr><td>+ 현지 교통·식비·쇼핑</td><td id="tsOutSpend">—</td></tr>
+          <tr class="ts-sum"><td>1인 총액</td><td id="tsOutPer">—</td></tr>
+          <tr><td>전체 금액 <span id="tsOutPeople"></span></td><td id="tsOutAll">—</td></tr>
+          <tr><td colspan="2" class="ts-note-s" id="tsOutMemo"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a class="ts-cta" id="tsCta" href="#" target="_blank" rel="noopener sponsored">
+      예약 페이지 열기
+      <small id="tsCtaSub"></small>
+    </a>
+    <p class="ts-ad" id="tsAd"></p>
+  </div>
+
+  <h2>왜 이렇게 붙어요</h2>
+
+  <div class="ts-wrap">
+    <table>
+      <thead>
+        <tr><th>항목</th><th class="n">금액</th><th>언제 내요</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>부산항 부두세</td><td class="n">7,000원</td><td>예약할 때 여행사에 입금</td></tr>
+        <tr><td>유류할증료 (히타카츠 왕복)</td><td class="n">28,000원</td><td>예약할 때 여행사에 입금</td></tr>
+        <tr><td>유류할증료 (이즈하라 왕복)</td><td class="n">48,000원</td><td>예약할 때 여행사에 입금</td></tr>
+        <tr><td>대마도 부두세</td><td class="n">500엔</td><td>섬에서 현금</td></tr>
+        <tr><td>일본 출국세</td><td class="n">3,000엔</td><td>섬에서 현금</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ts-src">씨플라워호 상품 페이지의 '포함·불포함 사항'과 요금표에서 확인했어요(2026년 11월 19일). 이즈하라는 유류할증료가 편도 24,000원이라 히타카츠보다 왕복 2만 원이 더 들어요.</p>
+
+  <div class="ts-warn">
+    <div class="ts-cap">현금 챙기세요</div>
+    대마도 부두세와 출국세를 합친 <b>3,500엔은 섬에서 현금으로</b> 내요. 그런데 배가 닿는 히타카츠에는 ATM이 없어요. 섬 전체에 네 대뿐이고 세븐은행은 없어요. 은행에서 바로 환전도 안 되고, 버스도 현금만 받아요. <b>출발 전에 엔화를 챙기세요.</b>
+  </div>
+
+  <h2>1박 2일이면 얼마예요</h2>
+  <p>네이버 여행 패키지들이에요. <b>아홉 개 전부 가이드·기사 경비 2만 원이 표시가에 안 들어 있어요.</b> 표시가만 보면 틀려요.</p>
+
+  <div class="ts-wrap">
+    <table>
+      <thead>
+        <tr><th>상품</th><th class="n">표시가</th><th class="n">더 붙는 돈</th><th class="n">실제 지출</th></tr>
+      </thead>
+      <tbody>
+        <tr class="hl"><td>부산출발 대마도 2일 오션뷰호텔</td><td class="n">125,130원</td><td class="n">45,107원</td><td class="n">170,237원</td></tr>
+        <tr><td>참좋은특가 / 팬스타호</td><td class="n">156,170원</td><td class="n">20,000원</td><td class="n">176,170원</td></tr>
+        <tr><td>선착순 10명 특가 (이즈하라 시내)</td><td class="n">135,703원</td><td class="n">45,107원</td><td class="n">180,810원</td></tr>
+        <tr><td>365일 매일출발 (토요코인)</td><td class="n">164,803원</td><td class="n">45,107원</td><td class="n">209,910원</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ts-src">2026년 11월 17일 네이버 여행 상품 페이지에서 확인한 아홉 개 중 네 개예요. '더 붙는 돈'은 가이드비 20,000원과, 출국세가 불포함인 상품의 3,000엔이에요. 나머지 다섯 개와 유류할증료 별도분은 엑셀에 들어 있어요.</p>
+
+  <h2>엑셀로도 받아 가세요</h2>
+  <p>이 계산기에 없는 것까지 들어 있어요. 1박 2일 상품 열한 개, 일본 본토 원정 예산, 해외 직구 관세 계산, 그리고 같은 물건을 국내·대마도 당일·1박 2일·일본 여행 네 가지 길로 살 때 총비용을 비교하는 시트예요.</p>
+  <p>환율 한 칸만 바꾸면 일곱 장이 전부 따라 바뀌어요. 받는 곳은 <a href="https://blog.naver.com/goghibli" target="_blank" rel="noopener">네이버 블로그</a>예요.</p>
+
+  <h2>가기 전에 볼 것</h2>
+  <ul>
+    <li><b>요일로 값이 갈려요.</b> 같은 승선권인데 화·수·목 24,900원, 금 62,900원, 토·일 75,900원이에요.</li>
+    <li><b>이즈하라는 당일치기가 어려워요.</b> 항해가 2시간 20분이라 머무는 시간이 짧아요. 당일로 가시려면 히타카츠예요.</li>
+    <li><b>패키지는 최소 출발 인원이 15명이에요.</b> 미달이면 취소될 수 있어요.</li>
+    <li><b>결항하면 더 묵는 비용은 본인 부담이에요.</b> 약관에 그렇게 돼 있어요.</li>
+    <li>여행자 보험은 따로예요. 만 50세 미만 5,000원, 이상 8,000원이에요.</li>
+  </ul>
+
+  <div class="ts-note">
+    숫자는 2026년 11월 14일과 19일에 상품 페이지와 선사 공식 페이지에서 확인한 값이에요. 뱃값·특가·유류할증료는 수시로 바뀌니 결제 전에 상품 페이지에서 한 번 더 보세요. 이 글은 공부용 정리이고, 특정 여행사를 추천하지 않아요.
+  </div>
+
+</article>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var won = function(n){ return Math.round(n).toLocaleString('ko-KR') + '원'; };
+
+  var SEA  = 'https://naver.me/GRDNRFyD';
+  var PKG  = 'https://naver.me/Fhu7zGma';
+  var STAR = 'https://www.starline.co.kr/';
+  var PAN  = 'https://www.panstarcruise.com/product/daemado/price';
+
+  // fuel: 히타카츠 28,000 / 이즈하라 48,000
+  var P = [
+    {n:'승선권 풀당일 · 수요일 (히타카츠)', price:24900, fuel:28000, url:SEA,  seller:'즐거운 여행 / 씨플라워호', connect:true,
+     memo:'수요일은 히타카츠예요. 11월 요금표 기준이고 체류 시간은 확인하지 못했어요.'},
+    {n:'승선권 풀당일 · 화·목 (이즈하라)', price:24900, fuel:48000, url:SEA,  seller:'즐거운 여행 / 씨플라워호', connect:true,
+     memo:'이즈하라는 유류할증료가 편도 24,000원이라 2만 원이 더 들어요. 항해가 길어 당일치기는 빠듯해요.'},
+    {n:'승선권 풀당일 · 금요일 (히타카츠)', price:62900, fuel:28000, url:SEA,  seller:'즐거운 여행 / 씨플라워호', connect:true,
+     memo:'금요일은 평일인데도 값이 올라가요.'},
+    {n:'승선권 풀당일 · 토·일 (히타카츠)', price:75900, fuel:28000, url:SEA,  seller:'즐거운 여행 / 씨플라워호', connect:true,
+     memo:'주말이 평일의 3배예요.'},
+    {n:'승선권 짧은당일 · 토·일', price:52900, fuel:28000, url:SEA,  seller:'즐거운 여행 / 씨플라워호', connect:true,
+     memo:'주말만 있어요. 풀당일보다 체류가 짧은데 몇 시간인지는 확인하지 못했어요.'},
+    {n:'당일 패키지 (가이드·차량·중식)', price:49900, fuel:0, port:0, portJp:0, guide:10000, url:PKG, seller:'일본만', connect:true,
+     memo:'왕복선박료·부두세·유류세·전용버스·쓰루가이드·입장료·현지식사가 들어 있어요. 따로 내는 건 출국세와 가이드 봉사료 1만 원이에요. 체류는 토 6시간 10분, 일·월·화·목 5시간 20분, 월·수·금 4시간이에요.'},
+    {n:'스타라인 히타카츠 왕복 (정가)', price:200000, fuel:28000, url:STAR, seller:'스타라인', connect:false,
+     memo:'정가예요. 항해 1시간 10~20분, 당일치기 체류는 5시간 50분~7시간 20분이에요.'},
+    {n:'스타라인 이즈하라 왕복 (정가)', price:240000, fuel:48000, url:STAR, seller:'스타라인', connect:false,
+     memo:'체류가 2시간 50분이라 당일치기는 사실상 무리예요.'},
+    {n:'팬스타 히타카츠 왕복 (주중)', price:180000, fuel:28000, url:PAN,  seller:'팬스타크루즈', connect:false,
+     memo:'성인 편도 90,000원 × 2예요.'},
+    {n:'팬스타 히타카츠 왕복 (주말·성수기)', price:220000, fuel:28000, url:PAN, seller:'팬스타크루즈', connect:false,
+     memo:'성인 편도 110,000원 × 2예요.'}
+  ];
+
+  var sel = $('tsProd');
+  P.forEach(function(p, i){
+    var o = document.createElement('option');
+    o.value = i;
+    o.textContent = p.n + ' · ' + p.price.toLocaleString('ko-KR') + '원';
+    sel.appendChild(o);
+  });
+  sel.value = 5;   // 기본은 당일 패키지 (제일 싸게 끝나요)
+
+  function val(id){ var e = $(id); return e ? parseFloat(e.value) || 0 : 0; }
+
+  function calc(){
+    var p = P[parseInt(sel.value, 10)];
+    var rate = val('tsRate') / 100;
+    var people = Math.max(1, Math.floor(val('tsPeople')) || 1);
+
+    var port   = (p.port   === undefined) ? 7000 : p.port;
+    var portJp = (p.portJp === undefined) ? Math.round(rate * 500) : p.portJp;
+    var exitJp = Math.round(rate * 3000);
+    var guide  = p.guide || 0;
+    var extra  = port + p.fuel + portJp + exitJp + guide;
+    var real   = p.price + extra;
+    var spend  = val('tsLocal') + val('tsFood') + val('tsShop');
+
+    $('tsOutPrice').textContent  = won(p.price);
+    $('tsOutPort').textContent   = port   ? won(port)   : '표시가에 포함';
+    $('tsOutFuel').textContent   = p.fuel ? won(p.fuel) : '표시가에 포함';
+    $('tsOutFuelNote').textContent = p.fuel === 48000 ? '(이즈하라)' : (p.fuel ? '(히타카츠)' : '');
+    $('tsOutPortJp').textContent = portJp ? won(portJp) : '표시가에 포함';
+    $('tsOutExit').textContent   = won(exitJp);
+    $('tsOutGuide').textContent  = guide ? won(guide) : '없음';
+    $('tsOutReal').textContent   = won(real);
+    $('tsOutSpend').textContent  = won(spend);
+    $('tsOutPer').textContent    = won(real + spend);
+    $('tsOutPeople').textContent = '(' + people + '명)';
+    $('tsOutAll').textContent    = won((real + spend) * people);
+    $('tsOutMemo').textContent   = p.memo;
+
+    var cta = $('tsCta');
+    cta.href = p.url;
+    cta.firstChild.nodeValue = p.connect ? '\n      이 상품 예약 페이지 열기\n      ' : '\n      선사 공식 페이지 열기\n      ';
+    $('tsCtaSub').textContent = p.seller + ' · ' + p.price.toLocaleString('ko-KR') + '원 (실제 지출 ' + won(real) + ')';
+    $('tsAd').textContent = p.connect
+      ? '이 버튼은 네이버 쇼핑 커넥트 제휴 링크예요. 구매가 일어나면 일정액의 수수료를 받고, 사시는 분이 더 내는 돈은 없어요.'
+      : '선사 공식 페이지로 가요. 제휴 링크가 아니에요.';
+  }
+
+  ['tsProd','tsLocal','tsFood','tsShop','tsPeople','tsRate'].forEach(function(id){
+    var e = $(id);
+    if (e) { e.addEventListener('input', calc); e.addEventListener('change', calc); }
+  });
+  calc();
+})();
+</script>
+
+
+<footer class="ft">
+  <div class="ft-in">
+    <div class="ft-row">
+      <a href="/">홈</a>
+      <a href="/tsushima/">대마도 비용</a>
+      <a href="/mounjaro/">마운자로 계산기</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="https://blog.naver.com/goghibli" target="_blank" rel="noopener">블로그</a>
+      <a href="https://www.threads.com/@heeya.dailyfit" target="_blank" rel="noopener">스레드</a>
+    </div>
+    <div>희야의 데일리무드 · 일부 페이지에는 제휴 링크가 들어 있고, 구매가 일어나면 일정액의 수수료를 받아요. 결제 금액은 달라지지 않아요.</div>
+    <div>글에 적힌 숫자는 확인한 날짜 기준이에요. 가격과 제도는 수시로 바뀌니 결제 전에 공식 페이지에서 다시 보세요.</div>
+  </div>
+</footer>
+
+</body>
+</html>
