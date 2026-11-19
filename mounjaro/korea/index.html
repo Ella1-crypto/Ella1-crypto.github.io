@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>마운자로 한 달 비용 | 희야의 데일리무드</title>
+<meta name="description" content="마운자로 약값에 진료비와 검사비를 더해 한 달에 실제로 나가는 돈을 계산해요.">
+<link rel="canonical" href="https://ella1-crypto.github.io/mounjaro/korea/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="마운자로 한 달 비용">
+<meta property="og:description" content="마운자로 약값에 진료비와 검사비를 더해 한 달에 실제로 나가는 돈을 계산해요.">
+<meta property="og:url" content="https://ella1-crypto.github.io/mounjaro/korea/">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
+<style>
+  :root{
+    --nv-bg:#fffdfa; --nv-ink:#231f1c; --nv-sub:#6d655e;
+    --nv-line:#e6ded4; --nv-key:#a8453a; --nv-soft:#f7f1e9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+      --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+    --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+    color-scheme:dark;
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--nv-bg);color:var(--nv-ink);
+    font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+
+  .nv{border-bottom:1px solid var(--nv-line);background:var(--nv-bg)}
+  .nv-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px}
+  .nv-home{font-weight:700;font-size:15px;color:var(--nv-ink);text-decoration:none;letter-spacing:-.01em}
+  .nv-links{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto}
+  .nv-links a{font-size:14px;color:var(--nv-sub);text-decoration:none;padding:3px 0;border-bottom:1px solid transparent}
+  .nv-links a:hover,.nv-links a:focus{color:var(--nv-key);border-bottom-color:var(--nv-key)}
+  .nv-links a[aria-current="page"]{color:var(--nv-key);font-weight:700}
+
+  .ft{border-top:1px solid var(--nv-line);background:var(--nv-soft);margin-top:48px}
+  .ft-in{max-width:760px;margin:0 auto;font-size:13px;line-height:1.9;color:var(--nv-sub);
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 32px}
+  .ft-in a{color:var(--nv-sub)}
+  .ft-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .ft-row a{font-weight:700;color:var(--nv-ink);text-decoration:none}
+  .ft-row a:hover{color:var(--nv-key)}
+</style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebPage",
+ "headline": "마운자로 한 달 비용",
+ "description": "마운자로 약값에 진료비와 검사비를 더해 한 달에 실제로 나가는 돈을 계산해요.",
+ "url": "https://ella1-crypto.github.io/mounjaro/korea/",
+ "inLanguage": "ko",
+ "dateModified": "2026-11-19"
+}
+</script>
+</head>
+<body>
+
+<header class="nv">
+  <div class="nv-in">
+    <a class="nv-home" href="/">희야의 데일리무드</a>
+    <nav class="nv-links" aria-label="사이트 메뉴"><a href="/tsushima/">대마도 비용</a><a href="/mounjaro/korea/" aria-current="page">마운자로 한국</a><a href="/mounjaro/">마운자로 일본 비교</a><a href="/privacy/">개인정보처리방침</a></nav>
+  </div>
+</header>
+
+
+<style>
+  /* 레이아웃: 짧은 설명 → 계산기 한 덩어리 → 옆 계산기로 가는 길. 색은 계산기 조각이 자기 걸 들고 온다. */
+  .mk{box-sizing:border-box;width:100%;max-width:760px;margin:0 auto;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:28px 8px;font-size:16px;line-height:1.78}
+  .mk h1,.mk h2,.mk p,.mk ul,.mk li{margin:0;padding:0}
+  .mk ul{padding-left:1.15em}
+  .mk li{margin:.3em 0}
+  .mk h1,.mk h2{font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    text-wrap:balance;line-height:1.38}
+  .mk h1{font-size:30px;letter-spacing:-.02em;margin-bottom:10px}
+  .mk h2{font-size:21px;margin:38px 0 12px;padding-top:18px;border-top:1px solid var(--nv-line)}
+  .mk p{margin:0 0 14px}
+  .mk a{color:var(--nv-key)}
+  .mk-dek{font-size:15px;color:var(--nv-sub);margin-bottom:20px}
+  .mk-note{background:var(--nv-soft);border-radius:12px;padding:14px 16px;font-size:14px;
+    color:var(--nv-sub);line-height:1.75;margin:16px 0}
+  .mk-note b{color:var(--nv-ink)}
+  .mk-go{display:block;margin:18px 0;padding:15px 16px;border-radius:12px;
+    border:1px solid var(--nv-line);background:var(--nv-soft);text-decoration:none;color:var(--nv-ink)}
+  .mk-go:hover{border-color:var(--nv-key)}
+  .mk-go b{display:block;font-size:16px;margin-bottom:3px}
+  .mk-go span{font-size:13.5px;color:var(--nv-sub)}
+  @media (max-width:440px){.mk{font-size:15.5px}.mk h1{font-size:25px}}
+</style>
+
+<article class="mk">
+
+  <h1>마운자로 한 달 비용</h1>
+  <p class="mk-dek">약값에 진료비와 검사비를 더해, 한 달에 실제로 나가는 돈을 계산해요.</p>
+
+  <p>마운자로는 비급여라 정가가 없어요. 약국마다 값이 다르고, 병원 진료비는 또 따로예요. 그래서 "얼마예요?"에 한 줄로 답하기가 어려워요.</p>
+  <p>아래에 용량과 기간을 넣으면 합계가 나와요. 용량을 올리는 계획이면 단계별로 주 수를 나눠 넣으면 돼요.</p>
+
+<div class="mjc" id="mjc">
+  <style>
+  .mjc{--mjc-ink:#23201f;--mjc-sub:#6b645f;--mjc-line:#e3ddd7;--mjc-bg:#fffdfb;--mjc-soft:#f6f1ec;--mjc-key:#b4543f;--mjc-keysoft:#fdeee9;
+    display:block;box-sizing:border-box;width:100%;max-width:720px;margin:28px auto;padding:20px 16px 18px;
+    background:var(--mjc-bg);border:1px solid var(--mjc-line);border-radius:14px;
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    color:var(--mjc-ink);font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%;text-align:left}
+  .mjc *,.mjc *::before,.mjc *::after{box-sizing:border-box}
+  .mjc table,.mjc p,.mjc div,.mjc label,.mjc span,.mjc td{margin:0;padding:0;font-family:inherit;color:inherit;border:0}
+  .mjc .mjc-h{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .mjc .mjc-sub{margin-top:4px;font-size:13px;color:var(--mjc-sub)}
+  .mjc .mjc-sec{margin-top:18px}
+  .mjc .mjc-lab{font-size:13px;font-weight:700;color:var(--mjc-sub);margin-bottom:7px;display:block}
+  .mjc .mjc-tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .mjc .mjc-tab{flex:1 1 auto;min-width:96px;padding:9px 6px;text-align:center;font-size:13px;font-weight:700;
+    border:1px solid var(--mjc-line);border-radius:9px;background:#fff;color:var(--mjc-sub);cursor:pointer;user-select:none}
+  .mjc .mjc-tab[aria-pressed="true"]{background:var(--mjc-keysoft);border-color:var(--mjc-key);color:var(--mjc-key)}
+  .mjc .mjc-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .mjc .mjc-n{width:26px;flex:0 0 26px;font-size:13px;color:var(--mjc-sub);font-weight:700}
+  .mjc select,.mjc input{font:inherit;font-size:15px;color:var(--mjc-ink);background:#fff;
+    border:1px solid var(--mjc-line);border-radius:9px;padding:9px 10px;min-width:0;-webkit-appearance:none;appearance:none}
+  .mjc select{flex:1 1 120px}
+  .mjc input{flex:1 1 90px;text-align:right}
+  .mjc input:focus,.mjc select:focus{outline:2px solid var(--mjc-key);outline-offset:1px}
+  .mjc .mjc-unit{flex:0 0 auto;font-size:13px;color:var(--mjc-sub)}
+  .mjc .mjc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mjc .mjc-fld{display:flex;flex-direction:column;gap:5px}
+  .mjc .mjc-fld span{font-size:12px;color:var(--mjc-sub);font-weight:700}
+  .mjc .mjc-out{margin-top:18px;border:1px solid var(--mjc-line);border-radius:12px;overflow:hidden}
+  .mjc .mjc-out table{width:100%;border-collapse:collapse}
+  .mjc .mjc-out td{padding:10px 13px;font-size:14px;border-bottom:1px solid var(--mjc-line)}
+  .mjc .mjc-out td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  .mjc .mjc-out tr:nth-child(odd) td{background:var(--mjc-soft)}
+  .mjc .mjc-tot td{background:var(--mjc-keysoft) !important;border-bottom:none;font-size:16px;color:var(--mjc-key)}
+  .mjc .mjc-tot td:last-child{font-size:21px}
+  .mjc .mjc-note{margin-top:14px;font-size:12px;color:var(--mjc-sub);line-height:1.75}
+  .mjc .mjc-note b{color:var(--mjc-ink)}
+  .mjc .mjc-warn{margin-top:12px;padding:11px 13px;background:var(--mjc-soft);border-radius:10px;font-size:12.5px;color:var(--mjc-sub);line-height:1.75}
+  .mjc .mjc-hide{display:none}
+  @media (max-width:430px){.mjc .mjc-grid{grid-template-columns:1fr}.mjc .mjc-tab{min-width:72px;font-size:12px}}
+  </style>
+
+  <div class="mjc-h">마운자로 한 달 비용 계산기</div>
+  <div class="mjc-sub">약값에 진료비와 검사비를 더해, 실제로 나가는 돈을 계산해요.</div>
+
+  <div class="mjc-sec">
+    <span class="mjc-lab">약값 기준</span>
+    <div class="mjc-tabs" id="mjcBasis">
+      <div class="mjc-tab" data-b="low" role="button" tabindex="0" aria-pressed="false">공개 최저가</div>
+      <div class="mjc-tab" data-b="avg" role="button" tabindex="0" aria-pressed="true">등록 약국 평균가</div>
+      <div class="mjc-tab" data-b="own" role="button" tabindex="0" aria-pressed="false">직접 입력</div>
+    </div>
+  </div>
+
+  <div class="mjc-sec">
+    <span class="mjc-lab">투여 계획 (쓰지 않을 단계는 0주로 두세요)</span>
+    <div class="mjc-row">
+      <div class="mjc-n">1</div>
+      <select class="mjc-dose" data-i="0"></select>
+      <input class="mjc-wk" data-i="0" type="number" inputmode="numeric" min="0" max="104" step="1" value="4">
+      <div class="mjc-unit">주</div>
+      <input class="mjc-own mjc-hide" data-i="0" type="number" inputmode="numeric" min="0" step="1000" placeholder="4주분 약값">
+    </div>
+    <div class="mjc-row">
+      <div class="mjc-n">2</div>
+      <select class="mjc-dose" data-i="1"></select>
+      <input class="mjc-wk" data-i="1" type="number" inputmode="numeric" min="0" max="104" step="1" value="8">
+      <div class="mjc-unit">주</div>
+      <input class="mjc-own mjc-hide" data-i="1" type="number" inputmode="numeric" min="0" step="1000" placeholder="4주분 약값">
+    </div>
+    <div class="mjc-row">
+      <div class="mjc-n">3</div>
+      <select class="mjc-dose" data-i="2"></select>
+      <input class="mjc-wk" data-i="2" type="number" inputmode="numeric" min="0" max="104" step="1" value="0">
+      <div class="mjc-unit">주</div>
+      <input class="mjc-own mjc-hide" data-i="2" type="number" inputmode="numeric" min="0" step="1000" placeholder="4주분 약값">
+    </div>
+  </div>
+
+  <div class="mjc-sec">
+    <span class="mjc-lab">약값 말고 드는 돈</span>
+    <div class="mjc-grid">
+      <label class="mjc-fld"><span>진료비 1회 (평균 21,000원)</span><input id="mjcVisitFee" type="number" inputmode="numeric" min="0" step="1000" value="21000"></label>
+      <label class="mjc-fld"><span>진료 횟수 (비우면 4주에 1번)</span><input id="mjcVisitCnt" type="number" inputmode="numeric" min="0" step="1" placeholder="자동"></label>
+      <label class="mjc-fld"><span>검사비 1회</span><input id="mjcTestFee" type="number" inputmode="numeric" min="0" step="1000" value="30000"></label>
+      <label class="mjc-fld"><span>검사 횟수</span><input id="mjcTestCnt" type="number" inputmode="numeric" min="0" step="1" value="1"></label>
+    </div>
+  </div>
+
+  <div class="mjc-out">
+    <table><tbody>
+      <tr><td>투여 기간</td><td id="mjcWeeks">-</td></tr>
+      <tr><td>필요한 상자 (4펜·4주분)</td><td id="mjcBoxes">-</td></tr>
+      <tr><td>약값 합계</td><td id="mjcDrug">-</td></tr>
+      <tr><td>진료비 합계</td><td id="mjcVisit">-</td></tr>
+      <tr><td>검사비 합계</td><td id="mjcTest">-</td></tr>
+      <tr class="mjc-tot"><td>총 예상 지출</td><td id="mjcTotal">-</td></tr>
+    </tbody></table>
+  </div>
+  <div class="mjc-out" style="margin-top:8px">
+    <table><tbody>
+      <tr><td>4주당 평균</td><td id="mjcPer4">-</td></tr>
+      <tr><td>1주당 평균</td><td id="mjcPerWk">-</td></tr>
+      <tr><td>1펜(1회 투여)당 약값 환산</td><td id="mjcPerPen">-</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="mjc-note" id="mjcSrc"></div>
+
+  <div class="mjc-warn">
+    이 계산기는 비용 구조를 이해하기 위한 <b>참고용</b>이에요. 처방 용량과 투여 기간은 치료 효과와 이상반응을 보고
+    <b>의료진이 결정</b>해요. 가격으로 용량을 고르지 마세요.<br>
+    기본값으로 넣어 둔 약값은 가격비교 플랫폼에 등록된 금액의 집계값이고, 전국 약국의 공식 통계가 아니에요.
+    방문 당일에도 같은 값이라는 보장이 없으니 <b>결제 전에 의료기관과 약국에 직접 확인</b>하세요.
+  </div>
+
+  <script>
+  (function(){
+    var root = document.getElementById('mjc');
+    if (!root || root.getAttribute('data-ready')) return;
+    root.setAttribute('data-ready', '1');
+
+    // 1팩(4펜·4주분) 약국 약제비 — 나만의닥터 공개 가격비교, 2026년 11월 18일 조회
+    // 표본: 2.5mg 2,504곳 · 5mg 2,485곳 · 7.5mg 2,170곳 · 10mg 1,946곳 · 12.5mg 1,283곳 · 15mg 1,224곳
+    // 조회 주소: my-doctor.io/medical-cost/마운자로-2.5mg (용량만 바꿔서 6개)
+    // ★ 갱신할 때는 이 숫자 12개와 아래 SRC_DATE·SRC_N만 바꾸면 돼요.
+    var SRC_DATE = '2026년 11월 18일';
+    var SRC_N = '1,224~2,504곳';
+    var DOSE = [
+      {mg: '2.5mg',  low: 269000, avg: 296640},
+      {mg: '5mg',    low: 360000, avg: 391060},
+      {mg: '7.5mg',  low: 510000, avg: 545100},
+      {mg: '10mg',   low: 510000, avg: 544470},
+      {mg: '12.5mg', low: 674000, avg: 702810},
+      {mg: '15mg',   low: 540000, avg: 711880, flag: true}
+    ];
+    var basis = 'avg';
+    function one(s){ return root.querySelector(s); }
+    function all(s){ return Array.prototype.slice.call(root.querySelectorAll(s)); }
+    function won(n){ return (Math.round(n) || 0).toLocaleString('ko-KR') + '원'; }
+    function num(el, dflt){
+      var v = parseFloat(el.value);
+      return (isNaN(v) || v < 0) ? (dflt === undefined ? 0 : dflt) : v;
+    }
+
+    all('.mjc-dose').forEach(function(sel, i){
+      DOSE.forEach(function(d, j){
+        var o = document.createElement('option');
+        o.value = j; o.textContent = d.mg; sel.appendChild(o);
+      });
+      sel.value = (i === 0) ? '0' : '1';
+    });
+
+    function price(i){
+      if (basis === 'own') return num(all('.mjc-own')[i]);
+      var j = parseInt(all('.mjc-dose')[i].value, 10) || 0;
+      return DOSE[j][basis];
+    }
+
+    function calc(){
+      var weeks = 0, boxes = 0, drug = 0, flagged = false;
+      for (var i = 0; i < 3; i++){
+        var wk = Math.round(num(all('.mjc-wk')[i]));
+        if (wk <= 0) continue;
+        var j = parseInt(all('.mjc-dose')[i].value, 10) || 0;
+        if (DOSE[j].flag && basis === 'low') flagged = true;
+        var bx = Math.ceil(wk / 4);
+        weeks += wk; boxes += bx; drug += bx * price(i);
+      }
+      var vFee = num(one('#mjcVisitFee'));
+      var vCntEl = one('#mjcVisitCnt');
+      var vCnt = (vCntEl.value === '') ? Math.ceil(weeks / 4) : Math.round(num(vCntEl));
+      var tFee = num(one('#mjcTestFee'));
+      var tCnt = Math.round(num(one('#mjcTestCnt')));
+      var visit = vFee * vCnt, test = tFee * tCnt, total = drug + visit + test;
+
+      one('#mjcWeeks').textContent = weeks > 0 ? (weeks + '주 (약 ' + (weeks / 4.345).toFixed(1) + '개월)') : '-';
+      one('#mjcBoxes').textContent = boxes > 0 ? (boxes + '상자 · 펜 ' + (boxes * 4) + '개') : '-';
+      one('#mjcDrug').textContent = won(drug);
+      one('#mjcVisit').textContent = won(visit) + ((vCntEl.value === '' && weeks > 0) ? (' (' + vCnt + '회)') : '');
+      one('#mjcTest').textContent = won(test);
+      one('#mjcTotal').textContent = won(total);
+      one('#mjcPer4').textContent = weeks > 0 ? won(total / (weeks / 4)) : '-';
+      one('#mjcPerWk').textContent = weeks > 0 ? won(total / weeks) : '-';
+      one('#mjcPerPen').textContent = boxes > 0 ? won(drug / (boxes * 4)) : '-';
+
+      var src;
+      if (basis === 'own') {
+        src = '약값을 직접 넣으셨어요. 진료비와 검사비는 가정한 금액이에요.';
+      } else {
+        src = '기본 약값: 나만의닥터 공개 가격비교 ' + SRC_DATE + ' 조회분(용량별 ' + SRC_N + ' 기준)의 <b>'
+            + (basis === 'low' ? '약국 약제비 최저' : '약국 약제비 평균') + '</b>이에요.'
+            + '<br>진료비 기본값 21,000원은 같은 자료의 병원 처방비 평균이에요(최저는 5,000원). 검사비는 가정한 금액이에요.';
+      }
+      if (flagged) {
+        src += '<br>※ 15mg 최저 540,000원은 평균 711,880원과 차이가 큰 값이라, 확정 최저가로 보기 어려워요.';
+      }
+      one('#mjcSrc').innerHTML = src;
+    }
+
+    function setBasis(b){
+      basis = b;
+      all('#mjcBasis .mjc-tab').forEach(function(t){
+        t.setAttribute('aria-pressed', String(t.getAttribute('data-b') === b));
+      });
+      all('.mjc-own').forEach(function(el){
+        if (b === 'own') { el.classList.remove('mjc-hide'); } else { el.classList.add('mjc-hide'); }
+      });
+      all('.mjc-dose').forEach(function(el){ el.disabled = (b === 'own'); });
+      calc();
+    }
+
+    all('#mjcBasis .mjc-tab').forEach(function(t){
+      t.addEventListener('click', function(){ setBasis(t.getAttribute('data-b')); });
+      t.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBasis(t.getAttribute('data-b')); }
+      });
+    });
+    root.addEventListener('input', calc);
+    root.addEventListener('change', calc);
+    setBasis('avg');
+  })();
+  </script>
+</div>
+
+  <div class="mk-note">
+    약값은 공개 가격비교 플랫폼의 <b>2026년 11월 18일 집계</b>예요. 용량별로 1,224~2,504곳이 올린 값을 모은 거라 전국 약국의 공식 통계는 아니에요. 진료비 기본값 21,000원은 같은 자료의 평균이고 최저는 5,000원이에요. 다니시는 병원 금액으로 바꿔서 쓰세요.
+  </div>
+
+  <h2>일본과 비교하고 싶으시면</h2>
+  <p>2026년 11월 12일부터 해외에서 정상 처방받은 약을 들여올 수 있게 바뀌었어요. 항공·뱃삯까지 더해서 어느 쪽이 싼지 보는 계산기를 따로 뒀어요.</p>
+
+  <a class="mk-go" href="/mounjaro/">
+    <b>일본 가면 진짜 싼가 →</b>
+    <span>약값에 가는 값까지 더해서 비교해요. 몇 개부터 이득인지도 나와요.</span>
+  </a>
+
+  <div class="mk-note">
+    마운자로는 <b>비급여 전문의약품</b>이에요. 투여 여부와 용량은 치료 반응과 이상반응을 보고 의료진이 결정해요. 가격을 보고 용량을 고르거나, 처방 없이 구하는 일은 하지 마세요. 이 페이지는 비용 구조를 정리한 정보이고, 특정 병원이나 약국을 추천하지 않아요.
+  </div>
+
+</article>
+
+
+<footer class="ft">
+  <div class="ft-in">
+    <div class="ft-row">
+      <a href="/">홈</a>
+      <a href="/tsushima/">대마도 비용</a>
+      <a href="/mounjaro/">마운자로 일본 비교</a>
+      <a href="/mounjaro/korea/">마운자로 한국</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="https://blog.naver.com/goghibli" target="_blank" rel="noopener">블로그</a>
+      <a href="https://www.threads.com/@heeya.dailyfit" target="_blank" rel="noopener">스레드</a>
+    </div>
+    <div>희야의 데일리무드 · 일부 페이지에는 제휴 링크가 들어 있고, 구매가 일어나면 일정액의 수수료를 받아요. 결제 금액은 달라지지 않아요.</div>
+    <div>글에 적힌 숫자는 확인한 날짜 기준이에요. 가격과 제도는 수시로 바뀌니 결제 전에 공식 페이지에서 다시 보세요.</div>
+  </div>
+</footer>
+
+</body>
+</html>
