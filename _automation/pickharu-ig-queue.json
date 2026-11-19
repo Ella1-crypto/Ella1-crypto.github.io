@@ -2909,9 +2909,14 @@
    "assets/pickharu/ig/ig-aitip-07-kocca-intent-communication/07.jpg",
    "assets/pickharu/ig/ig-aitip-07-kocca-intent-communication/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-07-kocca-intent-communication/story.jpg",
-  "comment": "출처: 에듀코카(한국콘텐츠진흥원) 「AI와 소통하기-의도를 전달하는 커뮤니케이션 전략 - 스토리텔링이 있는 AI 영상제작」 강의 페이지 (전필구, 11분 19초 · 2026년 11월 11일 확인). 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: 에듀코카(한국콘텐츠진흥원) 「AI와 소통하기-의도를 전달하는 커뮤니케이션 전략 - 스토리텔링이 있는 AI 영상제작」 강의 페이지 (전필구, 11분 19초 · 2026년 11월 11일 확인). 예시 질문은 희야가 만든 예시예요.",
+  "post_id": "18127451659710909",
+  "published_at": "2026-11-19T18:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18416071912091783",
+  "story_id": "18121612564991993"
  },
  {
   "id": "rl-aitip-07-kocca-intent-communication",
