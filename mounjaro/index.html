@@ -14,15 +14,51 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
 <style>
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; }
-  img { max-width: 100%; }
-  [hidden] { display: none !important; }
+  :root{
+    --nv-bg:#fffdfa; --nv-ink:#231f1c; --nv-sub:#6d655e;
+    --nv-line:#e6ded4; --nv-key:#a8453a; --nv-soft:#f7f1e9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+      --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --nv-bg:#1a1716; --nv-ink:#f0eae4; --nv-sub:#a79d94;
+    --nv-line:#3a3331; --nv-key:#e4897c; --nv-soft:#2b2725;
+    color-scheme:dark;
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--nv-bg);color:var(--nv-ink);
+    font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+
+  .nv{border-bottom:1px solid var(--nv-line);background:var(--nv-bg)}
+  .nv-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px}
+  .nv-home{font-weight:700;font-size:15px;color:var(--nv-ink);text-decoration:none;letter-spacing:-.01em}
+  .nv-links{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto}
+  .nv-links a{font-size:14px;color:var(--nv-sub);text-decoration:none;padding:3px 0;border-bottom:1px solid transparent}
+  .nv-links a:hover,.nv-links a:focus{color:var(--nv-key);border-bottom-color:var(--nv-key)}
+  .nv-links a[aria-current="page"]{color:var(--nv-key);font-weight:700}
+
+  .ft{border-top:1px solid var(--nv-line);background:var(--nv-soft);margin-top:48px}
+  .ft-in{max-width:760px;margin:0 auto;font-size:13px;line-height:1.9;color:var(--nv-sub);
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 32px}
+  .ft-in a{color:var(--nv-sub)}
+  .ft-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .ft-row a{font-weight:700;color:var(--nv-ink);text-decoration:none}
+  .ft-row a:hover{color:var(--nv-key)}
 </style>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
- "@type": "Article",
+ "@type": "WebPage",
  "headline": "일본 가면 진짜 싼가",
  "description": "마운자로를 일본에서 받아 올 때와 한국에서 받을 때, 약값에 항공·뱃삯까지 더해 총비용을 비교하는 계산기예요.",
  "url": "https://ella1-crypto.github.io/mounjaro/",
@@ -32,6 +68,14 @@
 </script>
 </head>
 <body>
+
+<header class="nv">
+  <div class="nv-in">
+    <a class="nv-home" href="/">희야의 데일리무드</a>
+    <nav class="nv-links" aria-label="사이트 메뉴"><a href="/mounjaro/" aria-current="page">마운자로 계산기</a><a href="/privacy/">개인정보처리방침</a></nav>
+  </div>
+</header>
+
 
 <style>
   /* 레이아웃: 한 줄기 읽기 흐름 + 가운데에 계산기 한 덩어리. 색은 약국 종이봉투의 크라프트 톤 + 도장 붉은색. */
@@ -438,6 +482,21 @@
   calc();
 })();
 </script>
+
+
+<footer class="ft">
+  <div class="ft-in">
+    <div class="ft-row">
+      <a href="/">홈</a>
+      <a href="/mounjaro/">마운자로 계산기</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="https://blog.naver.com/goghibli" target="_blank" rel="noopener">블로그</a>
+      <a href="https://www.threads.com/@heeya.dailyfit" target="_blank" rel="noopener">스레드</a>
+    </div>
+    <div>희야의 데일리무드 · 일부 페이지에는 제휴 링크가 들어 있고, 구매가 일어나면 일정액의 수수료를 받아요. 결제 금액은 달라지지 않아요.</div>
+    <div>글에 적힌 숫자는 확인한 날짜 기준이에요. 가격과 제도는 수시로 바뀌니 결제 전에 공식 페이지에서 다시 보세요.</div>
+  </div>
+</footer>
 
 </body>
 </html>
