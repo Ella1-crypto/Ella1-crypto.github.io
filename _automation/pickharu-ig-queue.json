@@ -3272,7 +3272,7 @@
    "assets/pickharu/ig/ig-yt13b-clean-20261120/07.jpg",
    "assets/pickharu/ig/ig-yt13b-clean-20261120/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt13b-clean-20261120/story.jpg",
   "comment": "📌 출처: 소득세법 제143조 제1항(원천징수영수증 발급) · 소득세법 시행규칙 별지 제24호서식(1) 세액명세 칸 구조 · 2026년 11월 18일 확인",
   "test": {
@@ -3284,7 +3284,12 @@
    "tagged_at": "2026-11-19",
    "variant_label": "③ 반전",
    "hook_text": "연말정산 결과는 딱 한 칸"
-  }
+  },
+  "post_id": "18182319121445406",
+  "published_at": "2026-11-20T08:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18315033577304221",
+  "story_id": "18105984944359328"
  },
  {
   "id": "rl-yt13b-clean-20261120",
