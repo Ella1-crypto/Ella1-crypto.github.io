@@ -85,7 +85,8 @@ textarea{min-height:70px;resize:vertical}
 <script>
 (()=>{
 const tg=window.Telegram&&Telegram.WebApp; try{tg&&tg.ready();tg&&tg.expand();}catch(e){}
-const inTg=!!(tg&&tg.initData);
+// 키보드 버튼으로 연 미니앱은 initData 가 비어 있음(11/20 확인) → platform 으로 텔레그램 안인지 판단
+const inTg=!!(tg && tg.platform && tg.platform!=="unknown" && typeof tg.sendData==="function");
 const $=s=>document.querySelector(s), v=$("#v"), stage=$("#stage"), tap=$("#tap");
 let items=[], cur=null, xy=null, notes=[], decision="";
 const key=()=>"rv-"+(cur&&cur.id);
