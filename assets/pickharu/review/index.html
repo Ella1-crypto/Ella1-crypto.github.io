@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>릴스 검수</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#fff;--fg:#1b1b1f;--sub:#6b6b75;--line:#e6e6ea;--card:#f6f6f8;--acc:#ff4f8b;--ok:#1aa36b;--no:#d64545;--blue:#3b6cff}
+@media (prefers-color-scheme:dark){:root{--bg:#141418;--fg:#f2f2f5;--sub:#a0a0aa;--line:#2c2c33;--card:#1e1e24}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+main{max-width:520px;margin:0 auto;padding:12px 16px 120px}
+h1{font-size:17px;margin:4px 0 10px}
+select,textarea,input{width:100%;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+textarea{min-height:70px;resize:vertical}
+.stage{position:relative;margin:10px auto 6px;width:min(100%,360px);aspect-ratio:9/16;background:#000;border-radius:12px;overflow:hidden;touch-action:manipulation}
+.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.tap{position:absolute;inset:0}
+.mark{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;pointer-events:none}
+.mark.pending{background:#ffd23f;color:#111}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:9px 12px;font:inherit;cursor:pointer}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.btn.sel{outline:3px solid var(--blue)}
+.btn:disabled{opacity:.5}
+.time{font-variant-numeric:tabular-nums;color:var(--sub);margin-left:auto}
+.meta{color:var(--sub);font-size:13px;margin:4px 0}
+.changes{background:var(--card);border-radius:10px;padding:8px 10px;font-size:13px;margin:6px 0;white-space:pre-line}
+.list{margin:8px 0;padding:0;list-style:none}
+.list li{display:flex;gap:8px;align-items:flex-start;border-bottom:1px solid var(--line);padding:8px 0}
+.num{flex:none;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.list .t{color:var(--sub);font-size:12px}
+.list .x{margin-left:auto;flex:none}
+.sec{margin-top:16px}
+.sec>b{display:block;margin-bottom:6px}
+.badge{font-size:12px;padding:2px 7px;border-radius:999px;background:var(--card);border:1px solid var(--line)}
+.warn{color:var(--no);font-size:13px}
+.send{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.send .btn{width:100%;padding:13px;font-size:16px}
+.hint{font-size:12px;color:var(--sub)}
+</style>
+</head>
+<body>
+<main>
+  <h1>🎬 릴스 검수</h1>
+  <select id="pick" aria-label="시안 고르기"></select>
+  <div class="meta" id="meta"></div>
+  <div class="changes" id="changes" hidden></div>
+  <div class="stage" id="stage">
+    <video id="v" playsinline webkit-playsinline preload="auto"></video>
+    <div class="tap" id="tap"></div>
+  </div>
+  <div class="row">
+    <button class="btn" id="play">▶</button>
+    <button class="btn" data-d="-0.5">-0.5초</button>
+    <button class="btn" data-d="-0.033">◀ 1장</button>
+    <button class="btn" data-d="0.033">1장 ▶</button>
+    <button class="btn" data-d="0.5">+0.5초</button>
+    <span class="time" id="time">0.00초</span>
+  </div>
+  <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="재생 위치" style="padding:0;margin-top:6px">
+  <p class="hint">멈추고 화면에서 고칠 자리를 누른 뒤 아래에 적고 [메모 추가]. 자리를 안 찍어도 돼요.</p>
+
+  <div class="sec">
+    <b>메모 <span class="t" id="where">(0.00초 · 자리 안 찍음)</span></b>
+    <textarea id="text" placeholder="무엇을 어떻게 고칠지"></textarea>
+    <div class="row" style="margin-top:6px"><button class="btn primary" id="add">메모 추가</button><button class="btn" id="clearxy" hidden>자리 지우기</button></div>
+    <ul class="list" id="list"></ul>
+  </div>
+
+  <div class="sec">
+    <b>결정 (고르지 않아도 돼요)</b>
+    <div class="row" id="decide">
+      <button class="btn" data-k="확정">✅ 확정</button>
+      <button class="btn" data-k="반려">⛔ 반려</button>
+      <button class="btn" data-k="다른 시안">🔁 다른 시안</button>
+    </div>
+    <textarea id="dir" placeholder="다른 시안 방향(선택)" hidden style="margin-top:6px"></textarea>
+  </div>
+  <p class="warn" id="warn" hidden></p>
+</main>
+<div class="send"><button class="btn primary" id="send">텔레그램으로 보내기</button></div>
+<script>
+(()=>{
+const tg=window.Telegram&&Telegram.WebApp; try{tg&&tg.ready();tg&&tg.expand();}catch(e){}
+const inTg=!!(tg&&tg.initData);
+const $=s=>document.querySelector(s), v=$("#v"), stage=$("#stage"), tap=$("#tap");
+let items=[], cur=null, xy=null, notes=[], decision="";
+const key=()=>"rv-"+(cur&&cur.id);
+const fmt=t=>(Math.round(t*100)/100).toFixed(2)+"초";
+function store(){ try{localStorage.setItem(key(),JSON.stringify({notes,decision,dir:$("#dir").value}))}catch(e){} }
+function restore(){ notes=[];decision="";$("#dir").value=""; try{const s=JSON.parse(localStorage.getItem(key())||"null"); if(s){notes=s.notes||[];decision=s.decision||"";$("#dir").value=s.dir||"";}}catch(e){} }
+function warn(m){ $("#warn").textContent=m||""; $("#warn").hidden=!m; }
+
+async function loadIndex(){
+  try{
+    const r=await fetch("index.json?t="+Date.now(),{cache:"no-store"}); const j=await r.json();
+    items=(j.items||[]);
+  }catch(e){ warn("목록을 못 불러왔어요. 잠시 뒤 다시 열어 주세요."); return; }
+  const want=new URLSearchParams(location.search).get("item");
+  const sel=$("#pick"); sel.innerHTML="";
+  items.forEach(o=>{ const op=document.createElement("option"); op.value=o.id; op.textContent=(o.state&&o.state!=="검수 중"?"["+o.state+"] ":"")+o.title; sel.appendChild(op); });
+  const first=items.find(o=>o.id===want)||items.find(o=>o.state==="검수 중")||items[0];
+  if(first){ sel.value=first.id; load(first); } else warn("올라온 시안이 없어요.");
+}
+function load(o){
+  cur=o; xy=null; restore();
+  $("#meta").innerHTML=(o.state?'<span class="badge">'+o.state+'</span> ':"")+(o.created||"").slice(5,16).replace("T"," ");
+  $("#changes").hidden=!o.changes; $("#changes").textContent=o.changes?"이번 판에서 바꾼 점\n"+o.changes:"";
+  v.src=o.video+"?v="+(o.v||""); v.load();
+  render();
+}
+$("#pick").addEventListener("change",e=>{ const o=items.find(x=>x.id===e.target.value); if(o) load(o); });
+
+// 재생
+const play=$("#play");
+play.onclick=()=>{ if(v.paused) v.play().catch(()=>{}); else v.pause(); };
+v.addEventListener("play",()=>play.textContent="❚❚"); v.addEventListener("pause",()=>{play.textContent="▶";render();});
+document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{ v.pause(); v.currentTime=Math.max(0,Math.min(v.duration||0,v.currentTime+parseFloat(b.dataset.d))); });
+v.addEventListener("timeupdate",tick); v.addEventListener("seeked",()=>{tick();render();}); v.addEventListener("loadedmetadata",tick);
+const scrub=$("#scrub"); let drag=false;
+scrub.addEventListener("input",()=>{drag=true; if(v.duration){v.pause(); v.currentTime=scrub.value/1000*v.duration;}});
+scrub.addEventListener("change",()=>{drag=false;});
+function tick(){ $("#time").textContent=fmt(v.currentTime||0)+(v.duration?" / "+fmt(v.duration):""); if(!drag&&v.duration) scrub.value=Math.round(v.currentTime/v.duration*1000); marks(); $("#where").textContent="("+fmt(v.currentTime||0)+" · "+(xy?"자리 찍음":"자리 안 찍음")+")"; }
+
+// 자리 찍기
+tap.addEventListener("click",e=>{ const r=stage.getBoundingClientRect(); v.pause(); xy={x:Math.round((e.clientX-r.left)/r.width*100)/100,y:Math.round((e.clientY-r.top)/r.height*100)/100}; render(); $("#text").focus({preventScroll:true}); });
+$("#clearxy").onclick=()=>{xy=null;render();};
+function marks(){
+  stage.querySelectorAll(".mark").forEach(m=>m.remove());
+  notes.forEach((n,i)=>{ if(n.x==null||Math.abs(n.t-v.currentTime)>0.6) return; const m=document.createElement("div"); m.className="mark"; m.style.left=n.x*100+"%"; m.style.top=n.y*100+"%"; m.textContent=i+1; stage.appendChild(m); });
+  if(xy){ const m=document.createElement("div"); m.className="mark pending"; m.style.left=xy.x*100+"%"; m.style.top=xy.y*100+"%"; m.textContent="+"; stage.appendChild(m); }
+}
+
+// 메모
+$("#add").onclick=()=>{ const t=$("#text").value.trim(); if(!t){$("#text").focus();return;} notes.push({t:Math.round((v.currentTime||0)*100)/100,x:xy?xy.x:null,y:xy?xy.y:null,m:t}); notes.sort((a,b)=>a.t-b.t); $("#text").value=""; xy=null; store(); render(); };
+function render(){
+  $("#clearxy").hidden=!xy;
+  const ul=$("#list"); ul.innerHTML="";
+  notes.forEach((n,i)=>{ const li=document.createElement("li"); li.innerHTML='<span class="num">'+(i+1)+'</span><div><div class="t"></div><div class="m"></div></div><button class="btn x" aria-label="지우기">✕</button>';
+    li.querySelector(".t").textContent=fmt(n.t)+(n.x!=null?" · 자리 찍음":"");
+    li.querySelector(".m").textContent=n.m;
+    li.querySelector(".t").onclick=()=>{v.pause();v.currentTime=n.t;};
+    li.querySelector(".x").onclick=()=>{notes.splice(i,1);store();render();};
+    ul.appendChild(li); });
+  document.querySelectorAll("#decide .btn").forEach(b=>b.classList.toggle("sel",b.dataset.k===decision));
+  $("#dir").hidden=decision!=="다른 시안";
+  tick();
+}
+document.querySelectorAll("#decide .btn").forEach(b=>b.onclick=()=>{ decision=decision===b.dataset.k?"":b.dataset.k; store(); render(); });
+$("#dir").addEventListener("input",store);
+$("#text").addEventListener("input",()=>{ try{localStorage.setItem(key()+"-draft",$("#text").value)}catch(e){} });
+
+// 보내기
+$("#send").onclick=()=>{
+  const pending=$("#text").value.trim();
+  if(pending){ $("#add").click(); }
+  if(!notes.length && !decision){ warn("메모나 결정이 없어요."); return; }
+  const payload={i:cur.id,ti:cur.title,n:notes,d:decision,dir:decision==="다른 시안"?$("#dir").value.trim():""};
+  let s=JSON.stringify(payload);
+  if(new Blob([s]).size>4000){ warn("메모가 너무 길어요(텔레그램 한도). 나눠서 보내 주세요."); return; }
+  if(inTg && tg.sendData){
+    try{ localStorage.removeItem(key()); }catch(e){}
+    tg.sendData(s);   // 보내면 화면이 닫히고 봇이 바로 답장해요
+  } else {
+    const txt="[검수] "+cur.title+"\n"+notes.map((n,i)=>(i+1)+") "+fmt(n.t)+(n.x!=null?" (자리 "+n.x+", "+n.y+")":"")+" "+n.m).join("\n")+(decision?"\n결정: "+decision:"");
+    navigator.clipboard&&navigator.clipboard.writeText(txt).then(()=>warn("텔레그램 밖에서 열었어요. 내용을 복사했으니 봇 영상에 답장으로 붙여 넣어 주세요."),()=>warn("텔레그램 봇의 [🎬 검수 화면 열기] 버튼으로 열어야 바로 보내져요."));
+  }
+};
+loadIndex();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+ "items": [
+  {
+   "id": "kitty-v2",
+   "title": "카카오 02 키티 핸드워시 v2 (11/25 12:30 예약)",
+   "kind": "video",
+   "video": "../ig/rl-kakao-kitty-handwash/reel.mp4",
+   "fps": 30,
+   "state": "확정",
+   "changes": "훅 키티 아래로 · 끝 문구 '집들이 갈 때 꺼내 보게 저장해 두세요!'",
+   "created": "2026-11-20T22:26:30+09:00",
+   "v": 1795175668
+  },
+  {
+   "id": "handcream-v3",
+   "title": "카카오 01 달걀 핸드크림 v3 (11/24 12:30 예약)",
+   "kind": "video",
+   "video": "../ig/rl-kakao-handcream-egg/reel.mp4",
+   "fps": 30,
+   "state": "확정",
+   "changes": "반짝 선 → 손그림 화살표 · 향 장면 노란 테두리 · 하트 거울 처음부터 '?'",
+   "created": "2026-11-20T22:26:30+09:00",
+   "v": 1795175668
+  },
+  {
+   "id": "cinna-v4",
+   "title": "시나모롤 무드등 v4 (11/23 12:30 예약)",
+   "kind": "video",
+   "video": "../ig/rl-kakao-098-cinna-lamp/reel.mp4",
+   "fps": 30,
+   "state": "확정",
+   "changes": "끝 장 '몰래 선물'",
+   "created": "2026-11-20T22:26:30+09:00",
+   "v": 1795175668
+  }
+ ],
+ "updated": "2026-11-20T22:26:30+09:00"
+}
