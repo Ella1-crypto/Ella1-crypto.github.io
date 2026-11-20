@@ -3214,9 +3214,14 @@
    "assets/pickharu/ig/ig-aitip-08-gseek-faceless-shorts/07.jpg",
    "assets/pickharu/ig/ig-aitip-08-gseek-faceless-shorts/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-08-gseek-faceless-shorts/story.jpg",
-  "comment": "출처: 경기도 GSEEK 「퇴근 후 5분, AI가 다 해주는 '자동 수익' 쇼츠 제작법」 강의 페이지 (대모산개발단, 14차시 1시간 23분, 초급 · 2026년 11월 11일 확인). 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: 경기도 GSEEK 「퇴근 후 5분, AI가 다 해주는 '자동 수익' 쇼츠 제작법」 강의 페이지 (대모산개발단, 14차시 1시간 23분, 초급 · 2026년 11월 11일 확인). 예시 질문은 희야가 만든 예시예요.",
+  "post_id": "18117610862124967",
+  "published_at": "2026-11-20T18:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17959881411276228",
+  "story_id": "17920012149265845"
  },
  {
   "id": "rl-aitip-08-gseek-faceless-shorts",
