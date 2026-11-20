@@ -3409,7 +3409,7 @@
    "assets/pickharu/ig/ig-yt13c-clean-20261120/07.jpg",
    "assets/pickharu/ig/ig-yt13c-clean-20261120/08.jpg"
   ],
-  "status": "예약",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt13c-clean-20261120/story.jpg",
   "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인",
   "test": {
@@ -3421,7 +3421,12 @@
    "tagged_at": "2026-11-20",
    "variant_label": "③ 반전",
    "hook_text": "카드 공제 한도 꽉 찼어도 더 있어요"
-  }
+  },
+  "post_id": "18081485348718886",
+  "published_at": "2026-11-20T20:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18355897603265028",
+  "story_id": "18103679258415308"
  },
  {
   "id": "rl-yt13c-clean-20261120",
@@ -3429,7 +3434,7 @@
   "caption": "연말정산 카드 공제, 한도 꽉 찼어도 더 있어요 🧺\n\n13탄에서 총급여 25% 문턱을 얘기했죠.\n기본 한도까지 다 채우신 분은\n여기서 한 번 더 있어요.\n① 기본 한도는 총급여 7천만 원 이하\n300만 원, 넘으면 250만 원이에요.\n② 거기가 꽉 찼어도 전통시장 40%,\n대중교통 40% 쓴 건 추가 한도로\n300만 원까지 더 쳐 줘요.\n(총급여 7천만 원 초과면 200만 원)\n③ 총급여 7천만 원 이하면\n도서·공연·영화관, 수영장·헬스장 30%도\n그 추가 한도에 같이 들어가요.\n④ 추가 한도는 기본 한도를\n넘겼을 때만 써요.\n안 넘겼으면 쓸 일이 없어요.\n\n출처는 첫 댓글에 정리했어요.\n\n12월에 장 볼 일 있으면 전통시장,\n출퇴근 교통비는 어차피 나가는 거니까\n카드만 제대로 긁어 두면 돼요.\n저장해 두고 1월에 꺼내 보세요 🤍\n\n#연말정산 #신용카드소득공제 #소득공제 #전통시장 #대중교통",
   "video": "assets/pickharu/ig/rl-yt13c-clean-20261120/reel.mp4",
   "share_to_feed": false,
-  "status": "예약",
+  "status": "직접 게시",
   "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인",
   "page": "assets/pickharu/ig/rl-yt13c-clean-20261120/index.html",
   "test": {
@@ -3441,6 +3446,37 @@
    "tagged_at": "2026-11-20",
    "variant_label": "③ 반전",
    "hook_text": "카드 공제 한도 꽉 찼어도 더 있어요"
-  }
+  },
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/68"
+ },
+ {
+  "id": "rl-kakao-098-cinna-lamp",
+  "publish_at": "2026-11-21T12:30+09:00",
+  "caption": "시나모롤 좋아하는 친구한테 아직 보여주지 마세요 ☁️\n\n머리를 꾹 누르면 노란 불이\n하얀 불로 바뀌는 시나모롤 무드등이에요.\n말랑말랑한 실리콘에 가슴엔 하트,\n자기 전에 수면등으로 두기 좋아요.\n\n마지막 히든은 무선 리모컨이에요.\n누운 채로 불을 끌 수 있어요.\n\n주소를 몰라도 카톡으로 보내면 끝이라\n생일·크리스마스 선물로 편해요.\n📍 상품은 프로필 링크에 있어요\n\n몰래 선물할 거면 저장해 두고 🤫\n같이 준비할 친구한테만 살짝 공유해 주세요 🤍\n\n#시나모롤 #산리오 #무드등 #카카오선물하기 #크리스마스선물\n\n[광고] 카카오 선물하기\n이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다.",
+  "video": "assets/pickharu/ig/rl-kakao-098-cinna-lamp/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "page": "assets/pickharu/ig/rl-kakao-098-cinna-lamp/index.html",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 주석 페이지 확정분"
+ },
+ {
+  "id": "rl-kakao-handcream-egg",
+  "publish_at": "2026-11-22T12:30+09:00",
+  "caption": "이 하얀 달걀, 사실 핸드크림이에요 🤍\n\n딥퍼랑스 퍼퓸 핸드크림이에요.\n향이 9가지라 받는 사람 취향대로\n고를 수 있어요.\n선물 후기가 7천 개 넘게 쌓였고\n하트 거울도 같이 와요.\n\n선물 포장으로 오니까\n카톡으로 보내기만 하면 끝이에요.\n상품은 프로필 링크에 있어요.\n\n생일 선물 고민 중이면 저장해 두세요\n\n#핸드크림선물 #생일선물추천 #카카오선물하기 #퍼퓸핸드크림 #여자친구선물\n\n[광고] 카카오 선물하기\n이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다.",
+  "video": "assets/pickharu/ig/rl-kakao-handcream-egg/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "page": "assets/pickharu/ig/rl-kakao-handcream-egg/index.html",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 주석 페이지 확정분"
+ },
+ {
+  "id": "rl-kakao-kitty-handwash",
+  "publish_at": "2026-11-23T12:30+09:00",
+  "caption": "세면대에 키티 하나, 손 씻기가 놀이로 🫧\n\n헬로키티 핸드워시 디스펜서예요.\n머리 위 펌프를 꾹 누르면 쏙 나오고\n주방에도 욕실에도 두기 좋은 크기예요.\n숨은 디테일은\n키티가 품에 작은 병을 안고 있다는 거예요.\n\n카톡으로 보내면 집들이 선물 끝이에요.\n상품은 프로필 링크에 있어요.\n\n집들이 갈 때 꺼내 보게 저장해 두고 🏠\n자취 시작한 친구한테 공유해 주세요 🫧\n\n#집들이선물 #헬로키티 #자취선물 #카카오선물하기 #욕실인테리어\n\n[광고] 카카오 선물하기\n이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다.",
+  "video": "assets/pickharu/ig/rl-kakao-kitty-handwash/reel.mp4",
+  "share_to_feed": false,
+  "status": "예약",
+  "page": "assets/pickharu/ig/rl-kakao-kitty-handwash/index.html",
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 주석 페이지 확정분"
  }
 ]
