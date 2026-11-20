@@ -3409,7 +3409,7 @@
    "assets/pickharu/ig/ig-yt13c-clean-20261120/07.jpg",
    "assets/pickharu/ig/ig-yt13c-clean-20261120/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt13c-clean-20261120/story.jpg",
   "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인",
   "test": {
@@ -3421,7 +3421,12 @@
    "tagged_at": "2026-11-20",
    "variant_label": "③ 반전",
    "hook_text": "카드 공제 한도 꽉 찼어도 더 있어요"
-  }
+  },
+  "post_id": "18081485348718886",
+  "published_at": "2026-11-20T20:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18355897603265028",
+  "story_id": "18103679258415308"
  },
  {
   "id": "rl-yt13c-clean-20261120",
