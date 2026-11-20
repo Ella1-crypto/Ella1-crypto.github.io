@@ -3403,7 +3403,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt13c-clean-20261120/story.jpg",
-  "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인"
+  "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-20",
+   "variant_label": "③ 반전",
+   "hook_text": "카드 공제 한도 꽉 찼어도 더 있어요"
+  }
  },
  {
   "id": "rl-yt13c-clean-20261120",
@@ -3413,6 +3423,16 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 조세특례제한법 제126조의2(신용카드 등 사용금액에 대한 소득공제, 2025년 12월 23일 개정 · 2026년 1월 1일 시행) · 2026년 11월 20일 확인",
-  "page": "assets/pickharu/ig/rl-yt13c-clean-20261120/index.html"
+  "page": "assets/pickharu/ig/rl-yt13c-clean-20261120/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "③반전",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-20",
+   "variant_label": "③ 반전",
+   "hook_text": "카드 공제 한도 꽉 찼어도 더 있어요"
+  }
  }
 ]
