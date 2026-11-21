@@ -291,8 +291,11 @@ def github_issue(item: dict) -> str:
         return "안 보냄(GITHUB_TOKEN 없음)"
     page = SITE_URL + item.get("page", "").removesuffix("index.html")
     if item.get("post_id"):  # 2026-11-09 사용자 "올리고 알려주면 내가 수정할게": 자동으로 올라간 카드뉴스 → 앱에서 음악 넣기 알림
-        body = {"title": f"📸 카드뉴스 올라갔어요 · 음악 넣기 · {item['id']}",
-                "body": "인스타 앱에서 방금 올라간 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요. 넣은 뒤 이 이슈를 닫아 주세요.",
+        what = "릴스" if "video" in item else "카드뉴스"
+        body = {"title": f"📸 {what} 올라갔어요 · 음악 넣기 · {item['id']}",
+                "body": f"자동으로 올라간 {what}예요. 그래프 API에는 음악을 붙이는 칸이 없어서 **소리 없이 나갔어요.**\n\n"
+                        "인스타 앱에서 방금 올라간 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요. "
+                        "릴스는 올린 뒤 오디오를 못 바꿀 수 있어요. 그러면 지우고 다시 올리거나 그대로 두세요. 넣은 뒤 이 이슈를 닫아 주세요.",
                 "assignees": [repo.split("/")[0]]}
     else:
         body = None
