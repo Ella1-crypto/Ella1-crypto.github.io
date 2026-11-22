@@ -3342,9 +3342,14 @@
    "assets/pickharu/ig/ig-aitip-05p-prompt-engineering/07.jpg",
    "assets/pickharu/ig/ig-aitip-05p-prompt-engineering/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-aitip-05p-prompt-engineering/story.jpg",
-  "comment": "출처: 코세라 「Prompt Engineering for Generative AI: Build Better AI Prompts」 강의 페이지 (IBM · Antonio Cangiano, 3모듈 약 9시간, 초급 · 2026년 11월 16일 확인). 예시 질문은 희야가 만든 예시예요."
+  "comment": "출처: 코세라 「Prompt Engineering for Generative AI: Build Better AI Prompts」 강의 페이지 (IBM · Antonio Cangiano, 3모듈 약 9시간, 초급 · 2026년 11월 16일 확인). 예시 질문은 희야가 만든 예시예요.",
+  "post_id": "18143727910621696",
+  "published_at": "2026-11-22T18:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18100962911403258",
+  "story_id": "17977150431173653"
  },
  {
   "id": "rl-aitip-05p-prompt-engineering",
