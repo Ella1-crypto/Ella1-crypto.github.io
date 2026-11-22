@@ -3372,7 +3372,8 @@
     "status": "예약",
     "comment": "📌 출처: MTN 2026-11-12 보도(식약처·관세청 관계자 발언: 반복 반입·검사 이력) · 의약품 부작용 피해구제 제도 안내(한국 반입 의약품·일본 적응외 사용 제외) · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Christophe95 (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Chihaya Sta (CC BY-SA 4.0) / Unsplash — Ryan Cheon",
     "page": "assets/pickharu/ig/rl-mj03-ig-20261122/index.html",
-    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일."
+    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일. / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다.",
+    "auto": true
   },
   {
     "id": "rl-mj04-ig-20261123",
@@ -3383,7 +3384,8 @@
     "status": "예약",
     "comment": "📌 출처: 인천공항 FAQ(2024-12-06, 젤 아이스팩 액체류 규정) · 서류(처방전·영수증·원래 포장)는 공식 목록 없는 실무 팁 · 여객선 기준 미확인 · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Chihaya Sta (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Christophe95 (CC BY-SA 4.0), Saigen Jiro (CC0)",
     "page": "assets/pickharu/ig/rl-mj04-ig-20261123/index.html",
-    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일."
+    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일. / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다.",
+    "auto": true
   },
   {
     "id": "rl-mj05-ig-20261124",
@@ -3394,7 +3396,8 @@
     "status": "예약",
     "comment": "📌 출처: 블로그 2탄 §4 기준 — 일본 클리닉 자체 페이지(2026-10-01 갱신, 2펜 1상자=2주분 · 4펜 약 4주분 · 도쿄 한 클리닉 1펜 3,500엔·4펜 14,000엔) · 주 1회 투여는 제품 허가 정보 · 2026년 11월 19일 확인 · 구매 권유 아님 / 사진: Wikimedia Commons — そらみみ (CC BY-SA 4.0), Nryate (CC BY-SA 4.0), Jakub Hałun (CC BY-SA 4.0), Hirho (CC BY 4.0)",
     "page": "assets/pickharu/ig/rl-mj05-ig-20261124/index.html",
-    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일."
+    "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일. / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다.",
+    "auto": true
   },
   {
     "id": "rl-mj06-ig-20261126",
@@ -3404,7 +3407,9 @@
     "share_to_feed": false,
     "status": "예약",
     "comment": "📌 출처: 승선권 풀당일(화·수·목) 24,900원·당일 패키지 49,900원: 네이버 쇼핑 상품 페이지(2026-11-19) · 부산항 부두세 7,000원·유류할증료 28,000원(히타카츠 왕복): 선사 공식 요금 2026-11-14 · 대마도 부두세 500엔·일본 출국세 3,000엔 · 환율 100엔=836.9원 · 히타카츠 ATM 0대·체인 편의점 0곳: 쓰시마 공식 목록 · 2026년 11월 20일 확인 / 사진: Wikimedia Commons — Saigen Jiro (CC0), Christophe95 (CC BY-SA 4.0), Opqr (CC BY-SA 3.0), ブルーノ・プラス (CC BY-SA 4.0)",
-    "page": "assets/pickharu/ig/rl-mj06-ig-20261126/index.html"
+    "page": "assets/pickharu/ig/rl-mj06-ig-20261126/index.html",
+    "auto": true,
+    "note": " / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다."
   },
   {
     "id": "rl-mj07-ig-20261127",
@@ -3414,7 +3419,9 @@
     "share_to_feed": false,
     "status": "예약",
     "comment": "📌 출처: 대마도 승선권 24,900원·당일 패키지 49,900원: 네이버 쇼핑(2026-11-19), 부가금은 선사 공식 요금 2026-11-14, 환율 100엔=836.9원 · 후쿠오카 뉴카멜리아: 네이버 상품가 2026-11-16(12월 특정일 특가, 2박 3일부터, 부가금 현장 결제) · KTX·항공권은 금액 없이 구조만 · 2026년 11월 20일 확인 / 사진: Wikimedia Commons — Choi2451 (CC BY-SA 3.0), ERIC  SALARD (CC BY-SA 2.0), 特急東海 (CC0) / Unsplash — Jan Ledermann",
-    "page": "assets/pickharu/ig/rl-mj07-ig-20261127/index.html"
+    "page": "assets/pickharu/ig/rl-mj07-ig-20261127/index.html",
+    "auto": true,
+    "note": " / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다."
   },
   {
     "id": "ig-yt13c-clean-20261120",
