@@ -62,6 +62,8 @@ STATUS_POLL_TRIES = 36  # 최대 3분 처리 대기
 VIDEO_POLL_TRIES = 120  # 영상은 최대 10분
 # 기다리는 중에도 5분마다 큐를 다시 받는다. 2026-10-31: 21:00 글까지 한 번에 잠들어 그 사이 추가한 20:05 릴스를 못 봄.
 RECHECK_SECONDS = 300
+import reel_notice  # 릴스 알림 모양 (2026-11-23)
+
 MANUAL = "직접 게시"  # 사용자가 앱에서 음악을 골라 올리는 릴스(발행기는 건너뜀)
 MANUAL_NOTE = "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음"
 # 이어달리기(2026-11-02 사용자 승인): --wait 실행이 끝나면 다음 '예약' 글 시각에 맞춰 새 --wait 실행을 부른다.
@@ -325,9 +327,8 @@ def telegram_notify(item: dict) -> str:
         text = (f"📸 인스타 카드뉴스 올라갔어요 · {item['id']}\n{first}\n"
                 "앱에서 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요.")
     else:
-        page = SITE_URL + item.get("page", "").removesuffix("index.html")
-        text = (f"🎬 인스타 릴스 올릴 시간이에요 · {item['id']}\n{first}\n"
-                f"영상 저장·캡션 복사 👉 {page}\n인스타 앱에서 음악 골라 올린 뒤 첫 댓글을 붙여 주세요.")
+        # 2026-11-23 사용자 "릴스, 클립은 이런 식으로 텔레그램에 항상 왔으면": 음악 1순위·대안·검색어·볼륨 규칙까지 한 모양으로
+        text = reel_notice.due_notice(item, SITE_URL)
     data = json.dumps({"chat_id": chat, "text": text}).encode()
     request = urllib.request.Request(f"https://api.telegram.org/bot{bot}/sendMessage", data=data, method="POST",
                                      headers={"Content-Type": "application/json"})
