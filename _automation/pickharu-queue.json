@@ -2147,13 +2147,14 @@
    "assets/pickharu/info-20261123-alo-bf-2.png"
   ],
   "publish_at": "2026-11-23T18:55+09:00",
-  "status": "예약",
+  "status": "실패",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665666,
    "message_id": 1389,
    "at": "2026-11-23T15:35:51+09:00"
-  }
+  },
+  "note": "오늘 정보 글을 이미 4개 올려 하루 상한 초과"
  }
 ]
