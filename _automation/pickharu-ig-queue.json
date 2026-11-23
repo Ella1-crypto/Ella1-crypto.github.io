@@ -3535,14 +3535,18 @@
   {
     "id": "rl-kakao-hangyodon-stand",
     "label": "한교동 스탠드",
-    "memo": "음악 아직 안 골랐어요 — 올리기 전에 추천 받아 주세요",
     "publish_at": "2026-11-26T12:30+09:00",
     "caption": "폰 세우는 곳에 한교동이 있다면 🐟\n\n산리오 휴대폰 거치대예요.\n키티·한교동·포차코 중에 고를 수 있고\n책상에도 침대 옆에도 두기 좋아요.\n숨은 디테일은\n포차코 받침에 별이 콕콕 박혀 있어요.\n\n직장 동료 선물로도 부담 없고\n카톡으로 보내면 끝이에요.\n📍 프로필 인포크 091번에 있어요\n\n책상 꾸밀 때 꺼내 보게 저장해 두고 🐟\n책상 꾸미기 좋아하는 친구한테 공유해 주세요\n\n#휴대폰거치대 #산리오 #한교동 #카카오선물하기 #책상꾸미기\n\n[광고] 카카오 선물하기\n이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다.",
     "video": "assets/pickharu/ig/rl-kakao-hangyodon-stand/reel.mp4",
     "share_to_feed": false,
     "status": "예약",
     "page": "assets/pickharu/ig/rl-kakao-hangyodon-stand/index.html",
-    "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 텔레그램 검수 확정(hangyodon-v2)"
+    "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 텔레그램 검수 확정(hangyodon-v2) · 음악 11/23 고름(music-guide 11/9: 캐릭터 굿즈 1순위 = @odang.pick 우사기 192.1만 사용곡, 대안 = @long_2_salim 11월 크리스마스 전환곡). 훅B·캡션 v3는 검수 화면 hangyodon-v3-hookB에서 결정 대기",
+    "music": {
+      "top": "Pajama Parties no Uta · パジャマパーティーズ",
+      "alt": "Winter Wonderland · 제이레빗",
+      "search": "kawaii, cute pop, music box"
+    }
   },
   {
     "id": "ig-20261123-nb-blackfriday",
