@@ -109,7 +109,7 @@ async function loadIndex(){
   const want=new URLSearchParams(location.search).get("item");
   const sel=$("#pick"); sel.innerHTML="";
   // 11/23 사용자 "확정된건 다 빼줘": 확정·취소는 목록에서 숨김(링크로 직접 연 시안만 예외)
-  items=items.filter(o=>!["확정","취소"].includes(o.state)||o.id===want);
+  items=items.filter(o=>(!["확정","취소","반려"].includes(o.state)&&!o.replaced_by)||o.id===want);
   items.forEach(o=>{ const op=document.createElement("option"); op.value=o.id; op.textContent=(o.state&&o.state!=="검수 중"?"["+o.state+"] ":"")+o.title; sel.appendChild(op); });
   const first=items.find(o=>o.id===want)||items.find(o=>o.state==="검수 중")||items[0];
   if(first){ sel.value=first.id; load(first); } else warn("올라온 시안이 없어요.");
