@@ -3793,7 +3793,7 @@
    "assets/pickharu/ig/ig-20261123-mj08-carry-in/05.jpg",
    "assets/pickharu/ig/ig-20261123-mj08-carry-in/06.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-20261123-mj08-carry-in/story.jpg",
   "comment": "📌 출처: 관세청 「수입통관 사무처리에 관한 고시」 별표 11 의약품 칸 \"총6병(6병 초과의 경우 의약품 용법상 3개월 복용량)\" · 식약처·관세청 보도자료(2026-11-11 배포, 11/12 시행) 각주 예시 3개월 12개 · 관세청 상담 내용(2026-11-23 이용자 통화, 공식 서면 안내 아님) · 한국 마운자로퀵펜주 허가(약학정보원, 2025-09-05, 2.4mL 다회용 4회) · 일본 릴리 첨부문서 제11판(단회용 0.5mL×2키트만) · 중국 릴리 공식 설명서(2.4ml 다회용 4회분 · 0.5ml 단회용 1회분) · 2026년 11월 23일 확인 · 구매 권유 아님",
   "label": "마운자로 ⑧ 카드뉴스 · 반입 개수",
@@ -3803,6 +3803,11 @@
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
   },
-  "note": "11/23 사용자 '마운자로 인스타 카드뉴스 자동으로 올려줘, 음악 붙여서' — 자동 게시 후 텔레그램 음악 넣기 알림(그래프 API엔 음악 칸 없음) · 11/23 19:51 사용자 '최대한 빨리, 지금 핫하다' → 11/26 18:30에서 오늘 20:02로 당김"
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18009932603791802",
+  "published_at": "2026-11-23T20:03+09:00",
+  "comment_id": "18164447845507331",
+  "story_id": "18148033279595031",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/72"
  }
 ]
