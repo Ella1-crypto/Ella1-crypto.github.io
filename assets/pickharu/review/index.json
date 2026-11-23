@@ -1,6 +1,17 @@
 {
  "items": [
   {
+   "id": "alo-bf-v1-m1",
+   "title": "알로 요가 블프 릴스 음악 후보 · 🎵1 Daily Beetle",
+   "kind": "video",
+   "video": "alo-bf-v1-m1/reel.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "음악 후보 1/3: Daily Beetle (CC BY 4.0) · 영상에 섞어 넣은 판",
+   "created": "2026-11-23T15:41:10+09:00",
+   "v": 1795416070
+  },
+  {
    "id": "alo-bf-v1",
    "title": "알로 요가 블프 릴스 v1 (제휴 아님 · 예약 전)",
    "kind": "video",
@@ -614,5 +625,5 @@
    "v": 1795175668
   }
  ],
- "updated": "2026-11-23T15:22:54+09:00"
+ "updated": "2026-11-23T15:41:10+09:00"
 }
