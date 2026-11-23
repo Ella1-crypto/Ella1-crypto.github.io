@@ -3752,6 +3752,14 @@
   "status": "예약",
   "auto": true,
   "label": "알로 요가 블프 v1",
-  "note": "통합 센터 요청(11/23) · 제휴 아님 · 11/23 사용자 '알로부터 시험' — 음악 섞어 자동 게시 첫 시험"
+  "note": "통합 센터 요청(11/23) · 제휴 아님 · 11/23 사용자 '알로부터 시험' — 음악 섞어 자동 게시 첫 시험",
+  "bgm": {
+   "file": "daily-beetle.mp3",
+   "title": "Daily Beetle",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "comment": "Music: Daily Beetle by Kevin MacLeod (incompetech.com), CC BY 4.0",
+  "memo": "🎵 음악 넣어 자동 게시: Daily Beetle"
  }
 ]
