@@ -3971,7 +3971,7 @@
    "assets/pickharu/ig/ig-20261124-mj01-card/04.jpg",
    "assets/pickharu/ig/ig-20261124-mj01-card/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-20261124-mj01-card/story.jpg",
   "comment": "📌 출처: 관세청 「수입통관 사무처리에 관한 고시」 별표 11 의약품 칸 \"총6병(6병 초과의 경우 의약품 용법상 3개월 복용량)\" · 식약처·관세청 보도자료(2026-11-11 배포, 11/12 시행, 각주 \"1주에 1회, 1개를 자가 주사하는 GLP-1 계열 비만치료제의 경우, 3개월 복용량은 12개\") · 여행자 휴대품 면세 1인 미화 800달러(관세법 시행규칙 제48조) · 2026년 11월 23일 확인 · 의학적 조언·구매 권유 아님",
   "label": "마운자로 1탄 카드뉴스",
@@ -3981,7 +3981,13 @@
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
   },
-  "ad": true
+  "ad": true,
+  "post_id": "18063425609650196",
+  "published_at": "2026-11-23T22:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18091040861700979",
+  "story_id": "18001881129047370",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/74"
  },
  {
   "id": "ig-20261124-mj02-card",
