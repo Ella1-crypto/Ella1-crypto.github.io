@@ -3709,7 +3709,7 @@
    "assets/pickharu/ig/ig-yt16-clean-20261123/07.jpg",
    "assets/pickharu/ig/ig-yt16-clean-20261123/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "실패",
   "story_image": "assets/pickharu/ig/ig-yt16-clean-20261123/story.jpg",
   "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인",
   "test": {
@@ -3721,7 +3721,8 @@
    "tagged_at": "2026-11-23",
    "variant_label": "② 숫자",
    "hook_text": "보험료는 100만 원까지만 세액공제"
-  }
+  },
+  "note": "게시 실패: HTTP 400: Timeout — 최근 글 조회로는 확인 못 함, 인스타에 올라갔는지 먼저 확인한 뒤 다시 예약"
  },
  {
   "id": "rl-yt16-clean-20261123",
