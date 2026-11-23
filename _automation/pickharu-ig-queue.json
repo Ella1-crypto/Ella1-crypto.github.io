@@ -3661,12 +3661,16 @@
   "status": "예약",
   "page": "assets/pickharu/ig/rl-inpock-031-red-potion/index.html",
   "label": "빨간포션 에너지 드링크 v1",
-  "music": {
-   "top": "즐거운 생활 · 45RPM",
-   "alt": "위드(With) · 리센느",
-   "search": "8bit game, upbeat pop"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/23 13:20 텔레그램 검수 확정(inpock-031-v1). 카페인 성인용 음료 — 캡션 주의 줄 있음",
+  "bgm": {
+   "file": "fuzzball-parade.mp3",
+   "title": "Fuzzball Parade",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
   },
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/23 13:20 텔레그램 검수 확정(inpock-031-v1). 카페인 성인용 음료 — 캡션 주의 줄 있음"
+  "comment": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+  "auto": true,
+  "memo": "🎵 음악 넣어 자동 게시: Fuzzball Parade"
  },
  {
   "id": "ig-20261123-seven-kitty-tiramisu",
