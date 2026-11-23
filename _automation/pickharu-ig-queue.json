@@ -3388,10 +3388,17 @@
   "video": "assets/pickharu/ig/rl-mj04-ig-20261123/reel.mp4",
   "share_to_feed": false,
   "status": "예약",
-  "comment": "📌 출처: 인천공항 FAQ(2024-12-06, 젤 아이스팩 액체류 규정) · 서류(처방전·영수증·원래 포장)는 공식 목록 없는 실무 팁 · 여객선 기준 미확인 · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Chihaya Sta (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Christophe95 (CC BY-SA 4.0), Saigen Jiro (CC0)",
+  "comment": "📌 출처: 인천공항 FAQ(2024-12-06, 젤 아이스팩 액체류 규정) · 서류(처방전·영수증·원래 포장)는 공식 목록 없는 실무 팁 · 여객선 기준 미확인 · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Chihaya Sta (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Christophe95 (CC BY-SA 4.0), Saigen Jiro (CC0)\n\nMusic: Wallpaper by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "page": "assets/pickharu/ig/rl-mj04-ig-20261123/index.html",
   "note": "11/20 하루씩 뒤로 밈(블로그 엑셀 글이 21:30 발행이라 첫 편부터 링크가 살아 있게). id의 날짜는 최초 배정일. / 11/22 사용자 '나머지도 자동으로 올려줘' — 자동 게시. 그래프 API에 음악 칸이 없어 소리 없이 나간다. / 11/22 사용자 '1~7탄 빨리 올리고' — 하루 2편(15:30·20:30)으로 당김, 11/25에 7탄까지 끝.",
-  "auto": true
+  "auto": true,
+  "bgm": {
+   "file": "wallpaper.mp3",
+   "title": "Wallpaper",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "memo": "🎵 음악 넣어 자동 게시: Wallpaper"
  },
  {
   "id": "rl-mj05-ig-20261124",
