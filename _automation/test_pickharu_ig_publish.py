@@ -288,6 +288,19 @@ class RunOnceTest(unittest.TestCase):
         self.assertEqual(items[0]["status"], FAILED)
         self.assertEqual(http.calls, [])
 
+    def test_music_notice_card_alerts_after_post(self):
+        # 11/23 사용자 "카드뉴스 자동으로, 음악 붙여서": 광고 아닌 카드도 music_notice 면 올라간 뒤 음악 넣기 알림
+        sent = []
+        _, items = self.run_once([dict(item(make_site(self.root)), music_notice=True)],
+                                 notify=lambda it: sent.append(it.get("post_id")) or "텔레그램 보냄")
+        self.assertEqual(sent, ["post9"])
+        self.assertIn("음악 넣기 알림", items[0]["music_note"])
+
+    def test_plain_card_without_music_notice_sends_nothing(self):
+        sent = []
+        self.run_once([item(make_site(self.root))], notify=lambda it: sent.append(1) or "x")
+        self.assertEqual(sent, [])
+
     def test_daily_cap_blocks_post_over_cap(self):
         images = make_site(self.root)
         done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]

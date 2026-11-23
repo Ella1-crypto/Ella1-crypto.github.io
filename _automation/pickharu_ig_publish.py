@@ -326,6 +326,9 @@ def telegram_notify(item: dict) -> str:
     if item.get("post_id"):
         text = (f"📸 인스타 카드뉴스 올라갔어요 · {item['id']}\n{first}\n"
                 "앱에서 게시물 → 오른쪽 위 메뉴 → 수정 → 오디오 바꾸기로 음악을 넣어 주세요.")
+        line = reel_notice.music_line(item)  # 11/23: 카드뉴스에도 곡 추천(music{top,alt,search})이 있으면 같이
+        if line:
+            text += "\n" + line
     else:
         # 2026-11-23 사용자 "릴스, 클립은 이런 식으로 텔레그램에 항상 왔으면": 음악 1순위·대안·검색어·볼륨 규칙까지 한 모양으로
         text = reel_notice.due_notice(item, SITE_URL)
@@ -414,7 +417,8 @@ def run_once(now: datetime, token: str, http: Http = http_json,
             done["story_id"] = publish_story(due.get("story_image") or due["images"][0], ig_user, token, http, sleep)
         except PUBLISH_ERRORS as error:
             done["story_error"] = f"스토리 실패: {error} — 게시물은 올라감, 스토리만 직접 올리기"
-    if notify and due.get("ad") and "video" not in due:
+    # 11/23 사용자 "카드뉴스 자동으로, 음악 붙여서": 광고가 아니어도 music_notice 면 올라간 뒤 음악 넣기 알림
+    if notify and (due.get("ad") or due.get("music_notice")) and "video" not in due:
         sent = notify({**due, **done})
         if sent:
             done["music_note"] = f"음악 넣기 알림 {sent}"
