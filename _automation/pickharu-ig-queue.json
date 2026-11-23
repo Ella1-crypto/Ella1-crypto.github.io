@@ -3576,11 +3576,15 @@
   "status": "예약",
   "page": "assets/pickharu/ig/rl-kakao-hangyodon-stand/index.html",
   "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/20 텔레그램 검수 확정(hangyodon-v2) · 음악 11/23 고름(music-guide 11/9: 캐릭터 굿즈 1순위 = @odang.pick 우사기 192.1만 사용곡, 대안 = @long_2_salim 11월 크리스마스 전환곡). 훅B·캡션 v3는 검수 화면 hangyodon-v3-hookB에서 결정 대기",
-  "music": {
-   "top": "Pajama Parties no Uta · パジャマパーティーズ",
-   "alt": "Winter Wonderland · 제이레빗",
-   "search": "kawaii, cute pop, music box"
-  }
+  "bgm": {
+   "file": "jingle-bells.mp3",
+   "title": "Jingle Bells",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "comment": "Music: Jingle Bells by Kevin MacLeod (incompetech.com), CC BY 4.0",
+  "auto": true,
+  "memo": "🎵 음악 넣어 자동 게시: Jingle Bells"
  },
  {
   "id": "rl-20261123-nb-blackfriday",
