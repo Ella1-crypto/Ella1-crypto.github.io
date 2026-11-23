@@ -3680,7 +3680,17 @@
   ],
   "status": "예약",
   "story_image": "assets/pickharu/ig/ig-yt16-clean-20261123/story.jpg",
-  "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인"
+  "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인",
+  "test": {
+   "group": "yt-repost-hook",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 카드뉴스는 숫자 훅(②)이 정리 훅(⑥)·반전 훅(③)보다 도달 대비 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-23",
+   "variant_label": "② 숫자",
+   "hook_text": "보험료는 100만 원까지만 세액공제"
+  }
  },
  {
   "id": "rl-yt16-clean-20261123",
@@ -3690,6 +3700,16 @@
   "share_to_feed": false,
   "status": "예약",
   "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인",
-  "page": "assets/pickharu/ig/rl-yt16-clean-20261123/index.html"
+  "page": "assets/pickharu/ig/rl-yt16-clean-20261123/index.html",
+  "test": {
+   "group": "yt-repost-hook-reel",
+   "variable": "hook_type",
+   "variant": "②숫자",
+   "hypothesis": "연말정산 릴스도 숫자 훅(②)이 저장+공유가 높다",
+   "kpi": "saves_shares_per_reach",
+   "tagged_at": "2026-11-23",
+   "variant_label": "② 숫자",
+   "hook_text": "보험료는 100만 원까지만 세액공제"
+  }
  }
 ]
