@@ -46,7 +46,7 @@
   },
   {
    "id": "hangyodon-v3-hookB",
-   "title": "카카오 한교동 스탠드 훅B (11/26 12:30 · 지금 예약은 원래 훅)",
+   "title": "카카오 한교동 스탠드 훅B 제안 (고르시면 11/26 12:30 영상·캡션 바꿈)",
    "kind": "video",
    "video": "hangyodon-v3-hookB/reel.mp4",
    "fps": 30,
@@ -57,7 +57,7 @@
   },
   {
    "id": "seven-kitty-cards-v2",
-   "title": "세븐일레븐 헬로키티 카드뉴스 5장 (11/25 18:30 자동 · 릴스 취소)",
+   "title": "세븐일레븐 헬로키티 카드뉴스 5장 (11/25 18:30 자동 · 끝 장 = 스레드용 한 장)",
    "kind": "video",
    "video": "seven-kitty-cards-v2/reel.mp4",
    "fps": 30,
@@ -68,40 +68,41 @@
   },
   {
    "id": "thehyundai-prewinter-v1",
-   "title": "더현대Hi 프리 윈터 위크 릴스 (11/26 18:40 직접 게시 · 카드 6장 18:30 자동)",
+   "title": "더현대Hi 프리 윈터 위크 릴스 (11/24 19:45 직접 게시 · 카드 6장 19:35 자동, 스레드와 같은 날)",
    "kind": "video",
    "video": "thehyundai-prewinter-v1/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "확정",
    "changes": "새로 만듦: 적립 신청이 핵심, 기간·구간·카드 7%·행사 상품·코디 셋·기획전, 또과장, 제휴 아님([광고] 없음)",
    "created": "2026-11-23T11:50:25+09:00",
    "v": 1795402225
   },
   {
    "id": "hangyodon-v1",
-   "title": "카카오 한교동 스탠드 (11/26 12:30 · 음악 미정)",
+   "title": "카카오 한교동 스탠드 (11/26 12:30 직접 게시 · 음악 골랐어요)",
    "kind": "video",
    "video": "hangyodon-v1/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "확정",
    "changes": "음악 아직 안 골랐어요 — 올리기 전에 말씀 주세요",
    "created": "2026-11-23T11:47:39+09:00",
    "v": 1795402059
   },
   {
    "id": "seven-kitty-v1",
-   "title": "세븐일레븐 헬로키티 티라미수 v1 (11/25 18:40 직접 게시)",
+   "title": "세븐일레븐 헬로키티 티라미수 릴스 v1 (취소 · 카드뉴스로 바뀜)",
    "kind": "video",
    "video": "seven-kitty-v1/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "취소",
    "changes": "사전예약 12/7까지, 보냉백 선착순 2만, 날짜 세 개",
    "created": "2026-11-23T11:47:33+09:00",
-   "v": 1795402053
+   "v": 1795402053,
+   "replaced_by": "seven-kitty-cards-v2"
   },
   {
    "id": "spao-bf-v1",
-   "title": "스파오 블프 v1 (11/24 18:40 직접 게시)",
+   "title": "스파오 블프 v1 (11/24 18:40 직접 게시 · 카드 18:30 자동)",
    "kind": "video",
    "video": "spao-bf-v1/reel.mp4",
    "fps": 30,
@@ -112,7 +113,7 @@
   },
   {
    "id": "nb-bf-v1",
-   "title": "뉴발란스 블프 v1 (오늘 18:40 직접 게시)",
+   "title": "뉴발란스 블프 v1 (11/23 18:40 직접 게시 · 카드 18:30 자동)",
    "kind": "video",
    "video": "nb-bf-v1/reel.mp4",
    "fps": 30,
@@ -123,25 +124,27 @@
   },
   {
    "id": "kitty-lunchbag-v3",
-   "title": "카카오 07 키티 도시락 가방 v3 (상세페이지 실사, 17.4초)",
+   "title": "카카오 07 키티 도시락 가방 v3 (→ v4 플로우 시안 만드는 중)",
    "kind": "video",
    "video": "kitty-lunchbag-v3/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "다른 시안 요청",
    "changes": "장면마다 상세페이지 실사 컷 · 도시락이 쏙(넉넉한 용량, 약 23×15cm) · 입체 얼굴 · 방수 원단·튼튼한 손잡이·바느질 · 히든 리본 근접",
    "created": "2026-11-20T23:49:02+09:00",
-   "v": 1795186142
+   "v": 1795186142,
+   "replaced_by": "kitty-lunchbag-v4"
   },
   {
    "id": "kuromi-tv-v3",
-   "title": "카카오 09 쿠로미 TV 무드등 v3 (상세페이지 실사, 17.5초)",
+   "title": "카카오 09 쿠로미 TV 무드등 v3 (→ v4 시나모롤 결 만드는 중)",
    "kind": "video",
    "video": "kuromi-tv-v3/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "다른 시안 요청",
    "changes": "장면마다 상세페이지 불 켜진 실사 컷 · 버튼 누르면 불 켜짐 · 크기 약 8×11cm(손바닥만) · 키티 TV는 옵션에 없어 뺌",
    "created": "2026-11-20T23:44:54+09:00",
-   "v": 1795185894
+   "v": 1795185894,
+   "replaced_by": "kuromi-tv-v4"
   },
   {
    "id": "kitty-lunchbag-v2",
@@ -210,5 +213,5 @@
    "v": 1795175668
   }
  ],
- "updated": "2026-11-23T12:27:11+09:00"
+ "updated": "2026-11-23T12:29:12+09:00"
 }
