@@ -1,6 +1,17 @@
 {
  "items": [
   {
+   "id": "alo-bf-v1-m3",
+   "title": "알로 요가 블프 릴스 음악 후보 · 🎵3 Pixel Peeker Polka - faster",
+   "kind": "video",
+   "video": "alo-bf-v1-m3/reel.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "음악 후보 3/3: Pixel Peeker Polka - faster (CC BY 4.0) · 영상에 섞어 넣은 판",
+   "created": "2026-11-23T15:41:29+09:00",
+   "v": 1795416089
+  },
+  {
    "id": "alo-bf-v1-m2",
    "title": "알로 요가 블프 릴스 음악 후보 · 🎵2 Life of Riley",
    "kind": "video",
@@ -636,5 +647,5 @@
    "v": 1795175668
   }
  ],
- "updated": "2026-11-23T15:41:20+09:00"
+ "updated": "2026-11-23T15:41:29+09:00"
 }
