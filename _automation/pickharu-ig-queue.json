@@ -3589,15 +3589,18 @@
   "video": "assets/pickharu/ig/rl-20261123-nb-blackfriday/reel.mp4",
   "share_to_feed": false,
   "status": "예약",
-  "comment": "출처: 뉴발란스 공식 블랙프라이데이 페이지·공식몰 검색 (2026년 11월 23일 확인)\nhttps://www.nbkorea.com/event/blackfridayfw2026_main.action\n값·쿠폰은 바뀔 수 있어서 결제 전에 한 번 더 확인해 주세요.",
+  "comment": "출처: 뉴발란스 공식 블랙프라이데이 페이지·공식몰 검색 (2026년 11월 23일 확인)\nhttps://www.nbkorea.com/event/blackfridayfw2026_main.action\n값·쿠폰은 바뀔 수 있어서 결제 전에 한 번 더 확인해 주세요.\n\nMusic: Pixel Peeker Polka - faster by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "page": "assets/pickharu/ig/rl-20261123-nb-blackfriday/index.html",
   "label": "뉴발란스 블프 v4 (배경 사진판·훅B)",
-  "music": {
-   "top": "즐거운 생활 · 45RPM",
-   "alt": "위드(With) · 리센느",
-   "search": "shopping, upbeat pop, happy funk"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 통합 센터 요청(11/23), 음악은 music-guide 11/9 기준 · 11/23 사용자 확정으로 nb_v3 영상·캡션으로 교체 · 11/23 검수 메모(배경 변경 5곳) 반영 v4로 교체, 18:40→21:30 (사용자 '미루고 고치기')",
+  "bgm": {
+   "file": "pixel-peeker-polka---faster.mp3",
+   "title": "Pixel Peeker Polka - faster",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
   },
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 통합 센터 요청(11/23), 음악은 music-guide 11/9 기준 · 11/23 사용자 확정으로 nb_v3 영상·캡션으로 교체 · 11/23 검수 메모(배경 변경 5곳) 반영 v4로 교체, 18:40→21:30 (사용자 '미루고 고치기')"
+  "auto": true,
+  "memo": "🎵 음악 넣어 자동 게시: Pixel Peeker Polka - faster"
  },
  {
   "id": "rl-20261123-spao-blackfriday",
