@@ -3729,12 +3729,12 @@
  },
  {
   "id": "rl-yt16-clean-20261123",
-  "publish_at": "2026-11-23T20:40+09:00",
+  "publish_at": "2026-11-23T21:40+09:00",
   "caption": "연말정산 16탄, 보험료는 100만 원까지만 세액공제예요 🛡️\n\n300만 원 내도 100만 원까지만 쳐 줘요.\n① 보장성보험료는 연 100만 원까지 12%,\n다 채우면 12만 원이에요.\n② 장애인전용 보장성보험은 따로\n연 100만 원, 15%라 최대 15만 원이에요.\n③ 피보험자가 기본공제 대상자여야 해요.\n의료비·교육비와 달리\n나이·소득 요건이 그대로 붙어요.\n④ 전세보증금 반환보증보험료도\n이 칸에 들어가요.\n\n저축성보험은 안 들어가요.\n낸 것보다 더 돌려주는 건 빠지거든요.\n\n출처는 첫 댓글에 정리했어요.\n\n월 8만 3천 원쯤이면 한도를 다 쓰는 셈이에요.\n간소화 자료에서 '보장성'으로 뜨는지\n보면 돼요.\n저장해 두고 1월에 꺼내 보세요 🤍\n\n📍 프로필 인포크 103번에 체크리스트\n내 상황 고르면 해당하는 것만 나와요\n\n#연말정산 #연말정산16탄 #보험료공제 #보장성보험 #세액공제",
   "video": "assets/pickharu/ig/rl-yt16-clean-20261123/reel.mp4",
   "share_to_feed": false,
-  "status": "직접 게시",
-  "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인",
+  "status": "예약",
+  "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인\n\nMusic: Deck the Halls B by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "page": "assets/pickharu/ig/rl-yt16-clean-20261123/index.html",
   "test": {
    "group": "yt-repost-hook-reel",
@@ -3746,7 +3746,15 @@
    "variant_label": "② 숫자",
    "hook_text": "보험료는 100만 원까지만 세액공제"
   },
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/73"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/73 | 11/23 20:40 자리를 5분 넘겨 21:40으로 옮김 · 16탄부터 음악 섞어 자동 게시",
+  "auto": true,
+  "bgm": {
+   "file": "deck-the-halls-b.mp3",
+   "title": "Deck the Halls B",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "memo": "🎵 음악 넣어 자동 게시: Deck the Halls B"
  },
  {
   "id": "rl-20261123-alo-bf",
