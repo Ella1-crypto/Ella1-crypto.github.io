@@ -79,6 +79,12 @@ textarea{min-height:70px;resize:vertical}
     </div>
     <textarea id="dir" placeholder="다른 시안 방향(선택)" hidden style="margin-top:6px"></textarea>
   </div>
+
+  <div class="sec">
+    <b>참고 영상·사진·링크 (선택)</b>
+    <label class="row" style="gap:8px;align-items:center;margin-top:6px"><input type="checkbox" id="wantref" style="width:auto"> 보낸 뒤 참고 자료도 올릴게요</label>
+    <p class="hint">체크하고 보내면 봇이 "이 메시지에 답장으로 보내 주세요" 안내를 보내요. 거기에 사진·영상(앨범 OK)·인스타/핀터레스트 링크를 답장으로 보내면 이 시안에 붙어요. 20MB 넘는 영상은 링크로.</p>
+  </div>
   <p class="warn" id="warn" hidden></p>
 </main>
 <div class="send"><button class="btn primary" id="send">텔레그램으로 보내기</button></div>
@@ -158,8 +164,9 @@ $("#text").addEventListener("input",()=>{ try{localStorage.setItem(key()+"-draft
 $("#send").onclick=()=>{
   const pending=$("#text").value.trim();
   if(pending){ $("#add").click(); }
-  if(!notes.length && !decision){ warn("메모나 결정이 없어요."); return; }
-  const payload={i:cur.id,ti:cur.title,n:notes,d:decision,dir:decision==="다른 시안"?$("#dir").value.trim():""};
+  const ref=$("#wantref").checked;
+  if(!notes.length && !decision && !ref){ warn("메모나 결정이 없어요."); return; }
+  const payload={i:cur.id,ti:cur.title,n:notes,d:decision,dir:decision==="다른 시안"?$("#dir").value.trim():"",r:ref?1:0};
   let s=JSON.stringify(payload);
   if(new Blob([s]).size>4000){ warn("메모가 너무 길어요(텔레그램 한도). 나눠서 보내 주세요."); return; }
   if(inTg && tg.sendData){
