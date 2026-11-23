@@ -3874,9 +3874,16 @@
   "video": "assets/pickharu/ig/rl-mj03-ig-20261123v2/reel.mp4",
   "share_to_feed": false,
   "status": "예약",
-  "comment": "📌 출처: MTN 2026-11-12 보도(식약처·관세청 관계자 발언: 반복 반입·검사 이력) · 의약품 부작용 피해구제 제도 안내(한국 반입 의약품·일본 적응외 사용 제외) · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Christophe95 (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Chihaya Sta (CC BY-SA 4.0) / Unsplash — Ryan Cheon",
+  "comment": "📌 출처: MTN 2026-11-12 보도(식약처·관세청 관계자 발언: 반복 반입·검사 이력) · 의약품 부작용 피해구제 제도 안내(한국 반입 의약품·일본 적응외 사용 제외) · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Christophe95 (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Chihaya Sta (CC BY-SA 4.0) / Unsplash — Ryan Cheon\n\nMusic: Life of Riley by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "auto": true,
   "label": "마운자로 3탄 릴스 다시판 (125 칩 뺌)",
-  "note": "11/23 20:3x 사용자 검수 화면 답장 '확정' · 기존 3탄은 희야가 인스타에서 보관"
+  "note": "11/23 20:3x 사용자 검수 화면 답장 '확정' · 기존 3탄은 희야가 인스타에서 보관",
+  "bgm": {
+   "file": "life-of-riley.mp3",
+   "title": "Life of Riley",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "memo": "🎵 음악 넣어 자동 게시: Life of Riley"
  }
 ]
