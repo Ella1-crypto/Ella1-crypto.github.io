@@ -3740,7 +3740,7 @@
    "assets/pickharu/ig/ig-yt16-clean-20261123/07.jpg",
    "assets/pickharu/ig/ig-yt16-clean-20261123/08.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-yt16-clean-20261123/story.jpg",
   "comment": "📌 출처: 소득세법 제59조의4(특별세액공제)·시행령 제118조의4 원문 · 2026년 11월 19일 확인",
   "test": {
@@ -3753,7 +3753,11 @@
    "variant_label": "② 숫자",
    "hook_text": "보험료는 100만 원까지만 세액공제"
   },
-  "note": "11/23 20:30 게시가 HTTP 400 Timeout으로 실패 · 희야가 인스타에서 '안 올라갔다' 확인 → 21:30으로 다시 예약(짝 릴스 21:40) | 11/23 21:1x 뉴발란스 릴스와 21:30 에 겹쳐 있어 벌림(어제 같은 자리에서 HTTP 400 으로 실패)."
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "post_id": "18065208188532363",
+  "published_at": "2026-11-23T21:37+09:00",
+  "comment_id": "18421866229159982",
+  "story_id": "18113877710524925"
  },
  {
   "id": "rl-yt16-clean-20261123",
