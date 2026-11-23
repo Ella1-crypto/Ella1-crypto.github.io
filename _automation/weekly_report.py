@@ -311,6 +311,28 @@ def top_bottom(posts: list[dict], n: int = 3) -> tuple[list[dict], list[dict]]:
     return top, bottom
 
 
+def diagnose(acc: dict) -> list[dict]:
+    """(2026-11-23 바코드랩 판매 진단) 글마다 다음에 바꿀 것 하나.
+    조회가 계정 중앙값의 절반 아래 → 첫 줄 교체(멈추게 못 함).
+    조회는 중앙값 이상인데 조회당 반응이 중앙값의 절반 아래 → 상품·내용 교체(봤는데 안 끌림).
+    클릭 수는 아직 수집하지 않아서(인포크·쿠팡 리포트) 반응(좋아요·답글·공유·저장)으로 대신 본다."""
+    scored = [p for p in acc["posts"] if p["primary"] and p["primary_label"] in ("조회", "도달")]  # 좋아요+댓글 대체값으론 진단 안 함
+    if len(scored) < 3:
+        return []
+    views = sorted(p["primary"] for p in scored)
+    med_v = views[len(views) // 2]
+    epv = sorted(p["engage"] / p["primary"] for p in scored)
+    med_e = epv[len(epv) // 2]
+    out = []
+    for p in sorted(scored, key=lambda p: p["when"]):
+        rate = p["engage"] / p["primary"]
+        if p["primary"] < med_v * 0.5:
+            out.append({**p, "fix": "첫 줄 교체", "why": f"{p['primary_label']} {p['primary']:,} < 중앙값 {med_v:,}의 절반"})
+        elif p["primary"] >= med_v and med_e > 0 and rate < med_e * 0.5:
+            out.append({**p, "fix": "상품·내용 교체", "why": f"{p['primary_label']}는 많은데 반응률 {rate:.1%} < 중앙값 {med_e:.1%}의 절반"})
+    return out
+
+
 def series_table(accounts: list[dict]) -> list[dict]:
     rows: dict[str, dict] = {}
     for acc in accounts:
@@ -376,6 +398,11 @@ def build_markdown(start: datetime, end: datetime, accounts: list[dict], blog: d
             L.append(f"- **약한 글 {len(bottom)}**")
             for p in bottom:
                 L.append(f"  - {post_line(p, acc['platform'])}")
+        fixes = diagnose(acc)
+        if fixes:
+            L.append(f"- **다음에 바꿀 것** (조회 낮음 = 첫 줄, 조회 많은데 반응 적음 = 상품·내용; 클릭 수는 아직 없음)")
+            for p in fixes:
+                L.append(f"  - {p['fix']}: `{p['id']}` {p['title']} — {p['why']}")
         no_metrics = [p for p in acc["posts"] if not p["has_metrics"]]
         if no_metrics:
             L.append(f"- 수치 못 받은 글 {len(no_metrics)}: " + ", ".join(f"`{p['id']}`" for p in no_metrics))
@@ -467,6 +494,10 @@ def build_telegram(start: datetime, end: datetime, accounts: list[dict], blog: d
             L.append("  잘됨: " + " / ".join(f"{p['title'][:18]}({p['primary']:,})" for p in top))
         if bottom:
             L.append("  약함: " + " / ".join(f"{p['title'][:18]}({p['primary']:,})" for p in bottom))
+        fixes = diagnose(acc)
+        if fixes:
+            n1 = sum(1 for p in fixes if p["fix"] == "첫 줄 교체")
+            L.append(f"  바꿀 것: 첫 줄 {n1} · 상품·내용 {len(fixes) - n1}" + " (" + " / ".join(f"{p['title'][:12]}→{'첫줄' if p['fix'] == '첫 줄 교체' else '상품'}" for p in fixes[:3]) + ")")
     L.append(f"\n블로그: 새 글 {len(blog['items'])}편" + (" · " + " / ".join(b["title"][:18] for b in blog["items"][:3]) if blog["items"] else "") + " · 조회수는 앱에서")
     rows = series_table(accounts)
     if rows:
