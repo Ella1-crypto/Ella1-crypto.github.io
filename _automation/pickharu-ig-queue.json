@@ -3629,15 +3629,18 @@
   "video": "assets/pickharu/ig/rl-20261123-thehyundai-prewinter/reel.mp4",
   "share_to_feed": false,
   "status": "예약",
-  "comment": "출처: 더현대Hi 「프리 윈터 위크」 공식 행사 페이지 (2026년 11월 23일 확인)\nhttps://hi.thehyundai.com/contents/787929\n적립 구간·제외 브랜드는 바뀔 수 있어서 결제 전에 한 번 더 확인해 주세요.",
+  "comment": "출처: 더현대Hi 「프리 윈터 위크」 공식 행사 페이지 (2026년 11월 23일 확인)\nhttps://hi.thehyundai.com/contents/787929\n적립 구간·제외 브랜드는 바뀔 수 있어서 결제 전에 한 번 더 확인해 주세요.\n\nMusic: Fluffing a Duck by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "page": "assets/pickharu/ig/rl-20261123-thehyundai-prewinter/index.html",
   "label": "더현대Hi 프리 윈터 위크 v1",
-  "music": {
-   "top": "Random Switch (remix) · Carpe Diem",
-   "alt": "위드(With) · 리센느",
-   "search": "upbeat pop, focus beat, shopping"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 통합 센터 요청(11/23), 제휴 아님([광고] 없음), 음악은 music-guide 11/9 기준(패션 꿀팁·세일) · 11/23 사용자 \"카드뉴스랑 같이\" → 스레드 11/24 19:25와 같은 날로 옮김",
+  "bgm": {
+   "file": "fluffing-a-duck.mp3",
+   "title": "Fluffing a Duck",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
   },
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 통합 센터 요청(11/23), 제휴 아님([광고] 없음), 음악은 music-guide 11/9 기준(패션 꿀팁·세일) · 11/23 사용자 \"카드뉴스랑 같이\" → 스레드 11/24 19:25와 같은 날로 옮김"
+  "auto": true,
+  "memo": "🎵 음악 넣어 자동 게시: Fluffing a Duck"
  },
  {
   "id": "rl-kakao-096-kuromi-tv",
