@@ -125,10 +125,11 @@ class VideoTest(unittest.TestCase):
         self.dir.cleanup()
 
     def test_video_rules(self):
+        """2026-11-23 사용자 "스레드에는 카드뉴스만 … mp4 형식은 ㄴㄴ": 영상이 붙어 있으면 무조건 막는다."""
         ok = {**item("a", text="이거 봐\n[광고] 쿠팡파트너스"), "video": "assets/pickharu/v1.mp4"}
-        self.assertEqual(pp.video_problem(ok, self.root), "")
-        self.assertIn("없음", pp.video_problem({**ok, "video": "assets/pickharu/none.mp4"}, self.root))
-        self.assertIn("경로", pp.video_problem({**ok, "video": "../secret.mp4"}, self.root))
+        self.assertIn("영상", pp.video_problem(ok, self.root))
+        self.assertIn("영상", pp.video_problem({**ok, "video": "assets/pickharu/none.mp4"}, self.root))
+        self.assertEqual(pp.video_problem({**ok, "video": ""}, self.root), "")
 
     def test_publishes_video_after_processing_finishes(self):
         calls, states = [], iter(["IN_PROGRESS", "FINISHED"])

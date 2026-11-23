@@ -102,6 +102,8 @@ def video_problem(item: dict, root: Path = SITE_ROOT) -> str:
     video = item.get("video")
     if not video:
         return ""
+    # 2026-11-23 사용자 "스레드에는 카드뉴스만 올려줘 / 릴스 올리지 말고 mp4 형식은 ㄴㄴ"
+    return "스레드엔 영상(mp4)을 올리지 않음 — 카드뉴스(images)로 넣으세요"
     if not VIDEO_RE.fullmatch(video):
         return "영상 경로는 assets/pickharu/이름.mp4 여야 함"
     path = root / video
