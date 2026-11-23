@@ -4000,7 +4000,7 @@
    "assets/pickharu/ig/ig-20261124-mj02-card/04.jpg",
    "assets/pickharu/ig/ig-20261124-mj02-card/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-20261124-mj02-card/story.jpg",
   "comment": "📌 출처: 후생노동성 안전성정보 No.406(일본 승인 적응증·적응외 사용, 외국인 보험진료 불가) · 후생노동대신 회견 2026-10-09(귀국 후 사용 목적 과잉 기간 처방 부적절) · Medical Tribune 2026-11-09 보도(일본 릴리·다나베파마 공급 재검토) · 식약처·관세청 보도자료 2026-11-11(11/12 시행) · 2026년 11월 14일 확인 · 의학적 조언·구매 권유 아님",
   "label": "마운자로 2탄 카드뉴스",
@@ -4010,7 +4010,13 @@
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
   },
-  "ad": true
+  "ad": true,
+  "post_id": "18124796596979635",
+  "published_at": "2026-11-23T22:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18111084353569375",
+  "story_id": "17929123173201450",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/75"
  },
  {
   "id": "ig-20261124-mj03-card",
