@@ -3855,10 +3855,17 @@
   "video": "assets/pickharu/ig/rl-mj01-ig-20261123v2/reel.mp4",
   "share_to_feed": false,
   "status": "예약",
-  "comment": "📌 출처: 식약처 보도자료(2026-11-11 배포, 11/12 시행) 자가 치료용 의약품 휴대 반입 기준 · 관세청 여행자 휴대품 면세 한도 800달러 · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Jakub Hałun (CC BY-SA 4.0), Chihaya Sta (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Saigen Jiro (CC0)",
+  "comment": "📌 출처: 식약처 보도자료(2026-11-11 배포, 11/12 시행) 자가 치료용 의약품 휴대 반입 기준 · 관세청 여행자 휴대품 면세 한도 800달러 · 2026년 11월 16일 확인 / 사진: Wikimedia Commons — Jakub Hałun (CC BY-SA 4.0), Chihaya Sta (CC BY-SA 4.0), ERIC  SALARD (CC BY-SA 2.0), Saigen Jiro (CC0)\n\nMusic: Merry Go by Kevin MacLeod (incompetech.com), CC BY 4.0",
   "auto": true,
   "label": "마운자로 1탄 릴스 다시판 (125 칩 뺌)",
-  "note": "11/23 20:3x 사용자 검수 화면 답장 '확정' · 기존 1탄은 희야가 인스타에서 보관"
+  "note": "11/23 20:3x 사용자 검수 화면 답장 '확정' · 기존 1탄은 희야가 인스타에서 보관",
+  "bgm": {
+   "file": "merry-go.mp3",
+   "title": "Merry Go",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
+  },
+  "memo": "🎵 음악 넣어 자동 게시: Merry Go"
  },
  {
   "id": "rl-mj03-ig-20261123v2",
