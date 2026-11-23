@@ -4029,7 +4029,7 @@
    "assets/pickharu/ig/ig-20261124-mj03-card/04.jpg",
    "assets/pickharu/ig/ig-20261124-mj03-card/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-20261124-mj03-card/story.jpg",
   "comment": "📌 출처: MTN 2026-11-12 보도(식약처 '일주일 후 다시 3개월치 반입은 치료 목적 보기 어려워 원칙적으로 허용 안 됨', 관세청 관계자 '검사 이력 관리·빈번 출입국자 추가 선별 가능·개인별 반입 이력 관리 시스템 없음', 반복 반입 제한 별도 규정 없음은 기자 서술) · 피해구제: 뉴스1 2026-11-13(한국 자가치료용 반입 의약품 제외), 후생노동성 안전성정보 No.406(일본 적응외 감량 목적 구제급부 어려움) · 2026년 11월 14일 확인 · 의학적 조언·구매 권유 아님",
   "label": "마운자로 3탄 카드뉴스",
@@ -4039,7 +4039,13 @@
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
   },
-  "ad": true
+  "ad": true,
+  "post_id": "18095031122499229",
+  "published_at": "2026-11-23T23:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18133926571694229",
+  "story_id": "17971007166194591",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/76"
  },
  {
   "id": "ig-20261124-mj04-card",
