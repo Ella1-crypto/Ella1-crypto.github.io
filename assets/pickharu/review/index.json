@@ -6,7 +6,7 @@
    "kind": "video",
    "video": "alo-bf-v1-m3/reel.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "취소",
    "changes": "음악 후보 3/3: Pixel Peeker Polka - faster (CC BY 4.0) · 영상에 섞어 넣은 판",
    "created": "2026-11-23T15:41:29+09:00",
    "v": 1795416089
@@ -647,5 +647,5 @@
    "v": 1795175668
   }
  ],
- "updated": "2026-11-23T15:51:01+09:00"
+ "updated": "2026-11-23T15:51:04+09:00"
 }
