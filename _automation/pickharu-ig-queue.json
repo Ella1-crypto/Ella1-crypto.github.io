@@ -3651,12 +3651,16 @@
   "status": "예약",
   "page": "assets/pickharu/ig/rl-kakao-096-kuromi-tv/index.html",
   "label": "쿠로미 TV 무드등 v3",
-  "music": {
-   "top": "Christmas Market · Eoneun",
-   "alt": "Winter Wonderland · 제이레빗",
-   "search": "music box, cozy night"
+  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/23 12:27 텔레그램 검수 확정(kuromi-tv-v3). 캡션의 배경 3종 줄은 상세 사진과 안 맞을 수 있어 뺌. 음악 = 시나모롤 무드등과 같은 결(music-guide 11/9)",
+  "bgm": {
+   "file": "merry-go.mp3",
+   "title": "Merry Go",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0"
   },
-  "note": "릴스는 사용자가 음악을 골라 직접 올림 — 발행기는 올리지 않음 · 11/23 12:27 텔레그램 검수 확정(kuromi-tv-v3). 캡션의 배경 3종 줄은 상세 사진과 안 맞을 수 있어 뺌. 음악 = 시나모롤 무드등과 같은 결(music-guide 11/9)"
+  "comment": "Music: Merry Go by Kevin MacLeod (incompetech.com), CC BY 4.0",
+  "auto": true,
+  "memo": "🎵 음악 넣어 자동 게시: Merry Go"
  },
  {
   "id": "rl-inpock-031-red-potion",
