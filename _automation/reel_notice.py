@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -156,6 +157,8 @@ def clip_entry(info: dict, mark: str) -> str:
 
 def clip_notice(infos: list[dict], title: str = "네이버 클립") -> str:
     """릴스 묶음 알림과 같은 모양. 클립은 음악 추천이 없어서 🎵 줄만 빠진다."""
+    # 제목에 이미 "4편"처럼 적어 보내도 "4편 4편"이 되지 않게 한 번만 붙인다.
+    title = re.sub(r"\s*\d+\s*편\s*$", "", title).strip()
     head = f"🎬 {title} {len(infos)}편 (올릴 순서대로)"
     blocks = [clip_entry(info, CIRCLED[i] if i < len(CIRCLED) else f"{i + 1}.")
               for i, info in enumerate(infos)]
