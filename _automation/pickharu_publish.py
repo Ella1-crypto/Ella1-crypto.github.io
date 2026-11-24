@@ -6,7 +6,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 안전장치 (재테크 자동 게시와 같은 방식 + 쇼핑 글 규칙):
 - 올리기 전에 '올리는 중'으로 커밋·푸시. 푸시가 안 되면 올리지 않는다(중복 게시 방지).
 - 토큰 계정이 pick.haru__1이 아니면 올리지 않는다.
-- 쇼핑 글은 쿠팡(기본), 카카오 선물하기(kind "카카오"), 네이버 브랜드 커넥트(kind "네이버") 세 종류. 종류마다 하루(KST) 상한, 첫 댓글 첫 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS). 2026-11-10부터 본문 끝 [광고] 검사 없음.
+- 쇼핑 글은 쿠팡(기본), 카카오 선물하기(kind "카카오"), 네이버 쇼핑 커넥트(kind "네이버") 세 종류. 쿠팡 글에 also:["네이버"]를 두면 두 종류 링크·고지를 한 글에 함께 단다(2026-11-24). 종류마다 하루(KST) 상한, 첫 댓글 첫 줄 광고 표시, 댓글 고지 문구·링크 형식이 따로 있다(SHOPS). 2026-11-10부터 본문 끝 [광고] 검사 없음.
 - 본문 500자, 본문 주소 금지.
 - 본문은 올라갔는데 댓글만 실패하면 본문은 그대로 '올림'으로 두고 reply_error에 남긴다(본문 재게시 금지).
 - 토큰은 환경변수(GitHub Secrets)로만 받고 어디에도 기록하지 않는다.
@@ -70,7 +70,8 @@ BLOG_LINK_RE = re.compile(r"https://blog\.naver\.com/goghibli/\d+")
 COUPANG, KAKAO, NAVER = "쿠팡", "카카오", "네이버"
 KAKAO_DISCLOSURE = "이 포스팅은 선물하기 큐레이터 활동의 일환으로, 주문 발생 시 일정액의 수수료를 제공 받습니다."
 KAKAO_LINK_RE = re.compile(r"https://gift-link\.kakao\.com/c/[A-Za-z0-9_-]+")
-NAVER_DISCLOSURE = "이 포스팅은 네이버 브랜드 커넥트 활동의 일환으로, 판매 발생 시 일정액의 수수료를 제공받습니다."
+# 2026-11-24 사용자 "네이버 고지 문구를 쇼핑 커넥트 원문으로 바꾸기 / 고쳐" (11/19 원문 지정).
+NAVER_DISCLOSURE = "이 포스팅은 네이버 쇼핑 커넥트 활동의 일환으로, 판매 발생 시 수수료를 제공받습니다."
 NAVER_LINK_RE = re.compile(r"https://naver\.me/[A-Za-z0-9]+")  # 브랜드 커넥트 링크는 naver.me 단축 주소(2026-10-27 사용자 예시)
 # 올리브영 쇼핑 큐레이터(2026-11-02 승인). 가이드는 공식 문구를 제목·서두에 두라고 하지만, 2026-11-03 사용자가 위반 소지를 듣고도 다른 종류처럼(마지막 줄 [광고]+댓글 고지)으로 정함.
 OLIVEYOUNG = "올영"
@@ -91,7 +92,7 @@ COPY_MIN = 8  # 첫 댓글에 이 글자 수 이상인 본문 줄이 그대로 �
 SHOPS = {
     COUPANG: {"tag": AD_TAG, "disclosure": DISCLOSURE, "link": LINK_RE, "cap": DAILY_CAP},
     KAKAO: {"tag": "[광고] 카카오 선물하기", "disclosure": KAKAO_DISCLOSURE, "link": KAKAO_LINK_RE, "cap": 3},  # 2026-10-30 사용자 지정: 하루 3개까지
-    NAVER: {"tag": "[광고] 네이버 브랜드 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3,
+    NAVER: {"tag": "[광고] 네이버 쇼핑 커넥트", "disclosure": NAVER_DISCLOSURE, "link": NAVER_LINK_RE, "cap": 3,
             "max_links": 3},  # 2026-10-30 사용자 지정: 하루 3개까지. 11-01: 같은 상품 옵션(1개·2개·세트) 링크는 한 글에 3개까지
     # 2026-11-02 사용자: 하루 1개 → 같은 날 "블프 안에 끝내"로 2개. 11-03 사용자: 본문 첫머리 문구 빼고 다른 종류처럼 마지막 줄 [광고]+댓글 고지
     OLIVEYOUNG: {"tag": "[광고] 올리브영 쇼핑 큐레이터", "disclosure": OY_DISCLOSURE, "link": OY_LINK_RE, "cap": 2},
@@ -247,18 +248,26 @@ def problem_of(item: dict) -> str:
     if kind not in SHOPS:
         return f"알 수 없는 글 종류: {kind}"
     rule = SHOPS[kind]
+    # 2026-11-24 사용자 "쿠팡과 네이버 링크를 한 글에 함께 허용하고, 고지 두 줄을 같이 넣기 / 고쳐":
+    # also(함께 다는 종류 목록)가 있으면 그 종류들의 고지 문구도 모두 있어야 하고, 링크는 어느 종류 것이든 된다.
+    also = item.get("also") or []
+    if not isinstance(also, list) or any(a not in SHOPS or a == kind for a in also):
+        return "함께 다는 종류(also)는 다른 쇼핑 종류 이름 목록이어야 함"
+    rules = [(kind, rule)] + [(a, SHOPS[a]) for a in also]
     # 2026-11-10 사용자 "본문 끝 [광고]를 빼고 첫 댓글에만" (응 바꿔줘): 본문 마지막 줄 검사 없앰.
     # 광고 표시는 아래 '첫 댓글 첫 줄 [광고]' 검사가 맡는다. 본문에 남아 있어도(옛 큐) 막지 않는다.
-    if rule["disclosure"] not in reply:
-        return f"댓글에 {kind} 고지 문구가 없음"
+    for name, r in rules:
+        if r["disclosure"] not in reply:
+            return f"댓글에 {name} 고지 문구가 없음"
+    link = re.compile("|".join(f"(?:{r['link'].pattern})" for _, r in rules))
     urls = ANY_URL_RE.findall(reply)
-    max_links = rule.get("max_links", 1)
-    if not 1 <= len(urls) <= max_links or not all(rule["link"].fullmatch(u) for u in urls):
+    max_links = rule.get("max_links", 1) if not also else sum(r.get("max_links", 1) for _, r in rules)
+    if not 1 <= len(urls) <= max_links or not all(link.fullmatch(u) for u in urls):
         return f"댓글에 {kind} 링크가 1~{max_links}개 있어야 함" if max_links > 1 else f"댓글에 {kind} 링크가 정확히 1개 있어야 함"
     # 2026-11-09 사용자 "[광고]를 첫 댓글에 처음에 넣어줘야징": 첫 댓글 첫 줄도 광고 표시로 시작
     if not reply.lstrip().startswith("[광고]"):
         return f"첫 댓글 첫 줄이 [광고]로 시작하지 않음(광고 표시 {rule['tag']})"
-    return thread_problem(item, rule["link"]) or media_problem(item)
+    return thread_problem(item, link) or media_problem(item)
 
 
 def posted_today(items: list[dict], now: datetime, kind: str | None = COUPANG) -> int:

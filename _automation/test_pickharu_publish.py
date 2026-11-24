@@ -41,14 +41,14 @@ class KakaoRuleTest(unittest.TestCase):
         self.assertIn("링크", pp.problem_of(kakao("k", reply=f"https://gift.kakao.com/x\n{pp.KAKAO_DISCLOSURE}")))
 
     def test_naver_rules(self):
-        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트",
-                        reply=f"[광고] 네이버 브랜드 커넥트\n보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
+        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 쇼핑 커넥트",
+                        reply=f"[광고] 네이버 쇼핑 커넥트\n보러 가기 👉 https://naver.me/FNtaeTiN\n\n{pp.NAVER_DISCLOSURE}"), "kind": "네이버"}
         self.assertEqual(pp.problem_of(naver), "")
         self.assertEqual(pp.problem_of({**naver, "text": KAKAO_TEXT}), "")  # 2026-11-10: 본문 끝 표시 검사 없음
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{KAKAO_LINK}\n{pp.NAVER_DISCLOSURE}"}))
 
     def test_naver_allows_up_to_three_option_links(self):
-        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 브랜드 커넥트"), "kind": "네이버"}
+        naver = {**item("n", text="퇴근길 선물 고민이면 이거\n[광고] 네이버 쇼핑 커넥트"), "kind": "네이버"}
         links = ["https://naver.me/AAA1", "https://naver.me/BBB2", "https://naver.me/CCC3", "https://naver.me/DDD4"]
         three = "\n".join(links[:3])
         self.assertEqual(pp.problem_of({**naver, "reply": f"[광고]\n{three}\n\n{pp.NAVER_DISCLOSURE}"}), "")
@@ -56,6 +56,18 @@ class KakaoRuleTest(unittest.TestCase):
         self.assertIn("링크", pp.problem_of({**naver, "reply": f"{four}\n\n{pp.NAVER_DISCLOSURE}"}))
         mixed = f"https://naver.me/AAA1\n{KAKAO_LINK}\n\n{pp.NAVER_DISCLOSURE}"
         self.assertIn("링크", pp.problem_of({**naver, "reply": mixed}))
+
+    def test_coupang_with_naver_also(self):
+        reply = (f"[광고] 쿠팡파트너스 · 네이버 쇼핑 커넥트\n{LINK}\nhttps://naver.me/AAA1\n\n"
+                 f"{pp.DISCLOSURE}\n{pp.NAVER_DISCLOSURE}")
+        mix = {**item("m", reply=reply), "also": ["네이버"],
+               "thread": ["② https://naver.me/BBB2", f"③ {LINK}"]}
+        self.assertEqual(pp.problem_of(mix), "")
+        self.assertIn("네이버 고지", pp.problem_of({**mix, "reply": reply.replace(pp.NAVER_DISCLOSURE, "")}))
+        self.assertIn("링크", pp.problem_of({**mix, "also": []}))
+        self.assertIn("링크", pp.problem_of({**mix, "thread": [f"② {KAKAO_LINK}"]}))
+        self.assertIn("also", pp.problem_of({**mix, "also": ["없는종류"]}))
+        self.assertIn("also", pp.problem_of({**mix, "also": "네이버"}))
 
     def test_unknown_kind_rejected(self):
         self.assertIn("종류", pp.problem_of({**item("a"), "kind": "번개장터"}))
