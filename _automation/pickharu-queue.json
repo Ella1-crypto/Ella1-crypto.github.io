@@ -2130,14 +2130,17 @@
    "assets/pickharu/pf-20261123-2-3.png"
   ],
   "publish_at": "2026-11-24T12:10+09:00",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": {
    "via": "telegram",
    "user_id": 8420322263,
    "update_id": 479665662,
    "message_id": 1376,
    "at": "2026-11-23T15:30:49+09:00"
-  }
+  },
+  "post_id": "18149640397569834",
+  "published_at": "2026-11-24T12:10+09:00",
+  "reply_id": "18124836824076526"
  },
  {
   "id": "if-20261123alo-1",
