@@ -4095,7 +4095,7 @@
    "assets/pickharu/ig/ig-20261124-mj05-card/04.jpg",
    "assets/pickharu/ig/ig-20261124-mj05-card/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "story_image": "assets/pickharu/ig/ig-20261124-mj05-card/story.jpg",
   "comment": "📌 출처: 일본 클리닉 자체 페이지(2026-10-01 갱신, 2펜 1상자=2주분 · 4펜 약 4주분 · 도쿄 한 클리닉 1펜 3,500엔·4펜 14,000엔) · 도쿄 클리닉 공식 요금표 2026-11-19(4펜 13,800엔) · 후기 집계 스시자로 2026-11-23(네이버 블로그 후기 306건·60곳, 공식가 아님) · 2026년 11월 19일 확인 · 의학적 조언·구매 권유 아님",
   "label": "마운자로 5탄 카드뉴스",
@@ -4104,7 +4104,13 @@
    "top": "Happy Food Groove · Bunnyvibes official",
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
-  }
+  },
+  "post_id": "18085563659358874",
+  "published_at": "2026-11-24T15:31+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18213955864373146",
+  "story_id": "17881933941633117",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/78"
  },
  {
   "id": "ig-20261124-mj06-card",
