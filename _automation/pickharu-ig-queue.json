@@ -4158,7 +4158,7 @@
    "assets/pickharu/ig/ig-20261124-mj07-card/04.jpg",
    "assets/pickharu/ig/ig-20261124-mj07-card/05.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-20261124-mj07-card/story.jpg",
   "comment": "📌 출처: 대마도 승선권·당일 패키지 네이버 쇼핑(2026-11-19), 부가금 선사 공식 요금(2026-11-14), 환율 100엔=836.9원 · 후쿠오카 뉴카멜리아 네이버 상품가(2026-11-16, 12월 특정일 특가, 2박 3일부터, 부가금 현장 결제) · KTX·항공권은 금액 없이 구조만 · 2026년 11월 20일 확인",
@@ -4168,7 +4168,13 @@
    "top": "Happy Food Groove · Bunnyvibes official",
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
-  }
+  },
+  "post_id": "18076384709772210",
+  "published_at": "2026-11-24T19:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "18110937322956698",
+  "story_id": "18175107553463267",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/80"
  },
  {
   "id": "ig-20261124-mj09-japan",
