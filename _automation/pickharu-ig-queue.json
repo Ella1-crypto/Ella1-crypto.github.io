@@ -4066,7 +4066,7 @@
    "assets/pickharu/ig/ig-20261124-mj04-card/03.jpg",
    "assets/pickharu/ig/ig-20261124-mj04-card/04.jpg"
   ],
-  "status": "올리는 중",
+  "status": "올림",
   "ad": true,
   "story_image": "assets/pickharu/ig/ig-20261124-mj04-card/story.jpg",
   "comment": "📌 출처: 인천공항 FAQ(2024-12-06, 젤 아이스팩 액체류 규정) · 처방전·영수증·원래 포장은 공식 목록 없는 실무 팁 · 여객선 기준 미확인 · 2026년 11월 16일 확인 · 의학적 조언·구매 권유 아님",
@@ -4076,7 +4076,13 @@
    "top": "Happy Food Groove · Bunnyvibes official",
    "alt": "Doo Doo · The Chillist",
    "search": "calm lofi, study, cozy"
-  }
+  },
+  "post_id": "17915201577561155",
+  "published_at": "2026-11-24T15:01+09:00",
+  "note": "게시 호출은 오류(HTTP 403: Application request limit reached)였지만 최근 글에서 올라간 것 확인",
+  "comment_id": "17945576043101639",
+  "story_id": "17969300690983351",
+  "music_note": "음악 넣기 알림 https://github.com/Ella1-crypto/Ella1-crypto.github.io/issues/77"
  },
  {
   "id": "ig-20261124-mj05-card",
