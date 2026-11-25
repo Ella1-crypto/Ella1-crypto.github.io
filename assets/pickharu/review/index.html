@@ -37,6 +37,15 @@ textarea{min-height:70px;resize:vertical}
 .sec>b{display:block;margin-bottom:6px}
 .badge{font-size:12px;padding:2px 7px;border-radius:999px;background:var(--card);border:1px solid var(--line)}
 .warn{color:var(--no);font-size:13px}
+.cp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+.cp h3{font-size:14px;margin:10px 0 6px}
+.cp h3:first-child{margin-top:0}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.days .btn,.slots .btn{flex:none;font-size:13px;padding:7px 10px}
+.slots{display:flex;flex-wrap:wrap;gap:6px}
+.slots .btn small{display:block;font-size:10px;color:var(--sub)}
+.final{font-weight:700;margin:8px 0 0}
+.cap{white-space:pre-wrap;font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px;max-height:260px;overflow:auto;margin:0}
 .send{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
 .send .btn{width:100%;padding:13px;font-size:16px}
 .hint{font-size:12px;color:var(--sub)}
@@ -79,6 +88,24 @@ textarea{min-height:70px;resize:vertical}
       <button class="btn" data-k="다른 시안">🔁 다른 시안</button>
     </div>
     <textarea id="dir" placeholder="다른 시안 방향(선택)" hidden style="margin-top:6px"></textarea>
+    <div class="cp" id="cpanel" hidden>
+      <h3>📍 어디에</h3><div id="cpCh" class="hint"></div>
+      <h3>🗓 언제 (한국시간 · 빈 자리만 고를 수 있어요)</h3>
+      <div id="cpNow" class="hint"></div>
+      <div class="days" id="cpDays"></div>
+      <div class="slots" id="cpSlots" style="margin-top:6px"></div>
+      <p class="final" id="cpFinal">시간을 골라 주세요</p>
+      <h3>📝 올라갈 캡션 (발행기가 보내는 그대로)</h3>
+      <pre class="cap" id="cpCap"></pre>
+      <div id="cpComBox"><h3>💬 첫 댓글</h3><pre class="cap" id="cpCom"></pre></div>
+      <h3>🎵 음악</h3>
+      <div id="cpMusic" class="hint"></div>
+      <div class="row" id="cpMusicCtl" hidden style="margin-top:6px">
+        <button class="btn" id="cpPlayBgm">🎧 음악 넣은 미리보기로 보기</button>
+        <label class="row" style="gap:6px"><input type="checkbox" id="cpUseBgm" style="width:auto" checked> 확정할 때 이 곡 넣기</label>
+      </div>
+      <p class="hint" id="cpAsOf"></p>
+    </div>
   </div>
 
   <div class="sec">
@@ -98,20 +125,46 @@ const $=s=>document.querySelector(s), v=$("#v"), stage=$("#stage"), tap=$("#tap"
 let items=[], cur=null, xy=null, notes=[], decision="";
 const key=()=>"rv-"+(cur&&cur.id);
 const fmt=t=>(Math.round(t*100)/100).toFixed(2)+"초";
-function store(){ try{localStorage.setItem(key(),JSON.stringify({notes,decision,dir:$("#dir").value}))}catch(e){} }
-function restore(){ notes=[];decision="";$("#dir").value=""; try{const s=JSON.parse(localStorage.getItem(key())||"null"); if(s){notes=s.notes||[];decision=s.decision||"";$("#dir").value=s.dir||"";}}catch(e){} }
+function store(){ try{localStorage.setItem(key(),JSON.stringify({notes,decision,dir:$("#dir").value,at:pickAt}))}catch(e){} }
+function restore(){ notes=[];decision="";pickAt="";pickDay="";bgmOn=false;$("#dir").value=""; try{const s=JSON.parse(localStorage.getItem(key())||"null"); if(s){notes=s.notes||[];decision=s.decision||"";$("#dir").value=s.dir||"";pickAt=s.at||"";}}catch(e){} }
 function warn(m){ $("#warn").textContent=m||""; $("#warn").hidden=!m; }
 
 async function loadIndex(){
   try{
     const r=await fetch("index.json?t="+Date.now(),{cache:"no-store"}); const j=await r.json();
     allItems=(j.items||[]);
+    try{ const r2=await fetch("schedule.json?t="+Date.now(),{cache:"no-store"}); sched=r2.ok?await r2.json():null; }catch(e){ sched=null; }
   }catch(e){ warn("목록을 못 불러왔어요. 잠시 뒤 다시 열어 주세요."); return; }
   fillPick();
 }
 // 11/25 희야 "확정된 것·이미 올라간 것 다 빼줘": 기본 목록 = 검수가 필요한 미확정만.
 // 확정·취소·반려·replaced_by·archived(게시완료/대체 확인분)는 📦 보관함으로. 지우지 않음.
-let allItems=[];
+let allItems=[], sched=null, pickDay="", pickAt="", bgmOn=false;
+const WD=["일","월","화","수","목","금","토"];
+function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[(d.getUTCDay())]+")"; }
+function kstNow(){ const d=new Date(Date.now()+9*3600e3); return d.toISOString().slice(0,16).replace("T"," "); }
+function info(){ return sched&&sched.items&&cur?sched.items[cur.id]:null; }
+function renderPanel(){
+  const box=$("#cpanel"); box.hidden=decision!=="확정"; if(box.hidden) return;
+  const it=info();
+  if(!sched){ $("#cpCh").textContent="일정 자료(schedule.json)를 못 불러왔어요 — 확정해도 시간은 나중에 따로 정해요"; $("#cpDays").innerHTML=""; $("#cpSlots").innerHTML=""; $("#cpFinal").textContent="시간 고르기 불가"; $("#cpCap").textContent="(확인 불가)"; $("#cpComBox").hidden=true; $("#cpMusic").textContent="(확인 불가)"; return; }
+  $("#cpCh").textContent=sched.channel+" · "+(it?it.kind:"릴스")+(it&&it.queue_id?" · 큐 "+it.queue_id+(it.status?" ("+it.status+(it.publish_at?" "+it.publish_at.slice(5,16).replace("T"," "):"")+")":""):" · 아직 예약 큐 항목 없음");
+  $("#cpNow").textContent="운영 시간대 "+sched.open+" · 앞뒤 "+sched.gap_min+"분 안에 다른 글이 있으면 찬 자리 · 자료 기준 "+sched.generated.slice(5,16).replace("T"," ")+" (지금 "+kstNow()+")";
+  const days=Object.keys(sched.days||{}).filter(d=>(sched.days[d]||[]).length);
+  if(!pickDay||!days.includes(pickDay)) pickDay=(pickAt&&days.includes(pickAt.slice(0,10)))?pickAt.slice(0,10):days[0]||"";
+  const dEl=$("#cpDays"); dEl.innerHTML="";
+  days.forEach(d=>{ const free=sched.days[d].filter(x=>x.free).length; const b=document.createElement("button"); b.className="btn"+(d===pickDay?" sel":""); b.textContent=dayLabel(d)+" · 빈 "+free; b.onclick=()=>{pickDay=d; renderPanel();}; dEl.appendChild(b); });
+  const sEl=$("#cpSlots"); sEl.innerHTML="";
+  (sched.days[pickDay]||[]).forEach(x=>{ const at=pickDay+"T"+x.t+":00+09:00"; const b=document.createElement("button"); b.className="btn"+(at===pickAt?" sel":""); b.disabled=!x.free; b.innerHTML=x.t+(x.free?"":"<small>"+x.by.replace(/</g,"&lt;")+"</small>"); b.onclick=()=>{pickAt=at; store(); renderPanel();}; sEl.appendChild(b); });
+  $("#cpFinal").textContent=pickAt?("▶ "+dayLabel(pickAt.slice(0,10))+" "+pickAt.slice(11,16)+" (한국시간)에 "+sched.channel+" "+(it?it.kind:"릴스")+"로 올라가요"):"시간을 골라 주세요 — 고르기 전엔 보내기가 막혀요";
+  const cap=it&&it.caption?it.caption:"";
+  $("#cpCap").textContent=cap||"⏳ 캡션 생성 대기 — 아직 큐에 캡션이 없어요. 확정을 보내면 릴스 세션이 캡션을 만들어 다시 보여 드려요(그 전엔 예약 안 함).";
+  $("#cpComBox").hidden=!(it&&it.comment); $("#cpCom").textContent=it&&it.comment?it.comment:"";
+  const m=it?it.music:null;
+  $("#cpMusic").textContent=m?("상태: "+m.state+(m.title?" · "+m.title+(m.artist?" — "+m.artist:"")+(m.license?" ("+m.license+")":""):"")+(m.mode?" · "+m.mode:"")+(m.note?" · "+m.note:"")):"음악 정보 없음(확인 불가)";
+  $("#cpMusicCtl").hidden=!(m&&m.state==="미리보기"&&m.video);
+  $("#cpAsOf").textContent=it&&it.ch?"캡션 지문 "+it.ch+" — 보낸 뒤 캡션이 바뀌면 예약하지 않고 다시 확인을 요청해요":"";
+}
 const isArc=o=>["확정","취소","반려"].includes(o.state)||!!o.replaced_by||!!o.archived;
 function arcTag(o){ return o.archived?(o.archived.why==="게시완료"?"[게시완료] ":"[대체됨] "):(o.state?"["+o.state+"] ":""); }
 function fillPick(){
@@ -171,10 +224,12 @@ function render(){
     ul.appendChild(li); });
   document.querySelectorAll("#decide .btn").forEach(b=>b.classList.toggle("sel",b.dataset.k===decision));
   $("#dir").hidden=decision!=="다른 시안";
+  renderPanel();
   tick();
 }
 document.querySelectorAll("#decide .btn").forEach(b=>b.onclick=()=>{ decision=decision===b.dataset.k?"":b.dataset.k; store(); render(); });
 $("#dir").addEventListener("input",store);
+$("#cpPlayBgm").onclick=()=>{ const m=info()&&info().music; if(!m||!m.video) return; bgmOn=!bgmOn; v.src=(bgmOn?m.video:cur.video)+"?v="+(cur.v||""); v.load(); v.play().catch(()=>{}); $("#cpPlayBgm").textContent=bgmOn?"🎬 원래 시안으로 보기":"🎧 음악 넣은 미리보기로 보기"; };
 $("#text").addEventListener("input",()=>{ try{localStorage.setItem(key()+"-draft",$("#text").value)}catch(e){} });
 
 // 보내기
@@ -184,6 +239,14 @@ $("#send").onclick=()=>{
   const ref=$("#wantref").checked;
   if(!notes.length && !decision && !ref){ warn("메모나 결정이 없어요."); return; }
   const payload={i:cur.id,ti:cur.title,n:notes,d:decision,dir:decision==="다른 시안"?$("#dir").value.trim():"",r:ref?1:0};
+  if(decision==="확정" && sched){
+    if(!pickAt){ warn("확정하려면 게시 날짜·시간을 먼저 골라 주세요."); return; }
+    const it=info();
+    payload.at=pickAt;
+    if(it&&it.ch) payload.ch=it.ch;
+    if(it&&it.queue_id) payload.q=it.queue_id;
+    const m=it&&it.music; if(m&&m.state==="미리보기"&&m.file&&$("#cpUseBgm").checked) payload.m=m.file;
+  }
   let s=JSON.stringify(payload);
   if(new Blob([s]).size>4000){ warn("메모가 너무 길어요(텔레그램 한도). 나눠서 보내 주세요."); return; }
   if(inTg && tg.sendData){
