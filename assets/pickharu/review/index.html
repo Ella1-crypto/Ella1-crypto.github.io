@@ -46,6 +46,7 @@ textarea{min-height:70px;resize:vertical}
 <main>
   <h1>🎬 릴스 검수</h1>
   <select id="pick" aria-label="시안 고르기"></select>
+  <label class="hint" style="display:flex;gap:6px;align-items:center;margin:6px 0 0"><input type="checkbox" id="showArc" style="width:auto"> 📦 보관함 보기 (확정·게시완료·대체된 시안 <span id="arcN">0</span>개)</label>
   <div class="meta" id="meta"></div>
   <div class="changes" id="changes" hidden></div>
   <div class="stage" id="stage">
@@ -104,23 +105,37 @@ function warn(m){ $("#warn").textContent=m||""; $("#warn").hidden=!m; }
 async function loadIndex(){
   try{
     const r=await fetch("index.json?t="+Date.now(),{cache:"no-store"}); const j=await r.json();
-    items=(j.items||[]);
+    allItems=(j.items||[]);
   }catch(e){ warn("목록을 못 불러왔어요. 잠시 뒤 다시 열어 주세요."); return; }
+  fillPick();
+}
+// 11/25 희야 "확정된 것·이미 올라간 것 다 빼줘": 기본 목록 = 검수가 필요한 미확정만.
+// 확정·취소·반려·replaced_by·archived(게시완료/대체 확인분)는 📦 보관함으로. 지우지 않음.
+let allItems=[];
+const isArc=o=>["확정","취소","반려"].includes(o.state)||!!o.replaced_by||!!o.archived;
+function arcTag(o){ return o.archived?(o.archived.why==="게시완료"?"[게시완료] ":"[대체됨] "):(o.state?"["+o.state+"] ":""); }
+function fillPick(){
   const want=new URLSearchParams(location.search).get("item");
+  const showArc=$("#showArc").checked;
   const sel=$("#pick"); sel.innerHTML="";
-  // 11/23 사용자 "확정된건 다 빼줘": 확정·취소는 목록에서 숨김(링크로 직접 연 시안만 예외)
-  items=items.filter(o=>(!["확정","취소","반려"].includes(o.state)&&!o.replaced_by)||o.id===want);
-  items.forEach(o=>{ const op=document.createElement("option"); op.value=o.id; op.textContent=(o.state&&o.state!=="검수 중"?"["+o.state+"] ":"")+o.title; sel.appendChild(op); });
-  const first=items.find(o=>o.id===want)||items.find(o=>o.state==="검수 중")||items[0];
-  if(first){ sel.value=first.id; load(first); } else warn("올라온 시안이 없어요.");
+  const open=allItems.filter(o=>!isArc(o)), arc=allItems.filter(isArc);
+  $("#arcN").textContent=arc.length;
+  open.forEach(o=>{ const op=document.createElement("option"); op.value=o.id; op.textContent=(o.state&&o.state!=="검수 중"?"["+o.state+"] ":"")+o.title; sel.appendChild(op); });
+  const wantArc=arc.find(o=>o.id===want);
+  const arcShown=showArc?arc:(wantArc?[wantArc]:[]);
+  if(arcShown.length){ const g=document.createElement("optgroup"); g.label=showArc?"📦 보관함":"📦 링크로 연 보관 시안"; arcShown.forEach(o=>{ const op=document.createElement("option"); op.value=o.id; op.textContent=arcTag(o)+o.title; g.appendChild(op); }); sel.appendChild(g); }
+  items=open.concat(arcShown);
+  const first=items.find(o=>o.id===want)||open.find(o=>o.state==="검수 중")||items[0];
+  if(first){ sel.value=first.id; load(first); } else warn("검수할 시안이 없어요. 📦 보관함에서 지난 시안을 볼 수 있어요.");
 }
 function load(o){
   cur=o; xy=null; restore();
-  $("#meta").innerHTML=(o.state?'<span class="badge">'+o.state+'</span> ':"")+(o.created||"").slice(5,16).replace("T"," ");
+  $("#meta").innerHTML=(o.state?'<span class="badge">'+o.state+'</span> ':"")+(o.archived?'<span class="badge">📦 '+o.archived.why+' · '+o.archived.ref+'</span> ':"")+(o.created||"").slice(5,16).replace("T"," ");
   $("#changes").hidden=!o.changes; $("#changes").textContent=o.changes?"이번 판에서 바꾼 점\n"+o.changes:"";
   v.src=o.video+"?v="+(o.v||""); v.load();
   render();
 }
+$("#showArc").addEventListener("change",fillPick);
 $("#pick").addEventListener("change",e=>{ const o=items.find(x=>x.id===e.target.value); if(o) load(o); });
 
 // 재생
