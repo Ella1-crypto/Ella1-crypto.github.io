@@ -61,7 +61,7 @@ textarea{min-height:70px;resize:vertical}
 </head>
 <body>
 <main>
-  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-25.7</span></h1>
+  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-25.8</span></h1>
   <p class="warn" id="schedWarn" hidden></p>
   <select id="pick" aria-label="시안 고르기"></select>
   <label class="hint" style="display:flex;gap:6px;align-items:center;margin:6px 0 0"><input type="checkbox" id="showArc" style="width:auto"> 📦 보관함 보기 (확정·게시완료·대체된 시안 <span id="arcN">0</span>개)</label>
@@ -93,10 +93,12 @@ textarea{min-height:70px;resize:vertical}
     <b>결정 (고르지 않아도 돼요)</b>
     <div class="row" id="decide">
       <button class="btn" data-k="확정">✅ 확정</button>
+      <button class="btn" data-k="진행 안 함">⏹ 진행 안 함</button>
       <button class="btn" data-k="반려">⛔ 반려</button>
       <button class="btn" data-k="다른 시안">🔁 다른 시안</button>
       <button class="btn" data-k="캡션 수정">✏️ 캡션·첫 댓글 수정</button>
     </div>
+    <p class="hint">‘진행 안 함’을 선택하고 아래 보내기를 누르면 해당 시안을 중단하고 보관함으로 옮겨요. 기존 게시물은 삭제하지 않아요.</p>
     <textarea id="dir" placeholder="다른 시안 방향(선택)" hidden style="margin-top:6px"></textarea>
     <div class="cp" id="cpanel" hidden>
       <h3>📍 어디에</h3><div id="cpCh" class="hint"></div>
@@ -167,7 +169,7 @@ async function loadIndex(){
 // 11/25 희야 "확정된 것·이미 올라간 것 다 빼줘": 기본 목록 = 검수가 필요한 미확정만.
 // 확정·취소·반려·replaced_by·archived(게시완료/대체 확인분)는 📦 보관함으로. 지우지 않음.
 let allItems=[], sched=null, pickDay="", pickAt="", bgmOn=false, edCap=null, edCom=null;
-const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-25.7";
+const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-25.8";
 function edited(){ const it=info(); return !!(it&&(it.queue_id||it.editable)&&((edCap!==null&&edCap!==(it.caption||""))||(edCom!==null&&edCom!==(it.comment||"")))); }
 const WD=["일","월","화","수","목","금","토"];
 function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[(d.getUTCDay())]+")"; }
@@ -179,7 +181,8 @@ function mode(){ const it=info(); if(!it||!it.queue_id||!it.caption) return "준
 function needs(){ const it=info(); const n=[]; if(!it||!it.caption) n.push("완성 캡션"); if(it&&!it.queue_id) n.push("게시 준비 확인"); const m=it&&it.music||{}; if(!(MUSIC_OK.includes(m.state)||(m.state==="미리보기"&&$("#cpUseBgm").checked))) n.push("음악 확인"); return n; }
 function renderPanel(){
   // 11/25: 확정을 누르기 전에도 예약표·시간·캡션·음악이 보이게(누르지 않으면 패널이 없어 '반영 안 됨'으로 보였음)
-  const box=$("#cpanel"); box.hidden=false;
+  const box=$("#cpanel"); box.hidden=decision==="진행 안 함";
+  if(decision==="진행 안 함"){ $("#send").textContent="⏹ 진행 안 함 보내기"; return; }
   const it=info();
   $("#cpWhen").hidden=decision==="캡션 수정";
   if(!sched){ $("#cpCh").textContent="⚠️ 일정 자료(schedule.json)를 못 불러왔어요 — 이 상태에선 확정·캡션 저장을 보낼 수 없어요. 화면을 닫고 다시 열어 주세요"; $("#cpDays").innerHTML=""; $("#cpSlots").innerHTML=""; $("#cpFinal").textContent="시간 고르기 불가"; $("#cpCap").textContent="(확인 불가)"; $("#cpComBox").hidden=true; $("#cpMusic").textContent="(확인 불가)"; return; }
