@@ -144,6 +144,10 @@ const WD=["일","월","화","수","목","금","토"];
 function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[(d.getUTCDay())]+")"; }
 function kstNow(){ const d=new Date(Date.now()+9*3600e3); return d.toISOString().slice(0,16).replace("T"," "); }
 function info(){ return sched&&sched.items&&cur?sched.items[cur.id]:null; }
+// 11/25 희야: 완성 캡션 + 음악 확인이 된 것만 '최종 확정'(예약). 아니면 '준비 요청'(희망 일정만 전달, 예약 안 함)
+const MUSIC_OK=["적용됨","원래 소리 있음"];
+function mode(){ const it=info(); if(!it||!it.queue_id||!it.caption) return "준비 요청"; const m=it.music||{}; if(MUSIC_OK.includes(m.state)) return "확정"; if(m.state==="미리보기"&&$("#cpUseBgm").checked) return "확정"; return "준비 요청"; }
+function needs(){ const it=info(); const n=[]; if(!it||!it.queue_id||!it.caption) n.push("완성 캡션"); const m=it&&it.music||{}; if(!(MUSIC_OK.includes(m.state)||(m.state==="미리보기"&&$("#cpUseBgm").checked))) n.push("음악 확인"); return n; }
 function renderPanel(){
   const box=$("#cpanel"); box.hidden=decision!=="확정"; if(box.hidden) return;
   const it=info();
@@ -156,7 +160,11 @@ function renderPanel(){
   days.forEach(d=>{ const free=sched.days[d].filter(x=>x.free).length; const b=document.createElement("button"); b.className="btn"+(d===pickDay?" sel":""); b.textContent=dayLabel(d)+" · 빈 "+free; b.onclick=()=>{pickDay=d; renderPanel();}; dEl.appendChild(b); });
   const sEl=$("#cpSlots"); sEl.innerHTML="";
   (sched.days[pickDay]||[]).forEach(x=>{ const at=pickDay+"T"+x.t+":00+09:00"; const b=document.createElement("button"); b.className="btn"+(at===pickAt?" sel":""); b.disabled=!x.free; b.innerHTML=x.t+(x.free?"":"<small>"+x.by.replace(/</g,"&lt;")+"</small>"); b.onclick=()=>{pickAt=at; store(); renderPanel();}; sEl.appendChild(b); });
-  $("#cpFinal").textContent=pickAt?("▶ "+dayLabel(pickAt.slice(0,10))+" "+pickAt.slice(11,16)+" (한국시간)에 "+sched.channel+" "+(it?it.kind:"릴스")+"로 올라가요"):"시간을 골라 주세요 — 고르기 전엔 보내기가 막혀요";
+  const md=mode(), when=pickAt?dayLabel(pickAt.slice(0,10))+" "+pickAt.slice(11,16)+" (한국시간)":"";
+  $("#cpFinal").textContent=!pickAt?"시간을 골라 주세요 — 고르기 전엔 보내기가 막혀요"
+    :(md==="확정"?"▶ 최종 확정하면 "+when+"에 "+sched.channel+" "+(it?it.kind:"릴스")+"로 예약돼요(보낸 뒤 충돌·캡션을 다시 확인)"
+                  :"📝 희망 일정 "+when+" — 아직 예약 아님. 필요: "+needs().join(", ")+". 준비되면 캡션·음악을 보고 다시 최종 확정해야 예약돼요");
+  $("#send").textContent=(decision==="확정")?(md==="확정"?"✅ 최종 확정 보내기":"📝 준비 요청 보내기"):"텔레그램으로 보내기";
   const cap=it&&it.caption?it.caption:"";
   $("#cpCap").textContent=cap||"⏳ 캡션 생성 대기 — 아직 큐에 캡션이 없어요. 확정을 보내면 릴스 세션이 캡션을 만들어 다시 보여 드려요(그 전엔 예약 안 함).";
   $("#cpComBox").hidden=!(it&&it.comment); $("#cpCom").textContent=it&&it.comment?it.comment:"";
@@ -224,11 +232,13 @@ function render(){
     ul.appendChild(li); });
   document.querySelectorAll("#decide .btn").forEach(b=>b.classList.toggle("sel",b.dataset.k===decision));
   $("#dir").hidden=decision!=="다른 시안";
+  if(decision!=="확정") $("#send").textContent="텔레그램으로 보내기";
   renderPanel();
   tick();
 }
 document.querySelectorAll("#decide .btn").forEach(b=>b.onclick=()=>{ decision=decision===b.dataset.k?"":b.dataset.k; store(); render(); });
 $("#dir").addEventListener("input",store);
+$("#cpUseBgm").addEventListener("change",renderPanel);
 $("#cpPlayBgm").onclick=()=>{ const m=info()&&info().music; if(!m||!m.video) return; bgmOn=!bgmOn; v.src=(bgmOn?m.video:cur.video)+"?v="+(cur.v||""); v.load(); v.play().catch(()=>{}); $("#cpPlayBgm").textContent=bgmOn?"🎬 원래 시안으로 보기":"🎧 음악 넣은 미리보기로 보기"; };
 $("#text").addEventListener("input",()=>{ try{localStorage.setItem(key()+"-draft",$("#text").value)}catch(e){} });
 
@@ -242,6 +252,7 @@ $("#send").onclick=()=>{
   if(decision==="확정" && sched){
     if(!pickAt){ warn("확정하려면 게시 날짜·시간을 먼저 골라 주세요."); return; }
     const it=info();
+    payload.d=mode();      // 캡션·음악이 다 안 됐으면 '준비 요청'으로 보냄(예약 안 됨)
     payload.at=pickAt;
     if(it&&it.ch) payload.ch=it.ch;
     if(it&&it.queue_id) payload.q=it.queue_id;
