@@ -29,7 +29,7 @@ def make_site(root: Path, item_id: str = "ig-20261031-ganadi", count: int = 3) -
 
 
 def item(images, **extra):
-    return {"id": "ig-20261031-ganadi", "publish_at": "2026-10-31T19:00+09:00", "status": READY,
+    return {"id": "ig-20261031-ganadi", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "approved_by": "test explicit approval",
             "caption": "투썸 가나디 케이크 정리 🍒\n\n#가나디 #투썸", "images": images, **extra}
 
 
@@ -41,7 +41,7 @@ def make_reel(root: Path, item_id: str = "rl-20261030-kitty7") -> str:
 
 
 def reel(video, **extra):
-    return {"id": "rl-20261030-kitty7", "publish_at": "2026-10-31T19:00+09:00", "status": READY,
+    return {"id": "rl-20261030-kitty7", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "approved_by": "test explicit approval",
             "caption": "초코 헬로키티 굿즈 정리 🎀", "video": video, "auto": True, **extra}
 
 
@@ -257,7 +257,7 @@ class RunOnceTest(unittest.TestCase):
         images = make_site(self.root)
         (self.root / "assets/pickharu/ig/ig-20261031-ganadi/story.jpg").write_bytes(b"jpg")
         done = [dict(item(images), id=f"d{n}", status=DONE, published_at="2026-10-31T09:00+09:00") for n in range(1, ig.DAILY_CAP + 1)]
-        story = {"id": "st-1", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "story_only": True,
+        story = {"id": "st-1", "publish_at": "2026-10-31T19:00+09:00", "status": READY, "approved_by": "test explicit approval", "story_only": True,
                  "story_image": "assets/pickharu/ig/ig-20261031-ganadi/story.jpg"}
         result, items = self.run_once(done + [story], http)
         self.assertIn("스토리 올림", result)

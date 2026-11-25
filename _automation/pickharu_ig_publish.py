@@ -362,6 +362,12 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(strip(items), path)
         commit("chore: pick.haru 인스타 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
+    # Fail closed before any publishing API call; auto is not approval.
+    if due.get("stop_requested_at") or not str(due.get("approved_by") or "").strip():
+        reason = "사용자 진행 안 함" if due.get("stop_requested_at") else "최종 승인 기록 없음"
+        save_queue(strip(with_status(items, due["id"], status="보류", note=reason)), path)
+        commit(f"chore: 인스타 게시 차단 ({due['id']}: {reason})")
+        return f"올리지 않음: {due['id']} — {reason}"
     if "video" in due and due.get("auto") is not True:
         sent = notify(due) if notify else ""
         note = f"{MANUAL_NOTE} · 알림 {sent}" if sent else MANUAL_NOTE
