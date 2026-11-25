@@ -10,6 +10,7 @@
 :root{--bg:#fff;--fg:#1b1b1f;--sub:#6b6b75;--line:#e6e6ea;--card:#f6f6f8;--acc:#ff4f8b;--ok:#1aa36b;--no:#d64545;--blue:#3b6cff}
 @media (prefers-color-scheme:dark){:root{--bg:#141418;--fg:#f2f2f5;--sub:#a0a0aa;--line:#2c2c33;--card:#1e1e24}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 main{max-width:520px;margin:0 auto;padding:12px 16px 120px}
 h1{font-size:17px;margin:4px 0 10px}
@@ -60,7 +61,7 @@ textarea{min-height:70px;resize:vertical}
 </head>
 <body>
 <main>
-  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-25.6</span></h1>
+  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-25.7</span></h1>
   <p class="warn" id="schedWarn" hidden></p>
   <select id="pick" aria-label="시안 고르기"></select>
   <label class="hint" style="display:flex;gap:6px;align-items:center;margin:6px 0 0"><input type="checkbox" id="showArc" style="width:auto"> 📦 보관함 보기 (확정·게시완료·대체된 시안 <span id="arcN">0</span>개)</label>
@@ -166,8 +167,8 @@ async function loadIndex(){
 // 11/25 희야 "확정된 것·이미 올라간 것 다 빼줘": 기본 목록 = 검수가 필요한 미확정만.
 // 확정·취소·반려·replaced_by·archived(게시완료/대체 확인분)는 📦 보관함으로. 지우지 않음.
 let allItems=[], sched=null, pickDay="", pickAt="", bgmOn=false, edCap=null, edCom=null;
-const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-25.6";
-function edited(){ const it=info(); return !!(it&&it.queue_id&&((edCap!==null&&edCap!==(it.caption||""))||(edCom!==null&&edCom!==(it.comment||"")))); }
+const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-25.7";
+function edited(){ const it=info(); return !!(it&&(it.queue_id||it.editable)&&((edCap!==null&&edCap!==(it.caption||""))||(edCom!==null&&edCom!==(it.comment||"")))); }
 const WD=["일","월","화","수","목","금","토"];
 function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[(d.getUTCDay())]+")"; }
 function kstNow(){ const d=new Date(Date.now()+9*3600e3); return d.toISOString().slice(0,16).replace("T"," "); }
@@ -175,7 +176,7 @@ function info(){ return sched&&sched.items&&cur?sched.items[cur.id]:null; }
 // 11/25 희야: 완성 캡션 + 음악 확인이 된 것만 '최종 확정'(예약). 아니면 '준비 요청'(희망 일정만 전달, 예약 안 함)
 const MUSIC_OK=["적용됨","원래 소리 있음"];
 function mode(){ const it=info(); if(!it||!it.queue_id||!it.caption) return "준비 요청"; const m=it.music||{}; if(MUSIC_OK.includes(m.state)) return "확정"; if(m.state==="미리보기"&&$("#cpUseBgm").checked) return "확정"; return "준비 요청"; }
-function needs(){ const it=info(); const n=[]; if(!it||!it.queue_id||!it.caption) n.push("완성 캡션"); const m=it&&it.music||{}; if(!(MUSIC_OK.includes(m.state)||(m.state==="미리보기"&&$("#cpUseBgm").checked))) n.push("음악 확인"); return n; }
+function needs(){ const it=info(); const n=[]; if(!it||!it.caption) n.push("완성 캡션"); if(it&&!it.queue_id) n.push("게시 준비 확인"); const m=it&&it.music||{}; if(!(MUSIC_OK.includes(m.state)||(m.state==="미리보기"&&$("#cpUseBgm").checked))) n.push("음악 확인"); return n; }
 function renderPanel(){
   // 11/25: 확정을 누르기 전에도 예약표·시간·캡션·음악이 보이게(누르지 않으면 패널이 없어 '반영 안 됨'으로 보였음)
   const box=$("#cpanel"); box.hidden=false;
@@ -213,18 +214,18 @@ function renderPanel(){
   $("#send").textContent=(decision==="확정")?(md==="확정"?"✅ 최종 확정 보내기":"📝 준비 요청 보내기"):"텔레그램으로 보내기";
   if(decision==="캡션 수정") $("#send").textContent=edited()?"✏️ 캡션 저장 보내기":"고친 곳이 없어요";
   const cap=it&&it.caption?it.caption:"";
-  const canEdit=!!(it&&it.queue_id);
+  const canEdit=!!(it&&(it.queue_id||it.editable));
   if(canEdit){ if(edCap===null) edCap=cap; if(edCom===null) edCom=it.comment||""; }
   $("#cpEditBox").hidden=!canEdit;
   $("#cpCap").hidden=canEdit&&!edited(); 
-  $("#cpCap").textContent=canEdit?("미리보기 (고친 내용)\n\n"+edCap+(edCom?"\n\n— 첫 댓글 —\n"+edCom:"")):(cap||"⏳ 캡션 생성 대기 — 아직 큐에 캡션이 없어요. 준비 요청을 보내면 릴스 세션이 캡션을 만들어 다시 보여 드려요(그 전엔 예약 안 함).");
+  $("#cpCap").textContent=canEdit?("미리보기 (고친 내용)\n\n"+edCap+(edCom?"\n\n— 첫 댓글 —\n"+edCom:"")):(cap||"⏳ 캡션 준비 중 — 아직 검수용 캡션이 없어요. 캡션을 준비 중이에요. 준비 완료 안내 후 다시 열어 주세요(그 전엔 예약 안 함).");
   if(canEdit){
     if($("#cpCapEd").value!==edCap) $("#cpCapEd").value=edCap;
     if($("#cpComEd").value!==edCom) $("#cpComEd").value=edCom;
     const tags=(edCap.match(/#\S+/g)||[]).length;
     $("#cpCapCnt").textContent="캡션 "+edCap.length+"/"+CAP_LIMIT+"자 · 해시태그 "+tags+"/"+TAG_LIMIT; $("#cpCapCnt").classList.toggle("bad",edCap.length>CAP_LIMIT||tags>TAG_LIMIT||!edCap.trim());
     $("#cpComCnt").textContent="첫 댓글 "+edCom.length+"자"; $("#cpComCnt").classList.toggle("bad",edCom.length>CAP_LIMIT);
-    $("#cpEditHint").textContent=edited()?"✏️ 고친 내용이 있어요 — "+(decision==="확정"?"최종 확정과 함께 반영돼요":"‘캡션 저장 보내기’를 눌러야 큐에 저장돼요(예약·시각은 그대로)")+". 원문이 그사이 바뀌었으면 반영하지 않아요.":"고칠 곳을 바로 고치면 돼요. 저장만으로는 예약·확정되지 않아요.";
+    $("#cpEditHint").textContent=edited()?"✏️ 고친 내용이 있어요 — "+(decision==="확정"?"최종 확정과 함께 반영돼요":"‘캡션 저장 보내기’를 눌러야 저장돼요(예약·시각은 그대로)")+". 원문이 그사이 바뀌었으면 반영하지 않아요.":"고칠 곳을 바로 고치면 돼요. 저장만으로는 예약·확정되지 않아요.";
   }
   $("#cpComBox").hidden=canEdit||!(it&&it.comment); $("#cpCom").textContent=it&&it.comment?it.comment:"";
   const m=it?it.music:null;
@@ -303,18 +304,18 @@ $("#cpComEd").addEventListener("input",e=>{ edCom=e.target.value; renderPanel();
 $("#cpCapReset").onclick=()=>{ const it=info(); edCap=it?it.caption||"":""; renderPanel(); };
 $("#cpComSave").onclick=()=>{
   const it=info();
-  if(!sched||!it||!it.queue_id){ warn("이 시안은 예약 큐 항목이 없어 첫 댓글을 저장할 곳이 없어요."); return; }
+  if(!sched||!it||!(it.queue_id||it.editable)){ warn("이 시안은 아직 검수용 캡션이 준비되지 않았어요."); return; }
   if(edCom===null||edCom===(it.comment||"")){ warn("첫 댓글에서 고친 곳이 없어요."); return; }
   if(edCom.length>CAP_LIMIT){ warn("첫 댓글이 너무 길어요(2,200자 이하)."); return; }
   const payload={i:cur.id,ti:cur.title,n:[],d:"캡션 수정",com:edCom,ch:it.ch,q:it.queue_id,r:0};
   const s=JSON.stringify(payload);
   if(new Blob([s]).size>4000){ warn("첫 댓글이 텔레그램 한 번에 보낼 수 있는 양을 넘어요."); return; }
-  $("#cpComSaved").textContent="⏳ 저장 요청을 보내는 중이에요. 봇이 '✏️ 저장했어요'로 답하면 큐 첫 댓글에 반영된 거예요(예약·게시 상태는 그대로).";
+  $("#cpComSaved").textContent="⏳ 저장 요청을 보내는 중이에요. 봇이 저장 완료로 답하면 반영된 거예요(예약·게시 상태는 그대로).";
   if(inTg && tg.sendData){ try{ localStorage.removeItem(key()); }catch(e){} tg.sendData(s); }
   else { warn("텔레그램 봇의 [🎬 검수 화면 열기] 버튼으로 열어야 저장 요청을 보낼 수 있어요."); }
 };
 $("#cpComReset").onclick=()=>{ const it=info(); edCom=it?it.comment||"":""; renderPanel(); };
-$("#cpPlayBgm").onclick=()=>{ const m=info()&&info().music; if(!m||!m.video) return; bgmOn=!bgmOn; v.src=(bgmOn?m.video:cur.video)+"?v="+(cur.v||""); v.load(); v.play().catch(()=>{}); $("#cpPlayBgm").textContent=bgmOn?"🎬 원래 시안으로 보기":"🎧 음악 넣은 미리보기로 보기"; };
+$("#cpPlayBgm").onclick=()=>{ const m=info()&&info().music; if(!m||!m.video) return; bgmOn=!bgmOn; v.src=(bgmOn?m.video:cur.video)+"?v="+(cur.v||""); v.load(); v.play().catch(()=>warn("재생이 차단됐어요. 영상 재생 버튼을 눌러 주세요.")); $("#cpPlayBgm").textContent=bgmOn?"🎬 원래 시안으로 보기":"🎧 음악 넣은 미리보기로 보기"; };
 $("#text").addEventListener("input",()=>{ try{localStorage.setItem(key()+"-draft",$("#text").value)}catch(e){} });
 
 // 보내기
@@ -337,7 +338,7 @@ $("#send").onclick=()=>{
   }
   if(decision==="캡션 수정"){
     const it=info();
-    if(!it||!it.queue_id){ warn("이 시안은 아직 예약 큐 항목이 없어 캡션을 저장할 곳이 없어요."); return; }
+    if(!it||!(it.queue_id||it.editable)){ warn("이 시안은 아직 검수용 캡션이 준비되지 않았어요."); return; }
     if(!edited()){ warn("고친 곳이 없어요."); return; }
     if(!edCap.trim()||edCap.length>CAP_LIMIT||(edCap.match(/#\S+/g)||[]).length>TAG_LIMIT){ warn("캡션 길이·해시태그 수를 확인해 주세요(2,200자·30개 이하)."); return; }
     payload.cap=edCap; payload.com=edCom; payload.ch=it.ch; payload.q=it.queue_id;
