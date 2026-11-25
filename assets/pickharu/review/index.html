@@ -154,12 +154,19 @@ function renderPanel(){
   if(!sched){ $("#cpCh").textContent="일정 자료(schedule.json)를 못 불러왔어요 — 확정해도 시간은 나중에 따로 정해요"; $("#cpDays").innerHTML=""; $("#cpSlots").innerHTML=""; $("#cpFinal").textContent="시간 고르기 불가"; $("#cpCap").textContent="(확인 불가)"; $("#cpComBox").hidden=true; $("#cpMusic").textContent="(확인 불가)"; return; }
   $("#cpCh").textContent=sched.channel+" · "+(it?it.kind:"릴스")+(it&&it.queue_id?" · 큐 "+it.queue_id+(it.status?" ("+it.status+(it.publish_at?" "+it.publish_at.slice(5,16).replace("T"," "):"")+")":""):" · 아직 예약 큐 항목 없음");
   $("#cpNow").textContent="운영 시간대 "+sched.open+" · 앞뒤 "+sched.gap_min+"분 안에 다른 글이 있으면 찬 자리 · 자료 기준 "+sched.generated.slice(5,16).replace("T"," ")+" (지금 "+kstNow()+")";
+  // 자기 큐 id 만 막고 있는 자리는 빈 자리(기존 예약 유지). 기존 예약 시각은 기본으로 골라 둠.
+  const own=it&&it.queue_id||"", ownAt=(it&&it.status==="예약"&&it.publish_at)?it.publish_at.slice(0,16)+":00+09:00":"";
+  const okSlot=x=>x.free||(own&&(x.ids||[]).length&&x.ids.every(id=>id===own));
+  if(!pickAt&&ownAt&&new Date(ownAt)>new Date()) pickAt=ownAt;
   const days=Object.keys(sched.days||{}).filter(d=>(sched.days[d]||[]).length);
   if(!pickDay||!days.includes(pickDay)) pickDay=(pickAt&&days.includes(pickAt.slice(0,10)))?pickAt.slice(0,10):days[0]||"";
   const dEl=$("#cpDays"); dEl.innerHTML="";
-  days.forEach(d=>{ const free=sched.days[d].filter(x=>x.free).length; const b=document.createElement("button"); b.className="btn"+(d===pickDay?" sel":""); b.textContent=dayLabel(d)+" · 빈 "+free; b.onclick=()=>{pickDay=d; renderPanel();}; dEl.appendChild(b); });
+  days.forEach(d=>{ const free=sched.days[d].filter(okSlot).length; const b=document.createElement("button"); b.className="btn"+(d===pickDay?" sel":""); b.textContent=dayLabel(d)+" · 빈 "+free; b.onclick=()=>{pickDay=d; renderPanel();}; dEl.appendChild(b); });
   const sEl=$("#cpSlots"); sEl.innerHTML="";
-  (sched.days[pickDay]||[]).forEach(x=>{ const at=pickDay+"T"+x.t+":00+09:00"; const b=document.createElement("button"); b.className="btn"+(at===pickAt?" sel":""); b.disabled=!x.free; b.innerHTML=x.t+(x.free?"":"<small>"+x.by.replace(/</g,"&lt;")+"</small>"); b.onclick=()=>{pickAt=at; store(); renderPanel();}; sEl.appendChild(b); });
+  let rows=(sched.days[pickDay]||[]).slice();
+  if(ownAt&&ownAt.slice(0,10)===pickDay&&!rows.some(x=>x.t===ownAt.slice(11,16))) rows.push({t:ownAt.slice(11,16),free:true,by:"",ids:[]});
+  rows.sort((a,b)=>a.t<b.t?-1:1);
+  rows.forEach(x=>{ const at=pickDay+"T"+x.t+":00+09:00"; const ok=okSlot(x), mine=at===ownAt; const b=document.createElement("button"); b.className="btn"+(at===pickAt?" sel":""); b.disabled=!ok; b.innerHTML=x.t+(mine?"<small>지금 예약</small>":(ok?"":"<small>"+x.by.replace(/</g,"&lt;")+"</small>")); b.onclick=()=>{pickAt=at; store(); renderPanel();}; sEl.appendChild(b); });
   const md=mode(), when=pickAt?dayLabel(pickAt.slice(0,10))+" "+pickAt.slice(11,16)+" (한국시간)":"";
   $("#cpFinal").textContent=!pickAt?"시간을 골라 주세요 — 고르기 전엔 보내기가 막혀요"
     :(md==="확정"?"▶ 최종 확정하면 "+when+"에 "+sched.channel+" "+(it?it.kind:"릴스")+"로 예약돼요(보낸 뒤 충돌·캡션을 다시 확인)"
