@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-26T14:48+09:00",
+ "generated": "2026-11-26T14:53+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -745,22 +745,6 @@
     "artist": "Kevin MacLeod",
     "license": "CC BY 4.0",
     "note": "큐에 등록된 곡이 영상에 섞여 있어요"
-   }
-  },
-  "mj02-reel-v2": {
-   "queue_id": "",
-   "kind": "릴스",
-   "publish_mode": "direct",
-   "status": "",
-   "publish_at": "",
-   "caption": "",
-   "comment": "",
-   "editable": false,
-   "copy_status": "검수 초안 · 예약 전",
-   "ch": "",
-   "music": {
-    "state": "원래 소리 있음",
-    "note": "영상 안 소리(음악·효과음·목소리)는 그대로 나가요. 곡 정보는 큐에 없어요"
    }
   },
   "spao-bf-v3": {
