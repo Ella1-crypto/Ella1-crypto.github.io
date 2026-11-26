@@ -465,6 +465,8 @@ def main() -> int:
     configured = os.environ.get("PICKHARU_IG_USER_ID", "").strip() or DEFAULT_IG_USER
     if "--check" in sys.argv:
         print(f"인스타 계정 확인: {EXPECTED_USERNAME} (ID {find_ig_user(token, configured=configured)})")
+        from ig_readback import inspect
+        inspect(token, configured)
         return 0
     run = lambda now: run_once(now, token, configured_user=configured, ready=image_ready, notify=notify_all)
     if "--wait" in sys.argv:
