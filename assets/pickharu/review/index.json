@@ -2534,7 +2534,7 @@
    "kind": "video",
    "video": "inpock-019-v1/reel_music.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "취소",
    "changes": "새로 만듦: polaroid 판 · 훅 '이 귤, 11brix 넘는 것만'",
    "created": "2026-11-23T13:04:57+09:00",
    "v": 1795691247,
@@ -2571,6 +2571,12 @@
     "energy": 3,
     "video_md5": "8378ac95738eb28b5ffc81897b31c3cc",
     "mode": "목소리+음악(ducking)"
+   },
+   "stop_requested_at": "2026-11-26T21:10:10+09:00",
+   "stop_reason": "사용자 진행 안 함",
+   "archived": {
+    "why": "진행 안 함",
+    "at": "2026-11-26T21:10:10+09:00"
    }
   },
   {
