@@ -2333,5 +2333,28 @@
   "approved_by": "희야: 2026-11-25 이 대화에서 내일 연재시리즈 정상적으로 올라가게 복구 요청",
   "source_checked_at": "2026-11-25T23:45:11.575323+09:00",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-jt-20261126.png"
+ },
+ {
+  "id": "ai-20261127-am",
+  "publish_at": "2026-11-27T09:30+09:00",
+  "text": "세일 가격 적어 둔 시트,\nAI한테 매번 복사해 붙이고 있다면 📎\n\nClaude Academy 무료 강좌 「Claude 101」\n'도구 연결하기' 레슨에 나와\n\n커넥터는 드라이브 같은 대화 밖 자료를\nClaude가 직접 읽게 이어 주는 기능이야\n연결은 언제든 끊을 수 있대\n\n레슨 팁은 권한을 보고 승인한 다음\n접근되는지부터 물어보라는 거\nClaude는 내가 볼 수 있는 것만 본대\n\n연결하고 나면 이렇게 물어봐\n\"구글 드라이브의 '세일 가격 기록' 시트 읽어 줘.\n지난주보다 내린 상품만 골라서\n상품명, 가격, 날짜로 표 만들어 줘.\n확인 못 한 칸은 비워 둬.\"\n\n복사 붙이기 없이\n시트 내용으로 바로 정리받을 수 있어\n\n시트 연결하기 전에 꺼내 보게 저장해 둬",
+  "reply": "📌 출처: Anthropic · Claude Academy 「Claude 101」 (도구 연결하기 · 2026.11.26 확인)\nhttps://academy.claude.com/ko/courses/claude-101/connecting-your-tools\n무료 강좌 안내: Claude Academy 홈\nhttps://academy.claude.com/ko\n\n시트 문장은 우리가 만든 예시야. 커넥터 사용 가능 플랜은 Claude 공식 안내에서 확인해 줘.",
+  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261127-am.png",
+  "status": "예약",
+  "source": "AI 노하우 하루 1개",
+  "series_category": "AI 팁·사용법",
+  "kind": "정보",
+  "editorial_slot": "2026-11-27-base",
+  "topic_key": "ai-tip-connectors-sheet",
+  "purpose": "전문성",
+  "blog_series": "ai-tip",
+  "blog_episode": null,
+  "channel": "threads-heeya",
+  "sources": [
+   "https://academy.claude.com/ko/courses/claude-101/connecting-your-tools",
+   "https://academy.claude.com/ko"
+  ],
+  "source_checked_at": "2026-11-26",
+  "note": "ai-knowhow-series 11/26 실행(홀수일 11/27 → Claude 101). 「Claude 101」(13레슨·2.5시간) '도구 연결하기' 레슨에서 커넥터=대화 밖 자료(스프레드시트·이메일 등) 접근, 연결 언제든 해제, 권한 검토 후 승인→'접근할 수 있나요?' 테스트, '여러분이 보는 것만 볼 수 있습니다'를, '무료 강좌'는 academy.claude.com/ko 홈에서 2026.11.26 확인(web-fetch 에이전트). 플랜별 커넥터 사용 여부는 확인 못 해 본문에 안 씀. 큐 전체에 같은 레슨 주소·이름 없음 확인. 예시 프롬프트는 우리 것. 반말(RULES v2). 11/26 지시대로 체험판·크몽·DM CTA 없음. 11/27은 편성 전환 기간이라 editorial_slot은 참고용, blog_episode 미확인 null. Codex 인계(jobs)에 이 슬롯 작업 없음 확인 후 제작."
  }
 ]
