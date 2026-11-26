@@ -302,8 +302,8 @@ def github_issue(item: dict) -> str:
     else:
         body = None
     body = body or {"title": f"🎬 릴스 올릴 시간이에요 · {item['id']}",
-            "body": f"음악 없는 영상과 캡션·첫 댓글을 준비해 뒀어요.\n\n👉 {page}\n\n"
-                    "영상 저장 → 인스타 앱에서 뜨는 음악 골라 올리기 → 첫 댓글 붙여 넣기. 올린 뒤 이 이슈를 닫아 주세요.",
+            "body": f"이 항목은 직접 게시 모드여서 자동 업로드되지 않았어요. 영상·캡션·첫 댓글은 아래에서 확인해 주세요.\n\n👉 {page}\n\n"
+                    "영상의 기존 소리를 먼저 확인한 뒤 직접 업로드해 주세요. 자동 게시를 요청한 항목이라면 중복 업로드하지 말고 게시 모드 복구를 기다려 주세요. 직접 게시를 마쳤다면 이 이슈를 닫아 주세요.",
             "assignees": [repo.split("/")[0]]}
     request = urllib.request.Request(f"https://api.github.com/repos/{repo}/issues", data=json.dumps(body).encode(),
                                      method="POST", headers={"Authorization": f"Bearer {token}",
