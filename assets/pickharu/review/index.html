@@ -61,7 +61,7 @@ textarea{min-height:70px;resize:vertical}
 </head>
 <body>
 <main>
-  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-25.8</span></h1>
+  <h1>🎬 릴스 검수 <span class="cnt" id="uiVer">판 2026-11-26.9</span></h1>
   <p class="warn" id="schedWarn" hidden></p>
   <select id="pick" aria-label="시안 고르기"></select>
   <label class="hint" style="display:flex;gap:6px;align-items:center;margin:6px 0 0"><input type="checkbox" id="showArc" style="width:auto"> 📦 보관함 보기 (확정·게시완료·대체된 시안 <span id="arcN">0</span>개)</label>
@@ -125,6 +125,14 @@ textarea{min-height:70px;resize:vertical}
         <p class="hint" id="cpEditHint"></p>
       </div>
       <div id="cpComBox"><h3>💬 첫 댓글</h3><pre class="cap" id="cpCom"></pre></div>
+      <h3>게시 방식</h3>
+      <select id="cpPublishMode" aria-label="게시 방식">
+        <option value="direct">직접 게시 알림</option>
+        <option value="auto">일반 릴스 자동 게시</option>
+        <option value="trial_manual">파일럿 테스트 · 전체 공개는 앱에서 별도 확정</option>
+        <option value="trial_auto">파일럿 테스트 · 성과에 따른 자동 전체 공개까지 승인</option>
+      </select>
+      <p class="hint">파일럿은 비팔로워 대상 테스트입니다. 계정 지원 여부에 따라 실패할 수 있으며, 실패하면 일반 공개로 바꾸지 않습니다. 자동 전체 공개를 고르면 Instagram이 성과를 판단해 공개합니다.</p>
       <h3>🎵 음악</h3>
       <div id="cpMusic" class="hint"></div>
       <div class="row" id="cpMusicCtl" hidden style="margin-top:6px">
@@ -169,7 +177,7 @@ async function loadIndex(){
 // 11/25 희야 "확정된 것·이미 올라간 것 다 빼줘": 기본 목록 = 검수가 필요한 미확정만.
 // 확정·취소·반려·replaced_by·archived(게시완료/대체 확인분)는 📦 보관함으로. 지우지 않음.
 let allItems=[], sched=null, pickDay="", pickAt="", bgmOn=false, edCap=null, edCom=null;
-const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-25.8";
+const CAP_LIMIT=2200, TAG_LIMIT=30, UI_VERSION="2026-11-26.9";
 function edited(){ const it=info(); return !!(it&&(it.queue_id||it.editable)&&((edCap!==null&&edCap!==(it.caption||""))||(edCom!==null&&edCom!==(it.comment||"")))); }
 const WD=["일","월","화","수","목","금","토"];
 function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[(d.getUTCDay())]+")"; }
@@ -254,6 +262,7 @@ function fillPick(){
 }
 function load(o){
   cur=o; xy=null; restore();
+  $("#cpPublishMode").value=(info()&&info().publish_mode)||"direct";
   $("#meta").innerHTML=(o.state?'<span class="badge">'+o.state+'</span> ':"")+(o.archived?'<span class="badge">📦 '+o.archived.why+' · '+o.archived.ref+'</span> ':"")+(o.created||"").slice(5,16).replace("T"," ");
   $("#changes").hidden=!o.changes; $("#changes").textContent=o.changes?"이번 판에서 바꾼 점\n"+o.changes:"";
   v.src=o.video+"?v="+(o.v||""); v.load();
@@ -334,6 +343,7 @@ $("#send").onclick=()=>{
     const it=info();
     payload.d=mode();      // 캡션·음악이 다 안 됐으면 '준비 요청'으로 보냄(예약 안 됨)
     payload.at=pickAt;
+    payload.pm=$("#cpPublishMode").value;
     if(it&&it.ch) payload.ch=it.ch;
     if(it&&it.queue_id) payload.q=it.queue_id;
     const m=it&&it.music; if(m&&m.state==="미리보기"&&m.file&&$("#cpUseBgm").checked) payload.m=m.file;

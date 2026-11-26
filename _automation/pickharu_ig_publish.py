@@ -22,6 +22,7 @@ GitHub Actions(.github/workflows/ig-pickharu.yml)가 실행한다. 표준 라이
 from __future__ import annotations
 
 import json
+from trial_reels import trial_problem, trial_params
 import os
 import re
 import sys
@@ -90,6 +91,8 @@ def story_problem(item: dict, root: Path) -> str:
 
 
 def problem_of(item: dict, root: Path = SITE_ROOT) -> str:
+    if error := trial_problem(item):
+        return error
     if item.get("story_only"):  # 스토리만 다시 올리기(2026-10-30: 찌그러진 스토리 교체)
         return story_problem(item, root)
     caption = item.get("caption", "")
@@ -205,9 +208,16 @@ def find_live_post(item: dict, ig_user: str, token: str, http: Http, since: date
 
 def publish(item: dict, ig_user: str, token: str, http: Http, sleep) -> str:
     media = f"{GRAPH}/{ig_user}/media"
+    if item.get("trial_strategy"):
+        media = media.replace("/v21.0/", "/v27.0/")
     if "video" in item:
         params = {"media_type": "REELS", "video_url": SITE_URL + item["video"], "caption": item["caption"],
                   "share_to_feed": "true" if item.get("share_to_feed") else "false", "access_token": token}
+        if item.get("trial_strategy"):
+            if error := trial_problem(item):
+                raise ValueError(error)
+            params["trial_params"] = json.dumps(trial_params(item))
+            params["share_to_feed"] = "false"
         if item.get("ai_generated"):  # 인스타 'AI 정보' 라벨(Content Publishing API is_ai_generated, 2026-06-22 changelog)
             params["is_ai_generated"] = "true"
         container = http("POST", media, params)["id"]

@@ -9,7 +9,10 @@ def inspect(token, configured):
  posts=data.get('data',[])
  rows=[]
  for item in load_queue(QUEUE_PATH):
-  if item.get('status') not in ['직접 게시','실패'] or not item.get('video'):continue
+  if (item.get('status') not in ['직접 게시','실패'] and item.get('id') != 'rl-20261123-spao-blackfriday') or not item.get('video'):continue
   exact=[{k:x.get(k) for k in ['id','timestamp','media_type','permalink']} for x in posts if x.get('caption','').strip()==item.get('caption','').strip()]
   rows.append({'queue_id':item['id'],'exact_matches':exact,'auto':item.get('auto'),'status':item.get('status')})
  print('READBACK '+json.dumps({'checked_at':datetime.now(timezone.utc).isoformat(),'account_verified':True,'count':len(posts),'oldest':posts[-1].get('timestamp') if posts else None,'items':rows},ensure_ascii=False))
+
+ from trial_reels import collect_metrics
+ print("TRIAL_METRICS "+json.dumps(collect_metrics(load_queue(QUEUE_PATH),token,http_json,GRAPH,datetime.now(timezone.utc)),ensure_ascii=False))
