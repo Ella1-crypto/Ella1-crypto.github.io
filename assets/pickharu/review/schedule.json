@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-26T17:39+09:00",
+ "generated": "2026-11-26T17:40+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -1205,6 +1205,15 @@
    "approved": false,
    "type": "보류",
    "post_id": ""
+  },
+  {
+   "at": "2026-11-27T18:00+09:00",
+   "title": "인포크 042 데이로 삐약이 듀얼 손난로 (새 릴스 · 예약 전)",
+   "kind": "릴스",
+   "status": "준비 요청",
+   "auto": false,
+   "approved": false,
+   "type": "희망"
   }
  ]
 }
