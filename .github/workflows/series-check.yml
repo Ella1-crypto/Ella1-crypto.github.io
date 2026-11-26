@@ -7,6 +7,11 @@ on:
   schedule:
     - cron: "40 3 * * *"   # 매일 12:40 KST (GitHub cron은 늦어질 수 있음)
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "알림을 보내지 않고 점검 결과만 확인"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -24,4 +29,10 @@ jobs:
         env:
           HEEYA_TELEGRAM_TOKEN: ${{ secrets.HEEYA_TELEGRAM_TOKEN }}
           HEEYA_TELEGRAM_CHAT_ID: ${{ secrets.HEEYA_TELEGRAM_CHAT_ID }}
-        run: python _automation/jaetech_series_check.py
+          SERIES_DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ "$SERIES_DRY_RUN" = "true" ]; then
+            python _automation/jaetech_series_check.py --dry-run
+          else
+            python _automation/jaetech_series_check.py
+          fi

@@ -42,23 +42,56 @@ def category_matches(item: dict, name: str, day: date) -> bool:
     return item.get("series_category") == name
 
 
+def editorial_gaps(items: list[dict], today: date, calendar=None) -> list[str]:
+    """Read-only readiness audit; a queue entry is neither a draft nor proof of publication."""
+    if calendar is None:
+        calendar = json.loads(Path(__file__).with_name("editorial_calendar.json").read_text())
+    day = today + timedelta(days=1)
+    transition = day < date.fromisoformat(calendar["effective_from"])
+    source = calendar.get("transition", {}).get("days", []) if transition else calendar["slots"]
+    expected = [s for s in source if s["date"] == day.isoformat()]
+    if not expected:
+        return [f"• {day:%m/%d} 편성표 없음 — 제작 기준 갱신 필요 (정상 처리 아님)"]
+    out = []
+    for slot in expected:
+        label = f"{day:%m/%d} {slot.get('topic_brief', slot['series_category'])}"
+        rows = [it for it in items if it.get("editorial_slot") == slot["editorial_slot"]
+                and it.get("topic_key") == slot["topic_key"]
+                and it.get("channel", "threads-heeya") in {"threads-heeya", "threads_heeya"}]
+        live = [it for it in rows if it.get("status") in LIVE and day_of(it) == day]
+        if len(live) > 1:
+            out.append(f"• heeya {label}: 중복 큐 {len(live)}건 — 자동 재생성 금지")
+        elif live:
+            it = live[0]
+            if it.get("status") == "올림" and not (it.get("post_id") and it.get("published_at")):
+                out.append(f"• heeya {label}: 올림 표시지만 게시 ID/시각 증거 미확인")
+            elif it.get("status") == "올리는 중":
+                out.append(f"• heeya {label}: 처리 중 — 결과 조회 먼저, 재게시 금지")
+        elif rows:
+            states = ', '.join(sorted({str(it.get('status', '미확인')) for it in rows}))
+            out.append(f"• heeya {label}: {states} — 제작/검수/승인 상태 확인, 예약 아님")
+        else:
+            out.append(f"• heeya {label}: 정렬된 준비물·예약 큐 미확인 — 블로그 기준 제작 필요")
+        conflicts = [it for it in items if day_of(it) == day and it.get('status') in LIVE
+                     and it.get('topic_key') != slot['topic_key']]
+        for it in conflicts:
+            out.append(f"• 기존 큐 {it.get('id')}: {it.get('status')} / {it.get('topic_key', '소재 미기록')} — 공통소재와 다름, 임의 변경·취소 금지")
+        ig = slot.get('channels', {}).get('instagram', {})
+        ig_state = {'preparation_required': '제작·검수 준비 필요', 'planned': '기획만 있음'}.get(ig.get('status'), ig.get('status', '준비 상태 미확인'))
+        # This script cannot read Instagram's native schedule or publishing API.
+        out.append(f"• 인스타 {label}: {ig_state} — 릴스·표지·캡션·첫댓글·음악·검수전달 증거 별도 점검")
+    if transition:
+        out.append("• 전환기: 블로그 예약 유지, 인스타 메인 1편 기획. 추가 블로그 글을 전부 피드로 복제하지 않음")
+        for draft in calendar.get('transition', {}).get('retained_drafts', []):
+            if day.isoformat().replace('-', '') in draft['id']:
+                out.append(f"• 보존 초안 {draft['id']}: {draft['note']}")
+    return out
+
+
 def missing(items: list[dict], today: date) -> list[str]:
     """비어 있는 자리 설명 목록. id 모양이 맞는 글만 센다(r2-ai-… 는 무료강의·AI 어느 쪽에도 안 셈)."""
-    if today >= date(2026, 11, 29):
-        day = today + timedelta(days=1)
-        calendar = json.loads(Path(__file__).with_name("editorial_calendar.json").read_text())
-        expected = [s for s in calendar["slots"] if s["date"] == day.isoformat()]
-        if not expected:
-            return [f"• {day:%m/%d} 공통 편성표 갱신 필요 — 과거 매일3편을 복구하지 마세요"]
-        gaps = []
-        for slot in expected:
-            have = any(it.get("editorial_slot") == slot["editorial_slot"]
-                       and it.get("topic_key") == slot["topic_key"]
-                       and it.get("purpose") == slot["purpose"]
-                       and it.get("status") in LIVE and day_of(it) == day for it in items)
-            if not have:
-                gaps.append(f"• {day:%m/%d} {slot['series_category']} 공통 슬롯 준비/승인 확인 필요 — 자동 추가발행 금지")
-        return gaps
+    if today >= date(2026, 11, 26):
+        return editorial_gaps(items, today)
     out = []
     for name, shape, ahead, need, task in SLOTS:
         day = today + timedelta(days=ahead)
@@ -70,9 +103,11 @@ def missing(items: list[dict], today: date) -> list[str]:
 
 
 def message(gaps: list[str], today: date) -> str:
-    return "\n".join([f"⚠️ heeya 연재 빈자리 ({today:%m/%d} 점검)",
-                      "해당 날짜의 연재 큐가 비어 있거나 카테고리가 맞지 않아요. 생성/예약 기록 확인이 필요해요.", *gaps,
-                      "", "통합 센터에 \"빈자리 채워줘\"라고 보내 주세요."])
+    return "\n".join([f"🧭 블로그·heeya·인스타 준비 점검 ({today:%m/%d})",
+                      "예약 누락·제작 대기·소재 충돌을 구분한 결과입니다. 예약과 실제 발행은 별도입니다.", *gaps,
+                      "", "기존 승인 예약은 유지합니다. 새 글은 영상/원고·캡션·음악·방식·시각 검수와 최종확정 후 예약합니다.",
+                      "예약 작업 재실행이나 확정 버튼을 반복하지 마세요. 미완료 항목은 준비 작업으로 이어갑니다."])
+
 
 
 def send(text: str, http=http_json) -> bool:
@@ -93,7 +128,8 @@ def main() -> int:
         return 0
     text = message(gaps, today)
     print(text)
-    send(text)
+    if "--dry-run" not in sys.argv:
+        send(text)
     return 0
 
 

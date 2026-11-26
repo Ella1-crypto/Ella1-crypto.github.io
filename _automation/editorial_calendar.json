@@ -1221,5 +1221,145 @@
       "condition": "당주 검증된 마감 행사/선택 상품이 있고 메인과 중복 아님. 기존 검수 승인 필요. 없으면 생략",
       "product_id": null
     }
-  ]
+  ],
+  "transition": {
+    "source": "User blog schedule screenshots, 2026-11-26 19:59 KST; Instagram plan reconciled with published history",
+    "preserve_existing_queue": true,
+    "legacy_three_series_preparation": "11/29까지 기존 준비물은 보존하되 블로그와 다른 소재를 자동 추가예약하지 않음",
+    "blog_schedule": [
+      {
+        "scheduled_at": "2026-11-26T20:00:00+09:00",
+        "title_visible": "세븐일레븐 헬로키티 하트티라미수",
+        "subtitle_visible": "사전예약 14,900원·보냉백 2만 …",
+        "blog_episode": null,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-27T09:40:00+09:00",
+        "title_visible": "월세액 세액공제",
+        "subtitle_visible": "1천만 원까지 17%, 최대 170만 원",
+        "blog_episode": 20,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-27T12:00:00+09:00",
+        "title_visible": "AI 노코드 자동화 무료강의",
+        "subtitle_visible": "평생배움터 8차시·가계부 매니저까지",
+        "blog_episode": null,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-27T18:00:00+09:00",
+        "title_visible": "마운자로 3개월분 비용 비교",
+        "subtitle_visible": "한국 vs 일본·중국 7가지 길, 다 더하면 차…",
+        "blog_episode": null,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-28T09:40:00+09:00",
+        "title_visible": "맞벌이 부부, 누구 앞으로 넣을까",
+        "subtitle_visible": "칸마다 답이 달라요",
+        "blog_episode": 21,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-28T12:00:00+09:00",
+        "title_visible": "마운자로 연태(옌타이) 후기 모음",
+        "subtitle_visible": "병원 길·호텔 수령·가는 값, 후기 3…",
+        "blog_episode": null,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-29T09:40:00+09:00",
+        "title_visible": "연말정산 정리편",
+        "subtitle_visible": "12월 31일 전에 할 것과 이미 끝난 것",
+        "blog_episode": 22,
+        "status": "예약 화면 확인"
+      },
+      {
+        "scheduled_at": "2026-11-29T20:00:00+09:00",
+        "title_visible": "캡컷 무료강의",
+        "subtitle_visible": "숏폼 영상 편집 7차시·1시간 2분 정리",
+        "blog_episode": null,
+        "status": "예약 화면 확인"
+      }
+    ],
+    "days": [
+      {
+        "date": "2026-11-27",
+        "editorial_slot": "2026-11-27-base",
+        "topic_key": "yearend-monthly-rent",
+        "topic_brief": "월세 공제",
+        "series_category": "연말정산",
+        "purpose": "expertise",
+        "blog_episode": 20,
+        "blog_status": "scheduled_user_evidence",
+        "instagram_main_count": 1,
+        "instagram_format": "clean 릴스 25~35초 + 표지·캡션·첫댓글·음악",
+        "channels": {
+          "threads_heeya": {
+            "status": "preparation_required"
+          },
+          "instagram": {
+            "status": "preparation_required"
+          }
+        },
+        "additional_blog_topics": "추가 인스타 피드로 자동복제하지 않음",
+        "publishing_authorized": false
+      },
+      {
+        "date": "2026-11-28",
+        "editorial_slot": "2026-11-28-base",
+        "topic_key": "yearend-couple-allocation",
+        "topic_brief": "맞벌이 공제 배분",
+        "series_category": "연말정산",
+        "purpose": "expertise",
+        "blog_episode": 21,
+        "blog_status": "scheduled_user_evidence",
+        "instagram_main_count": 1,
+        "instagram_format": "clean 릴스 25~35초 + 표지·캡션·첫댓글·음악",
+        "channels": {
+          "threads_heeya": {
+            "status": "preparation_required"
+          },
+          "instagram": {
+            "status": "preparation_required"
+          }
+        },
+        "additional_blog_topics": "추가 인스타 피드로 자동복제하지 않음",
+        "publishing_authorized": false
+      },
+      {
+        "date": "2026-11-29",
+        "editorial_slot": "2026-11-29-base",
+        "topic_key": "yearend-final-checklist",
+        "topic_brief": "연말정산 정리",
+        "series_category": "연말정산",
+        "purpose": "expertise",
+        "blog_episode": 22,
+        "blog_status": "scheduled_user_evidence",
+        "instagram_main_count": 1,
+        "instagram_format": "clean 릴스 25~35초 + 표지·캡션·첫댓글·음악",
+        "channels": {
+          "threads_heeya": {
+            "status": "preparation_required"
+          },
+          "instagram": {
+            "status": "preparation_required"
+          }
+        },
+        "additional_blog_topics": "추가 인스타 피드로 자동복제하지 않음",
+        "publishing_authorized": false
+      }
+    ],
+    "retained_drafts": [
+      {
+        "id": "r2-20261127",
+        "topic_key": "ai-video-subject-vs-camera-motion",
+        "state": "off_plan_draft",
+        "delivery": "sending_unknown",
+        "note": "원고·이미지 존재, Telegram 전송결과 미확인. 블로그 11/27 소재와 다름. 재전송·자동예약 금지."
+      }
+    ]
+  }
 }

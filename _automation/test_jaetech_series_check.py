@@ -45,15 +45,32 @@ class MissingTest(unittest.TestCase):
         items = [FULL[0], item("ai-video-03", "2026-11-04T09:30+09:00"), FULL[3]]
         self.assertEqual(sc.missing(items, TODAY), [])
 
-    def test_new_categories_do_not_count_old_free_course(self):
-        rows = [item("jt-20261126", "2026-11-26T13:00+09:00"),
-                dict(item("ai-20261127-am", "2026-11-27T09:30+09:00"), series_category="AI 팁·사용법"),
-                dict(item("r2-20261127", "2026-11-27T07:30+09:00"), series_category="무료강의")]
-        self.assertEqual(len(sc.missing(rows, date(2026,11,26))), 1)
-        rows[-1]["series_category"] = "AI 영상 만들기"
-        self.assertEqual(sc.missing(rows, date(2026,11,26)), [])
-        rows[1]["series_category"] = "AI 영상 만들기"
-        self.assertEqual(len(sc.missing(rows, date(2026,11,26))), 1)
+    def test_transition_uses_blog_not_daily_ai_video_quota(self):
+        rows = [dict(item("ai-20261127-am", "2026-11-27T09:30+09:00"), topic_key="ai-tip-connectors-sheet")]
+        gaps = sc.missing(rows, date(2026,11,26))
+        text = sc.message(gaps, date(2026,11,26))
+        self.assertIn("월세 공제", text)
+        self.assertIn("공통소재와 다름", text)
+        self.assertNotIn("다시 돌리기", text)
+        self.assertNotIn("빈자리 채워줘", text)
+        self.assertIn("전송결과 미확인", text)
+
+    def test_ready_draft_does_not_become_scheduled(self):
+        row = dict(item("rent", "2026-11-27T13:00+09:00", "검수 대기"),
+                   editorial_slot="2026-11-27-base", topic_key="yearend-monthly-rent")
+        self.assertIn("예약 아님", '\n'.join(sc.missing([row],date(2026,11,26))))
+
+    def test_publication_requires_evidence_and_duplicate_detected(self):
+        row = dict(item("rent", "2026-11-27T13:00+09:00", "올림"),
+                   editorial_slot="2026-11-27-base", topic_key="yearend-monthly-rent")
+        self.assertIn("증거 미확인", '\n'.join(sc.missing([row],date(2026,11,26))))
+        self.assertIn("중복 큐", '\n'.join(sc.missing([row,row],date(2026,11,26))))
+
+    def test_weekly_slots_and_calendar_absence(self):
+        text = '\n'.join(sc.missing([],date(2026,11,29)))
+        self.assertIn("사진 한 장", text)
+        self.assertNotIn("free-course-series", text)
+        self.assertIn("편성표 없음", '\n'.join(sc.missing([],date(2027,1,30))))
 
     def test_send_needs_secrets(self):
         sent = []
