@@ -17,6 +17,7 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from threads_review_gate import approval_problem, stamp_approval
 from jaetech_publish import DONE, IN_PROGRESS, KST, READY, load_queue, save_queue
 from pickharu_publish import (
     COUPANG, FOLLOWUP, GENERAL, INFO, KAKAO, MAX_SESSION, NAVER, OLIVEYOUNG, OY_BF_END, QUEUE_PATH, SHOPS, cap_of,
@@ -100,7 +101,7 @@ def pick(drafts: list[dict], ids: list[str]) -> list[dict]:
 
 
 def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime | None = None,
-          now: datetime | None = None) -> list[dict]:
+          now: datetime | None = None, approval: dict | None = None) -> list[dict]:
     chosen = pick(drafts, ids)
     now = now or datetime.now(KST)
     for kind in {shop_of(d) for d in chosen} & (SHOPS.keys() | {INFO}):
@@ -145,6 +146,10 @@ def build(drafts: list[dict], ids: list[str], queue: list[dict], start: datetime
     new = [{**{k: d[k] for k in QUEUE_FIELDS if k in d and k != "publish_at"},
             "publish_at": at.isoformat(timespec="minutes"), "status": READY}
            for d, at in zip(chosen, times)]
+    for item in new:
+        stamp_approval(item, approval)
+        if issue := approval_problem(item):
+            raise ValueError(f"{item['id']}: {issue}")
     return queue + new
 
 
@@ -165,6 +170,7 @@ def main() -> int:
     parser.add_argument("--ids", required=True)
     parser.add_argument("--start")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--approval-file", help="구체적 초안 최종승인 증거 JSON; 일반 올려줘 요청은 승인 아님")
     args = parser.parse_args()
     if git("pull", "--ff-only").returncode != 0:
         print("최신 저장소를 받지 못했습니다(git pull 실패).", file=sys.stderr)
@@ -173,7 +179,8 @@ def main() -> int:
     ids = [s.strip() for s in args.ids.split(",") if s.strip()]
     try:
         start = datetime.fromisoformat(args.start).replace(tzinfo=KST) if args.start else None
-        queue = build(drafts, ids, load_queue(QUEUE_PATH), start)
+        approval = json.loads(Path(args.approval_file).read_text()) if args.approval_file else None
+        queue = build(drafts, ids, load_queue(QUEUE_PATH), start, approval=approval)
     except ValueError as error:
         print(error, file=sys.stderr)
         return 1

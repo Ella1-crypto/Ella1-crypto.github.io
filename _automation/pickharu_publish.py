@@ -14,6 +14,7 @@ GitHub Actions(.github/workflows/threads-pickharu.yml)가 실행한다. 표준 �
 from __future__ import annotations
 
 import json
+from threads_review_gate import approval_problem
 import os
 import re
 import sys
@@ -386,7 +387,7 @@ def run_once(now: datetime, token: str, http: Http = http_json,
         save_queue(items, path)
         commit("chore: pick.haru 예약 목록 정리 (늦은 글 실패 처리)")
         return "올릴 글 없음"
-    problem = problem_of(due) or ("소식 시간이 지나 올리지 않음" if expired(due, now) else "")
+    problem = approval_problem(due) or problem_of(due) or ("소식 시간이 지나 올리지 않음" if expired(due, now) else "")
     if not problem and due.get("kind") != FOLLOWUP:
         kind = shop_of(due)
         cap = GENERAL_CAP if is_general(due) else cap_of(kind, now)
