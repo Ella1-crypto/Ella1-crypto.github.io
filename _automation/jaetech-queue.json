@@ -2310,10 +2310,13 @@
   "source": "AI 노하우 하루 1개",
   "note": "트랙8 안전: 읽기 결과물과 행동 범위 지정. CSV 등록 공개 강의. 기존 전체 큐에 URL/강의명 미사용 확인.",
   "kind": "정보",
-  "status": "올리는 중",
+  "status": "올림",
   "approved_by": "희야: 2026-11-25 이 대화에서 내일 연재시리즈 정상적으로 올라가게 복구 요청",
   "source_checked_at": "2026-11-25T23:45:11.575323+09:00",
-  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261126-am.png"
+  "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261126-am.png",
+  "post_id": "17950879281360245",
+  "published_at": "2026-11-26T09:30+09:00",
+  "reply_id": "17897173746437669"
  },
  {
   "id": "jt-20261126",
