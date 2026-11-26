@@ -21,8 +21,8 @@ from jaetech_publish import KST, QUEUE_PATH, http_json, load_queue
 SLOTS = (  # (이름, id 모양, 며칠 뒤, 필요한 개수, 다시 돌릴 예약 작업)
     ("재테크 한 줄", re.compile(r"jt-\d{8}"), 0, 1, "jaetech-one-liner"),
     # 11/10부터 AI 노하우 영상 연재는 ai-video-NN id를 쓴다(11/12 가짜 경보로 추가). r2-ai-… 는 앞이 r2- 라 안 맞음.
-    ("AI 노하우", re.compile(r"ai-(\d{8}|video-\d+)"), 1, 1, "ai-knowhow-series"),
-    ("무료강의", re.compile(r"r2-\d{8}"), 1, 1, "free-course-series"),
+    ("AI 팁·사용법", re.compile(r"ai-(\d{8}|video-\d+)"), 1, 1, "ai-knowhow-series"),
+    ("AI 영상 만들기", re.compile(r"r2-\d{8}"), 1, 1, "free-course-series"),
 )
 LIVE = {"예약", "올리는 중", "올림"}
 
@@ -34,13 +34,19 @@ def day_of(item: dict) -> date | None:
         return None
 
 
+def category_matches(item: dict, name: str, day: date) -> bool:
+    if day < date(2026, 11, 27) or name == "재테크 한 줄":
+        return True
+    return item.get("series_category") == name
+
+
 def missing(items: list[dict], today: date) -> list[str]:
     """비어 있는 자리 설명 목록. id 모양이 맞는 글만 센다(r2-ai-… 는 무료강의·AI 어느 쪽에도 안 셈)."""
     out = []
     for name, shape, ahead, need, task in SLOTS:
         day = today + timedelta(days=ahead)
         have = sum(1 for it in items if shape.match(it.get("id", "")) and it.get("status") in LIVE
-                   and day_of(it) == day)
+                   and day_of(it) == day and category_matches(it, name, day))
         if have < need:
             out.append(f"• {name} {day:%m/%d}: {have}/{need}개 — '{task}' 다시 돌리기")
     return out
@@ -48,7 +54,7 @@ def missing(items: list[dict], today: date) -> list[str]:
 
 def message(gaps: list[str], today: date) -> str:
     return "\n".join([f"⚠️ heeya 연재 빈자리 ({today:%m/%d} 점검)",
-                      "맥북 예약 작업이 안 돈 것 같아요(맥 잠자기·앱 꺼짐·권한 확인 창에서 멈춤).", *gaps,
+                      "해당 날짜의 연재 큐가 비어 있거나 카테고리가 맞지 않아요. 생성/예약 기록 확인이 필요해요.", *gaps,
                       "", "통합 센터에 \"빈자리 채워줘\"라고 보내 주세요."])
 
 

@@ -26,7 +26,7 @@ class MissingTest(unittest.TestCase):
     def test_reports_each_gap(self):
         gaps = sc.missing(FULL[:1], TODAY)
         self.assertEqual(len(gaps), 2)
-        self.assertIn("AI 노하우 11/04: 0/1", gaps[0])
+        self.assertIn("AI 팁·사용법 11/04: 0/1", gaps[0])
         self.assertIn("free-course-series", gaps[1])
 
     def test_one_ai_post_a_day_is_enough(self):
@@ -38,12 +38,22 @@ class MissingTest(unittest.TestCase):
         items = [item("jt-20261103", "2026-11-03T13:00+09:00", "실패"),
                  item("r2-ai-20261104", "2026-11-04T07:30+09:00")] + FULL[1:3]
         gaps = sc.missing(items, TODAY)
-        self.assertTrue(any("재테크" in g for g in gaps) and any("무료강의" in g for g in gaps))
+        self.assertTrue(any("재테크" in g for g in gaps) and any("AI 영상 만들기" in g for g in gaps))
 
     def test_ai_video_series_id_counts(self):
         # 11/12: ai-video-03이 11/13 09:30에 예약돼 있었는데 0/1로 경보가 갔다.
         items = [FULL[0], item("ai-video-03", "2026-11-04T09:30+09:00"), FULL[3]]
         self.assertEqual(sc.missing(items, TODAY), [])
+
+    def test_new_categories_do_not_count_old_free_course(self):
+        rows = [item("jt-20261126", "2026-11-26T13:00+09:00"),
+                dict(item("ai-20261127-am", "2026-11-27T09:30+09:00"), series_category="AI 팁·사용법"),
+                dict(item("r2-20261127", "2026-11-27T07:30+09:00"), series_category="무료강의")]
+        self.assertEqual(len(sc.missing(rows, date(2026,11,26))), 1)
+        rows[-1]["series_category"] = "AI 영상 만들기"
+        self.assertEqual(sc.missing(rows, date(2026,11,26)), [])
+        rows[1]["series_category"] = "AI 영상 만들기"
+        self.assertEqual(len(sc.missing(rows, date(2026,11,26))), 1)
 
     def test_send_needs_secrets(self):
         sent = []
