@@ -184,7 +184,7 @@ function dayLabel(iso){ const d=new Date(iso+"T00:00:00Z"); return (d.getUTCMont
 function kstNow(){ const d=new Date(Date.now()+9*3600e3); return d.toISOString().slice(0,16).replace("T"," "); }
 function info(){ return sched&&sched.items&&cur?sched.items[cur.id]:null; }
 // 11/25 희야: 완성 캡션 + 음악 확인이 된 것만 '최종 확정'(예약). 아니면 '준비 요청'(희망 일정만 전달, 예약 안 함)
-const MUSIC_OK=["적용됨","원래 소리 있음"];
+const MUSIC_OK=["적용됨"];
 function mode(){ const it=info(); if(!it||!it.queue_id||!it.caption) return "준비 요청"; const m=it.music||{}; if(MUSIC_OK.includes(m.state)) return "확정"; if(m.state==="미리보기"&&$("#cpUseBgm").checked) return "확정"; return "준비 요청"; }
 function needs(){ const it=info(); const n=[]; if(!it||!it.caption) n.push("완성 캡션"); if(it&&!it.queue_id) n.push("게시 준비 확인"); const m=it&&it.music||{}; if(!(MUSIC_OK.includes(m.state)||(m.state==="미리보기"&&$("#cpUseBgm").checked))) n.push("음악 확인"); return n; }
 function renderPanel(){
