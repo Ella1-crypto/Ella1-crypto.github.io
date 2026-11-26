@@ -739,29 +739,6 @@
     "note": "큐에 등록된 곡이 영상에 섞여 있어요"
    }
   },
-  "mj12-sheet": {
-   "queue_id": "",
-   "kind": "릴스",
-   "status": "",
-   "publish_at": "",
-   "caption": "",
-   "comment": "",
-   "editable": false,
-   "copy_status": "검수 초안 · 예약 전",
-   "ch": "",
-   "music": {
-    "title": "Sneaky Snitch",
-    "artist": "Kevin MacLeod",
-    "license": "CC BY 4.0",
-    "file": "sneaky-snitch.mp3",
-    "video": "mj12-sheet/music_preview.mp4",
-    "mode": "음악 주인공",
-    "lufs": -12.1,
-    "src_md5": "35b4800f570917800e22dd498328a588",
-    "note": "확정 전 미리보기예요. 확정하면 이 곡을 섞어 올려요(큐 항목이 있을 때)",
-    "state": "미리보기"
-   }
-  },
   "mj02-reel-v2": {
    "queue_id": "",
    "kind": "릴스",
