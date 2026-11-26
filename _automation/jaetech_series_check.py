@@ -12,6 +12,8 @@ GitHub Actions(.github/workflows/series-check.yml)가 매일 낮에 이 검사�
 from __future__ import annotations
 
 import os
+import json
+from pathlib import Path
 import re
 import sys
 from datetime import date, datetime, timedelta
@@ -42,6 +44,21 @@ def category_matches(item: dict, name: str, day: date) -> bool:
 
 def missing(items: list[dict], today: date) -> list[str]:
     """비어 있는 자리 설명 목록. id 모양이 맞는 글만 센다(r2-ai-… 는 무료강의·AI 어느 쪽에도 안 셈)."""
+    if today >= date(2026, 11, 29):
+        day = today + timedelta(days=1)
+        calendar = json.loads(Path(__file__).with_name("editorial_calendar.json").read_text())
+        expected = [s for s in calendar["slots"] if s["date"] == day.isoformat()]
+        if not expected:
+            return [f"• {day:%m/%d} 공통 편성표 갱신 필요 — 과거 매일3편을 복구하지 마세요"]
+        gaps = []
+        for slot in expected:
+            have = any(it.get("editorial_slot") == slot["editorial_slot"]
+                       and it.get("topic_key") == slot["topic_key"]
+                       and it.get("purpose") == slot["purpose"]
+                       and it.get("status") in LIVE and day_of(it) == day for it in items)
+            if not have:
+                gaps.append(f"• {day:%m/%d} {slot['series_category']} 공통 슬롯 준비/승인 확인 필요 — 자동 추가발행 금지")
+        return gaps
     out = []
     for name, shape, ahead, need, task in SLOTS:
         day = today + timedelta(days=ahead)
