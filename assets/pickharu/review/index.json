@@ -1,6 +1,84 @@
 {
  "items": [
   {
+   "id": "pf-20261125-7-reel-v3",
+   "title": "양띠 몬치치 S 다른 시안 v3 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-7-reel-v3/reel_music.mp4",
+   "poster": "pf-20261125-7-reel-v3/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T21:43:24.291874+09:00",
+   "v": 1795783404,
+   "changes": "확대 강조화면 제거. 상품 누끼 전체샷. 새 훅과 4문장 TTS 추가, 음악은 목소리에 맞춰 낮춤.",
+   "needs": [
+    "새 시안 검수",
+    "최종 게시 방식·시각 확인"
+   ],
+   "review_copy": {
+    "caption": "양 모자만 보면 헷갈려요 🐑\n\n양인 줄 알았는데 후드 안에 몬치치가 숨어 있어요. 하얀 양 후드와 빨간 꽃이 포인트인 양띠 몬치치 S입니다. 작은 베비치치와는 다른 상품이에요.\n\n양띠 친구에게 줄 선물을 찾는다면 상품 정보를 확인해 보세요.",
+    "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOovi1sa\n\nMusic: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "9842646568",
+     "item_id": "29482910970",
+     "option": "몬치치 S / 동일 item ID",
+     "price": 61000,
+     "arrival_display": "12/18",
+     "link": "https://link.coupang.com/a/iZPOovi1sa",
+     "note": "큰 몬치치 S 단품. 베비치치는 별개 상품. 반품비41000원 표시, 개별 판매자 정품 보증 미확인. 즉시배송/연내도착 보장 없음.",
+     "link_verified_at": "2026-11-27T10:27:06.894289+09:00",
+     "video_sha256": "ba0203443e2688b933e490ee5e531d3a34f8b6aed7129f85977848b166663fb4",
+     "music": {
+      "file": "fuzzball-parade.mp3",
+      "title": "Fuzzball Parade",
+      "artist": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "credit": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+      "moods": [
+       "cute",
+       "funny"
+      ],
+      "energy": 3
+     },
+     "mix": {
+      "out": "/Users/jebbi/Documents/Codex/2026-11-25-new-chat/repairs/monchhichi_v2/review.mp4",
+      "mode": "음악 주인공",
+      "src_lufs": -70.0,
+      "lufs": -12.2
+     },
+     "voice": "none; music and animated text",
+     "publish_authorized": false
+    },
+    "script": [
+     "양인 줄 알았는데, 후드 안에 몬치치가 숨어 있어요.",
+     "하얀 양 후드에 빨간 꽃, 얼굴이 쏙 보이는 이 조합.",
+     "이건 큰 몬치치 에스예요. 작은 베비치치와는 다른 상품이에요.",
+     "양띠 친구에게 줄 귀여운 선물을 찾는다면, 이 몬치치를 살펴보세요."
+    ]
+   },
+   "review_bgm": {
+    "file": "fuzzball-parade.mp3",
+    "title": "Fuzzball Parade",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "funny"
+    ],
+    "energy": 3,
+    "video_md5": "36a9faf912b6d22c0931004773b63c89",
+    "mode": "목소리+음악(ducking)"
+   },
+   "reference_url": "https://pin.it/2WRKFIQS1",
+   "music_selection": {
+    "reason": "cute/funny energy3; product detail closeups; previous Carefree rejected for repetition",
+    "not_used_in_active_review_catalog": true,
+    "listening_verified": false
+   }
+  },
+  {
    "id": "inpock-008-v4",
    "title": "인포크 008 부이 헬로키티 디지털 카메라 수정본 v4 (예약 전)",
    "kind": "video",
@@ -235,7 +313,7 @@
    "video": "pf-20261125-7-reel-v2/reel_music.mp4",
    "poster": "pf-20261125-7-reel-v2/cover.jpg",
    "fps": 24,
-   "state": "검수 중",
+   "state": "수정 완료",
    "created": "2026-11-27T19:45:03.119957+09:00",
    "v": 1795776303,
    "changes": "Pinterest 참고 구도: 상품 중심 흰 배경·클로즈업. 14초4컷→9초6컷, 형광펜 제목 제거. Fuzzball Parade로 음악 교체. 실제 사용 촬영이 아닌 동일 상품 사진 편집.",
@@ -298,7 +376,8 @@
     "reason": "cute/funny energy3; product detail closeups; previous Carefree rejected for repetition",
     "not_used_in_active_review_catalog": true,
     "listening_verified": false
-   }
+   },
+   "replaced_by": "pf-20261125-7-reel-v3"
   },
   {
    "id": "pf-20261125-8-reel-v1",
