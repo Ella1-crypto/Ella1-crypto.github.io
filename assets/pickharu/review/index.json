@@ -1,6 +1,60 @@
 {
  "items": [
   {
+   "id": "inpock-008-v4",
+   "title": "인포크 008 부이 헬로키티 디지털 카메라 수정본 v4 (예약 전)",
+   "kind": "video",
+   "video": "inpock-008-v4/reel_music.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "7.43초 회전 GIF를 화면이 보이는 원본 상품 사진으로 교체. 12종씩 자막·십이 종씩 음성. 카카오톡 선물하기로 선물 권유하는 마지막 대본.",
+   "created": "2026-11-27T20:45:04.363581+09:00",
+   "v": 1795779904,
+   "review_copy": {
+    "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n키티 얼굴을 닮은 디지털 카메라. 리본 가운데에 렌즈가 있고 뒷면에는 화면이 있어요. 레드와 핑크, 색상별 전용 프레임은 12종씩입니다.\n\n키티 좋아하는 친구에게 카카오톡 선물하기로 이 카메라를 선물해 보세요.",
+    "comment": "상품 정보: 프로필 인포크 008번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Fluffing a Duck by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "source": {
+     "review_changes": "새로 만듦: sticker 판 · 훅 '이 키티 얼굴, 사실 카메라!'",
+     "product_list": {
+      "no": "008",
+      "name": "부이 헬로키티 디지털 카메라",
+      "url": "https://gift-link.kakao.com/c/2YOMT99Z",
+      "code": 200,
+      "final": "https://gift-link.kakao.com/c/2YOMT99Z"
+     }
+    },
+    "status": "검수 초안",
+    "created_at": "2026-11-25T13:09:23.258049+00:00",
+    "publication_check": "영상 속 기능 및 현재 링크·옵션 최종 확인 전. 예약 승인 아님.",
+    "disclosure_corrected_at": "2026-11-26T06:21:19.291399+00:00",
+    "script": [
+     "이 키티 얼굴, 사실 카메라예요.",
+     "리본 가운데가 렌즈고, 뒤집으면 화면이 나와요.",
+     "레드와 핑크, 색상마다 전용 프레임이 십이 종씩 들어 있어요.",
+     "키티 좋아하는 친구에게, 카카오톡 선물하기로 이 카메라를 선물해 보세요."
+    ]
+   },
+   "review_bgm": {
+    "file": "fluffing-a-duck.mp3",
+    "title": "Fluffing a Duck",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Fluffing a Duck by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "funny"
+    ],
+    "energy": 3,
+    "video_md5": "4b8bc1b992335e851b7a5a78ef91f6ce",
+    "mode": "목소리+음악(ducking)"
+   },
+   "poster": "inpock-008-v4/cover.jpg",
+   "needs": [
+    "새 시안 검수",
+    "최종 게시 방식·시각 확인"
+   ]
+  },
+  {
    "id": "inpock-029-v4",
    "title": "인포크 029 클라우드 카메라 다꾸 활용 시안 v4 (예약 전)",
    "kind": "video",
@@ -896,7 +950,7 @@
    "kind": "video",
    "video": "inpock-008-v3/reel_music.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "수정 완료",
    "changes": "0초부터 키티 얼굴만 크게 4초 보여준 뒤 뒷면·프레임 순서로 변경",
    "created": "2026-11-26T17:57:32.683096+09:00",
    "v": 1795691246,
@@ -932,7 +986,8 @@
     "energy": 3,
     "video_md5": "2f76c8aeb11c4dcbb6e8a3091fadcff7",
     "mode": "목소리+음악(ducking)"
-   }
+   },
+   "replaced_by": "inpock-008-v4"
   },
   {
    "id": "inpock-059-v2",
