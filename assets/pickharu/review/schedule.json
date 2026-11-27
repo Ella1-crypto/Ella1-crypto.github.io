@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-27T20:12+09:00",
+ "generated": "2026-11-27T20:18+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -683,6 +683,35 @@
   }
  ],
  "items": {
+  "inpock-045-v6": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n침대 옆에 키티 한 자리\n\n헬로키티 빅 무드등을 침실에 두는 모습을 담았어요.\n조명을 켰을 때의 분위기와 놓을 자리를 함께 살펴보세요.\n\n침대 옆 공간과 제품 크기를 먼저 비교해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 045번에 있어요.\n\n#소품 #생활용품 #쇼핑기록",
+   "comment": "상품 정보: 프로필 인포크 045번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Merry Go by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "ac17c94eae85",
+   "music": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "8b8e2ae1f3aac4f9d7174f409b3ecd92",
+    "mode": "목소리+음악(ducking)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
   "inpock-025-v4": {
    "queue_id": "",
    "kind": "릴스",
@@ -931,34 +960,6 @@
     "artist": "Kevin MacLeod",
     "license": "CC BY 4.0",
     "note": "큐에 등록된 곡이 영상에 섞여 있어요"
-   }
-  },
-  "inpock-045-v5": {
-   "queue_id": "",
-   "kind": "릴스",
-   "publish_mode": "direct",
-   "status": "",
-   "publish_at": "",
-   "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n침대 옆에 키티 한 자리\n\n헬로키티 빅 무드등을 침실에 두는 모습을 담았어요.\n조명을 켰을 때의 분위기와 놓을 자리를 함께 살펴보세요.\n\n침대 옆 공간과 제품 크기를 먼저 비교해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 045번에 있어요.\n\n#소품 #생활용품 #쇼핑기록",
-   "comment": "상품 정보: 프로필 인포크 045번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Merry Go by Kevin MacLeod (incompetech.com), CC BY 4.0",
-   "editable": true,
-   "copy_status": "검수 초안 · 예약 전",
-   "ch": "ac17c94eae85",
-   "music": {
-    "file": "merry-go.mp3",
-    "title": "Merry Go",
-    "artist": "Kevin MacLeod",
-    "license": "CC BY 4.0",
-    "credit": "Music: Merry Go by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "moods": [
-     "cute",
-     "whimsical"
-    ],
-    "energy": 3,
-    "video_md5": "750455dd2f6d32bd13d683c443043576",
-    "mode": "목소리+음악(ducking)",
-    "state": "적용됨",
-    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
    }
   },
   "inpock-029-v3": {
