@@ -1,6 +1,210 @@
 {
  "items": [
   {
+   "id": "pf-20261125-8-reel-v1",
+   "title": "양띠 베비치치 S 인형 영상 v1 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-8-reel-v1/reel_music.mp4",
+   "poster": "pf-20261125-8-reel-v1/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T10:38:00.521011+09:00",
+   "v": 1795743480,
+   "changes": "형광펜 제목·상품 이미지 움직임·음악 포함. 내레이션 없는 14초 영상.",
+   "needs": [
+    "인포크 번호 및 상품 구성 확인",
+    "최종 게시 방식·시각 확인"
+   ],
+   "review_copy": {
+    "caption": "양띠 베비치치 S 인형 디자인과 선택 옵션을 확인해요.\n\n작은 베비치치 단품. 큰 몬치치와 별개. 현재1/5 도착 예정으로 연내 수령 보장 없음. 개별 판매자 정품 보증 미확인.\n11/27 확인 가격 70,900원, 무료배송 표시, 2027/1/5 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+    "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOQdBs6u\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "9831286021",
+     "item_id": "29446758714",
+     "option": "베비치치 S / 동일 item ID",
+     "price": 70900,
+     "arrival_display": "2027/1/5",
+     "link": "https://link.coupang.com/a/iZPOQdBs6u",
+     "note": "작은 베비치치 단품. 큰 몬치치와 별개. 현재1/5 도착 예정으로 연내 수령 보장 없음. 개별 판매자 정품 보증 미확인.",
+     "link_verified_at": "2026-11-27T10:27:06.894289+09:00",
+     "video_sha256": "0df2696bf59df5f2b42f2c7249293da4c00543a46d3ab6a3549b1fadf0e7d8ec",
+     "music": {
+      "file": "carefree.mp3",
+      "title": "Carefree",
+      "artist": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+      "moods": [
+       "cute",
+       "upbeat",
+       "daily"
+      ],
+      "energy": 3
+     },
+     "mix": {
+      "out": "/Users/jebbi/Documents/Codex/2026-11-25-new-chat/repairs/backlog_delivery/pf8/review.mp4",
+      "mode": "음악 주인공",
+      "src_lufs": -70.0,
+      "lufs": -11.5
+     },
+     "voice": "none; music and animated text",
+     "publish_authorized": false
+    }
+   },
+   "review_bgm": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "3741bcd5e8b1957434f4f8d6a3dc28e7",
+    "mode": "음악+자막 (내레이션 없음)"
+   }
+  },
+  {
+   "id": "pf-20261125-7-reel-v1",
+   "title": "양띠 몬치치 S 인형 영상 v1 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-7-reel-v1/reel_music.mp4",
+   "poster": "pf-20261125-7-reel-v1/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T10:38:00.505799+09:00",
+   "v": 1795743480,
+   "changes": "형광펜 제목·상품 이미지 움직임·음악 포함. 내레이션 없는 14초 영상.",
+   "needs": [
+    "인포크 번호 및 상품 구성 확인",
+    "최종 게시 방식·시각 확인"
+   ],
+   "review_copy": {
+    "caption": "양띠 몬치치 S 인형 디자인과 선택 옵션을 확인해요.\n\n큰 몬치치 S 단품. 베비치치는 별개 상품. 반품비41000원 표시, 개별 판매자 정품 보증 미확인. 즉시배송/연내도착 보장 없음.\n11/27 확인 가격 61,000원, 무료배송 표시, 12/18 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+    "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOovi1sa\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "9842646568",
+     "item_id": "29482910970",
+     "option": "몬치치 S / 동일 item ID",
+     "price": 61000,
+     "arrival_display": "12/18",
+     "link": "https://link.coupang.com/a/iZPOovi1sa",
+     "note": "큰 몬치치 S 단품. 베비치치는 별개 상품. 반품비41000원 표시, 개별 판매자 정품 보증 미확인. 즉시배송/연내도착 보장 없음.",
+     "link_verified_at": "2026-11-27T10:27:06.894289+09:00",
+     "video_sha256": "4447a592a415c4f0d3ccaad9b17bf6d5b67f17bfb87c37636c13d320e564598c",
+     "music": {
+      "file": "carefree.mp3",
+      "title": "Carefree",
+      "artist": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+      "moods": [
+       "cute",
+       "upbeat",
+       "daily"
+      ],
+      "energy": 3
+     },
+     "mix": {
+      "out": "/Users/jebbi/Documents/Codex/2026-11-25-new-chat/repairs/backlog_delivery/pf7/review.mp4",
+      "mode": "음악 주인공",
+      "src_lufs": -70.0,
+      "lufs": -11.5
+     },
+     "voice": "none; music and animated text",
+     "publish_authorized": false
+    }
+   },
+   "review_bgm": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "413d8e8e47fc0755896eba6ef731d812",
+    "mode": "음악+자막 (내레이션 없음)"
+   }
+  },
+  {
+   "id": "pf-20261125-6-reel-v1",
+   "title": "시나모롤 입체 털슬리퍼 영상 v1 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-6-reel-v1/reel_music.mp4",
+   "poster": "pf-20261125-6-reel-v1/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T10:38:00.489622+09:00",
+   "v": 1795743480,
+   "changes": "형광펜 제목·상품 이미지 움직임·음악 포함. 내레이션 없는 14초 영상.",
+   "needs": [
+    "인포크 번호 및 상품 구성 확인",
+    "최종 게시 방식·시각 확인"
+   ],
+   "review_copy": {
+    "caption": "시나모롤 입체 털슬리퍼 디자인과 선택 옵션을 확인해요.\n\n시나모롤250 옵션 확인. 무료배송·무료반품은 확인 계정 와우회원 조건이며 비회원 조건은 다를 수 있음. 정품/착화감 단정 없음.\n11/27 확인 가격 14,950원, 무료배송 표시, 11/28 (회원·배송지 기준) 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+    "comment": "선택 상품 확인: https://link.coupang.com/a/iZPNV20UeW\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "8449092608",
+     "item_id": "24442995039",
+     "option": "시나모롤 / 250",
+     "price": 14950,
+     "arrival_display": "11/28 (회원·배송지 기준)",
+     "link": "https://link.coupang.com/a/iZPNV20UeW",
+     "note": "시나모롤250 옵션 확인. 무료배송·무료반품은 확인 계정 와우회원 조건이며 비회원 조건은 다를 수 있음. 정품/착화감 단정 없음.",
+     "link_verified_at": "2026-11-27T10:27:06.894289+09:00",
+     "video_sha256": "52984f21138b2f0ae16b749bea474f918eb4ada326e8d70ec393fd862764ff02",
+     "music": {
+      "file": "carefree.mp3",
+      "title": "Carefree",
+      "artist": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+      "moods": [
+       "cute",
+       "upbeat",
+       "daily"
+      ],
+      "energy": 3
+     },
+     "mix": {
+      "out": "/Users/jebbi/Documents/Codex/2026-11-25-new-chat/repairs/backlog_delivery/pf6/review.mp4",
+      "mode": "음악 주인공",
+      "src_lufs": -70.0,
+      "lufs": -11.5
+     },
+     "voice": "none; music and animated text",
+     "publish_authorized": false
+    }
+   },
+   "review_bgm": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "5c576d9a55940f56cb9e53eb81b9d440",
+    "mode": "음악+자막 (내레이션 없음)"
+   }
+  },
+  {
    "id": "pf-20261125-5-reel-v1",
    "title": "야시카 헬로키티 DZ-100 카메라 영상 v1 (예약 전)",
    "kind": "video",
