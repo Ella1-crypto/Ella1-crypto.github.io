@@ -1,6 +1,17 @@
 {
  "items": [
   {
+   "id": "inpock-048-v3",
+   "title": "인포크 048 겨울 키링 재작업 v3 (예약 전, 더 귀여운 시안)",
+   "kind": "video",
+   "video": "inpock-048-v3/reel.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "판 교체(kraft·폴라로이드 → sticker 파스텔 도트+버블글자, 더 귀여운 시안 요청 반영) · 훅 교체(키링도 겨울옷 입어요) · CTA 쿠팡이라 지금 주문하세요+인포크 048번",
+   "created": "2026-11-28T01:32:43+09:00",
+   "v": 1795797163
+  },
+  {
    "id": "inpock-045-v6",
    "title": "인포크 045 키티 무드등 재작업 v6 (예약 전)",
    "kind": "video",
@@ -43,61 +54,6 @@
    "changes": "훅 교체(이 얼굴, 알고 보니 카메라였어요) · 소구점 장면 추가(리뷰 1,760개) · 12종씩 TTS 유지 · 11/27 CTA(지금 선물하세요+인포크 008번 화면표기) 반영",
    "created": "2026-11-28T01:20:37+09:00",
    "v": 1795796437
-  },
-  {
-   "id": "inpock-048-v3",
-   "title": "인포크 048 키티 겨울모자 목도리 미니키링 수정본 v3 (예약 전)",
-   "kind": "video",
-   "video": "inpock-048-v3/reel_music.mp4",
-   "fps": 30,
-   "state": "검수 중",
-   "changes": "첫 훅을 가방 꾸미기로 교체. 저장·공유 CTA 제거, 인포크048 목도리모자키티 옵션 확인 후 주문 CTA 및 새 TTS.",
-   "created": "2026-11-27T21:50:35.957166+09:00",
-   "v": 1795783835,
-   "review_copy": {
-    "caption": "(광고) 쿠팡 파트너스 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n가방이 심심하다면? 겨울옷 입은 키티 하나 걸어보세요. 곰 귀 털모자와 빨간 리본, 줄무늬 목도리, 작은 가방까지 달린 미니키링이에요.\n\n프로필 인포크 048번에서 목도리모자키티 옵션을 확인하고 주문해 보세요.",
-    "comment": "상품 정보: 프로필 인포크 048번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Life of Riley by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "source": {
-     "review_changes": "새로 만듦: polaroid판(코르크·크라프트+폴라로이드 떨어짐) · 훅 '이 키티 키링, 겨울옷 입고 와요' · 11/10 링크 제한 기록 있음(오늘 링크는 열림)",
-     "product_list": {
-      "no": "048",
-      "name": "키티 겨울모자 목도리 미니키링",
-      "url": "https://link.coupang.com/a/ivSEOUom5s",
-      "code": 403,
-      "final": "https://www.coupang.com/vp/products/9710684637"
-     }
-    },
-    "status": "검수 초안",
-    "created_at": "2026-11-25T13:09:23.258095+00:00",
-    "publication_check": "영상 속 기능 및 현재 링크·옵션 최종 확인 전. 예약 승인 아님.",
-    "disclosure_corrected_at": "2026-11-26T06:21:19.291424+00:00",
-    "script": [
-     "가방이 심심하다면? 겨울옷 입은 키티 하나 걸어보세요.",
-     "곰 귀 털모자에 빨간 리본, 줄무늬 목도리, 작은 가방까지.",
-     "가방에도, 차 키에도 걸기만 하면 겨울 느낌 끝.",
-     "프로필 인포크 사십팔 번에서, 목도리모자키티 옵션을 확인하고 주문해 보세요."
-    ]
-   },
-   "review_bgm": {
-    "file": "life-of-riley.mp3",
-    "title": "Life of Riley",
-    "artist": "Kevin MacLeod",
-    "license": "CC BY 4.0",
-    "credit": "Music: Life of Riley by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "moods": [
-     "upbeat",
-     "daily",
-     "sale"
-    ],
-    "energy": 4,
-    "video_md5": "d51cbe54e78ecf24f0d67bfda395686a",
-    "mode": "목소리+음악(ducking)"
-   },
-   "poster": "inpock-048-v3/cover.jpg",
-   "needs": [
-    "새 시안 검수",
-    "최종 게시 방식·시각 확인"
-   ]
   },
   {
    "id": "pf-20261125-7-reel-v3",
@@ -4104,5 +4060,5 @@
    "v": 1795175668
   }
  ],
- "updated": "2026-11-28T01:30:32+09:00"
+ "updated": "2026-11-28T01:32:43+09:00"
 }
