@@ -4456,5 +4456,63 @@
   "post_id": "18122740340040752",
   "published_at": "2026-11-25T18:30+09:00",
   "comment_id": "18024817622943948"
+ },
+ {
+  "id": "rl-inpock-059-v3-20261127",
+  "label": "인포크 059 치이카와 방석 v3 · 파일럿",
+  "review_id": "inpock-059-v3",
+  "publish_at": "2026-11-27T20:30:00+09:00",
+  "status": "예약",
+  "caption": "(광고) 쿠팡 파트너스 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n인형처럼 보이는 의자 방석\n\n치이카와 일체형 의자 방석을 담았어요.\n책상 앞에 캐릭터 포인트를 주고 싶다면\n등받이와 좌판 모양을 살펴보세요.\n\n사용하는 의자의 좌판 크기와 방석 치수를 비교해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 059번에 있어요.\n\n#소품 #생활용품 #쇼핑기록",
+  "comment": "상품 정보: 프로필 인포크 059번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Carefree by Kevin MacLeod",
+  "video": "assets/pickharu/ig/rl-inpock-059-v3-20261127/reel.mp4",
+  "auto": true,
+  "share_to_feed": false,
+  "trial_strategy": "SS_PERFORMANCE",
+  "bgm": {
+   "file": "carefree.mp3",
+   "title": "Carefree",
+   "artist": "Kevin MacLeod",
+   "license": "CC BY 4.0",
+   "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "moods": [
+    "cute",
+    "upbeat",
+    "daily"
+   ],
+   "energy": 3,
+   "video_md5": "ff099d71da6de04ce9082be80032442d",
+   "mode": "목소리+음악(ducking)"
+  },
+  "approved_by": "희야(현재 대화에서 059 v3 오늘20:30 파일럿 예약 확정 재확인)",
+  "approved_at": "2026-11-27T19:54:46.642045+09:00",
+  "approval_source": {
+   "thread": "01a2122c-0318-7e91-b912-c2ef300a5ee2",
+   "user_confirmation": "파일럿 예약 확정 신청했잖아",
+   "original_request": "20261127-174633-479665759-inpock-059-v3.json",
+   "mode": "trial_auto",
+   "note": "준비요청 자체가 아니라 이후 현재대화의 반복 최종확정에 근거"
+  },
+  "affiliate_link_verified_at": "2026-11-27T18:29:43.365062+09:00",
+  "product_verification": {
+   "checked_at": "2026-11-27T18:29:43.363196+09:00",
+   "affiliate_url": "https://link.coupang.com/a/ivSHgAtw2m",
+   "product_id": "9798978388",
+   "item_id": "29341566671",
+   "option": "우사기 / ONE SIZE",
+   "displayed_price_krw": 23220,
+   "arrival_display": "12/10",
+   "method": "CUA Chrome rendered product screenshot; compared original cut/usagi.png visually",
+   "same_product_option_verified": true,
+   "affiliate_link_verified_at": "2026-11-27T18:29:43.365062+09:00",
+   "schedule_registered": false,
+   "posted": false
+  },
+  "note": "059 v3 기존 검수 영상·캡션·음악 유지. 성과에 따른 자동 전체 공개 포함 파일럿. 실패시 일반게시 대체 금지.",
+  "trial_approval": {
+   "mode": "SS_PERFORMANCE",
+   "at": "2026-11-27T19:54:46.642045+09:00",
+   "hash": "fe4bb772702213bb8a824e15fb14cfd89629d3d8d9ac9989192ad5c0ec18b9dc"
+  }
  }
 ]

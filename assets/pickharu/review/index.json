@@ -530,7 +530,7 @@
    "kind": "video",
    "video": "inpock-059-v3/reel_music.mp4",
    "fps": 30,
-   "state": "준비 요청",
+   "state": "확정",
    "changes": "의자 꾸밀 때 문구를 화면·음성에서 모두 삭제. 인형인 줄 알았던 방석 훅→실사용→먼작귀 친구 공유 구성",
    "created": "2026-11-26T17:57:32.862466+09:00",
    "v": 1795691246,
@@ -552,11 +552,7 @@
     "publication_check": "영상 속 기능 및 현재 링크·옵션 최종 확인 전. 예약 승인 아님.",
     "disclosure_corrected_at": "2026-11-26T06:21:19.291430+00:00"
    },
-   "wish_at": "2026-11-27T20:30:00+09:00",
    "requested": "2026-11-27T17:46+09:00",
-   "needs": [
-    "게시 준비 확인(상품 링크·옵션 및 게시 방식)"
-   ],
    "video_before_music": "inpock-059-v3/reel.mp4",
    "review_bgm": {
     "file": "carefree.mp3",
@@ -574,7 +570,15 @@
     "mode": "목소리+음악(ducking)"
    },
    "caption_edited": "2026-11-26T20:20+09:00",
-   "requested_publish_mode": "trial_auto"
+   "requested_publish_mode": "trial_auto",
+   "queue_id": "rl-inpock-059-v3-20261127",
+   "scheduled_for": "2026-11-27T20:30:00+09:00",
+   "confirmed": "2026-11-27T19:54:46.642045+09:00",
+   "archived": {
+    "why": "확정",
+    "ref": "rl-inpock-059-v3-20261127",
+    "at": "2026-11-27"
+   }
   },
   {
    "id": "inpock-045-v5",

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-27T19:45+09:00",
+ "generated": "2026-11-27T19:54+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -17,9 +17,11 @@
   "2026-11-27": [
    {
     "t": "20:30",
-    "free": true,
-    "by": "",
-    "ids": []
+    "free": false,
+    "by": "인포크 059 치이카와 방석 v3 · 파일럿",
+    "ids": [
+     "rl-inpock-059-v3-20261127"
+    ]
    },
    {
     "t": "21:30",
@@ -679,7 +681,15 @@
    }
   ]
  },
- "busy": [],
+ "busy": [
+  {
+   "id": "rl-inpock-059-v3-20261127",
+   "at": "2026-11-27T20:30+09:00",
+   "status": "예약",
+   "label": "인포크 059 치이카와 방석 v3 · 파일럿",
+   "hold": false
+  }
+ ],
  "items": {
   "pf-20261125-7-reel-v2": {
    "queue_id": "",
@@ -884,32 +894,22 @@
    }
   },
   "inpock-059-v3": {
-   "queue_id": "",
+   "queue_id": "rl-inpock-059-v3-20261127",
    "kind": "릴스",
    "publish_mode": "trial_auto",
-   "status": "",
-   "publish_at": "",
+   "status": "예약",
+   "publish_at": "2026-11-27T20:30:00+09:00",
    "caption": "(광고) 쿠팡 파트너스 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n인형처럼 보이는 의자 방석\n\n치이카와 일체형 의자 방석을 담았어요.\n책상 앞에 캐릭터 포인트를 주고 싶다면\n등받이와 좌판 모양을 살펴보세요.\n\n사용하는 의자의 좌판 크기와 방석 치수를 비교해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 059번에 있어요.\n\n#소품 #생활용품 #쇼핑기록",
    "comment": "상품 정보: 프로필 인포크 059번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Carefree by Kevin MacLeod",
    "editable": true,
-   "copy_status": "검수 초안 · 예약 전",
+   "copy_status": "큐 연결됨",
    "ch": "217494b7ca6d",
    "music": {
-    "file": "carefree.mp3",
+    "state": "적용됨",
     "title": "Carefree",
     "artist": "Kevin MacLeod",
     "license": "CC BY 4.0",
-    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "moods": [
-     "cute",
-     "upbeat",
-     "daily"
-    ],
-    "energy": 3,
-    "video_md5": "ff099d71da6de04ce9082be80032442d",
-    "mode": "목소리+음악(ducking)",
-    "state": "적용됨",
-    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+    "note": "큐에 등록된 곡이 영상에 섞여 있어요"
    }
   },
   "inpock-045-v5": {
@@ -1617,12 +1617,13 @@
  "reservations": [
   {
    "at": "2026-11-27T20:30+09:00",
-   "title": "인포크 059 치이카와 일체형 의자 방석 수정본 v3 (예약 전)",
+   "title": "인포크 059 치이카와 방석 v3 · 파일럿",
    "kind": "릴스",
-   "status": "준비 요청",
-   "auto": false,
-   "approved": false,
-   "type": "희망"
+   "status": "예약",
+   "auto": true,
+   "approved": true,
+   "type": "예약",
+   "post_id": ""
   }
  ]
 }
