@@ -1,6 +1,49 @@
 {
  "items": [
   {
+   "id": "pf-20261125-3-reel-v1",
+   "title": "선택 상품 · 키티 핑크 수납장 영상 v1 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-3-reel-v1/reel_music.mp4",
+   "poster": "pf-20261125-3-reel-v1/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T10:09:16.234724+09:00",
+   "v": 1795741756,
+   "changes": "선택 상품 실제 영상 제작. 형광펜 제목·상품 전체/상세 확대·음악 포함. 내레이션 없는 음악형 검수본.",
+   "needs": [
+    "실제 크기·소품 포함 여부 확인",
+    "인포크 번호 확인 후 구매 안내 추가",
+    "게시 방식·시각 최종확정"
+   ],
+   "review_copy": {
+    "caption": "키티가 서랍장이에요 🤍\n\n핑크 수납장의 앞면과 하트 모양 손잡이를 담았어요.\n11/27 확인: 핑크 옵션 95,400원, 무료배송 표시.\n12/15 도착 예정·반품비 40,000원으로 표시돼 있어요.\n가격·일정은 변동될 수 있으니 주문 전 확인해 주세요.\n사진 위 인형·시계 등 소품 포함 여부와 실제 크기는 추가 확인이 필요해요.\n\n#키티수납장 #핑크인테리어 #수납장\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+    "comment": "선택한 상품 확인: https://link.coupang.com/a/iXZyuP3MZ2\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "9717076392",
+     "item_id": "29077057046",
+     "option": "핑크",
+     "verified_at": "2026-11-27T09:58:34.540696+09:00"
+    }
+   },
+   "review_bgm": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "5ca1d2ce310ef80340e61f6af3098e58",
+    "mode": "음악+자막 (내레이션 없음)"
+   }
+  },
+  {
    "id": "inpock-059-v3",
    "title": "인포크 059 치이카와 일체형 의자 방석 수정본 v3 (예약 전)",
    "kind": "video",
