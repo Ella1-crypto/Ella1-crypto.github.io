@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-27T10:09+09:00",
+ "generated": "2026-11-27T10:24+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -713,6 +713,93 @@
   }
  ],
  "items": {
+  "pf-20261125-5-reel-v1": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "야시카 헬로키티 DZ-100 카메라 디자인과 선택 옵션을 확인해요.\n\n판매페이지 구성품에 브러쉬12종으로 불일치 발견: 스펙·구성 주장 제외. 현재 색상텍스트 미표시, 기존핑크item일치. 게시 전 색상/구성 확인. 반품비30000원.\n11/27 확인 가격 160,000원, 무료배송 표시, 12/8 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+   "comment": "선택 상품 확인: https://link.coupang.com/a/iXZzXjg6mW\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "c73a2f3caf97",
+   "music": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "e94360bf1d4f853c47fe9e8738fd39d1",
+    "mode": "음악+자막 (내레이션 없음)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
+  "pf-20261125-4-reel-v1": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "산리오 포켓 엘프 블라인드 박스 디자인과 선택 옵션을 확인해요.\n\n블라인드 박스1개. 사진캐릭터/키티 확정 아님. 현재 키티 지정옵션78300원과 구분. 수령 캐릭터 임의확정 금지.\n11/27 확인 가격 21,600원, 무료배송 표시, 12/15 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+   "comment": "선택 상품 확인: https://link.coupang.com/a/iXZziFBK0a\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "4d8256eeaa63",
+   "music": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "bbb4d2c40d2dcca9e2ac717bb24a44f6",
+    "mode": "음악+자막 (내레이션 없음)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
+  "pf-20261125-2-reel-v1": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "키티 로즈 가든 댄스 오르골 블록 디자인과 선택 옵션을 확인해요.\n\n조명·회전·조립 시간·정품 여부를 확정하지 않은 상품 사진 기반 검수본. 실제 포함 구성 추가 확인.\n11/27 확인 가격 46,800원, 무료배송 표시, 12/9 도착 예정. 가격·배송 일정은 변동될 수 있어요.\n사진은 상품 이미지 기반이며 사용 후기가 아니에요.\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+   "comment": "선택 상품 확인: https://link.coupang.com/a/iXZxNhdOg0\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "4fd8891b9c09",
+   "music": {
+    "file": "carefree.mp3",
+    "title": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "upbeat",
+     "daily"
+    ],
+    "energy": 3,
+    "video_md5": "92e424f689e0974aa5ce0ff717cd9914",
+    "mode": "음악+자막 (내레이션 없음)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
   "pf-20261125-3-reel-v1": {
    "queue_id": "",
    "kind": "릴스",
