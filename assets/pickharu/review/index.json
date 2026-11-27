@@ -1,6 +1,78 @@
 {
  "items": [
   {
+   "id": "pf-20261125-7-reel-v2",
+   "title": "양띠 몬치치 S 다른 시안 v2 (예약 전)",
+   "kind": "video",
+   "video": "pf-20261125-7-reel-v2/reel_music.mp4",
+   "poster": "pf-20261125-7-reel-v2/cover.jpg",
+   "fps": 24,
+   "state": "검수 중",
+   "created": "2026-11-27T19:45:03.119957+09:00",
+   "v": 1795776303,
+   "changes": "Pinterest 참고 구도: 상품 중심 흰 배경·클로즈업. 14초4컷→9초6컷, 형광펜 제목 제거. Fuzzball Parade로 음악 교체. 실제 사용 촬영이 아닌 동일 상품 사진 편집.",
+   "needs": [
+    "수정 시안 검수",
+    "최종 게시 방식·시각 확인"
+   ],
+   "review_copy": {
+    "caption": "양 모자만 보면 헷갈려요 🐑\n\n새해 인형을 미리 고른다면\n몬치치와 베비치치를 구분해 주세요.\n이번 상품은 큰 쪽 몬치치 S 단품이에요.\n양 후드와 붉은 꽃, 앞면 자수가 보여요.\n\n작은 베비치치는 별도 상품이에요.\n11/27 확인 화면에는 12/18 도착 예정,\n반품비 41,000원이 표시됐어요.\n일정·비용은 바뀔 수 있어요.\n개별 판매자의 정품 보증은 미확인이에요.\n\n날짜가 정해진 선물은 배송 조건부터 확인하고\n두 인형을 비교할 때 보게 저장해 주세요.\n\n프로필 인포크 128번\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로,\n이에 따른 일정액의 수수료를 제공받습니다.",
+    "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOovi1sa\n\nMusic: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "status": "검수 초안",
+    "source": {
+     "product_id": "9842646568",
+     "item_id": "29482910970",
+     "option": "몬치치 S / 동일 item ID",
+     "price": 61000,
+     "arrival_display": "12/18",
+     "link": "https://link.coupang.com/a/iZPOovi1sa",
+     "note": "큰 몬치치 S 단품. 베비치치는 별개 상품. 반품비41000원 표시, 개별 판매자 정품 보증 미확인. 즉시배송/연내도착 보장 없음.",
+     "link_verified_at": "2026-11-27T10:27:06.894289+09:00",
+     "video_sha256": "ba0203443e2688b933e490ee5e531d3a34f8b6aed7129f85977848b166663fb4",
+     "music": {
+      "file": "fuzzball-parade.mp3",
+      "title": "Fuzzball Parade",
+      "artist": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "credit": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+      "moods": [
+       "cute",
+       "funny"
+      ],
+      "energy": 3
+     },
+     "mix": {
+      "out": "/Users/jebbi/Documents/Codex/2026-11-25-new-chat/repairs/monchhichi_v2/review.mp4",
+      "mode": "음악 주인공",
+      "src_lufs": -70.0,
+      "lufs": -12.2
+     },
+     "voice": "none; music and animated text",
+     "publish_authorized": false
+    }
+   },
+   "review_bgm": {
+    "file": "fuzzball-parade.mp3",
+    "title": "Fuzzball Parade",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "funny"
+    ],
+    "energy": 3,
+    "video_md5": "1028ad5e5b63fa518074cac9c4ad8c0e",
+    "mode": "음악+자막 (내레이션 없음)"
+   },
+   "reference_url": "https://pin.it/2WRKFIQS1",
+   "music_selection": {
+    "reason": "cute/funny energy3; product detail closeups; previous Carefree rejected for repetition",
+    "not_used_in_active_review_catalog": true,
+    "listening_verified": false
+   }
+  },
+  {
    "id": "pf-20261125-8-reel-v1",
    "title": "양띠 베비치치 S 인형 영상 v1 (예약 전)",
    "kind": "video",
@@ -75,7 +147,7 @@
    "video": "pf-20261125-7-reel-v1/reel_music.mp4",
    "poster": "pf-20261125-7-reel-v1/cover.jpg",
    "fps": 24,
-   "state": "검수 중",
+   "state": "수정 완료",
    "created": "2026-11-27T10:38:00.505799+09:00",
    "v": 1795743480,
    "changes": "형광펜 제목·상품 이미지 움직임·음악 포함. 내레이션 없는 14초 영상.",
@@ -134,7 +206,8 @@
     "energy": 3,
     "video_md5": "413d8e8e47fc0755896eba6ef731d812",
     "mode": "음악+자막 (내레이션 없음)"
-   }
+   },
+   "replaced_by": "pf-20261125-7-reel-v2"
   },
   {
    "id": "pf-20261125-6-reel-v1",

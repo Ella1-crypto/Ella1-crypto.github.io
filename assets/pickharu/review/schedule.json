@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-27T17:46+09:00",
+ "generated": "2026-11-27T19:45+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -15,12 +15,6 @@
  "gap_min": 30,
  "days": {
   "2026-11-27": [
-   {
-    "t": "18:30",
-    "free": true,
-    "by": "",
-    "ids": []
-   },
    {
     "t": "20:30",
     "free": true,
@@ -687,6 +681,34 @@
  },
  "busy": [],
  "items": {
+  "pf-20261125-7-reel-v2": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "양 모자만 보면 헷갈려요 🐑\n\n새해 인형을 미리 고른다면\n몬치치와 베비치치를 구분해 주세요.\n이번 상품은 큰 쪽 몬치치 S 단품이에요.\n양 후드와 붉은 꽃, 앞면 자수가 보여요.\n\n작은 베비치치는 별도 상품이에요.\n11/27 확인 화면에는 12/18 도착 예정,\n반품비 41,000원이 표시됐어요.\n일정·비용은 바뀔 수 있어요.\n개별 판매자의 정품 보증은 미확인이에요.\n\n날짜가 정해진 선물은 배송 조건부터 확인하고\n두 인형을 비교할 때 보게 저장해 주세요.\n\n프로필 인포크 128번\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로,\n이에 따른 일정액의 수수료를 제공받습니다.",
+   "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOovi1sa\n\nMusic: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "a2b3ce3eb1bd",
+   "music": {
+    "file": "fuzzball-parade.mp3",
+    "title": "Fuzzball Parade",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Fuzzball Parade by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "funny"
+    ],
+    "energy": 3,
+    "video_md5": "1028ad5e5b63fa518074cac9c4ad8c0e",
+    "mode": "음악+자막 (내레이션 없음)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
   "pf-20261125-8-reel-v1": {
    "queue_id": "",
    "kind": "릴스",
@@ -711,35 +733,6 @@
     ],
     "energy": 3,
     "video_md5": "3741bcd5e8b1957434f4f8d6a3dc28e7",
-    "mode": "음악+자막 (내레이션 없음)",
-    "state": "적용됨",
-    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
-   }
-  },
-  "pf-20261125-7-reel-v1": {
-   "queue_id": "",
-   "kind": "릴스",
-   "publish_mode": "direct",
-   "status": "",
-   "publish_at": "",
-   "caption": "양 모자만 보면 헷갈려요 🐑\n\n새해 인형을 미리 고른다면\n몬치치와 베비치치를 구분해 주세요.\n이번 상품은 큰 쪽 몬치치 S 단품이에요.\n양 후드와 붉은 꽃, 앞면 자수가 보여요.\n\n작은 베비치치는 별도 상품이에요.\n11/27 확인 화면에는 12/18 도착 예정,\n반품비 41,000원이 표시됐어요.\n일정·비용은 바뀔 수 있어요.\n개별 판매자의 정품 보증은 미확인이에요.\n\n날짜가 정해진 선물은 배송 조건부터 확인하고\n두 인형을 비교할 때 보게 저장해 주세요.\n\n프로필 인포크 128번\n\n[광고] 쿠팡파트너스\n이 포스팅은 쿠팡 파트너스 활동의 일환으로,\n이에 따른 일정액의 수수료를 제공받습니다.",
-   "comment": "선택 상품 확인: https://link.coupang.com/a/iZPOovi1sa\n\nMusic: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
-   "editable": true,
-   "copy_status": "검수 초안 · 예약 전",
-   "ch": "0b019c4c3cbb",
-   "music": {
-    "file": "carefree.mp3",
-    "title": "Carefree",
-    "artist": "Kevin MacLeod",
-    "license": "CC BY 4.0",
-    "credit": "Music: Carefree by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "moods": [
-     "cute",
-     "upbeat",
-     "daily"
-    ],
-    "energy": 3,
-    "video_md5": "413d8e8e47fc0755896eba6ef731d812",
     "mode": "음악+자막 (내레이션 없음)",
     "state": "적용됨",
     "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
@@ -1622,24 +1615,6 @@
   }
  },
  "reservations": [
-  {
-   "at": "2026-11-27T18:00+09:00",
-   "title": "인포크 042 데이로 삐약이 듀얼 손난로 (새 릴스 · 예약 전)",
-   "kind": "릴스",
-   "status": "준비 요청",
-   "auto": false,
-   "approved": false,
-   "type": "희망"
-  },
-  {
-   "at": "2026-11-27T18:30+09:00",
-   "title": "인포크 046 산리오 룰루랄라 인형 키링 10cm (새 릴스 · 예약 전",
-   "kind": "릴스",
-   "status": "준비 요청",
-   "auto": false,
-   "approved": false,
-   "type": "희망"
-  },
   {
    "at": "2026-11-27T20:30+09:00",
    "title": "인포크 059 치이카와 일체형 의자 방석 수정본 v3 (예약 전)",
