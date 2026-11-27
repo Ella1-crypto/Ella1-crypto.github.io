@@ -1,6 +1,69 @@
 {
  "items": [
   {
+   "id": "inpock-025-v4",
+   "title": "인포크 025 휩드 무화버터 향 노트 새 시안 v4 (예약 전)",
+   "kind": "video",
+   "video": "inpock-025-v4/reel_music.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "짧은 향 소개를 꽃·과일/무화과 잎/우디 베이스/취향 비교 6장면으로 확장. 새 음성 대본, 음악 Wallpaper로 교체. 무화버터 상품 사진만 사용.",
+   "created": "2026-11-27T20:12:39.116664+09:00",
+   "v": 1795777959,
+   "review_copy": {
+    "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n무화과 향이면 다 달콤할까요?\n휩드 무화버터의 피그 우디 향을 향 노트로 정리했어요.\n\n시작: 오렌지 블로섬·무화과\n가운데: 무화과 잎\n베이스: 샌달우드·벤조인\n\n직접 시향한 후기가 아닌 상품 향 설명 기준이에요.\n향의 느낌은 개인마다 다를 수 있어요.\n향 취향을 비교할 때 저장해 두세요.\n\n상품 안내: 프로필 인포크 025번\n#휩드 #무화버터 #피그우디 #향노트",
+    "comment": "상품 정보: 프로필 인포크 025번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Wallpaper by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "source": {
+     "review_changes": "새로 만듦: editorial 판 · 훅 '무화과 살냄새'",
+     "product_list": {
+      "no": "025",
+      "name": "휩드 무화버터 바디워시\\u0026바디버터 세트",
+      "url": "https://gift-link.kakao.com/c/c0KbqG5l",
+      "code": 200,
+      "final": "https://gift-link.kakao.com/c/c0KbqG5l"
+     }
+    },
+    "status": "검수 초안",
+    "created_at": "2026-11-25T13:09:23.257996+00:00",
+    "publication_check": "영상 속 기능 및 현재 링크·옵션 최종 확인 전. 예약 승인 아님.",
+    "disclosure_corrected_at": "2026-11-26T06:21:19.291369+00:00",
+    "script": [
+     "무화과 향이면 다 달콤할까요? 무화버터는 피그 우디 향이에요.",
+     "향 노트의 시작은 오렌지 블로섬과 무화과. 꽃과 과일의 조합이죠.",
+     "가운데는 무화과 잎. 과육만이 아니라 잎의 노트도 함께 들어가요.",
+     "베이스는 샌달우드와 벤조인. 과일 향에 우디한 축을 더한 구성이에요.",
+     "무화과와 나무 향의 조합을 좋아한다면, 이 향 노트를 먼저 비교해 보세요.",
+     "직접 맡아본 후기는 아니에요. 향 설명을 기준으로 고를 때 저장해 두세요."
+    ]
+   },
+   "review_bgm": {
+    "file": "wallpaper.mp3",
+    "title": "Wallpaper",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Wallpaper by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "calm",
+     "info",
+     "daily"
+    ],
+    "energy": 2,
+    "video_md5": "a9e46036a07571d125e573d5ebe60d3e",
+    "mode": "목소리+음악(ducking)"
+   },
+   "poster": "inpock-025-v4/cover.jpg",
+   "needs": [
+    "새 시안 검수",
+    "최종 게시 방식·시각 확인"
+   ],
+   "music_selection": {
+    "previous": "Local Forecast - Elevator",
+    "current": "Wallpaper",
+    "reason": "calm/info energy2 for narrated fragrance-note explanation; replacing previous track",
+    "listening_verified": false
+   }
+  },
+  {
    "id": "pf-20261125-7-reel-v2",
    "title": "양띠 몬치치 S 다른 시안 v2 (예약 전)",
    "kind": "video",
@@ -675,7 +738,7 @@
    "kind": "video",
    "video": "inpock-025-v3/reel_music.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "수정 완료",
    "changes": "향 중심으로 재구성: 무화과 향 질문→무화과·샌달우드 향 노트 5.8초→향 취향 저장/공유. 용량·세트 소개 제외",
    "created": "2026-11-26T17:57:32.710275+09:00",
    "v": 1795691246,
@@ -711,7 +774,8 @@
     "energy": 2,
     "video_md5": "5eecfba53f0108752d64621679e2873d",
     "mode": "목소리+음악(ducking)"
-   }
+   },
+   "replaced_by": "inpock-025-v4"
   },
   {
    "id": "inpock-008-v3",
