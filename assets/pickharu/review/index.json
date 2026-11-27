@@ -1,6 +1,62 @@
 {
  "items": [
   {
+   "id": "inpock-029-v4",
+   "title": "인포크 029 클라우드 카메라 다꾸 활용 시안 v4 (예약 전)",
+   "kind": "video",
+   "video": "inpock-029-v4/reel_music.mp4",
+   "fps": 30,
+   "state": "검수 중",
+   "changes": "노트·스티커가 함께 보이는 상품 사진 추가. 사진 배치→날짜→한 줄 메모→테이프 장식 움직이는 다꾸 예시 추가. 편집 연출 표시; 실제 다꾸 실촬영 영상은 아님.",
+   "created": "2026-11-27T20:34:14.704604+09:00",
+   "v": 1795779254,
+   "review_copy": {
+    "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n사진을 스티커로 남겨요\n\n클라우드 카메라 스티커 포토 프린터를 담았어요.\n찍은 사진을 작은 기록으로 남기는 모습을 살펴보세요.\n\n인화 방식과 전용 용지 포함 여부를 구매 옵션에서 확인해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 029번에 있어요.\n\n#소품 #생활용품 #쇼핑기록\n\n영상의 다꾸 배치 과정은 편집 연출한 활용 예시입니다. 실제 촬영한 부착 시연이나 인화 품질 시연이 아닙니다.",
+    "comment": "상품 정보: 프로필 인포크 029번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "source": {
+     "review_changes": "새로 만듦: polaroid 판 · 훅 '이 카메라, 찍으면 바로 스티커!'",
+     "product_list": {
+      "no": "029",
+      "name": "클라우드 카메라 포토 프린터",
+      "url": "https://gift-link.kakao.com/c/hqoksOsN",
+      "code": 200,
+      "final": "https://gift-link.kakao.com/c/hqoksOsN"
+     }
+    },
+    "status": "검수 초안",
+    "created_at": "2026-11-25T13:09:23.257977+00:00",
+    "publication_check": "영상 속 기능 및 현재 링크·옵션 최종 확인 전. 예약 승인 아님.",
+    "disclosure_corrected_at": "2026-11-26T06:21:19.291360+00:00",
+    "script": [
+     "이 카메라, 찍으면 바로 스티커로 뽑혀 나와요.",
+     "스티커를 떼어 다이어리에 붙이는 활용이에요.",
+     "사진을 붙이고, 날짜와 한 줄 메모를 더해 보세요. 테이프로 포인트를 주면 나만의 다꾸 한 페이지.",
+     "사진이랑 동영상, 셀피 모드까지, 화면은 2.4인치 컬러.",
+     "선물 고를 때 꺼내 보게 저장해 두고, 다꾸 좋아하는 친구한테 공유해 주세요."
+    ]
+   },
+   "review_bgm": {
+    "file": "happy-alley.mp3",
+    "title": "Happy Alley",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "daily",
+     "fashion"
+    ],
+    "energy": 3,
+    "video_md5": "13febd429ed4662fe09021f6f4e32631",
+    "mode": "목소리+음악(ducking)"
+   },
+   "poster": "inpock-029-v4/cover.jpg",
+   "needs": [
+    "새 시안 검수",
+    "최종 게시 방식·시각 확인"
+   ]
+  },
+  {
    "id": "inpock-045-v6",
    "title": "인포크 045 헬로키티 빅 무드등 수정본 v6 (예약 전)",
    "kind": "video",
@@ -749,7 +805,7 @@
    "kind": "video",
    "video": "inpock-029-v3/reel_music.mp4",
    "fps": 30,
-   "state": "검수 중",
+   "state": "수정 완료",
    "changes": "새 시안: 스티커 떼는 손을 크게→날짜 인화→후면 촬영 화면. 한 장씩 크게 보는 구성",
    "created": "2026-11-26T17:57:32.738434+09:00",
    "v": 1795691246,
@@ -786,7 +842,8 @@
     "energy": 3,
     "video_md5": "2c0af1e4170dde5cf01e0240e2abda32",
     "mode": "목소리+음악(ducking)"
-   }
+   },
+   "replaced_by": "inpock-029-v4"
   },
   {
    "id": "inpock-025-v3",

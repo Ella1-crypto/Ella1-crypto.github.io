@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-27T20:18+09:00",
+ "generated": "2026-11-27T20:34+09:00",
  "channel": "인스타그램 @pick.haru.daily",
  "slots": [
   "09:00",
@@ -683,6 +683,35 @@
   }
  ],
  "items": {
+  "inpock-029-v4": {
+   "queue_id": "",
+   "kind": "릴스",
+   "publish_mode": "direct",
+   "status": "",
+   "publish_at": "",
+   "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n사진을 스티커로 남겨요\n\n클라우드 카메라 스티커 포토 프린터를 담았어요.\n찍은 사진을 작은 기록으로 남기는 모습을 살펴보세요.\n\n인화 방식과 전용 용지 포함 여부를 구매 옵션에서 확인해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 029번에 있어요.\n\n#소품 #생활용품 #쇼핑기록\n\n영상의 다꾸 배치 과정은 편집 연출한 활용 예시입니다. 실제 촬영한 부착 시연이나 인화 품질 시연이 아닙니다.",
+   "comment": "상품 정보: 프로필 인포크 029번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
+   "editable": true,
+   "copy_status": "검수 초안 · 예약 전",
+   "ch": "b19b50836e81",
+   "music": {
+    "file": "happy-alley.mp3",
+    "title": "Happy Alley",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "credit": "Music: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
+    "moods": [
+     "cute",
+     "daily",
+     "fashion"
+    ],
+    "energy": 3,
+    "video_md5": "13febd429ed4662fe09021f6f4e32631",
+    "mode": "목소리+음악(ducking)",
+    "state": "적용됨",
+    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
+   }
+  },
   "inpock-045-v6": {
    "queue_id": "",
    "kind": "릴스",
@@ -960,35 +989,6 @@
     "artist": "Kevin MacLeod",
     "license": "CC BY 4.0",
     "note": "큐에 등록된 곡이 영상에 섞여 있어요"
-   }
-  },
-  "inpock-029-v3": {
-   "queue_id": "",
-   "kind": "릴스",
-   "publish_mode": "direct",
-   "status": "",
-   "publish_at": "",
-   "caption": "(광고) 카카오 선물하기 제휴 활동으로 구매 시 수수료를 받을 수 있어요.\n\n사진을 스티커로 남겨요\n\n클라우드 카메라 스티커 포토 프린터를 담았어요.\n찍은 사진을 작은 기록으로 남기는 모습을 살펴보세요.\n\n인화 방식과 전용 용지 포함 여부를 구매 옵션에서 확인해 주세요.\n다시 비교할 때 꺼내 보게 저장해 두세요.\n\n구매 링크는 프로필 인포크 029번에 있어요.\n\n#소품 #생활용품 #쇼핑기록",
-   "comment": "상품 정보: 프로필 인포크 029번의 해당 상품 상세 안내를 확인해 주세요.\n\nMusic: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
-   "editable": true,
-   "copy_status": "검수 초안 · 예약 전",
-   "ch": "e991247ac7f2",
-   "music": {
-    "file": "happy-alley.mp3",
-    "title": "Happy Alley",
-    "artist": "Kevin MacLeod",
-    "license": "CC BY 4.0",
-    "credit": "Music: Happy Alley by Kevin MacLeod (incompetech.com), CC BY 4.0",
-    "moods": [
-     "cute",
-     "daily",
-     "fashion"
-    ],
-    "energy": 3,
-    "video_md5": "2c0af1e4170dde5cf01e0240e2abda32",
-    "mode": "목소리+음악(ducking)",
-    "state": "적용됨",
-    "note": "검수 영상에 음악 믹싱 완료 · 원본 영상 지문 일치"
    }
   },
   "inpock-008-v3": {
