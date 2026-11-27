@@ -2343,7 +2343,7 @@
   "text": "세일 가격 적어 둔 시트,\nAI한테 매번 복사해 붙이고 있다면 📎\n\nClaude Academy 무료 강좌 「Claude 101」\n'도구 연결하기' 레슨에 나와\n\n커넥터는 드라이브 같은 대화 밖 자료를\nClaude가 직접 읽게 이어 주는 기능이야\n연결은 언제든 끊을 수 있대\n\n레슨 팁은 권한을 보고 승인한 다음\n접근되는지부터 물어보라는 거\nClaude는 내가 볼 수 있는 것만 본대\n\n연결하고 나면 이렇게 물어봐\n\"구글 드라이브의 '세일 가격 기록' 시트 읽어 줘.\n지난주보다 내린 상품만 골라서\n상품명, 가격, 날짜로 표 만들어 줘.\n확인 못 한 칸은 비워 둬.\"\n\n복사 붙이기 없이\n시트 내용으로 바로 정리받을 수 있어\n\n시트 연결하기 전에 꺼내 보게 저장해 둬",
   "reply": "📌 출처: Anthropic · Claude Academy 「Claude 101」 (도구 연결하기 · 2026.11.26 확인)\nhttps://academy.claude.com/ko/courses/claude-101/connecting-your-tools\n무료 강좌 안내: Claude Academy 홈\nhttps://academy.claude.com/ko\n\n시트 문장은 우리가 만든 예시야. 커넥터 사용 가능 플랜은 Claude 공식 안내에서 확인해 줘.",
   "image_url": "https://ella1-crypto.github.io/threads-media/aicard-ai-20261127-am.png",
-  "status": "예약",
+  "status": "올리는 중",
   "source": "AI 노하우 하루 1개",
   "series_category": "AI 팁·사용법",
   "kind": "정보",
